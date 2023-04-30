@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary navbar-nav {% if config.navbar.fixed %}fixed-top{% endif%}">
   {% if config.navbar.container %}<div class="container">{% endif %}
-  <a class="navbar-brand" href='{{ "/" | absolute_path }}'>{{ config.metadata.title }}</a>
+  <a class="navbar-brand" href='{{ "/" | relative_url }}'>{{ config.metadata.title }}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>

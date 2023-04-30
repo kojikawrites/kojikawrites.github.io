@@ -7,7 +7,10 @@
   <style tyep="text/css">
     {% if page.path == "index.md" %}
     body {
-      background-color: slategray;
+      /*background-color: slategray;*/
+      background-image: url('{{ "/assets/images/hiive-background.png" | relative_url }}');
+      background-repeat: repeat;
+
       color: white;
     }
     {% else %}
