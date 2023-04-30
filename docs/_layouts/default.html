@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% include read-config.liquid %}
+<html lang='{{ page.lang | default: config.metadata.lang | default: site.lang | default: "en" }}'>
+
+  {% include head.html %}
+
+  <style tyep="text/css">
+    {% if page.path == "index.md" %}
+    body {
+      background-color: slategray;
+      color: white;
+    }
+    {% else %}
+    body {
+      /* background-color: #8DC63F; */
+      background-color: white;
+      color: black;
+      /* path: '{{ page.path }}'; */
+    }
+    {% endif %}
+  </style>
+
+  <body>
+
+    {% include header.html %}
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper container">
+        {{ content }}
+      </div>
+    </main>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>

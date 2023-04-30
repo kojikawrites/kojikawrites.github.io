@@ -1,0 +1,173 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+//@import "minima";
+
+.typeahead,
+.tt-query,
+.tt-hint {
+  width: 396px;
+  height: 30px;
+  padding: 8px 12px;
+  font-size: 18px;
+  line-height: 36px;
+  border: 2px solid #ccc;
+  //-webkit-border-radius: 8px;
+  //-moz-border-radius: 8px;
+  //border-radius: 8px;
+  outline: none;
+}
+
+.typeahead {
+  background-color: #fff;
+}
+
+.typeahead:focus {
+  border: 2px solid #0097cf;
+}
+
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  color: #999
+}
+
+.tt-menu {
+  width: 422px;
+  margin: 12px 0;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  //-webkit-border-radius: 8px;
+  //-moz-border-radius: 8px;
+  //border-radius: 8px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.tt-suggestion:hover {
+  cursor: pointer;
+  color: #fff;
+  background-color: #0097cf;
+}
+
+.tt-suggestion.tt-cursor {
+  color: #fff;
+  background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+.navbar-brand,
+#navbarSupportedContent ul {
+  margin-left: 10px;
+}
+
+.home-img {
+  width: 100%;
+}
+
+.home-img {
+  width: 100%;
+}
+
+.home-text {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.home-greet {
+  padding-top: 3vmin;
+  font-size: calc(2em + 5vmin);
+  font-weight: bolder;
+}
+
+.home-moniker {
+  font-size: calc(1.5em + 1vmin);
+  font-weight: bolder;
+}
+
+.home-bio {
+  font-size: calc(1em + 0.3vmin);
+  font-weight: normal;
+}
+
+
+
+.homepage .post-header { text-align: center; }
+
+.homepage .standalone-image {
+  margin-top: 5vmin;
+  margin-bottom: 8vmin;
+  width: 50vmin;
+}
+
+.homepage h1 {
+  font-size: 8vmin;
+  font-weight: bolder;
+}
+
+.homepage h1 small {
+  font-size: 3vmin;
+  font-weight: normal;
+}
+
+.homepage .post-tagline {
+  font-size: 2vmin;
+  font-weight: normal;
+  line-height: 2vmin;
+}
+
+.homepage p {
+  font-size: 2.5vmin;
+  font-weight: normal;
+}
+
+.homepage p.copyright {
+  font-size: 1.75vmin;
+  font-weight: normal;
+  text-align: center;
+}
+
+.service-item img {
+  width: 33vmin;
+}
+
+.service-item img.float-left {
+  float: left;
+  margin-right: 5vmin;
+}
+
+.service-item img.float-right {
+  float: right;
+  margin-left: 5vmin;
+}
+
+div.service-item {
+  margin-top: 3vmin;
+  clear-after: both;
+}
+
+/*
+<div class="home-bio" xstyle="font-size: 5vmin">&nbsp;</div>
+<div class="home-bio" xstyle="font-size: 4vmin;">Programmer. Writer. Artist. Teacher.</div>
+<div class="home-bio" xstyle="font-size: 4vmin">Juggler. Musician. Punster. Dad. Husband.</div>
+<div class="home-bio" xstyle="font-size: 4vmin">Thoughtworker. ex-IBMer. ex-Microsoftie.</div>
+<br/><br/>
+ */

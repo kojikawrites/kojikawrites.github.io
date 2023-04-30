@@ -1,0 +1,25 @@
+---
+layout: default
+---
+
+<article class="homepage">
+
+  <header class="post-header">
+    {% if page.title != "" and page.title != nil and page.showTitle != false %}
+    <h1 class="post-title">{{ page.title }}</h1>
+    <p class="post-tagline">{{ page.tagline }}</p>
+    {% endif %}
+
+    <img src='{{ page.logo | relative_path }}' class='standalone-image' />
+  </header>
+
+  <div class="post-content">
+    {{ content }}
+  </div>
+
+  <hr/>
+  {% assign currentYear = "now" | date: "%Y" %}
+  <p class="copyright">{{ page.trademark }}<br/>{{ page.copyright | replace: "CURRENT_YEAR", currentYear }}</p>
+
+  {% include comments.liquid %}
+</article>
