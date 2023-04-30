@@ -1,7 +1,7 @@
 
 
 <div class="service-item">
-  <img src="{{ site.baseurl }}{{ include.image | relative_url }}" alt="{{ include.title }}" class="float-{{ include.align }}" />
+  <img src="{{ include.image | relative_url }}" alt="{{ include.title }}" class="float-{{ include.align }}" />
   <div>
     <h2>{{ include.title }}</h2>
      {{ include.content | markdownify }}
