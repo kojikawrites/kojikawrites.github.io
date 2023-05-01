@@ -160,14 +160,13 @@
 }
 
 div.service-item {
-  margin-top: 3vmin;
-  clear-after: both;
+  margin-bottom: 13vmin;
+  clear: both;
 }
 
-/*
-<div class="home-bio" xstyle="font-size: 5vmin">&nbsp;</div>
-<div class="home-bio" xstyle="font-size: 4vmin;">Programmer. Writer. Artist. Teacher.</div>
-<div class="home-bio" xstyle="font-size: 4vmin">Juggler. Musician. Punster. Dad. Husband.</div>
-<div class="home-bio" xstyle="font-size: 4vmin">Thoughtworker. ex-IBMer. ex-Microsoftie.</div>
-<br/><br/>
- */
+
+body {
+  background-image: url('{{ "/assets/images/hiive-background.png" | relative_url }}');
+  background-repeat: repeat;
+  color: white;
+}

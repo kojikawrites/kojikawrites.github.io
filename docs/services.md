@@ -4,12 +4,12 @@ title: Services
 ---
 
 {% capture content %}
-## Software Development
+## General Software Development
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac cursus erat. Nullam nec tortor interdum, consequat lectus ac, placerat sem. Quisque volutpat sit amet lacus eu placerat. Curabitur fermentum leo pharetra neque malesuada ultrices. Pellentesque dictum nunc lobortis ornare iaculis. Morbi aliquam lorem id fermentum ornare. Aenean ultrices tempor arcu in porta. In hac habitasse platea dictumst.
 
 Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi dignissim iaculis ex, eu faucibus ipsum lacinia et. Sed ut cursus tortor. Proin pharetra at elit vel venenatis. Nam eget velit ac mi maximus euismod blandit in nunc. Donec elit purus, placerat ac eleifend eget.{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-software.png' align='left' content=content %}
+{% include service-item.liquid image='/assets/images/services/svc-software.svg' align='left' content=content %}
 
 
 {% capture content %}
@@ -18,7 +18,7 @@ Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac cursus erat. Nullam nec tortor interdum, consequat lectus ac, placerat sem. Quisque volutpat sit amet lacus eu placerat. Curabitur fermentum leo pharetra neque malesuada ultrices. Pellentesque dictum nunc lobortis ornare iaculis. Morbi aliquam lorem id fermentum ornare. Aenean ultrices tempor arcu in porta. In hac habitasse platea dictumst.
 
 Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi dignissim iaculis ex, eu faucibus ipsum lacinia et. Sed ut cursus tortor. Proin pharetra at elit vel venenatis. Nam eget velit ac mi maximus euismod blandit in nunc. Donec elit purus, placerat ac eleifend eget.{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-server.png' align='right' content=content %}
+{% include service-item.liquid image='/assets/images/services/svc-server.svg' align='right' content=content %}
 
 
 {% capture content %}
@@ -27,7 +27,7 @@ Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac cursus erat. Nullam nec tortor interdum, consequat lectus ac, placerat sem. Quisque volutpat sit amet lacus eu placerat. Curabitur fermentum leo pharetra neque malesuada ultrices. Pellentesque dictum nunc lobortis ornare iaculis. Morbi aliquam lorem id fermentum ornare. Aenean ultrices tempor arcu in porta. In hac habitasse platea dictumst.
 
 Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi dignissim iaculis ex, eu faucibus ipsum lacinia et. Sed ut cursus tortor. Proin pharetra at elit vel venenatis. Nam eget velit ac mi maximus euismod blandit in nunc. Donec elit purus, placerat ac eleifend eget.{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-legacy.png' align='left' content=content %}
+{% include service-item.liquid image='/assets/images/services/svc-legacy.svg' align='left' content=content %}
 
 
 {% capture content %}
@@ -36,7 +36,7 @@ Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac cursus erat. Nullam nec tortor interdum, consequat lectus ac, placerat sem. Quisque volutpat sit amet lacus eu placerat. Curabitur fermentum leo pharetra neque malesuada ultrices. Pellentesque dictum nunc lobortis ornare iaculis. Morbi aliquam lorem id fermentum ornare. Aenean ultrices tempor arcu in porta. In hac habitasse platea dictumst.
 
 Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi dignissim iaculis ex, eu faucibus ipsum lacinia et. Sed ut cursus tortor. Proin pharetra at elit vel venenatis. Nam eget velit ac mi maximus euismod blandit in nunc. Donec elit purus, placerat ac eleifend eget.{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-xplat.png' align='right' content=content %}
+{% include service-item.liquid image='/assets/images/services/svc-xplat.svg' align='right' content=content %}
 
 
 {% capture content %}
@@ -45,7 +45,7 @@ Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac cursus erat. Nullam nec tortor interdum, consequat lectus ac, placerat sem. Quisque volutpat sit amet lacus eu placerat. Curabitur fermentum leo pharetra neque malesuada ultrices. Pellentesque dictum nunc lobortis ornare iaculis. Morbi aliquam lorem id fermentum ornare. Aenean ultrices tempor arcu in porta. In hac habitasse platea dictumst.
 
 Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi dignissim iaculis ex, eu faucibus ipsum lacinia et. Sed ut cursus tortor. Proin pharetra at elit vel venenatis. Nam eget velit ac mi maximus euismod blandit in nunc. Donec elit purus, placerat ac eleifend eget.{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-aiml.png' align='left' content=content %}
+{% include service-item.liquid image='/assets/images/services/svc-aiml.svg' align='left' content=content %}
 
 
 {% capture content %}
@@ -54,7 +54,7 @@ Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac cursus erat. Nullam nec tortor interdum, consequat lectus ac, placerat sem. Quisque volutpat sit amet lacus eu placerat. Curabitur fermentum leo pharetra neque malesuada ultrices. Pellentesque dictum nunc lobortis ornare iaculis. Morbi aliquam lorem id fermentum ornare. Aenean ultrices tempor arcu in porta. In hac habitasse platea dictumst.
 
 Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi dignissim iaculis ex, eu faucibus ipsum lacinia et. Sed ut cursus tortor. Proin pharetra at elit vel venenatis. Nam eget velit ac mi maximus euismod blandit in nunc. Donec elit purus, placerat ac eleifend eget.{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-datasci.png' align='right' content=content %}
+{% include service-item.liquid image='/assets/images/services/svc-datasci.svg' align='right' content=content %}
 
 
 {% capture content %}
@@ -63,7 +63,7 @@ Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac cursus erat. Nullam nec tortor interdum, consequat lectus ac, placerat sem. Quisque volutpat sit amet lacus eu placerat. Curabitur fermentum leo pharetra neque malesuada ultrices. Pellentesque dictum nunc lobortis ornare iaculis. Morbi aliquam lorem id fermentum ornare. Aenean ultrices tempor arcu in porta. In hac habitasse platea dictumst.
 
 Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi dignissim iaculis ex, eu faucibus ipsum lacinia et. Sed ut cursus tortor. Proin pharetra at elit vel venenatis. Nam eget velit ac mi maximus euismod blandit in nunc. Donec elit purus, placerat ac eleifend eget.{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-gamedev.png' align='left' content=content %}
+{% include service-item.liquid image='/assets/images/services/svc-gamedev.svg' align='left' content=content %}
 
 
 {% capture content %}
@@ -72,6 +72,6 @@ Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac cursus erat. Nullam nec tortor interdum, consequat lectus ac, placerat sem. Quisque volutpat sit amet lacus eu placerat. Curabitur fermentum leo pharetra neque malesuada ultrices. Pellentesque dictum nunc lobortis ornare iaculis. Morbi aliquam lorem id fermentum ornare. Aenean ultrices tempor arcu in porta. In hac habitasse platea dictumst.
 
 Suspendisse justo mauris, varius sollicitudin auctor ac, varius vel enim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi dignissim iaculis ex, eu faucibus ipsum lacinia et. Sed ut cursus tortor. Proin pharetra at elit vel venenatis. Nam eget velit ac mi maximus euismod blandit in nunc. Donec elit purus, placerat ac eleifend eget.{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-embedded.png' align='right' content=content %}
+{% include service-item.liquid image='/assets/images/services/svc-embedded.svg' align='right' content=content %}
 
 
