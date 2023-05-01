@@ -156,13 +156,46 @@
 
 .service-item img.float-right {
   float: right;
-  margin-left: 5vmin;
+  margin-right: 5vmin;
 }
 
 div.service-item {
   margin-bottom: 13vmin;
   clear: both;
 }
+
+.about-resume-row {
+  clear-after: both;
+}
+
+.about-resume-avatar {
+  width: 33vmin;
+  float: left;
+  margin-right: 5vmin;
+}
+
+.about-resume-person {
+  //clear-after: both;
+  margin: 5vmin 0;
+}
+
+.about-resume-item {
+  clear: both;
+  margin: 2.5vmin 0;
+
+}
+
+.about-resume-item-section {
+  width: 100%;
+  border-bottom: 1px solid white;
+}
+
+.about-resume-item-section h1 {
+  font-weight: bolder;
+  //width: 100%;
+  //text-decoration: underline;
+}
+
 
 
 body {

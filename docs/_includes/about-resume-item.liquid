@@ -1,0 +1,15 @@
+
+
+<div class="about-resume-item">
+ <div class="about-resume-row row">
+  <div class="about-resume-col-detail col-sm-3">
+   <h3>{{ include.employer }}</h3>
+    {% if include.title != "" and include.title != nil %}{{ include.title }}<br/>{% endif %}
+    {% if include.period != "" and include.period != nil %}{{ include.period }}<br/>{% endif %}
+    {% if include.location != "" and include.location != nil %}{{ include.location }}<br/>{% endif %}
+  </div>
+  <div class="about-resume-col-detail col-sm-9">
+    {{ include.content | markdownify }}
+  </div>
+ </div>
+</div>
