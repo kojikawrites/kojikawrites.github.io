@@ -1,4 +1,4 @@
-<div style="text-align:center;">
+<div style="text-align:center;" class="not-found-404">
 
 <h2>Oops! File Not Found!</h2>
 
@@ -6,6 +6,6 @@
 
 <p>While you wait, just enjoy the fresh dairy air and click one of the links at the top of the page.</p>
 
-<p><img src='{{ "/assets/images/404/milk.png" | relative_url }}' alt="404 milk carton" /></p>
+<img src='{{ "/assets/images/404/milk.png" | relative_url }}' alt="404 milk carton" />
 
 </div>

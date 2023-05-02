@@ -1,8 +1,8 @@
-<div style="width:400px; background-color:#000; color:#fff; font-family:monospace; border:1px solid black; margin:auto;">
+<div class="not-found-404" style="width:100%; background-color:#000; color:#fff; font-family:monospace; border:1px solid black; margin:auto;">
 
 <div style="background-color:#fff; color:#000;"><pre><span style="float:right">0/0</span>West of House</pre></div>
 
-<div style="clear:both;"><pre style="background-color:#000; color:#fff; border:0;">
+<div style="clear:both;"><pre style="background-color:#000; color:#fff; border:0; text-align: left;">
 DORK I: The Great Underground Website
 {{ site.jaytch.title | default: site.title }} interactive fiction -
 a fallacy story

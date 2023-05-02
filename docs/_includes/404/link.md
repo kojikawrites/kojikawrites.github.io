@@ -1,4 +1,4 @@
-<div style="text-align:center;">
+<div style="text-align:center;" class="not-found-404">
 
 <h1>Game Over!</h1>
 
@@ -6,6 +6,6 @@
 
 <p>Try clicking one of the other links at the top of the page.</p>
 
-<p><img src='{{ "/assets/images/404/link.png" | relative_url }}' alt="404 dead link" /></p>
+<img src='{{ "/assets/images/404/link.png" | relative_url }}' alt="404 dead link" />
 
 </div>

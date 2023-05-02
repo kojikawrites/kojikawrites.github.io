@@ -1,4 +1,4 @@
-<div style="text-align:center;">
+<div style="text-align:center;" class="not-found-404">
 
 <h2>Man, That's Rough!</h2>
 
@@ -6,6 +6,6 @@
 
 <p>While you wait, click one of the links at the top of the page.</p>
 
-<p><img src='{{ "/assets/images/404/dog.png" | relative_url }}' alt="404 dog" /></p>
+<img src='{{ "/assets/images/404/dog.png" | relative_url }}' alt="404 dog" />
 
 </div>
