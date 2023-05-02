@@ -119,28 +119,28 @@
 }
 
 .homepage h1 {
-  font-size: 8vmin;
+  font-size: 3em;
   font-weight: bolder;
 }
 
 .homepage h1 small {
-  font-size: 3vmin;
+  font-size: 1.0em;
   font-weight: normal;
 }
 
 .homepage .post-tagline {
-  font-size: 2vmin;
+  font-size: 0.8em;
   font-weight: normal;
   line-height: 2vmin;
 }
 
 .homepage p {
-  font-size: 2.5vmin;
+  font-size: 1em;
   font-weight: normal;
 }
 
 .homepage p.copyright {
-  font-size: 1.75vmin;
+  font-size: 0.75em;
   font-weight: normal;
   text-align: center;
 }
@@ -156,7 +156,7 @@
 
 .service-item img.float-right {
   float: right;
-  margin-right: 5vmin;
+  margin-left: 5vmin;
 }
 
 div.service-item {
@@ -197,6 +197,43 @@ div.service-item {
   //text-decoration: underline;
 }
 
+@media (max-width: 767px) {
+
+  body {
+    text-align: center;
+  }
+
+  .about-resume-avatar {
+    width: 100%;
+    float: none;
+    margin-bottom: 10vmin;
+  }
+
+  .service-item {
+    text-align: center;
+  }
+
+  .service-item img {
+    width: 100%;
+    margin: 10vmin auto 5vmin;
+  }
+
+  .service-item img.float-left {
+    float: none;
+    //margin: 10vmin 5vmin 10vmin;
+  }
+
+  .service-item img.float-right {
+    float: none;
+    //margin: 10vmin 5vmin 10vmin;
+  }
+
+  div.service-item {
+    font-size: 1.2em;
+    margin-bottom: 13vmin;
+    clear: both;
+  }
+}
 
 
 body {
