@@ -83,10 +83,6 @@
   width: 100%;
 }
 
-.home-img {
-  width: 100%;
-}
-
 .home-text {
   text-align: center;
   margin: 0 auto;
@@ -130,7 +126,7 @@
 .homepage .standalone-image {
   margin-top: 5vmin;
   margin-bottom: 8vmin;
-  width: 50vmin;
+  width: 33vmin;
 }
 
 .homepage h1 {
@@ -139,23 +135,23 @@
 }
 
 .homepage h1 small {
-  font-size: 1.0em;
+  font-size: 0.8em;
   font-weight: normal;
 }
 
 .homepage .post-tagline {
-  font-size: 0.8em;
+  font-size: 1em;
   font-weight: normal;
   line-height: 2vmin;
 }
 
 .homepage p {
-  font-size: 1em;
+  font-size: 1.2em;
   font-weight: normal;
 }
 
-.homepage p.copyright {
-  font-size: 0.75em;
+p.copyright {
+  font-size: 0.8em;
   font-weight: normal;
   text-align: center;
 }
@@ -224,6 +220,14 @@ div.service-item {
     margin-bottom: 10vmin;
   }
 
+  .about-resume-col-detail {
+    margin-bottom: 3vmin;
+  }
+
+  .about-resume-title {
+    font-weight: bolder;
+  }
+
   .service-item {
     text-align: center;
   }
@@ -247,6 +251,10 @@ div.service-item {
     font-size: 1.2em;
     margin-bottom: 13vmin;
     clear: both;
+  }
+
+  .post-content img {
+    max-width: 100%;
   }
 }
 

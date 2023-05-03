@@ -17,9 +17,6 @@ layout: default
     {{ content }}
   </div>
 
-  <hr/>
-  {% assign currentYear = "now" | date: "%Y" %}
-  <p class="copyright">{{ page.trademark }}<br/>{{ page.copyright | replace: "CURRENT_YEAR", currentYear }}</p>
+  {% include footer.html %}
 
-  {% include comments.liquid %}
 </article>

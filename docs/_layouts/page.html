@@ -2,6 +2,8 @@
 layout: default
 ---
 
+{% include read-config.liquid %}
+
 <article class="post">
 
   <header class="post-header">
@@ -13,6 +15,8 @@ layout: default
   <div class="post-content">
     {{ content }}
   </div>
+
+  {% include footer.html %}
 
   {% include comments.liquid %}
 </article>

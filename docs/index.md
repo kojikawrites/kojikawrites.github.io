@@ -3,13 +3,14 @@ layout: homepage
 title: "Hiive<small>.com</small>"
 tagline: See what the buzz is about!
 logo: "/assets/images/hiive-logo.svg"
-trademark: "Hiive and its logo are registered trademarks of Hiive, LLC." 
-copyright: "All content &copy; 2012-CURRENT_YEAR by Hiive, LLC."
+#trademark: "Hiive and its logo are registered trademarks of Hiive, LLC." 
+#copyright: "All content &copy; 2012-CURRENT_YEAR by Hiive, LLC."
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. In tellus integer feugiat scelerisque varius. Neque vitae tempus quam pellentesque nec. Non consectetur a erat nam at lectus urna duis. At varius vel pharetra vel turpis nunc. Nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus. Luctus venenatis lectus magna fringilla. Lacus vel facilisis volutpat est velit egestas. Non diam phasellus vestibulum lorem sed risus. Nascetur ridiculus mus mauris vitae. Vel pretium lectus quam id leo in vitae. Venenatis tellus in metus vulputate eu scelerisque felis imperdiet proin.
+If you're looking for a reliable and experienced software development company to help you bring your ideas to life, look no further than Hiive, LLC! Andrew Rollings and his team of skilled developers have decades of experience in a wide range of technologies and platforms, including web, mobile, desktop applications, and game development. They're at home with projects from greenfield projects to large-scale conversions to legacy integrations and everything in between.
 
-Amet purus gravida quis blandit turpis cursus in. Massa sed elementum tempus egestas. Vestibulum lectus mauris ultrices eros in cursus turpis. Eu facilisis sed odio morbi. Libero justo laoreet sit amet. Euismod in pellentesque massa placerat duis ultricies lacus sed. Laoreet sit amet cursus sit amet dictum sit. Donec et odio pellentesque diam volutpat commodo. Ipsum consequat nisl vel pretium lectus quam id leo in. Leo in vitae turpis massa sed elementum tempus egestas. Posuere morbi leo urna molestie at. Sed turpis tincidunt id aliquet. Nisl vel pretium lectus quam id leo. Cursus metus aliquam eleifend mi in. Elementum eu facilisis sed odio morbi quis commodo odio aenean. Tellus mauris a diam maecenas sed enim ut sem viverra. In ornare quam viverra orci sagittis eu volutpat odio facilisis. Ac felis donec et odio pellentesque diam. Ultrices in iaculis nunc sed.
+The team at Hiive pride themselves on their ability to deliver high-quality, cost-effective software solutions to their clients, no matter the size or complexity of their project. Whether you need a simple website or a complex enterprise application, Hiive has the expertise to get the job done right, on time, and within budget.
 
+Services include everything from requirements analysis and software design to coding, testing, and deployment. Hiive uses the latest tools and technologies to ensure that your software is not only functional, but also scalable, maintainable, and secure. Take a look a the [Services page]({{ "/services" | relative_url }}) for a sample of what's offered.
 
- 
+So why choose Hiive.com for your next software development needs? Because they're passionate about what they do, and they're committed to delivering the best possible results for every client. [Contact Hiive]({{ "/contact-us" | relative_url }}) today to learn more about how they can help you achieve your goals!

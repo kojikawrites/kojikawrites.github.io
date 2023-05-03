@@ -9,6 +9,8 @@ metadata:
     #company: Joe Hall  # {metadata.title} when blank
     #website: http://joehall.net/  # http://{metadata.title}.com when blank
     #jurisdiction: Georgia  # e.g. Georgia, "United States" when blank
+  trademark: "Hiive and its logo are registered trademarks of Hiive, LLC." 
+  copyright: "All content &copy; 2012-CURRENT_YEAR by Hiive, LLC."
   lang: en
 
 customize:

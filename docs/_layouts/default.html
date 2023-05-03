@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% include read-config.liquid %}
 <html lang='{{ page.lang | default: config.metadata.lang | default: site.lang | default: "en" }}'>
 
   {% include head.html %}
@@ -32,8 +31,6 @@
         {{ content }}
       </div>
     </main>
-
-    {% include footer.html %}
 
   </body>
 
