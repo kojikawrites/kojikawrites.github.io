@@ -20,7 +20,7 @@ bundle exec jekyll server
 
 At this point, your site should be running on [localhost:4000](http://localhost:4000/). Marvel at its glory. When you're done admiring your work, you can make edits to your site and see them appear in the browser, in realtime.
 
-When you're ready to release the site into the wild, be sure to edit the _config.yml from this ...
+When you're ready to release the site into the wild, be sure to edit the `_config.yml` from this ...
 
 ```yaml
 url: "https://groundh0g.github.io" # the base hostname & protocol for your site, e.g. http://example.com
