@@ -45,8 +45,11 @@ plugins:
 
 
 collections:
-  - jekyllfaces
+  jekyllfaces:
 #    output: true
+  posts:
+    output: true
+    permalink: /blog/:categories/:year/:month/:day/:title/
 
 #  tweetHash:     "jaytch #blogs #OSS" # don't hash first tag
 #  tweetShoutOut: "GetJaytch"

@@ -27,14 +27,14 @@
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ config.metadata.title | default: site.title | escape }}" href='{{ "/feed.xml" | relative_url }}'>
 
-  <link rel="apple-touch-icon" sizes="180x180" href="https://joehall.net/assets/favicons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="https://joehall.net/assets/favicons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="https://joehall.net/assets/favicons/favicon-16x16.png">
-  <link rel="manifest" href="https://joehall.net/assets/favicons/site.webmanifest">
-  <link rel="mask-icon" href="https://joehall.net/assets/favicons/safari-pinned-tab.svg" color="#5bbad5">
-  <link rel="shortcut icon" href="https://joehall.net/assets/favicons/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ "/assets/favicons/apple-touch-icon.png" | relative_url }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ "/assets/favicons/favicon-32x32.png" | relative_url }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ "/assets/favicons/favicon-16x16.png" | relative_url }}">
+  <link rel="manifest" href="{{ "/assets/favicons/site.webmanifest" | relative_url }}">
+  <link rel="mask-icon" href="{{ "/assets/favicons/safari-pinned-tab.svg" | relative_url }}" color="#5bbad5">
+  <link rel="shortcut icon" href="{{ "/assets/favicons/favicon.ico" | relative_url }}">
   <meta name="msapplication-TileColor" content="#ffc40d">
-  <meta name="msapplication-config" content="https://joehall.net/assets/favicons/browserconfig.xml">
+  <meta name="msapplication-config" content="{{ "/assets/favicons/browserconfig.xml" | relative_url }}">
   <meta name="theme-color" content="#ffffff">
 
   <!-- BOOTSTRAP THEME -->
@@ -163,5 +163,41 @@
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
   <meta name="msapplication-TileColor" content="#da532c">
   <meta name="theme-color" content="#ffffff">
+
+  <!-- TODO: find a better place for this, make it configurable -->
+  <style type="text/css">
+
+{% assign currentPage = page.url | split: "/" | last | split: "." | first | downcase %}
+{% assign activeStyle = "{ font-weight: bolder; white-space: nowrap; }" %}
+{% case currentPage %}
+{% when "about" %}
+    #navLinkAbout {{ activeStyle }}
+    #navLinkAbout a::before { content: ">"; white-space: nowrap; }
+    #navLinkAbout a::after { content: "<"; white-space: nowrap; }
+{% when "blog" %}
+    #navLinkBlog {{ activeStyle }}
+    #navLinkBlog a::before { content: ">"; white-space: nowrap; }
+    #navLinkBlog a::after { content: "<"; white-space: nowrap; }
+{% when "contact-us" %}
+    #navLinkContactUs {{ activeStyle }}
+    #navLinkContactUs a::before { content: ">"; white-space: nowrap; }
+    #navLinkContactUs a::after { content: "<"; white-space: nowrap; }
+{% when "kudos" %}
+    #navLinkKudos {{ activeStyle }}
+    #navLinkKudos a::before { content: ">"; white-space: nowrap; }
+    #navLinkKudos a::after { content: "<"; white-space: nowrap; }
+{% when "services" %}
+    #navLinkServices {{ activeStyle }}
+    #navLinkServices a::before { content: ">"; white-space: nowrap; }
+    #navLinkServices a::after { content: "<"; white-space: nowrap; }
+{% else %}
+  {% if page.url contains "/blog/" %}
+    #navLinkBlog {{ activeStyle }}
+    #navLinkBlog a::before { content: ">"; white-space: nowrap; }
+    #navLinkBlog a::after { content: "<"; white-space: nowrap; }
+  {% endif %}
+{% endcase %}
+
+  </style>
 
 </head>

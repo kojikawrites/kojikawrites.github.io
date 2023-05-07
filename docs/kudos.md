@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Kudos
-showTitle: false
+#showTitle: false
 permalink: /kudos/
 ---
 

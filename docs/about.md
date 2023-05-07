@@ -1,7 +1,7 @@
 ---
 layout: page
 title: About
-showTitle: false
+#showTitle: false
 permalink: /about/
 ---
 

@@ -18,6 +18,18 @@ Now, whenever you want to kick off a local instance of your site, run the jekyll
 bundle exec jekyll server
 ```
 
+With recent versions of Jekyll, live reloads are supported. This is especially handy when making quick tweaks or content edits. No more refreshing your browser manually.
+
+```shell script
+bundle exec jekyll server --livereload
+```
+
+When you're ready to hit the localhost instance from another machine on your LAN, use the following command to expose the services and accept incoming connections.
+
+```shell script
+bundle exec jekyll server --livereload --host 0.0.0.0
+```
+
 At this point, your site should be running on [localhost:4000](http://localhost:4000/). Marvel at its glory. When you're done admiring your work, you can make edits to your site and see them appear in the browser, in realtime.
 
 When you're ready to release the site into the wild, be sure to edit the `_config.yml` from this ...

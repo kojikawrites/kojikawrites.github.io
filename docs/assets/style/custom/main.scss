@@ -208,7 +208,13 @@ div.service-item {
   //text-decoration: underline;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 992px) {
+  h1.post-title { display: none; }
+
+}
+
+//@media (max-width: 767px) {
+@media (max-width: 991px) {
 
   body {
     text-align: center;
@@ -233,17 +239,17 @@ div.service-item {
   }
 
   .service-item img {
-    width: 100%;
-    margin: 10vmin auto 5vmin;
+    width: 50%;
+    margin: 1vmin auto 5vmin;
   }
 
   .service-item img.float-left {
-    float: none;
+    float: none !important;
     //margin: 10vmin 5vmin 10vmin;
   }
 
   .service-item img.float-right {
-    float: none;
+    float: none !important;
     //margin: 10vmin 5vmin 10vmin;
   }
 
