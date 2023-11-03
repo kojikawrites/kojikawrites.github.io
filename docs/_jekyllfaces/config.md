@@ -1,8 +1,8 @@
 ---
 
 metadata:
-  title: Hiive<small><small>.com</small></small>
-  tagline: The latest buzz around Hiive, LLC.
+  title: h<span color="ff6600">i</span>ive<span color="#ff6600">labs</span><small><small>.com</small></small>
+  tagline: #The latest buzz around Hiive, LLC.
   description: > # Description for the site ...
     The launching point for all things Hiive, LLC. Personal and professional musings.
   legal: # used for privacy policy, terms of use, etc ...
@@ -14,7 +14,7 @@ metadata:
   lang: en
 
 customize:
-  theme: darkly       # one of: cerulean | cosmo | cyborg | darkly | default | flatly | journal | litera | lumen | lux | materia | minty | pulse | sandstone | simplex | sketchy | slate | solar | spacelab | superhero | united | yeti
+  theme: lux       # one of: cerulean | cosmo | cyborg | darkly | default | flatly | journal | litera | lumen | lux | materia | minty | pulse | sandstone | simplex | sketchy | slate | solar | spacelab | superhero | united | yeti
   http404: sticky     # one of: badge | default | dog | droids | glass | link | milk | monster | potty | shrug | sticky | tweet | zork
   #css: [ "main.css" ] # array of stylesheets to load after other styles
   #js:  [ "main.js"  ] # array of javascripts to load after other scripts

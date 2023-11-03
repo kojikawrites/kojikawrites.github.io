@@ -6,7 +6,9 @@ layout: default
 
   <header class="post-header">
     {% if page.title != "" and page.title != nil and page.showTitle != false %}
-    <h1 class="post-title-homepage">{{ page.title | replace: "Hiive", 'Hi<i style="color: #FFD479; font-style: normal;">i</i>ve' }}</h1>
+    <h1 class="post-title-homepage">{{ page.title | replace: "hiivelabs",
+      'h<i style="color: #ff6600; font-style: normal;">i</i>ive<i style="color:#ff6600; font-style: normal;">labs</i>' }}
+    </h1>
     <p class="post-tagline">{{ page.tagline }}</p>
     {% endif %}
 

@@ -1,7 +1,8 @@
 ---
 layout: homepage
-title: "Hiive<small>.com</small>"
-tagline: See what the buzz is about!
+title: "hiivelabs<small>.com</small>"
+showTitle: false
+tagline: #See what the buzz is about!
 logo: "/assets/images/hiive-logo.svg"
 #trademark: "Hiive and its logo are registered trademarks of Hiive, LLC." 
 #copyright: "All content &copy; 2012-CURRENT_YEAR by Hiive, LLC."
