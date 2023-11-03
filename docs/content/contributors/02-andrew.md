@@ -3,7 +3,7 @@ fullname: Andrew Rollings
 alias:    hiive
 image:    images/contributors/andrew.png
 role:     Programmer / Writer
-email:    hello@hiive.com
+email:    hello@hiivelabs.com
 website:  http://hiive.com/
 social:
   showAlias:     false

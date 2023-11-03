@@ -36,7 +36,7 @@ When you're ready to release the site into the wild, be sure to edit the `_confi
 
 ```yaml
 url: "https://groundh0g.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-baseurl: "/hiive.com" # the subpath of your site, e.g. /blog
+baseurl: "/hiivelabs.com" # the subpath of your site, e.g. /blog
 ```
 
 ... to this ...
