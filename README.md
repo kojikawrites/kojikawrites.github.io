@@ -42,6 +42,6 @@ baseurl: "/hiivelabs.com" # the subpath of your site, e.g. /blog
 ... to this ...
 
 ```yaml
-url: "https://hiive.com" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://hiivelabs.com" # the base hostname & protocol for your site, e.g. http://example.com
 baseurl: "" # the subpath of your site, e.g. /blog
 ```

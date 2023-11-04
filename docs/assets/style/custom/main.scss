@@ -138,8 +138,9 @@
 
 .post-list .post-list-title {
   font-size: 1.25em;
-  color: #ff6707;
-  font-weight: bolder;
+  color: #ffA707;
+  font-weight: bolder !important;
+  font-family: "Roboto", sans-serif !important;
 }
 
 .post-list .post-meta {
@@ -150,6 +151,17 @@
 .post-list .post-link {
   color: #ff6707;
   font-style: italic;
+}
+
+.page-content h1 {
+  color: #ffA707;
+  font-weight: bolder !important;
+  font-family: "Roboto", sans-serif !important;
+  text-transform: none !important;
+}
+
+.page-content .post-meta {
+  color: #808080
 }
 
 .homepage h1 {
@@ -178,6 +190,9 @@ p.copyright {
   font-size: 0.8em;
   font-weight: normal;
   text-align: center;
+  // line-height: 32px;
+  padding-bottom: 2em;
+  color: #A0A0A0
 }
 
 .service-item img {
@@ -292,5 +307,7 @@ div.service-item {
 body {
   background-image: url('{{ "/assets/images/hiive-background.png" | relative_url }}');
   background-repeat: repeat;
+  min-height: 100vh;
+  min-width: 100vw;
   color: white;
 }

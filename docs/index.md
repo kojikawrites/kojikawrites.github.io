@@ -8,10 +8,16 @@ logo: "/assets/images/hiive-logo.svg"
 #copyright: "All content &copy; 2012-CURRENT_YEAR by Hiive, LLC."
 ---
 
-If you're looking for a reliable and experienced software development company to help you bring your ideas to life, look no further than Hiive, LLC! Andrew Rollings and his team of skilled developers have decades of experience in a wide range of technologies and platforms, including web, mobile, desktop applications, and game development. They're at home with projects from greenfield projects to large-scale conversions to legacy integrations and everything in between.
+At h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span>, the fusion of artificial 
+intelligence and machine learning with human ingenuity delivers forward-thinking solutions that catapult businesses 
+ahead. Specializing in a broad spectrum of services, from software development to data science, the focus is on creating
+streamlined operations, revealing deep insights, and fostering innovation.
 
-The team at Hiive pride themselves on their ability to deliver high-quality, cost-effective software solutions to their clients, no matter the size or complexity of their project. Whether you need a simple website or a complex enterprise application, Hiive has the expertise to get the job done right, on time, and within budget.
+Whether it's sophisticated client/server/database architecture, cross-platform integration, or cutting-edge AI/ML
+implementation, h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span> offers bespoke solutions
+to meet complex challenges. With a commitment to staying ahead of technological trends, 
+h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span> ensures your enterprise remains at the 
+forefront of digital transformation.
 
-Services include everything from requirements analysis and software design to coding, testing, and deployment. Hiive uses the latest tools and technologies to ensure that your software is not only functional, but also scalable, maintainable, and secure. Take a look a the [Services page]({{ "/services" | relative_url }}) for a sample of what's offered.
-
-So why choose Hiive.com for your next software development needs? Because they're passionate about what they do, and they're committed to delivering the best possible results for every client. [Contact Hiive]({{ "/contact-us" | relative_url }}) today to learn more about how they can help you achieve your goals!
+Explore a partnership that transcends the traditional consultancy model. Embrace a future where technology and strategy
+unite to set a new standard for success.

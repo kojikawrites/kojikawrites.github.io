@@ -2,15 +2,15 @@
 
 metadata:
   title: h<span color="ff6600">i</span>ive<span color="#ff6600">labs</span><small><small>.com</small></small>
-  tagline: #The latest buzz around Hiive, LLC.
+  # tagline: The latest buzz around Hiive, LLC.
   description: > # Description for the site ...
     The launching point for all things Hiive, LLC. Personal and professional musings.
   legal: # used for privacy policy, terms of use, etc ...
     #company: Joe Hall  # {metadata.title} when blank
     #website: http://joehall.net/  # http://{metadata.title}.com when blank
     #jurisdiction: Georgia  # e.g. Georgia, "United States" when blank
-  trademark: "Hiive and its logo are registered trademarks of Hiive, LLC." 
-  copyright: "All content &copy; 2012-CURRENT_YEAR by Hiive, LLC."
+  trademark: "hiivelabs and its logo are registered trademarks of hiive llc." 
+  copyright: "All content &copy; 2005-CURRENT_YEAR by hiive llc."
   lang: en
 
 customize:
