@@ -4,6 +4,28 @@ title: Services
 ---
 
 {% capture content %}
+## AI and Machine Learning
+
+Artificial intelligence and machine learning are changing the way we interact with technology, and our team is at the forefront of integrating these cutting-edge technologies into software development projects of any scale. We specialize in building intelligent software solutions that leverage the latest advances in AI and machine learning, delivering enhanced functionality and performance for your business.
+
+Our team can build AI and machine learning solutions using a variety of technologies, including Python, TensorFlow, and Azure Machine Learning. We follow a comprehensive development lifecycle, including requirements gathering, design, development, testing, deployment, and maintenance, to ensure that your solution is of the highest quality. With our expertise, we can help you unlock the full potential of AI and machine learning in your software projects, driving innovation and success for your business.
+
+{% endcapture %}
+{% include service-item.liquid image='/assets/images/services/svc-aiml.png' align='left' content=content %}
+
+
+{% capture content %}
+## Data Science, Analytics, and Mining
+
+Do you have large amounts of data collected from your software applications but don't know how to extract insights and value from it? Our team specializes in implementing data science techniques for analytics and mining of data, delivering actionable insights that can drive growth and success for your business.
+
+Using a variety of data science tools and techniques, including statistical analysis, machine learning, and data visualization, our team can help you unlock the potential of your data. We follow a comprehensive process that includes data cleaning, preprocessing, modeling, and interpretation, ensuring that your insights are accurate and relevant. Let us help you turn your data into a powerful asset for your business, providing the insights and intelligence you need to make informed decisions and achieve your goals.
+
+{% endcapture %}
+{% include service-item.liquid image='/assets/images/services/svc-datasci.png' align='right' content=content %}
+
+
+{% capture content %}
 
 ## General Software Development
 
@@ -29,17 +51,6 @@ We follow a comprehensive development lifecycle that includes requirements gathe
 
 
 {% capture content %}
-## Legacy Systems
-
-Do you have legacy systems in your business that need to be integrated with modern applications or converted to more modern architectures? Our team specializes in creating software solutions that seamlessly integrate with legacy applications and their underlying data stores, providing a bridge between old and new systems.
-
-Our team follows a comprehensive development lifecycle, which includes requirements gathering, design, development, testing, deployment, and maintenance. We also use agile methodologies, allowing us to quickly adapt to changing requirements and deliver high-quality software that meets your business needs. With our automated deployment process, we can quickly and efficiently deploy new releases and updates, minimizing downtime and disruption. Let us help you modernize your legacy systems and achieve greater efficiency and productivity in your business processes.
-
-{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-legacy.png' align='left' content=content %}
-
-
-{% capture content %}
 ## Cross-Platform
 
 Looking for a software solution that can run on multiple platforms, delivering a native platform experience? Our team specializes in creating cross-platform software that runs on nearly any device, using both Microsoft .NET technologies and open-source Mono technologies.
@@ -47,29 +58,18 @@ Looking for a software solution that can run on multiple platforms, delivering a
 With our expertise, we can build software applications that deliver a seamless experience across all platforms, including desktop, web, mobile, and cloud. Our team follows a comprehensive development lifecycle, including requirements gathering, design, development, testing, deployment, and maintenance, to ensure that your application is of the highest quality. With our focus on Microsoft .NET technologies and open-source Mono technologies, we can build robust and reliable applications that run efficiently on a wide range of devices. Let us help you bring your software ideas to life and deliver a seamless native platform experience for your users, no matter what device they are using.
 
 {% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-xplat.png' align='right' content=content %}
+{% include service-item.liquid image='/assets/images/services/svc-xplat.png' align='left' content=content %}
 
 
 {% capture content %}
-## AI and Machine Learning
+## Legacy Systems
 
-Artificial intelligence and machine learning are changing the way we interact with technology, and our team is at the forefront of integrating these cutting-edge technologies into software development projects of any scale. We specialize in building intelligent software solutions that leverage the latest advances in AI and machine learning, delivering enhanced functionality and performance for your business.
+Do you have legacy systems in your business that need to be integrated with modern applications or converted to more modern architectures? Our team specializes in creating software solutions that seamlessly integrate with legacy applications and their underlying data stores, providing a bridge between old and new systems.
 
-Our team can build AI and machine learning solutions using a variety of technologies, including Python, TensorFlow, and Azure Machine Learning. We follow a comprehensive development lifecycle, including requirements gathering, design, development, testing, deployment, and maintenance, to ensure that your solution is of the highest quality. With our expertise, we can help you unlock the full potential of AI and machine learning in your software projects, driving innovation and success for your business.
-
-{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-aiml.png' align='left' content=content %}
-
-
-{% capture content %}
-## Data Science, Analytics, and Mining
-
-Do you have large amounts of data collected from your software applications but don't know how to extract insights and value from it? Our team specializes in implementing data science techniques for analytics and mining of data, delivering actionable insights that can drive growth and success for your business.
-
-Using a variety of data science tools and techniques, including statistical analysis, machine learning, and data visualization, our team can help you unlock the potential of your data. We follow a comprehensive process that includes data cleaning, preprocessing, modeling, and interpretation, ensuring that your insights are accurate and relevant. Let us help you turn your data into a powerful asset for your business, providing the insights and intelligence you need to make informed decisions and achieve your goals.
+Our team follows a comprehensive development lifecycle, which includes requirements gathering, design, development, testing, deployment, and maintenance. We also use agile methodologies, allowing us to quickly adapt to changing requirements and deliver high-quality software that meets your business needs. With our automated deployment process, we can quickly and efficiently deploy new releases and updates, minimizing downtime and disruption. Let us help you modernize your legacy systems and achieve greater efficiency and productivity in your business processes.
 
 {% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-datasci.png' align='right' content=content %}
+{% include service-item.liquid image='/assets/images/services/svc-legacy.png' align='right' content=content %}
 
 
 {% capture content %}
