@@ -1,6 +1,6 @@
-# hiive.com
+# hiivelabs.com
 
-This is the initial redesign of hiive.com for Andrew Rollings.
+This is the initial redesign of hiivelabs.com for Andrew Rollings.
 
 ## Running the Site Locally
 
