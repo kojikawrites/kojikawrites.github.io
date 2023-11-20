@@ -8,9 +8,16 @@ permalink: /about/
 {% capture content%}
 ## Andrew Rollings
 
-Andrew Rollings has written several books, all connected in some way or other with his love of games. The most notable of these being Game Architecture and Design, which has been the reference for many college and secondary education courses.
+Andrew Rollings has written several books, all connected in some way or other with his love of games. The most notable 
+of these being Game Architecture and Design, which has been the reference for many college and secondary education 
+courses.
 
-Andrew is an ex-UK resident who currently lives in a bunker located in places unknown. He earns his keep by architecting and developing software for companies that span a wide variety of fields. In his spare time, you may see him working on his Nintendo 3DS, Switch, or PC games.
+Andrew is an ex-UK resident who currently lives in a bunker located in places unknown. He earns his keep by architecting
+and developing software for companies that span a wide variety of fields. In his spare time, you may see him working on 
+his Nintendo 3DS, Switch, or PC games.
+
+Note that the image on the left is not what Andrew actually looks like. However it is what AI thinks he looks like based
+on a text description. He'll take it.
 
 {% endcapture %}
 {% assign imagePath = "/assets/images/andrew.png" | relative_url %}
