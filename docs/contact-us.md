@@ -13,7 +13,7 @@
 ### We can be reached at:
 
 <div class = ".container">
-    <span class="hidden-email">a.rollings</span><span>@</span><span class="hidden-email">hiivelabs.com</span>
+    <span class="hidden-email">info</span><span>@</span><span class="hidden-email">hiivelabs.com</span>
 </div>
 <style>
   .hidden-email { display: inline; }
