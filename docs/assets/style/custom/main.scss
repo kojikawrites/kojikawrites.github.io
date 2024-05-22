@@ -4,6 +4,11 @@
 
 //@import "minima";
 
+//a {
+//  color: white !important;
+//  font-style: italic;
+//}
+
 .typeahead,
 .tt-query,
 .tt-hint {
@@ -86,6 +91,10 @@
   font-family: 'Roboto', sans-serif;
 }
 
+.navbar-orange {
+  color: #ff6600 !important;
+}
+
 .home-img {
   width: 100%;
 }
@@ -126,6 +135,8 @@
   max-width: 100%;
   height: auto;
 }
+
+
 
 
 .homepage .post-header { text-align: center; }
@@ -218,6 +229,19 @@ div.service-item {
   clear-after: both;
 }
 
+.about-resume-row h3 {
+  color: white !important;
+}
+
+.post-content h3 {
+  color: white;
+}
+
+.about-resume-row a {
+  color: #ff6707;
+  font-style: italic;
+}
+
 .about-resume-avatar {
   width: 33vmin;
   float: left;
@@ -281,6 +305,18 @@ div.service-item {
 
   .about-resume-title {
     font-weight: bolder;
+    color: white !important;
+  }
+
+  .about-resume-period {
+    font-weight: normal;
+    color: white !important;
+  }
+
+  .about-resume-location {
+    font-weight: normal;
+    color: white !important;
+    font-style: italic;
   }
 
   .service-item {
