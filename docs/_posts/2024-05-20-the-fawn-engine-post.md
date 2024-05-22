@@ -1,10 +1,11 @@
 ---
 layout: post
-title:  "Voidforge Chronicles"
+title:  "The F.A.W.N. Engine"
 categories: gamedev
 author: hiive
 tags: gamedev
 ---
+
 ## Introduction
 Back in the dark times (mid-pandemic) I got an itch to create a new game. For background, I started out as a game developer for a short period of time immediately post-university, and quickly figured out that the mainstream game industry wasn't to my taste.
 So, I did what any self-respecting twenty-something would do, quit the game industry and moved over to the finance industry where I did the same kind of thing (programming is pretty much the same wherever you go) for five times the pay.
@@ -43,6 +44,8 @@ Admittedly it's not the best prose in the world, but it's certainly not bad, and
 
 I'm rambling again, and I've not even really talked about what the game is. Let me fix that.
 
+{% capture content%}
+
 ## Okay, so what kind of game?
 One of my favorite types of game, (at least theoretically), is the Roguelike. Most readers should be familiar with the concept, but the key feature of a roguelike is that the genre is arguably the first and oldest of the fully PG games.
 So why did I say that they are only *theoretically* my favorite game genre? You probably already know the answer: randomness. I like them, in theory, but I can't shake the feeling that I'm just playing against a random number generator. Recently some games have improved on this, with a particularly notable example being **Caves of Qud**. (It has some other issues that I'm not so keen on, but it's the best of the bunch, for sure.) Another one I think I should like (and I'm trying, honest!) is **KeeperRL**, and also **Dwarf Fortress** and **Soulash/Soulash 2**. There are many others that I haven’t mentioned, but that doesn’t mean they are any less good - it just means I haven’t played them enough to make a decent judgment. In fact, the only modern Roguelike I have put any significant time into recently would be Caves of Qud.
@@ -51,4 +54,10 @@ Each of these games are excellent within the genre, but they are still missing a
 
 I could (and probably should) go into a lot more detail about specifics of these (and other) games - if only to do them justice rather than deliver dismissive soundbites - but that will be a post for another time.
 
+So, the point of this long rambling post is that I'm thinking of making a Roguelike, bringing in some of the things I've learned from working in the A.I. field from the past few years. Currently this involves working on various support libraries that will make up the bones of the game.
 
+I'll talk about this in future posts, but I announce the name of the engine I'm building... The "Flexible Architecture for World-building and Narrative".
+{% endcapture %}
+
+{% assign imagePath = "/assets/images/fawn_engine_logo.png" | relative_url %}
+{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}

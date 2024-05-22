@@ -24,6 +24,7 @@ showTitle: false
     <span class="post-meta">{{ post.date | date: date_format }}</span>
     <p>{{ post.excerpt | strip_html }}<br/>
     <a class="post-link" href="{{ post.url | relative_url }}">Read More &raquo;</a></p>
+    <br/>
   </li>
 {% endfor %}
 </ul>
