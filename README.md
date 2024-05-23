@@ -1,6 +1,6 @@
-# hiivelabs.com
+# thewriteplace.rocks
 
-This is the initial redesign of hiivelabs.com for Andrew Rollings.
+This is the initial design of thewriteplace.rocks, based on the redesign of hiivelabs.com by Joe Hall for Andrew Rollings.
 
 ## Running the Site Locally
 
@@ -36,12 +36,12 @@ When you're ready to release the site into the wild, be sure to edit the `_confi
 
 ```yaml
 url: "https://groundh0g.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-baseurl: "/hiivelabs.com" # the subpath of your site, e.g. /blog
+baseurl: "/thewriteplace.rocks" # the subpath of your site, e.g. /blog
 ```
 
 ... to this ...
 
 ```yaml
-url: "https://hiivelabs.com" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://thewriteplace.rocks" # the base hostname & protocol for your site, e.g. http://example.com
 baseurl: "" # the subpath of your site, e.g. /blog
 ```
