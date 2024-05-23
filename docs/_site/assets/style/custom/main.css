@@ -76,6 +76,8 @@ div.service-item { margin-bottom: 13vmin; clear: both; }
 
 .post-content h3 { color: white; }
 
+.post-content h2 { color: white; }
+
 .about-resume-row a { color: #ff6707; font-style: italic; }
 
 .about-resume-avatar { width: 33vmin; float: left; margin-right: 5vmin; }
