@@ -1,0 +1,24 @@
+---
+layout: default
+---
+
+<article class="homepage">
+
+  <header class="post-header">
+    {% if page.title != "" and page.title != nil and page.showTitle != false %}
+    <h1 class="post-title-homepage">{{ page.title | replace: "hiivelabs",
+      'h<i style="color: #ff6600; font-style: normal;">i</i>ive<i style="color:#ff6600; font-style: normal;">labs</i>' }}
+    </h1>
+    <p class="post-tagline">{{ page.tagline }}</p>
+    {% endif %}
+
+    <img src='{{ page.logo | relative_url }}' class='standalone-image' />
+  </header>
+
+  <div class="post-content">
+    {{ content }}
+  </div>
+
+  {% include footer.html %}
+
+</article>

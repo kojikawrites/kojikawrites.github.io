@@ -1,0 +1,51 @@
+{% assign pages = site.pages | where: "dir", page.dir %}
+
+{% for file in pages %}
+  {% if file.name == page.name %}{% continue %}{% endif %}
+
+{% capture bioLeft %}
+  <img alt="{{ file.fullname }} Avatar" src='{{ "/assets/" | append: file.image | relative_url }}' width="300" title="{{ file.fullname }} Avatar">
+
+  **{{ file.fullname }}**<br/>
+  {% if file.role %}{{ file.role }}<br/>{% endif %}
+  {% if file.alias %}[@{{ file.alias }}](https://github.com/{{ file.alias }}/){:target="_blank"}<br/>{% endif %}
+{% endcapture %}
+
+{% capture social_output %}
+{%assign social_count = 0 %}
+{%if file.social.twitter %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://twitter.com/{{ file.social.twitter }}" title="{{ file.social.twitter }}"><i class="fa fa-twitter"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.twitter }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.facebook %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://facebook.com/{{ file.social.facebook }}" title="{{ file.social.facebook }}"><i class="fa fa-facebook"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.facebook }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.instagram %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://www.instagram.com/{{ file.social.instagram }}" title="{{ file.social.instagram }}"><i class="fa fa-instagram"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.instagram }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.linkedin %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://www.linkedin.com/in/{{ file.social.linkedin }}" title="{{ file.social.linkedin }}"><i class="fa fa-linkedin-square"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.linkedin }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.googleplus %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://google.com/+{{ file.social.googleplus }}" title="{{ file.social.googleplus }}"><i class="fa fa-google-plus-official"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.googleplus }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.github %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://github.com/{{ file.social.github }}" title="{{ file.social.github }}"><i class="fa fa-github"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.github }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.bitbucket %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://bitbucket.org/{{ file.social.bitbucket }}/" title="{{ file.social.bitbucket }}"><i class="fa fa-bitbucket-square"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.bitbucket }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.stackoverflow %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://stackoverflow.com/users/{{ file.social.stackoverflow }}" title="{{ file.social.stackoverflow }}"><i class="fa fa-stack-overflow"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.stackoverflow }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.deviant %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://{{ file.social.deviant }}.deviantart.com/" title="{{ file.social.deviant }}"><i class="fa fa-deviantart"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.deviant }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.dribbble %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://dribbble.com/{{ file.social.dribbble }}" title="{{ file.social.dribbble }}"><i class="fa fa-dribbble"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.dribbble }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.flickr %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://www.flickr.com/photos/{{ file.social.flickr }}" title="{{ file.social.flickr }}"><i class="fa fa-flickr"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.flickr }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.tumblr %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://www.tumblr.com/blog/{{ file.social.tumblr }}" title="{{ file.social.tumblr }}"><i class="fa fa-tumblr"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.tumblr }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.pinterest %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://www.pinterest.com/+{{ file.social.pinterest }}" title="{{ file.social.pinterest }}"><i class="fa fa-pinterest-square"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.pinterest }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.youtube %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://www.youtube.com/user/{{ file.social.youtube }}" title="{{ file.social.youtube }}"><i class="fa fa-youtube"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.youtube }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.twitch %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://www.twitch.tv.com/{{ file.social.twitch }}" title="{{ file.social.twitch }}"><i class="fa fa-twitch"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.twitch }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{%if file.social.steam %}{% if social_count > 0 %} \| {% endif %}<a target="_blank" href="https://steamcommunity.com/id/{{ file.social.steam }}" title="{{ file.social.steam }}"><i class="fa fa-steam-square"></i>{% if file.social.showAlias %}&nbsp;{{ file.social.steam }}{% endif %}</a>{% endif %}{% assign social_count = social_count | plus: 1 %}
+{% endcapture %}{% assign social_output = social_output | strip_newlines | strip_whitespace %}
+
+{% capture bioRight %}
+  {{ file.content }}
+
+  {{ social_output }}
+{% endcapture %}
+
+<hr/>
+<br/>
+<div class="row">
+  <div class="col-md-4">
+    {{ bioLeft | markdownify }}
+  </div>
+  <div class="col-md-8">
+    {{ bioRight | markdownify }}
+  </div>
+</div>
+
+{% endfor %}

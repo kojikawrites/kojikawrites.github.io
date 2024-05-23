@@ -1,0 +1,14 @@
+{% assign pages = site.pages | where: "dir", page.dir %}
+
+{% for file in pages %}
+    {% if file.name == page.name %}{% continue %}{% endif %}
+    {% if file.show <> false %}
+<hr/>
+<br/>
+<div class="row">
+    <div class="col-md-12">
+        {{ file.content | markdownify }}
+    </div>
+</div>
+    {% endif %}
+{% endfor %}
