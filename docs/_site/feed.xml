@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-05-22T21:57:29-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Welcome to thewriteplace.rocks!</title><link href="http://localhost:4000/blog/writing/2024/05/22/the-fawn-engine-post/" rel="alternate" type="text/html" title="Welcome to thewriteplace.rocks!" /><published>2024-05-22T00:00:00-04:00</published><updated>2024-05-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/05/22/the-fawn-engine-post</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/05/22/the-fawn-engine-post/">&lt;p&gt;Welcome to The Write Place, your new favorite spot for all things writing! We’re thrilled to have you join our community 
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-05-22T22:28:13-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Welcome to thewriteplace.rocks!</title><link href="http://localhost:4000/blog/writing/2024/05/22/the-fawn-engine-post/" rel="alternate" type="text/html" title="Welcome to thewriteplace.rocks!" /><published>2024-05-22T00:00:00-04:00</published><updated>2024-05-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/05/22/the-fawn-engine-post</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/05/22/the-fawn-engine-post/">&lt;p&gt;Welcome to The Write Place, your new favorite spot for all things writing! We’re thrilled to have you join our community 
 of writers, readers, and word enthusiasts. Whether you’re a seasoned novelist, a budding poet, or someone who just loves
 a good story, you’re in the right place.&lt;/p&gt;
 
@@ -23,12 +23,11 @@ Place — where every word matters and every story counts. You’ve found the ri
 range of topics that matter to writers at all stages of their journey. From mastering the basics of storytelling to 
 exploring advanced techniques that add depth and dimension to your work, there’s something here for everyone.&lt;/p&gt;
 
-&lt;p&gt;We’ll feature interviews with published authors who’ll share their secrets and struggles, offer insights into the 
-publishing industry, and provide practical advice on how to get your work noticed. Our goal is to create a vibrant, 
- space where you can learn and grow. So stay tuned, keep writing, 
-and remember—every great story starts with a single word. Welcome to The Write Place, where your writing journey 
-finds its perfect home.&lt;/p&gt;
+&lt;p&gt;Our goal is to create a vibrant space where you can learn and grow. So stay tuned, keep writing, 
+and remember—every great story starts with a single word.&lt;/p&gt;
+
+&lt;p&gt;So, welcome to The Write Place, where your writing journey finds its perfect home.&lt;/p&gt;
 
 &lt;div style=&quot;width: 100vw; display: block; align-content: center&quot;&gt;
-        &lt;img style=&quot;width:20vw; display: block; margin-left: 20vw; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
+        &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
 &lt;/div&gt;</content><author><name>kojika</name></author><category term="writing" /><category term="writing" /><summary type="html">Welcome to The Write Place, your new favorite spot for all things writing! We’re thrilled to have you join our community of writers, readers, and word enthusiasts. Whether you’re a seasoned novelist, a budding poet, or someone who just loves a good story, you’re in the right place.</summary></entry></feed>
