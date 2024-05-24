@@ -27,5 +27,3 @@ I played two games on recommendation from Andrew, as a means of getting to know 
 And certainly, this isn't saying that rogue-like games aren't good games; it's quite the opposite. While I didn't have the connect I would with some games, Hack, Slash, Loot highly amused me. I couldn't sit there for hours playing it, but it was enough entertainment, even in just short bursts, to show that it was a good game and well constructed. I also enjoyed some of the game mechanics of Legends of Yore too.
 
 When it comes down to it, rogue-like games probably aren’t for me, or at least pure ones. However, games are rarely fully one genre or another anymore, and I would be greatly interested in seeing a rogue game mixed in with other genres; then you can get all the fun of questing, with the added bonus of a plot to explain why we’ve decided that all those tombs just had to be vandalized.
-
-![Andrew's Signature]({{ "/assets/images/signature-andrew.png" | relative_url }})
