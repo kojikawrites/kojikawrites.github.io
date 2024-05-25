@@ -88,7 +88,7 @@ So, the point of this long rambling post is that I'm thinking of making a Roguel
 I've learned from working in the A.I. field from the past few years. Currently this involves working on various 
 support libraries that will make up the bones of the game.
 
-I'll talk about this in future posts, but I announce the name of the engine I'm building... 
+I'll talk about this in future posts, but I *will* announce the name of the engine I'm building... 
 The "Flexible Architecture for World-building and Narrative", AKA "The FAWN Engine". 
 
 ![Andrew's Signature]({{ "/assets/images/signature-andrew.png" | relative_url }})
