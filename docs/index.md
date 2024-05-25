@@ -27,4 +27,4 @@ aims to create unique adventures that are both dynamic and adaptive.
 
 Accessibility and inclusivity are also central to this endeavor, ensuring that 
 the games are enjoyable for all players. Discover how AI and human ingenuity 
-can come together to create compelling gaming experiences at hiivelabs.
+can come together to create compelling gaming experiences at h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span>.
