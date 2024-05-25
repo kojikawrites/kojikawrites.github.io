@@ -6,9 +6,21 @@ title: Mission
 {% capture content %}
 ## Incorporating ML/AI into Game Design and Development
 
-hiivelabs explores the integration of machine learning (ML) and artificial intelligence (AI) into game design. This project aims to create procedurally generated experiences that emulate the intricacies of hand-crafted content. By leveraging advanced AI techniques, the goal is to develop unique, engaging, and immersive gaming environments. The research investigates how ML/AI can enhance procedural generation, ensuring game elements exhibit depth, coherence, and creativity.
+h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span> 
+explores the integration of machine learning (ML) and artificial intelligence 
+(AI) into game design. This project aims to create procedurally generated 
+experiences that emulate the intricacies of hand-crafted content. 
+By leveraging advanced AI techniques, the goal is to develop unique, engaging, 
+and immersive gaming environments. The research investigates how ML/AI can 
+enhance procedural generation, ensuring game elements exhibit depth, coherence, 
+and creativity.
 
-AI algorithms analyze and replicate complex design patterns found in manually created game elements. This process uses data analysis and algorithmic design, drawing from a diverse dataset of game designs and player feedback. By balancing randomness with structure, the goal is to produce content that surprises and delights players while ensuring a logical and enjoyable gameplay experience.
+AI algorithms analyze and replicate complex design patterns found in manually 
+created game elements. This process uses data analysis and algorithmic design, 
+drawing from a diverse dataset of game designs and player feedback. 
+By balancing randomness with structure, the goal is to produce content 
+that surprises and delights players while ensuring a logical and enjoyable 
+gameplay experience.
 
 Key areas of focus include:
 
@@ -24,7 +36,7 @@ Key areas of focus include:
 
 6. **Adaptive Play Style**: Reacting to the player’s play style, making the adventure as big or small as the player desires without explicit input. The AI observes and learns from the player's interactions, preferences, and decisions to adjust the scope and scale of the adventure dynamically. This ensures that the gameplay experience aligns with the player's style, whether they prefer a grand epic journey or a series of smaller, more personal adventures. The game world and narrative adapt in real-time, providing a tailored experience that remains engaging and immersive throughout.
 
-The ultimate aim is to create a roguelike game that is fully procedurally generated but feels hand-crafted. By exploring AI's possibilities in game design, hiivelabs contributes to a broader understanding of ML/AI applications in creative fields. The project aims to inspire new approaches to game development, showcasing AI's potential to enhance creativity and innovation. Driven by a passion for exploring uncharted territories in technology and creativity, hiivelabs seeks to push the envelope of what can be achieved in the gaming industry. The results aim to demonstrate that AI can craft game experiences as rich and nuanced as those created by human designers, opening new horizons for developers and players.
+The ultimate aim is to create a roguelike game that is fully procedurally generated but feels hand-crafted. By exploring AI's possibilities in game design, h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span> contributes to a broader understanding of ML/AI applications in creative fields. The project aims to inspire new approaches to game development, showcasing AI's potential to enhance creativity and innovation. Driven by a passion for exploring uncharted territories in technology and creativity, h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span> seeks to push the envelope of what can be achieved in the gaming industry. The results aim to demonstrate that AI can craft game experiences as rich and nuanced as those created by human designers, opening new horizons for developers and players.
 {% endcapture %}
 {% include service-item.liquid image='/assets/images/services/svc-gamedev.png' align='left' content=content %}
 
