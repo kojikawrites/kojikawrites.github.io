@@ -8,16 +8,23 @@ logo: "/assets/images/hiive-logo.svg"
 #copyright: "All content &copy; 2012-CURRENT_YEAR by Hiive, LLC."
 ---
 
-At h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span>, the fusion of artificial 
-intelligence and machine learning with human ingenuity delivers forward-thinking solutions that catapult businesses 
-ahead. Specializing in a broad spectrum of services, from software development to data science, the focus is on creating
-streamlined operations, revealing deep insights, and fostering innovation.
+**Welcome to h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span>**
 
-Whether it's sophisticated client/server/database architecture, cross-platform integration, or cutting-edge AI/ML
-implementation, h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span> offers bespoke solutions
-to meet complex challenges. With a commitment to staying ahead of technological trends, 
-h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span> ensures your enterprise remains at the 
-forefront of digital transformation.
+At h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span>, the integration of artificial intelligence and machine learning 
+with game design leads to procedurally generated experiences that feel 
+hand-crafted. This experimental project explores innovative AI techniques 
+to develop immersive and engaging gaming environments that dynamically 
+adapt to player actions and preferences. It also serves as an opportunity to 
+delve into the Rust programming language, pushing the boundaries of both 
+technology and creativity.
 
-Explore a partnership that transcends the traditional consultancy model. Embrace a future where technology and strategy
-unite to set a new standard for success.
+The mission of h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span> is to 
+investigate how AI can enhance game design, ensuring that the generated content 
+exhibits depth, coherence, and creativity. By focusing on key areas such as 
+terrain generation, character development, quest creation, narrative design, 
+and living worlds, h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span> 
+aims to create unique adventures that are both dynamic and adaptive.
+
+Accessibility and inclusivity are also central to this endeavor, ensuring that 
+the games are enjoyable for all players. Discover how AI and human ingenuity 
+can come together to create compelling gaming experiences at hiivelabs.
