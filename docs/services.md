@@ -1,96 +1,30 @@
 ---
 layout: page
-title: Services
+title: Mission
 ---
 
 {% capture content %}
-## AI and Machine Learning
+## Incorporating ML/AI into Game Design and Development
 
-Artificial intelligence and machine learning are changing the way we interact with technology, and our team is at the forefront of integrating these cutting-edge technologies into software development projects of any scale. We specialize in building intelligent software solutions that leverage the latest advances in AI and machine learning, delivering enhanced functionality and performance for your business.
+hiivelabs explores the integration of machine learning (ML) and artificial intelligence (AI) into game design. This project aims to create procedurally generated experiences that emulate the intricacies of hand-crafted content. By leveraging advanced AI techniques, the goal is to develop unique, engaging, and immersive gaming environments. The research investigates how ML/AI can enhance procedural generation, ensuring game elements exhibit depth, coherence, and creativity.
 
-Our team can build AI and machine learning solutions using a variety of technologies, including Python, TensorFlow, and Azure Machine Learning. We follow a comprehensive development lifecycle, including requirements gathering, design, development, testing, deployment, and maintenance, to ensure that your solution is of the highest quality. With our expertise, we can help you unlock the full potential of AI and machine learning in your software projects, driving innovation and success for your business.
+AI algorithms analyze and replicate complex design patterns found in manually created game elements. This process uses data analysis and algorithmic design, drawing from a diverse dataset of game designs and player feedback. By balancing randomness with structure, the goal is to produce content that surprises and delights players while ensuring a logical and enjoyable gameplay experience.
 
-{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-aiml.png' align='left' content=content %}
+Key areas of focus include:
 
+1. **Terrain Generation**: Creating vast, detailed landscapes that feel organic and believable. The terrain generation process employs AI to simulate natural geological processes, resulting in realistic mountains, valleys, rivers, and forests. Each generated landscape is unique, yet maintains the coherence and visual appeal of a hand-crafted world. The AI adapts to various environmental factors, such as climate and vegetation, to create immersive and diverse biomes that enhance the player's exploration experience.
 
-{% capture content %}
-## Data Science, Analytics, and Mining
+2. **Character Development**: Designing diverse and complex characters with unique backstories and behaviors. Characters are generated with intricate personal histories, motivations, and personality traits that influence their interactions with the player and the game world. AI-driven behavior models enable characters to react dynamically to player actions and environmental changes, creating a more engaging and lifelike experience. The characters' development is intertwined with the game's narrative, ensuring that they contribute meaningfully to the story and gameplay.
 
-Do you have large amounts of data collected from your software applications but don't know how to extract insights and value from it? Our team specializes in implementing data science techniques for analytics and mining of data, delivering actionable insights that can drive growth and success for your business.
+3. **Quest Creation**: Generating multi-layered dynamic quests that offer meaningful choices and consequences across different conceptual levels. This includes personal character arcs that delve into individual stories and motivations, mid-level quests that involve interactions and conflicts within small groups or communities, and overarching world-changing events that alter the game’s broader landscape. Each layer of quests is interconnected, allowing player decisions to influence subsequent quests and the overall narrative. AI ensures that quests remain fresh and varied, adapting to the evolving game world and player actions.
 
-Using a variety of data science tools and techniques, including statistical analysis, machine learning, and data visualization, our team can help you unlock the potential of your data. We follow a comprehensive process that includes data cleaning, preprocessing, modeling, and interpretation, ensuring that your insights are accurate and relevant. Let us help you turn your data into a powerful asset for your business, providing the insights and intelligence you need to make informed decisions and achieve your goals.
+4. **Narrative Design**: Crafting cohesive and immersive storylines that adapt to player actions. The narrative is dynamically generated, allowing for a fluid and personalized storytelling experience. AI algorithms track player choices and in-game events to weave a story that responds to the player's decisions, ensuring that each playthrough is unique. The narrative structure accommodates branching storylines, multiple endings, and character development arcs that provide depth and replayability. This adaptive approach ensures that the story remains engaging and relevant throughout the game.
 
-{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-datasci.png' align='right' content=content %}
+5. **Living Worlds**: Developing believable worlds where ecosystems interact dynamically, AI-driven NPCs behave realistically, and systems of politics, economics, and social interactions evolve over time. These living worlds react to player actions, creating a sense of immersion and realism. AI models simulate the interactions between flora and fauna, weather patterns, and resource cycles to create a vibrant and evolving ecosystem. NPCs have their own goals and routines, influenced by the political and economic systems in place. Additionally, AI generates cities, villages, towns, and other artificial settlements with their own unique cultures, economies, and political systems. These settlements grow and change over time, influenced by the player’s actions and the world’s evolving dynamics. This complexity ensures that the game world feels alive and responsive, offering players a rich and dynamic environment to explore.
 
+6. **Adaptive Play Style**: Reacting to the player’s play style, making the adventure as big or small as the player desires without explicit input. The AI observes and learns from the player's interactions, preferences, and decisions to adjust the scope and scale of the adventure dynamically. This ensures that the gameplay experience aligns with the player's style, whether they prefer a grand epic journey or a series of smaller, more personal adventures. The game world and narrative adapt in real-time, providing a tailored experience that remains engaging and immersive throughout.
 
-{% capture content %}
-
-## General Software Development
-
-Are you looking for reliable and efficient software development services for your business? Look no further than our team of experts! We specialize in providing end-to-end solutions for software development, from initial concept and design to deployment and maintenance.
-
-We follow industry-standard software development lifecycle methodologies to ensure that your project is completed on time and within budget. Our team is also well-versed in agile methodologies, which allows us to quickly adapt to changing requirements and deliver high-quality software that meets your business needs. With our automated deployment process, we can quickly deploy new releases and updates with minimal downtime. Let us help you bring your software ideas to life and take your business to the next level!
-
-{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-software.png' align='left' content=content %}
-
-
-{% capture content %}
-## Client / Server / Database
-
-Are you looking for client/server software development services? We specialize in developing scalable and robust 
-applications using the Service-Oriented Architecture (SOA) approach. Our team of experts focuses on separation of 
-concerns by dividing the application into front-end, back-end, and data layers, allowing for flexibility and easy maintenance.
-
-We follow a comprehensive development lifecycle that includes requirements gathering, design, development, testing, deployment, and maintenance. Our team is also experienced in agile methodologies, which enables us to deliver software quickly and adapt to changing requirements. With our automated deployment process, we can deploy new releases and updates with ease, ensuring minimal downtime. Let us help you build a high-quality, scalable, and maintainable software solution for your business needs.
-
-{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-server.png' align='right' content=content %}
-
-
-{% capture content %}
-## Cross-Platform
-
-Looking for a software solution that can run on multiple platforms, delivering a native platform experience? Our team specializes in creating cross-platform software that runs on nearly any device, using both Microsoft .NET technologies and open-source Mono technologies.
-
-With our expertise, we can build software applications that deliver a seamless experience across all platforms, including desktop, web, mobile, and cloud. Our team follows a comprehensive development lifecycle, including requirements gathering, design, development, testing, deployment, and maintenance, to ensure that your application is of the highest quality. With our focus on Microsoft .NET technologies and open-source Mono technologies, we can build robust and reliable applications that run efficiently on a wide range of devices. Let us help you bring your software ideas to life and deliver a seamless native platform experience for your users, no matter what device they are using.
-
-{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-xplat.png' align='left' content=content %}
-
-
-{% capture content %}
-## Legacy Systems
-
-Do you have legacy systems in your business that need to be integrated with modern applications or converted to more modern architectures? Our team specializes in creating software solutions that seamlessly integrate with legacy applications and their underlying data stores, providing a bridge between old and new systems.
-
-Our team follows a comprehensive development lifecycle, which includes requirements gathering, design, development, testing, deployment, and maintenance. We also use agile methodologies, allowing us to quickly adapt to changing requirements and deliver high-quality software that meets your business needs. With our automated deployment process, we can quickly and efficiently deploy new releases and updates, minimizing downtime and disruption. Let us help you modernize your legacy systems and achieve greater efficiency and productivity in your business processes.
-
-{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-legacy.png' align='right' content=content %}
-
-
-{% capture content %}
-## Game Development, Gamification, and Interactive JIT Training
-
-Looking to create an engaging and immersive gaming experience for your users? Our team specializes in building video games that capture the imagination and deliver fun and excitement, no matter what platform you are targeting. With our experience delivering games on everything from mobile to desktop to web to gaming consoles, we have the skills and expertise to bring your gaming vision to life.
-
-But it's not just about entertainment - we also specialize in applying gamification techniques to JIT training and interactive learning, providing a powerful and engaging way to train and educate your users. Let us help you create a memorable gaming experience that drives engagement and success for your business, whether you are targeting entertainment or education.
-
+The ultimate aim is to create a roguelike game that is fully procedurally generated but feels hand-crafted. By exploring AI's possibilities in game design, hiivelabs contributes to a broader understanding of ML/AI applications in creative fields. The project aims to inspire new approaches to game development, showcasing AI's potential to enhance creativity and innovation. Driven by a passion for exploring uncharted territories in technology and creativity, hiivelabs seeks to push the envelope of what can be achieved in the gaming industry. The results aim to demonstrate that AI can craft game experiences as rich and nuanced as those created by human designers, opening new horizons for developers and players.
 {% endcapture %}
 {% include service-item.liquid image='/assets/images/services/svc-gamedev.png' align='left' content=content %}
-
-
-{% capture content %}
-## Embedded Systems / IoT
-
-Are you looking to build software for embedded systems or IoT devices with restrictive resources? Our team specializes in creating software solutions that are optimized for devices with limited processing power, memory, and storage.
-
-Our expertise in developing software for embedded systems and IoT devices allows us to build solutions that are efficient, reliable, and secure. Whether you need software for a single device or a complex network of connected devices, we have the skills and expertise to bring your project to life. Let us help you build software that is tailored to your specific needs.
-
-{% endcapture %}
-{% include service-item.liquid image='/assets/images/services/svc-embedded.png' align='right' content=content %}
-
 
