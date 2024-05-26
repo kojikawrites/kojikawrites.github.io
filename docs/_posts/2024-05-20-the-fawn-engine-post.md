@@ -25,7 +25,8 @@ For me, at least, the biggest immersion breaker in any game is the feeling that 
 
 ## This is where AI comes in, right?
 With the massive explosion of AI over the past couple of years (you noticed, right?) and the (somewhat) understandable 
-backlash against "they're taking our jorbs" that resulted. Personally, I'm not sure how I feel about that. On the one 
+backlash against "they're taking our jorbs" that resulted, there a lot of opposing views about the ethics of using 
+AI for content creation. Personally, I'm not sure how I feel about that. On the one 
 hand, you have artists, coders, musicians and writers worried that they are going to lose their livelihood. 
 On the other hand you have individuals wanting to do these things who have neither the requisite skills, nor the money 
 to pay other people to do it for them. On the other other hand, you have large corporations trying to squeeze out more 
