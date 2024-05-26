@@ -6,7 +6,6 @@ author: hiive
 tags: gamedev
 ---
 
-## Introduction
 Back in the dark times (mid-pandemic) I got an itch to create a new game. For background, I started out as a game developer for a short period of time immediately post-university, and quickly figured out that the mainstream game industry wasn't to my taste.
 So, I did what any self-respecting twenty-something would do, quit the game industry and moved over to the finance industry where I did the same kind of thing (programming is pretty much the same wherever you go) for five times the pay.
 

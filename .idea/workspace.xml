@@ -4,20 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/docs/assets/style/custom/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_includes/post-image.liquid" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_includes/post-image.liquid" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_posts/2012-07-23-can-i-have-a-little-more-plot-with-that.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_posts/2012-07-23-can-i-have-a-little-more-plot-with-that.md" afterDir="false" />
+    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Updates to formatting.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Gemfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_includes/head.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_includes/head.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_includes/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_includes/header.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/_posts/2024-05-20-the-fawn-engine-post.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_posts/2024-05-20-the-fawn-engine-post.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/about.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/about.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/services.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/mission.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,40 +20,40 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "hiive"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;hiive&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/hiive/hiive.github.io.git",
-    "accountId": "05fa393a-e5e8-4ca9-a8f9-27b30d18430d"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/hiive/hiive.github.io.git&quot;,
+    &quot;accountId&quot;: &quot;05fa393a-e5e8-4ca9-a8f9-27b30d18430d&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 7
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2gvZbEAqfHrAYRrrimEG1jattAd" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/andrewrollings/WebstormProjects/hiivelabs.com/docs/assets/style/custom",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/andrewrollings/WebstormProjects/hiivelabs.com/docs/assets/style/custom&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/docs/assets/style/custom" />
@@ -81,11 +74,24 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1716580081421</updated>
-      <workItem from="1716580082671" duration="2752000" />
+      <workItem from="1716580082671" duration="3537000" />
     </task>
+    <task id="LOCAL-00001" summary="Updates to formatting.">
+      <option name="closed" value="true" />
+      <created>1716583014377</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1716583014377</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updates to formatting." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates to formatting." />
   </component>
 </project>

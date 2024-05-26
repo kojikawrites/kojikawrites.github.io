@@ -192,6 +192,10 @@
     #navLinkServices {{ activeStyle }}
     #navLinkServices a::before { content: ">"; white-space: nowrap; }
     #navLinkServices a::after { content: "<"; white-space: nowrap; }
+{% when "mission" %}
+    #navLinkServices {{ activeStyle }}
+    #navLinkMission a::before { content: ">"; white-space: nowrap; }
+    #navLinkMission a::after { content: "<"; white-space: nowrap; }
 {% else %}
   {% if page.url contains "/blog/" %}
     #navLinkBlog {{ activeStyle }}
