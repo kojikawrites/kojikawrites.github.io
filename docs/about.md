@@ -20,7 +20,7 @@ Note that the image on the left is not what Andrew actually looks like. However 
 on a text description. He'll take it.
 
 {% endcapture %}
-{% assign imagePath = "/assets/images/andrew.png" | relative_url %}
+{% assign imagePath = "/assets/images/andrew-portrait.png" | relative_url %}
 {% include about-resume-person.liquid imagePath=imagePath content=content altText="Andrew Rollings avatar" %}
 
 {% capture content%}
