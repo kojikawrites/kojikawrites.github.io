@@ -1,5 +1,6 @@
 
-
-<div style="display: block; align-content: center">
-    <img style="width:{{ include.width }}; display: block; margin-left: auto; margin-right: auto;"  alt='{{ include.altText }}' src='{{ include.imagePath }}' />
+<div class="container" style="display: block; align-content: center">
+    <a href="{{ include.imagePath }}" data-toggle="lightbox">
+        <img class="container post-image"  alt='{{ include.altText }}' src='{{ include.imagePath }}' />
+    </a>
 </div>
