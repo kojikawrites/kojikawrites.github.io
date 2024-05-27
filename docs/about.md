@@ -6,38 +6,38 @@ permalink: /about/
 ---
 
 {% capture content%}
-## Andrew Rollings
+## hiive
 
-Andrew Rollings has written several books, all connected in some way or other with his love of games. The most notable 
+hiive has written several books, all connected in some way or other with his love of games. The most notable 
 of these being Game Architecture and Design, which has been the reference for many college and secondary education 
 courses.
 
-Andrew is an ex-UK resident who currently lives in a bunker located in places unknown. He earns his keep by architecting
+hiive is an ex-UK resident who currently lives in a bunker located in places unknown. He earns his keep by architecting
 and developing software for companies that span a wide variety of fields. In his spare time, you may see him working on 
 his Nintendo 3DS, Switch, or PC games.
 
-Note that the image on the left is not what Andrew actually looks like. However it is what AI thinks he looks like based
-on a text description. He'll take it.
+Note that the image on the left is not what he actually looks like. However, it is what AI thinks he looks like based
+on a text description and an uploaded photo. He'll take it.
 
 {% endcapture %}
-{% assign imagePath = "/assets/images/andrew-portrait.png" | relative_url %}
-{% include about-resume-person.liquid imagePath=imagePath content=content altText="Andrew Rollings avatar" %}
+{% assign imagePath = "/assets/images/hiive-portrait.png" | relative_url %}
+{% include about-resume-person.liquid imagePath=imagePath content=content altText="hiive avatar" %}
 
 {% capture content%}
-## Fawn Rollings
+## Kojika
 
-Fawn Rollings is an aspiring writer and game designer with a passion for creating inclusive and accessible experiences. 
+Kojika is an aspiring writer and game designer with a passion for creating inclusive and accessible experiences. 
 Her keen interest in accessibility drives her to develop games and stories that are enjoyable and engaging for all 
 audiences, regardless of their abilities. Fawn continually seeks to broaden her knowledge and skills in the industry, 
 staying updated on the latest accessibility practices and innovations. Her dedication to inclusivity not only 
 enhances her creative projects but also contributes to making the world of gaming and literature more welcoming 
 and accommodating for everyone. 
 
-Her avatar is far closer to her real-life appearance than Andrew's. He'll take it.
+Her avatar is far closer to her real-life appearance than hiive's. We'll take it.
 
 {% endcapture %}
-{% assign imagePath = "/assets/images/fawn.png" | relative_url %}
-{% include about-resume-person.liquid imagePath=imagePath content=content altText="Fawn Rollings avatar" %}
+{% assign imagePath = "/assets/images/kojika-portrait.png" | relative_url %}
+{% include about-resume-person.liquid imagePath=imagePath content=content altText="Kojikas avatar" %}
 
 
 

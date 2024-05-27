@@ -4,7 +4,7 @@ title: Mission Statement
 ---
 
 {% capture content %}
-## Incorporating ML/AI into Game Design and Development
+## Ethically Incorporating ML/AI into Game Design and Development
 
 h<span style="color:#ffA707">i</span>ive<span style="color:#ffA707">labs</span> 
 explores the integration of machine learning (ML) and artificial intelligence 

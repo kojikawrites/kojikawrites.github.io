@@ -4,10 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Updates to formatting.">
-      <change afterPath="$PROJECT_DIR$/docs/assets/images/andrew-portrait.png" afterDir="false" />
+    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Changed picture for Andrew">
+      <change afterPath="$PROJECT_DIR$/docs/_posts/2023-07-23-can-i-have-a-little-more-plot-with-that.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/_posts/2024-05-26-world-building.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_includes/post-image.liquid" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_includes/post-image.liquid" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_layouts/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_layouts/post.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_posts/2012-07-23-can-i-have-a-little-more-plot-with-that.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_posts/2024-05-20-the-fawn-engine-post.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_posts/2024-05-20-the-fawn-engine-post.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/about.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/about.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/assets/images/andrew-portrait.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/hiive-portrait.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/assets/images/andrew.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/hiive.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/assets/images/fawn.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/kojika-portrait.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/assets/images/fawn_engine_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/blog/fawn_engine_logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/mission.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/mission.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +67,7 @@
       <recent name="$PROJECT_DIR$/docs/assets/style/custom" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/assets/images/blog" />
       <recent name="$PROJECT_DIR$/docs/assets/images" />
     </key>
   </component>
@@ -92,7 +104,23 @@
       <option name="project" value="LOCAL" />
       <updated>1716693364179</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Changed picture for Andrew">
+      <option name="closed" value="true" />
+      <created>1716693920400</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1716693920400</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Changed picture for Andrew">
+      <option name="closed" value="true" />
+      <created>1716694130136</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1716694130136</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -100,6 +128,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updates to formatting." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates to formatting." />
+    <MESSAGE value="Changed picture for Andrew" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed picture for Andrew" />
   </component>
 </project>

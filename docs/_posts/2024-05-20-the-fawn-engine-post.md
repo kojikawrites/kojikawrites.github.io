@@ -89,11 +89,13 @@ I've learned from working in the A.I. field from the past few years. Currently t
 support libraries that will make up the bones of the game.
 
 I'll talk about this in future posts, but I *will* announce the name of the engine I'm building... 
-The "Flexible Architecture for World-building and Narrative", AKA "The FAWN Engine". 
+The "Flexible Architecture for World-building and Narrative"
 
-![Andrew's Signature]({{ "/assets/images/signature-andrew.png" | relative_url }})
+{% assign imagePath = "/assets/images/blog/fawn_engine_logo.png" | relative_url %}
+{% include post-image.liquid width="320px" imagePath=imagePath content=content altText="FAWN Engine Logo" %}
 
+AKA "The FAWN Engine".
 
-{% assign imagePath = "/assets/images/fawn_engine_logo.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }})
+
 

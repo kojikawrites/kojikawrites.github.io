@@ -6,10 +6,10 @@
 // @import "minima/_syntax-highlighting.scss";
 //@import "minima";
 
-//a {
-//  color: white !important;
-//  font-style: italic;
-//}
+a {
+  color: #ff6707 !important;
+  font-style: italic;
+}
 
 // syntax coloring start
 
@@ -314,10 +314,6 @@ div.service-item {
   color: #ff6707;
 }
 
-.about-resume-row a {
-  color: #ff6707;
-  font-style: italic;
-}
 
 .about-resume-avatar {
   width: 33vmin;
@@ -367,7 +363,7 @@ div.service-item {
 @media (max-width: 991px) {
 
   body {
-    text-align: center;
+    text-align: left;
   }
 
   .about-resume-avatar {
