@@ -8,11 +8,9 @@ logo: "/assets/images/logo.png"
 #copyright: "All content &copy; 2012-CURRENT_YEAR by Hiive, LLC."
 ---
 
-Welcome to The Write Place, where we’re all just trying to make sense of this whole writing thing together! 
-Whether you're a seasoned pro, a hopeful novelist, or someone who just enjoys a good story, our blog offers a mix of 
-practical advice, humorous insights, and the occasional misstep we’ve turned into a learning experience. 
-Discover tips on crafting memorable characters, dodging writer's block, and finding your voice amidst the chaos. 
-Join our community of writers who know that every story is a journey, complete with a few laughs and a lot of heart. 
-Dive in and let's embrace the wonderfully messy world of writing!
+My name is K°, welcome to The Write Place, where I’m just trying to make sense of this whole writing thing. 
+Whether you’re a seasoned pro, a hopeful novelist, or someone who simply enjoys a good story, my blog offers a mix of 
+practical advice, humorous insights, and the occasional misstep I’ve managed to turn into a learning experience. 
 
-Because at The Write Place, we help you find the right words in the right place.
+Discover tips on crafting memorable characters, dodging writer’s block, and finding your voice amidst the chaos. 
+So, join me, where every story is a journey, complete with a few laughs, a lot of heart and a plethora of endings.
