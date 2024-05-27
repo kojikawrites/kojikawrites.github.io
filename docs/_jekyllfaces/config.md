@@ -1,7 +1,7 @@
 ---
 
 metadata:
-  title: h<span class="navbar-orange">i</span>ive<span class="navbar-orange">labs</span><small><small>.com</small></small>
+  title: <span class="navbar-white">h</span>i<span class="navbar-white">ive</span>labs<small><small><span class="navbar-white">.com</span></small></small>
   # tagline: The latest buzz around Hiive, LLC.
   description: > # Description for the site ...
     The launching point for all things Hiive, LLC. Personal and professional musings.

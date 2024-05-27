@@ -4,19 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Updated png filename case">
-      <change afterPath="$PROJECT_DIR$/docs/assets/script/3rd-party/ekko-lightbox.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/assets/script/3rd-party/ekko-lightbox.min.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/assets/style/custom/ekko-lightbox.css" afterDir="false" />
+    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Added lightbox feature">
+      <change afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_includes/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_includes/footer.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_includes/head.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_includes/head.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/_includes/post-image.liquid" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_includes/post-image.liquid" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_jekyllfaces/config.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_jekyllfaces/config.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/_layouts/default.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_layouts/default.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/assets/images/blog/modulated_altitude_map.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/blog/modulated_altitude_map.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/assets/images/blog/world_biome_map.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/blog/world_biome_map.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/assets/images/blog/world_heatmap.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/blog/world_heatmap.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/assets/images/blog/world_roads_and_capitals.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/blog/world_roads_and_capitals.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/assets/images/blog/fawn_engine.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/assets/images/blog/fawn_engine_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/blog/fawn_engine_logo.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -136,7 +131,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716768880477</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added lightbox feature">
+      <option name="closed" value="true" />
+      <created>1716775191035</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1716775191035</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,6 +150,7 @@
     <MESSAGE value="Changed picture for Andrew" />
     <MESSAGE value="Updated site to include new blog post, and prev/next links." />
     <MESSAGE value="Updated png filename case" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated png filename case" />
+    <MESSAGE value="Added lightbox feature" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added lightbox feature" />
   </component>
 </project>
