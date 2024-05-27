@@ -182,7 +182,7 @@ which is 16384x12288, or about 201.3 million tiles.
 
 If we chose to zoom to level 8, we would have a procedurally generated world with the dimensions of the original 
 map multiplied by a factor of 2<sup>8</sup>, giving a final tile map size of 262144x196608, or approximately 51.5 
-billion tiles, roughly $^1/_3$ of which would be land, giving roughly 17 billion reachable tiles in the world (which, 
+billion tiles, roughly one third of which would be land, giving roughly 17 billion reachable tiles in the world (which, 
 in all honesty, is probably too big to be any fun).
 
 Realistically, a zoom level of 4 or 5 would probably be sufficient for most situations, but I have not yet decided 
