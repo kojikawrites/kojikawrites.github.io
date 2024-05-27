@@ -1,42 +1,32 @@
 ---
 layout: post
-title:  "Welcome to thewriteplace.rocks!"
+title:  "Is AI a Threat to the Writer's Sphere?"
 categories: writing
-author: kojika
-tags: writing
+author: K°
+tags: writing, AI
 ---
 
 
 
-Welcome to The Write Place, your new favorite spot for all things writing! We're thrilled to have you join our community 
-of writers, readers, and word enthusiasts. Whether you're a seasoned novelist, a budding poet, or someone who just loves
-a good story, you're in the right place.
+The short answer is no and the long answer is still too, no. As much as a lot of us feel as though AI poses an existential threat to our work, the real competition we currently face is, dare I say it, each other. There are just way too many authors currently writing and publishing right now. All of us, competing for the few crumbs of prestige, and glimmers of significance, for AI to be the main concern here.
 
-At The Write Place, we believe that every story deserves to be told. We're here to help you find your voice, hone your 
-craft, and navigate the wonderful, often chaotic world of writing. Our blog will be your go-to resource for tips on 
-character development, plot structuring, and conquering writer's block. We'll also delve into the nitty-gritty of 
-grammar, the joys of editing, and the art of finding inspiration in the most unexpected places.
+The question we truly need to be asking here is:
 
-But let's be honest—writing isn't always easy. It's a journey filled with highs and lows, moments of brilliance, and 
-periods of doubt. That's why we're committed to creating a supportive and encouraging environment where you can share 
-your triumphs and struggles. Here, you'll find a community of like-minded individuals who understand the challenges and 
-rewards of the writing process.
+How can we make our individual writing more valuable when the supply currently exceeds demand?
 
-We'll be sharing expert advice, hilarious anecdotes, and inspiring stories from writers of all backgrounds. Whether 
-you're looking for practical tips, a bit of humor, or a dose of motivation, we've got you covered. And we promise to 
-keep things light-hearted and fun, because let's face it—writing should be enjoyable!
+Right now, most independent authors are busy working one, two, sometimes even three day jobs in order to keep the lights on, while only dreaming of the time when they’ll have the ability to write full-time.
 
-So grab a cup of coffee, pull up a chair, and let's embark on this creative journey together. Welcome to The Write 
-Place — where every word matters and every story counts. You've found the right place to write!
+For me personally, right now anyway, I could spend most of my time focusing on unique perspectives, writing in underserved niches, or developing a strong author brand, but as of now, I see a better income stream for my family and I where the aspiring writer is my customer, rather than readers.
 
-In this first post, we want to set the stage for what you can expect from The Write Place. We’ll be diving into a wide 
-range of topics that matter to writers at all stages of their journey. From mastering the basics of storytelling to 
-exploring advanced techniques that add depth and dimension to your work, there’s something here for everyone. 
+It makes me sad, that for now anyway, my stories will remain in an unpublished document. The sad reality is that I see no less than fifty to one-hundred ads on my socials, on a daily basis, containing a struggling author just like myself attempting to attract readers. 
 
-Our goal is to create a vibrant space where you can learn and grow. So stay tuned, keep writing, 
-and remember—every great story starts with a single word. 
+On the flip side of that coin however, there seems to be an infinite supply of would be writers who’ll pay for digital content, programs, courses and workshops to help them publish their books.
 
-So, welcome to The Write Place, where your writing journey finds its perfect home.
+In the meantime, I am unworried about AI and I remain hopeful that one day, this website will allow me to do both sell my novels and help other authors on their writing journey.
+
+What do you see as your major hurdle or competition? I’d love to hear about your personal experiences, thoughts, or strategies for navigating the challenges of the current writing and publishing landscape.
+
+
 
 
 
