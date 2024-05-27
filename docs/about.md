@@ -9,14 +9,17 @@ permalink: /about/
 ## hiive
 
 hiive has written several books, all connected in some way or other with his love of games. The most notable 
-of these being Game Architecture and Design, which has been the reference for many college and secondary education 
-courses.
+of these being a very well-received book on Game Architecture and Design, which has been the reference for many college 
+and secondary education courses.
 
-hiive is an ex-UK resident who currently lives in a bunker located in places unknown. He earns his keep by architecting
-and developing software for companies that span a wide variety of fields. In his spare time, you may see him working on 
-his Nintendo 3DS, Switch, or PC games.
+hiive is an ex-UK resident who currently lives in a bunker located in places unknown. He has a BSc in Physics, an MSc in ML/AI, 
+and currently earns his keep as a Lead Data Engineer and Subject-Matter Expert (SME) for the use of ML/AI in medical research.  
+In his spare time, you may see him  working on games. He, sadly, does not have much time to play them any more. 
+He has been writing software for over 25 years, and is knowledgeable across a wide range of industries and programming 
+languages, ranging from BASIC and Z80 assembler in the early days, through C/C++, and out the other side to Python, 
+C# and (more recently) Rust. 
 
-Note that the image on the left is not what he actually looks like. However, it is what AI thinks he looks like based
+Note that his avatar is not really what he actually looks like. However, it is what AI thinks he looks like based
 on a text description and an uploaded photo. He'll take it.
 
 {% endcapture %}
@@ -28,10 +31,15 @@ on a text description and an uploaded photo. He'll take it.
 
 Kojika is an aspiring writer and game designer with a passion for creating inclusive and accessible experiences. 
 Her keen interest in accessibility drives her to develop games and stories that are enjoyable and engaging for all 
-audiences, regardless of their abilities. Fawn continually seeks to broaden her knowledge and skills in the industry, 
+audiences, regardless of their abilities. 
+
+Kojika continually seeks to broaden her knowledge and skills in the industry, 
 staying updated on the latest accessibility practices and innovations. Her dedication to inclusivity not only 
 enhances her creative projects but also contributes to making the world of gaming and literature more welcoming 
 and accommodating for everyone. 
+
+Kojika is a skilled writer and story-teller, and is currently learning Python so that she doesn't have to keep asking 
+hiive to write programs for her.
 
 Her avatar is far closer to her real-life appearance than hiive's. We'll take it.
 
