@@ -31,7 +31,7 @@ using a chunk system to generate persistent chunks on demand.
 ## Land Mass and Biome Generation
 
 {% assign imagePath = "/assets/images/blog/voronoi_graph.jpg" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Basic Voronoi Graph" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Basic Voronoi Graph" %}
 
 \
 There’s nothing particularly groundbreaking about the landscape generation technique that I used here; it’s a Voronoi 
@@ -54,7 +54,7 @@ indistinguishable, why do the extra processing?)
 As an additional simplification step, I deleted all internal cells that were totally surrounded by sea.
 
 {% assign imagePath = "/assets/images/blog/voronoi_land_masses.jpg" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Land masses from Voronoi Graph" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Land masses from Voronoi Graph" %}
 
 \
 The next image shows the biome assignment, encoded as texture values. It’s a bit difficult to see because the encoding 
@@ -65,7 +65,7 @@ the top left of the image). If that slider was reduced to zero, there would be n
 be a much larger red outline (meaning more land erosion).
 
 {% assign imagePath = "/assets/images/blog/map_biome_generation.jpg" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Biome Generation Texture" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Biome Generation Texture" %}
 
 \
 The next image shows a cleaner polygonal view of the generated biomes combined with the height map. Honestly it wasn’t 
@@ -73,7 +73,7 @@ much use other than for a visual sanity check, but it did look pretty, which is 
 
 
 {% assign imagePath = "/assets/images/blog/world_biome_map.png" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Polygonal Shaded Biome Map" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Polygonal Shaded Biome Map" %}
 
 \
 To decide what biomes went where, I used another three generated shader textures. The first two were for altitude and 
@@ -86,11 +86,11 @@ The following three images show the modulated altitude, moisture and temperature
 
 
 {% assign imagePath = "/assets/images/blog/modulated_altitude_map.png" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Terrain modulated altitude map" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Terrain modulated altitude map" %}
 {% assign imagePath = "/assets/images/blog/world_precipitation.png" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Precipitation Map" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Precipitation Map" %}
 {% assign imagePath = "/assets/images/blog/world_heatmap.png" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Temperature Map" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Temperature Map" %}
 
 \
 I used the three maps as a 3D lookup into a pre-defined biome table to assign biomes based on altitude, temperature 
@@ -98,7 +98,7 @@ and rainfall. The table itself was based on real-world biome zoning - specifical
 classification scheme, shown here (sourced from [Wikipedia](https://en.wikipedia.org/wiki/Holdridge_life_zones)).
 
 {% assign imagePath = "/assets/images/blog/holdridge_life_zone_wikipedia.png" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Holdridge life zones" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Holdridge life zones" %}
 
 \
 The end result of this process was a large world map of biome info, comprising biome type, altitude above sea level, 
@@ -131,7 +131,7 @@ shading for each color-coded region is based on the scoring for the Voronoi poin
 the region). As can be seen, I also weighted for proximity to a coastline.
 
 {% assign imagePath = "/assets/images/blog/world_roads_and_capitals.png" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Geopolitical Regions, 
+{% include post-image.liquid imagePath=imagePath content=content altText="Geopolitical Regions, 
 Roads and Capitals" %}
 
 \
@@ -140,7 +140,7 @@ relationship between source map pixels and biome tiles. Initially I just focused
 correctly, producing output that looked something like the following image.
 
 {% assign imagePath = "/assets/images/blog/landscape_zoomx0.png" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Tile map at zoom level 0" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Tile map at zoom level 0" %}
 
 \
 This was a good start. I now had a world that could be represented as tiles. However, it was only the size of the 
@@ -189,7 +189,7 @@ exactly which zoom level to use. It will depend upon a lot of gameplay factors t
 ensure that the map generation remains flexible throughout the development until a determination can be made.
 
 {% assign imagePath = "/assets/images/blog/landscape_zoomx4.png" | relative_url %}
-{% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Tile map at zoom level 4" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Tile map at zoom level 4" %}
 
 \
 Now, if you read my previous post, you'll have noticed that I talked about writing the game in Rust, so why am I 

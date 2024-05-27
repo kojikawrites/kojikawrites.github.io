@@ -231,6 +231,11 @@ a {
   font-family: "Roboto", sans-serif !important;
 }
 
+.hiive-highlight {
+  color: #ffA707;
+  font-weight: bold;
+}
+
 .post-list .post-meta {
   font-size: 0.85em;
   color: #808080
@@ -355,12 +360,17 @@ div.service-item {
 
 .about-resume-bio h2 {
   color: #ff6707;
-# color: #ffA707;
 }
 
 
 .post-image {
-  width: 100vw;
+  width: 65vw;
+  margin: 16px auto;
+  // border: 1px solid #444;
+}
+
+.post-image-small {
+  width: 20vw;
   margin: 16px auto;
   // border: 1px solid #444;
 }
@@ -434,6 +444,11 @@ div.service-item {
 
   .post-image {
     width: 100%;
+    align-content: center;
+  }
+
+  .post-image-small {
+    width: 50%;
     align-content: center;
   }
 }
