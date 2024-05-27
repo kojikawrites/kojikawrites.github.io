@@ -72,7 +72,7 @@ The next image shows a cleaner polygonal view of the generated biomes combined w
 much use other than for a visual sanity check, but it did look pretty, which is why I included it here.
 
 
-{% assign imagePath = "/assets/images/blog/world_biome_map.PNG" | relative_url %}
+{% assign imagePath = "/assets/images/blog/world_biome_map.png" | relative_url %}
 {% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Polygonal Shaded Biome Map" %}
 
 \
@@ -85,11 +85,11 @@ temperature, and then applying a seeded random vertical distortion across the te
 The following three images show the modulated altitude, moisture and temperature maps respectively.
 
 
-{% assign imagePath = "/assets/images/blog/modulated_altitude_map.PNG" | relative_url %}
+{% assign imagePath = "/assets/images/blog/modulated_altitude_map.png" | relative_url %}
 {% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Terrain modulated altitude map" %}
-{% assign imagePath = "/assets/images/blog/world_precipitation.PNG" | relative_url %}
+{% assign imagePath = "/assets/images/blog/world_precipitation.png" | relative_url %}
 {% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Precipitation Map" %}
-{% assign imagePath = "/assets/images/blog/world_heatmap.PNG" | relative_url %}
+{% assign imagePath = "/assets/images/blog/world_heatmap.png" | relative_url %}
 {% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Temperature Map" %}
 
 \
@@ -97,7 +97,7 @@ I used the three maps as a 3D lookup into a pre-defined biome table to assign bi
 and rainfall. The table itself was based on real-world biome zoning - specifically the Holdridge life zone 
 classification scheme, shown here (sourced from [Wikipedia](https://en.wikipedia.org/wiki/Holdridge_life_zones)).
 
-{% assign imagePath = "/assets/images/blog/holdridge_life_zone_wikipedia.PNG" | relative_url %}
+{% assign imagePath = "/assets/images/blog/holdridge_life_zone_wikipedia.png" | relative_url %}
 {% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Holdridge life zones" %}
 
 \
@@ -130,7 +130,7 @@ The resulting geopolitical map ended up looking something like the image below. 
 shading for each color-coded region is based on the scoring for the Voronoi points within that region (normalized for 
 the region). As can be seen, I also weighted for proximity to a coastline.
 
-{% assign imagePath = "/assets/images/blog/world_roads_and_capitals.PNG" | relative_url %}
+{% assign imagePath = "/assets/images/blog/world_roads_and_capitals.png" | relative_url %}
 {% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Geopolitical Regions, 
 Roads and Capitals" %}
 
@@ -139,7 +139,7 @@ From this point, I had all of the data I needed to be able to generate a top lev
 relationship between source map pixels and biome tiles. Initially I just focused on having the landscape display 
 correctly, producing output that looked something like the following image.
 
-{% assign imagePath = "/assets/images/blog/landscape_zoomx0.PNG" | relative_url %}
+{% assign imagePath = "/assets/images/blog/landscape_zoomx0.png" | relative_url %}
 {% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Tile map at zoom level 0" %}
 
 \
@@ -188,7 +188,7 @@ Realistically, a zoom level of 4 or 5 would probably be sufficient for most situ
 exactly which zoom level to use. It will depend upon a lot of gameplay factors that have yet to be decided, so I will 
 ensure that the map generation remains flexible throughout the development until a determination can be made.
 
-{% assign imagePath = "/assets/images/blog/landscape_zoomx4.PNG" | relative_url %}
+{% assign imagePath = "/assets/images/blog/landscape_zoomx4.png" | relative_url %}
 {% include post-image.liquid width="50vw" imagePath=imagePath content=content altText="Tile map at zoom level 4" %}
 
 \

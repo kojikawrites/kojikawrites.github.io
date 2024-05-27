@@ -4,21 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Changed picture for Andrew">
-      <change afterPath="$PROJECT_DIR$/docs/_posts/2023-07-23-can-i-have-a-little-more-plot-with-that.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/_posts/2024-05-26-world-building.md" afterDir="false" />
+    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Updated site to include new blog post, and prev/next links.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_includes/post-image.liquid" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_includes/post-image.liquid" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_layouts/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_layouts/post.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_posts/2012-07-23-can-i-have-a-little-more-plot-with-that.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_posts/2024-05-20-the-fawn-engine-post.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_posts/2024-05-20-the-fawn-engine-post.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/about.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/about.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/assets/images/andrew-portrait.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/hiive-portrait.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/assets/images/andrew.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/hiive.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/assets/images/fawn.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/kojika-portrait.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/assets/images/fawn_engine_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/images/blog/fawn_engine_logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/mission.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/mission.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_posts/2024-05-26-world-building.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_posts/2024-05-26-world-building.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +108,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716694130136</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Updated site to include new blog post, and prev/next links.">
+      <option name="closed" value="true" />
+      <created>1716768532535</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1716768532535</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -129,6 +125,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updates to formatting." />
     <MESSAGE value="Changed picture for Andrew" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed picture for Andrew" />
+    <MESSAGE value="Updated site to include new blog post, and prev/next links." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated site to include new blog post, and prev/next links." />
   </component>
 </project>
