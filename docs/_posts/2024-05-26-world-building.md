@@ -98,7 +98,8 @@ and rainfall. The table itself was based on real-world biome zoning - specifical
 classification scheme, shown here (sourced from [Wikipedia](https://en.wikipedia.org/wiki/Holdridge_life_zones)).
 
 {% assign imagePath = "/assets/images/blog/holdridge_life_zone_wikipedia.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="Holdridge life zones" %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Holdridge life zone
+classification scheme" %}
 
 \
 The end result of this process was a large world map of biome info, comprising biome type, altitude above sea level, 
