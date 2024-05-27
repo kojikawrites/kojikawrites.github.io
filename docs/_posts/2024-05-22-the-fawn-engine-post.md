@@ -8,23 +8,18 @@ tags: writing, AI
 
 
 
-The short answer is no and the long answer is still too, no. As much as a lot of us feel as though AI poses an existential threat to our work, the real competition we currently face is, dare I say it, each other. There are just way too many authors currently writing and publishing right now. All of us, competing for the few crumbs of prestige, and glimmers of significance, for AI to be the main concern here.
+The short answer is no, and the long answer remains no. While many of us worry about AI as a potential threat to our writing careers, the real challenge we face right now is the sheer number of authors writing and publishing. With so many of us competing for limited recognition and significance, AI isn’t our primary concern at this moment.
 
-The question we truly need to be asking here is:
+The real question we need to ask is:
+How can we make our individual writing stand out in a market where the supply exceeds the demand?
 
-How can we make our individual writing more valuable when the supply currently exceeds demand?
+Currently, many independent authors juggle multiple day jobs just to make ends meet, dreaming of the day they can write full-time. Personally, I could focus on unique perspectives, underserved niches, or building a strong author brand. However, I see an opportunity to generate a better income for my family by helping aspiring writers achieve their publishing goals.
 
-Right now, most independent authors are busy working one, two, sometimes even three day jobs in order to keep the lights on, while only dreaming of the time when they’ll have the ability to write full-time.
+It’s disheartening that my own stories remain unpublished for now, but the reality is that I see countless ads from fellow struggling authors every day, all vying for readers’ attention. On the other hand, there’s a growing demand for digital content, programs, courses, and workshops to assist would-be writers in publishing their books.
 
-For me personally, right now anyway, I could spend most of my time focusing on unique perspectives, writing in underserved niches, or developing a strong author brand, but as of now, I see a better income stream for my family and I where the aspiring writer is my customer, rather than readers.
+For the time being, I’m not overly concerned about AI and remain hopeful that this website will eventually allow me to both sell my novels and support other authors on their writing journeys.
 
-It makes me sad, that for now anyway, my stories will remain in an unpublished document. The sad reality is that I see no less than fifty to one-hundred ads on my socials, on a daily basis, containing a struggling author just like myself attempting to attract readers. 
-
-On the flip side of that coin however, there seems to be an infinite supply of would be writers who’ll pay for digital content, programs, courses and workshops to help them publish their books.
-
-In the meantime, I am unworried about AI and I remain hopeful that one day, this website will allow me to do both sell my novels and help other authors on their writing journey.
-
-What do you see as your major hurdle or competition? I’d love to hear about your personal experiences, thoughts, or strategies for navigating the challenges of the current writing and publishing landscape.
+What do you see as your major hurdle or competition? I’d love to hear about your personal experiences, thoughts, and strategies for navigating the challenges of the current writing and publishing landscape.
 
 
 
