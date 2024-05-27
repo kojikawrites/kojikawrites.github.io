@@ -136,7 +136,7 @@ the region). As can be seen, I also weighted for proximity to a coastline.
 Roads and Capitals" %}
 
 \
-From this point, I had all of the data I needed to be able to generate a top level tile based map, with a one-to-one 
+From this point, I had all the data I needed to be able to generate a top level tile based map, with a one-to-one 
 relationship between source map pixels and biome tiles. Initially I just focused on having the landscape display 
 correctly, producing output that looked something like the following image.
 
@@ -191,6 +191,15 @@ ensure that the map generation remains flexible throughout the development until
 
 {% assign imagePath = "/assets/images/blog/landscape_zoomx4.png" | relative_url %}
 {% include post-image.liquid imagePath=imagePath content=content altText="Tile map at zoom level 4" %}
+
+Here's a video of everything in action.
+
+<p>
+    <a href="https://www.youtube.com/watch?v=vxD22Ptloqc&amp;rel=0" 
+        data-toggle="lightbox"
+        data-title="The proto-FAWN Engine">VIDEO: The proto-FAWN Engine</a>
+</p>
+
 
 \
 Now, if you read my previous post, you'll have noticed that I talked about writing the game in Rust, so why am I 

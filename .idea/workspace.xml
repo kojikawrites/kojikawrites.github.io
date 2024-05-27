@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="More image tweaks.">
+    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Typo fix">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/_posts/2024-05-26-world-building.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_posts/2024-05-26-world-building.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -149,7 +150,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716777699541</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Typo fix">
+      <option name="closed" value="true" />
+      <created>1716777872323</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1716777872323</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -163,6 +172,7 @@
     <MESSAGE value="Added lightbox feature" />
     <MESSAGE value="Tweaks to lightbox." />
     <MESSAGE value="More image tweaks." />
-    <option name="LAST_COMMIT_MESSAGE" value="More image tweaks." />
+    <MESSAGE value="Typo fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Typo fix" />
   </component>
 </project>
