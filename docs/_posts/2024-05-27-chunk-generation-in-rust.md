@@ -25,7 +25,7 @@ chunked in order to not result in a exponential explosion of required memory and
 
 I fairly arbitrarily chose of chunk size of **128x64**, and therefore layer beyond zero was conceptually built from 
 these chunks. During rendering, the render engine requests tile information from the chunk manager. The chunk manager 
-checked its in memory cache to see if the chunk is available. If not, it checks the disk cache. If it’s not there 
+checks its in-memory cache to see if the chunk is available. If not, it checks the disk cache. If it’s not there 
 either, the chunk is created on the fly.
 
 The following code excerpt shows a simple algorithm that simply doubles up the previous layer. That is, each tile 
