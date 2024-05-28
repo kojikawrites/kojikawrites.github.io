@@ -23,7 +23,7 @@ iteration. Instead, we divide the map into chunks. As mentioned previously, the 
 **1024x768**. However, subsequent layers (each representing a doubling of size of the previous layer) need to be 
 chunked in order to not result in a exponential explosion of required memory and processing time.
 
-I fairly arbitrarily chose of chunk size of **128x64**, and therefore layer beyond zero was conceptually built from 
+I fairly arbitrarily chose of chunk size of **128x64**, and therefore layers beyond zero are conceptually built from 
 these chunks. During rendering, the render engine requests tile information from the chunk manager. The chunk manager 
 checks its in-memory cache to see if the chunk is available. If not, it checks the disk cache. If it’s not there 
 either, the chunk is created on the fly.
