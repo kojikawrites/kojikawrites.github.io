@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Added blog post (first pass).">
+    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Added blog post (second pass).">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_posts/2024-05-27-chunk-generation-in-rust.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_posts/2024-05-27-chunk-generation-in-rust.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -215,7 +215,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716862793743</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Added blog post (second pass).">
+      <option name="closed" value="true" />
+      <created>1716871019122</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1716871019122</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -238,6 +246,7 @@
     <MESSAGE value="Restored original image size for gamedev icon." />
     <MESSAGE value="Added blog post." />
     <MESSAGE value="Added blog post (first pass)." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added blog post (first pass)." />
+    <MESSAGE value="Added blog post (second pass)." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added blog post (second pass)." />
   </component>
 </project>
