@@ -152,12 +152,15 @@ array of random byte values. *Layer 1* doubles in size to **16x16,** and *layer 
 altText="Layer 2 (32x32) (excl. out-of-bounds border)" %}
 </div>
 
-The astute observer will notice that *layer 1* is displayed at **18x18,** and *layer 2* is displayed at **34x34**. 
+The astute observer will notice that *layer 1* is actually displayed at **18x18,** and *layer 2* at **34x34**. 
 This is because I arbitrarily chose **`FF`** as the out-of-bounds value returned when the generation process requested 
 a tile coordinate outside the map. This is shown as a border on layers *1* and *2* to illustrate where the otherwise 
 inexplicable **`FF`** values are coming from in those layers. For use in game, I would ensure that the borders of the 
 map were all sea, which would also be the out-of-bounds value. This would ensure that there wasn’t any “edge of the 
 map” weirdness and allow the player to wrap around the map if necessary in the standard “fake globe but is actually 
 a toroid” fashion.
+
+In the next devlog post, I will talk about the caching and storage mechanisms, as well as some differences between the 
+Rust and C# implementations that were necessitated by Rust's borrow checker.
 
 ![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }})
