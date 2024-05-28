@@ -91,9 +91,10 @@ support libraries that will make up the bones of the game.
 I'll talk about this in future posts, but I *will* announce the name of the engine I'm building... 
 The <span class="hiive-highlight">&quot;Flexible Architecture for World-building and Narrative&quot;</span>
 
+<div>
 {% assign imagePath = "/assets/images/blog/fawn_engine_logo.png" | relative_url %}
 {% include post-image-small.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
-
+</div>
 AKA <span class="hiive-highlight">"The FAWN Engine"</span>.
 
 ![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }})

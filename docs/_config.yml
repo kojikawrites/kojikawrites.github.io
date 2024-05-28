@@ -25,6 +25,8 @@ github_username:  hiive
 
 # Build settings
 markdown: kramdown
+#highlighter: rouge
+#  input: GFM
 # theme: minima
 plugins:
   - jekyll-feed

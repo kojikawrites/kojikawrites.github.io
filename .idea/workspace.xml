@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Added some links on the main page." />
+    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Restored original image size for gamedev icon.">
+      <change afterPath="$PROJECT_DIR$/docs/_posts/2024-05-27-chunk-generation-in-rust.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Gemfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Gemfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_includes/post-image-small.liquid" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_includes/post-image-small.liquid" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_posts/2024-05-20-the-fawn-engine-post.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_posts/2024-05-20-the-fawn-engine-post.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/docs/assets/style/custom/main.scss" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,6 +62,7 @@
       <recent name="$PROJECT_DIR$/docs/assets/style/custom" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/assets/images/services" />
       <recent name="$PROJECT_DIR$/docs/assets/script/3rd-party" />
       <recent name="$PROJECT_DIR$/docs/assets/images/blog" />
       <recent name="$PROJECT_DIR$/docs/assets/images" />
@@ -195,7 +205,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716780400783</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Restored original image size for gamedev icon.">
+      <option name="closed" value="true" />
+      <created>1716780836682</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1716780836682</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,6 +233,7 @@
     <MESSAGE value="Tweak to mission page" />
     <MESSAGE value="Tweaked bios" />
     <MESSAGE value="Added some links on the main page." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added some links on the main page." />
+    <MESSAGE value="Restored original image size for gamedev icon." />
+    <option name="LAST_COMMIT_MESSAGE" value="Restored original image size for gamedev icon." />
   </component>
 </project>

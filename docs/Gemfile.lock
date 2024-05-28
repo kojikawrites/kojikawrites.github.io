@@ -279,6 +279,7 @@ DEPENDENCIES
   github-pages
   html-proofer
   jekyll-feed (~> 0.6)
+  rouge (~> 3.26)
   tzinfo-data
   webrick (~> 1.8)
 
