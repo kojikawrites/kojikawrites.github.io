@@ -123,7 +123,7 @@ straightforward, so I’ll show only the meat of the selection process.
 
 Initially, the process works as described for the doubler, and the first pass simply doubles the parent tiles. 
 Then it performs a second pass, during which the generation process, the `generate_chunk_work_from_parent` method 
-calls `choose_child_tile` to select the tile to mutate. It does this by using the a seed (derived from the chunk 
+calls `choose_child_tile` to select the tile to mutate. It does this by using the seed (derived from the chunk 
 coordinates) to generate an offset in the range of (&pm;1, &pm;1), as performed by `get_coord_offset`. Because we 
 are using a seed based on the coordinates, this will always be the same for a specific coordinate set, irrespective of 
 generation order.
