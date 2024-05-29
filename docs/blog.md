@@ -5,7 +5,7 @@ showTitle: false
 
 ## Recent Posts
 
-{% assign maxCount = 5 %}
+{% assign maxCount = 10 %}
 {% assign postCount = site.posts | size %}
 {% if postCount > maxCount %}
   The most recent {{ maxCount }} posts are listed below. To view the complete archive of {{ postCount }} posts, [click here]({{ "/blog-archive" | relative_url }}).
