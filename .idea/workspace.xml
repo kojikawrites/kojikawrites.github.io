@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Tweaked css">
+    <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Tweaked blog count to 10 (from 5) and updated 404 page.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_jekyllfaces/config.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_jekyllfaces/config.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/blog.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/blog.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/about.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/about.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +80,9 @@
       <updated>1716580081421</updated>
       <workItem from="1716580082671" duration="3537000" />
       <workItem from="1716940975730" duration="86000" />
-      <workItem from="1716942600521" duration="344000" />
+      <workItem from="1716942600521" duration="3630000" />
+      <workItem from="1717121642671" duration="1055000" />
+      <workItem from="1717211913429" duration="295000" />
     </task>
     <task id="LOCAL-00001" summary="Updates to formatting.">
       <option name="closed" value="true" />
@@ -234,7 +236,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716871693370</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Tweaked blog count to 10 (from 5) and updated 404 page.">
+      <option name="closed" value="true" />
+      <created>1716943211286</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1716943211286</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -259,6 +269,7 @@
     <MESSAGE value="Added blog post (first pass)." />
     <MESSAGE value="Added blog post (second pass)." />
     <MESSAGE value="Tweaked css" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tweaked css" />
+    <MESSAGE value="Tweaked blog count to 10 (from 5) and updated 404 page." />
+    <option name="LAST_COMMIT_MESSAGE" value="Tweaked blog count to 10 (from 5) and updated 404 page." />
   </component>
 </project>

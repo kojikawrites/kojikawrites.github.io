@@ -245,7 +245,7 @@ jfaces:
 #  comments : # settings for comments helper, set 'provider' to the comment provider you want to use
 #    provider : facebook # Set 'provider' to false to turn commenting off entirely
 #    disqus :
-#      short_name : myname
+#      short_name : hiive
 #    livefyre :
 #      site_id : 123
 #    intensedebate :

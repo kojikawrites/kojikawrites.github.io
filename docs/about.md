@@ -8,13 +8,13 @@ permalink: /about/
 {% capture content%}
 ## hiive
 
-hiive has written several books, all connected in some way or other with his love of games. The most notable 
-of these being a very well-received book on Game Architecture and Design, which has been the reference for many college 
-and secondary education courses.
-
 hiive is an ex-UK resident who currently lives in a bunker located in places unknown. He has a BSc in Physics, an MSc in ML/AI, 
-and currently earns his keep as a Lead Data Engineer and Subject-Matter Expert (SME) for the use of ML/AI in medical research.  
-In his spare time, you may see him  working on games. He, sadly, does not have much time to play them any more. 
+and currently earns his keep as a Lead Data Engineer and Subject-Matter Expert (SME) for the use of ML/AI in medical research. 
+
+hiive has written several books, all connected in some way or other with his love of games. The most notable
+of these being a very well-received book on game architecture and design, which has been the reference for many college
+and secondary education courses. In his spare time, you may see him working on games. He, sadly, does not have much 
+time to play them anymore.
 He has been writing software for over 25 years, and is knowledgeable across a wide range of industries and programming 
 languages, ranging from BASIC and Z80 assembler in the early days, through C/C++, and out the other side to Python, 
 C# and (more recently) Rust. 
@@ -29,7 +29,7 @@ on a text description and an uploaded photo. He'll take it.
 {% capture content%}
 ## Kojika
 
-Kojika is an aspiring writer and game designer with a passion for creating inclusive and accessible experiences. 
+Kojika is a writer and game designer with a passion for creating inclusive and accessible experiences. 
 Her keen interest in accessibility drives her to develop games and stories that are enjoyable and engaging for all 
 audiences, regardless of their abilities. 
 
