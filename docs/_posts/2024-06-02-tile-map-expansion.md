@@ -108,3 +108,6 @@ this boils down to the upper bounds of chunk generation being proportional to *O
 
 Combined with the LRU caching and persistent storage of generated chunks, the end result is an effective way of 
 generating huge maps on the fly in an efficient manner.
+
+![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }})
+
