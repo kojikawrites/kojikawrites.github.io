@@ -25,6 +25,7 @@ code, pre, code *, pre * {
   /*color: #f6f3e8 !important;*/
   /*background-color: #202020 !important;*/
   font-size: 10pt !important;
+  color: inherit !important;
 }
 
 .linenos * {
@@ -32,12 +33,12 @@ code, pre, code *, pre * {
 }
 
 .language-plaintext {
-  color: #EFA31D;
+  color: #FFE38D !important;
 }
 
 .highlight, .highlighttable  {
   background: #121212 !important;
-  color: #f6f3e8 !important;
+  //color: #f6f3e8 !important;
   padding-top: 8px;
   padding-bottom: 8px;
   margin-top: 8px;
