@@ -4,7 +4,7 @@ metadata:
   title: <span class="navbar-orange">thewriteplace</span><small><small>.rocks</small></small>
   # tagline: The latest buzz around Hiive, LLC.
   description: > # Description for the site ...
-    The launching point for all things Hiive, LLC. Personal and professional musings.
+    A Website about writing.
   legal: # used for privacy policy, terms of use, etc ...
     #company: Joe Hall  # {metadata.title} when blank
     #website: http://joehall.net/  # http://{metadata.title}.com when blank
@@ -15,7 +15,7 @@ metadata:
 
 customize:
   theme: lux       # one of: cerulean | cosmo | cyborg | darkly | default | flatly | journal | litera | lumen | lux | materia | minty | pulse | sandstone | simplex | sketchy | slate | solar | spacelab | superhero | united | yeti
-  http404: sticky     # one of: badge | default | dog | droids | glass | link | milk | monster | potty | shrug | sticky | tweet | zork
+  http404: shrug     # one of: badge | default | dog | droids | glass | link | milk | monster | potty | shrug | sticky | tweet | zork
   #css: [ "main.css" ] # array of stylesheets to load after other styles
   #js:  [ "main.js"  ] # array of javascripts to load after other scripts
 
