@@ -19,5 +19,6 @@ The protagonist has a relationship with someone that he, she or they really care
 - This relationship has started *before* the start of the story. 
 - It will touch on the protagonist's flaws.
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

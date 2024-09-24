@@ -37,5 +37,6 @@ Well, buckle up, because my list is lengthy.
 12. Logseq - https://logseq.com/
 13. CardBuddy - https://www.ussherpress.com/cardbuddy/
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

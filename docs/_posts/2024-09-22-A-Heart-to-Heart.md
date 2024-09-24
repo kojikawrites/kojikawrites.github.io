@@ -36,5 +36,6 @@ List three locations or situations in which your character and the antagonist co
 
 Now, with the understanding that you've gained from answering the twelve questions above, write a dialogue scene where this heart to heart conversation with the antagonist takes place.
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

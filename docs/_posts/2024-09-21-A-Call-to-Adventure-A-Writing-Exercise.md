@@ -41,5 +41,6 @@ It Might be helpful to structure it in the following way:
 
 Now, briefly explain how each new setting's challenge aligns with the character's personal growth or transformation. This can help you see the connection between your setting and character development more clearly.
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

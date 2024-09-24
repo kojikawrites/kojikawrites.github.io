@@ -95,5 +95,6 @@ The detective looks at himself in the mirror, contemplating the lines and wrinkl
 ### Eternal Vigilance:
 The family settles into their new home, the child plays in a more secure indoor environment, and the detective begins a new case. Each has found a way to move forward, but they remain vigilant, forever changed by the events that unfolded. The screen fades to black, leaving a haunting echo.
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

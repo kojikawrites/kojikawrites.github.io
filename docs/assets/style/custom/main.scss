@@ -286,6 +286,18 @@ div.service-item {
 # color: #ffA707;
 }
 
+.post-image {
+  width: 65vw;
+  margin: 16px auto;
+  // border: 1px solid #444;
+}
+
+.post-image-small {
+  width: 20vw;
+  margin: 16px auto;
+  // border: 1px solid #444;
+}
+
 @media (min-width: 992px) {
   h1.post-title { display: none; }
 
@@ -351,6 +363,17 @@ div.service-item {
 
   .post-content img {
     max-width: 100%;
+  }
+
+
+  .post-image {
+    width: 100%;
+    align-content: center;
+  }
+
+  .post-image-small {
+    width: 50%;
+    align-content: center;
   }
 }
 

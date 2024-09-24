@@ -62,5 +62,6 @@ There’s a declaration of love, a communion of the relationship. This is where 
 The Happily Ever After:  
 The romance reader has to have their denouement. They want a glimpse of the lovers in their new happily-ever-after world, to make sure that everything is going okay. There’s usually a scene including friends and family, gaining an acknowledgment of the new relationship from important people in their lives. There’s a renewed promise of forever.
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

@@ -69,5 +69,6 @@ End with hints of lingering questions or unresolved aspects of the altered timel
 ### Final Reflections:
 Conclude with the protagonist's final reflection on the power of choices, the malleability of history, and the enduring fascination with alternate timelines.
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

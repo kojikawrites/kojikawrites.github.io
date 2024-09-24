@@ -99,5 +99,6 @@ The end game is here and all of the loose ends are going to be tied up now. This
 ## Some Future Glimpses
 If your current book is going to be a part of a series, this is your golden opportunity to drop some alluring stepping stones into the ensuing books. However, if your book is a standalone, this is where you'll offer a glimpse into what the future may look like for the characters after the completion of their journey into adventure. It can be subtle and mysterious or it can be simply a satisfying look forward. It can also raise more questions or alter the perceived reality of the book. Lastly, it can leave the reader in charge of its overall interpretation or off a comfortingly firm ending. The choice is ultimately yours.
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

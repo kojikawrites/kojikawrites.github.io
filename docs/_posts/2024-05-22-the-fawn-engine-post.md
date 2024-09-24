@@ -23,8 +23,13 @@ What do you see as your major hurdle or competition? I’d love to hear about yo
 
 
 
+<div>
+{% assign imagePath = "/assets/images/fawn.png" | relative_url %}
+{% include post-image-small.liquid imagePath=imagePath content=content altText="Fawn" %}
+</div>
 
-
-
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}
+
+

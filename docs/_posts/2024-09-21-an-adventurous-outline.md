@@ -46,5 +46,6 @@ Encouragement From Others: Friends, family, or allies provide support and motiva
   Final Mastery of the Problem: Fully resolving the central conflict, the protagonist integrates their experiences and newfound abilities into daily life, ready to move forward enriched by their journey.
 
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

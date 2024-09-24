@@ -21,5 +21,6 @@ Consistency is key. While Phlebotinum doesn't need to be scientifically explaine
 
 By maintaining consistency, you keep the story engaging without frustrating readers with arbitrary changes to how the Phlebotinum works.
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

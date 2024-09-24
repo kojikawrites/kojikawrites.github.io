@@ -18,5 +18,6 @@ It will look somewhat like this:
 If there’s a post that you have questions about, or if you’d like to see me post something specific, please don’t hesitate to email me at info@thewriteplace.rocks.
 I will be adding my social media accounts at some point in the "Contact Us" section, as well, for communications purposes.
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}

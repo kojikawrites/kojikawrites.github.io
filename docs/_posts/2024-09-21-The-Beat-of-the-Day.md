@@ -18,5 +18,6 @@ However, the current story requires a space elevator, so it's been added and tre
 ### Best Practice:
 The most preferred use, is where it contradicts nothing, even though it was changed later on. An ideal "retcon" clarifies a question alluded to without adding excessive new questions.
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
+{% include post-image-signature.liquid imagePath = imagePath %}
