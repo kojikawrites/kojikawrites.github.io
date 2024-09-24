@@ -74,9 +74,9 @@ div.service-item { margin-bottom: 13vmin; clear: both; }
 
 .about-resume-row h3 { color: white !important; }
 
-.post-content h3 { color: white; }
+.post-content h3 { color: #ff6707; }
 
-.post-content h2 { color: white; }
+.post-content h2 { color: #ff6707; }
 
 .about-resume-row a { color: #ff6707; font-style: italic; }
 
@@ -95,7 +95,7 @@ div.service-item { margin-bottom: 13vmin; clear: both; }
 .about-resume-bio h2 { color: #ff6707; # color: #ffA707; }
 
 @media (min-width: 992px) { h1.post-title { display: none; } }
-@media (max-width: 991px) { body { text-align: center; }
+@media (max-width: 991px) { body { text-align: left; }
   .about-resume-avatar { width: 100%; float: none; margin-bottom: 10vmin; }
   .about-resume-col-detail { margin-bottom: 3vmin; }
   .about-resume-title { font-weight: bolder; color: white !important; }

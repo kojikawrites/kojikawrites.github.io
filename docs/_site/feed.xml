@@ -1,33 +1,410 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-05-24T19:40:20-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Welcome to thewriteplace.rocks!</title><link href="http://localhost:4000/blog/writing/2024/05/22/the-fawn-engine-post/" rel="alternate" type="text/html" title="Welcome to thewriteplace.rocks!" /><published>2024-05-22T00:00:00-04:00</published><updated>2024-05-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/05/22/the-fawn-engine-post</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/05/22/the-fawn-engine-post/">&lt;p&gt;Welcome to The Write Place, your new favorite spot for all things writing! We’re thrilled to have you join our community 
-of writers, readers, and word enthusiasts. Whether you’re a seasoned novelist, a budding poet, or someone who just loves
-a good story, you’re in the right place.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-09-23T21:06:44-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">My Posting Schedule</title><link href="http://localhost:4000/blog/writing/2024/09/23/My-Posting-Schedule/" rel="alternate" type="text/html" title="My Posting Schedule" /><published>2024-09-23T00:00:00-04:00</published><updated>2024-09-23T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/09/23/My-Posting-Schedule</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/09/23/My-Posting-Schedule/">&lt;h3 id=&quot;what-to-expect&quot;&gt;What to Expect:&lt;/h3&gt;
+&lt;p&gt;It is my hope that I can post content at least five to ten times a day, time and parenting permitting.&lt;/p&gt;
 
-&lt;p&gt;At The Write Place, we believe that every story deserves to be told. We’re here to help you find your voice, hone your 
-craft, and navigate the wonderful, often chaotic world of writing. Our blog will be your go-to resource for tips on 
-character development, plot structuring, and conquering writer’s block. We’ll also delve into the nitty-gritty of 
-grammar, the joys of editing, and the art of finding inspiration in the most unexpected places.&lt;/p&gt;
+&lt;p&gt;It will look somewhat like this:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;An Outline (perhaps two, depending on time constraints)&lt;/li&gt;
+  &lt;li&gt;The Story Beat of the Day (perhaps two, depending on time constraints)&lt;/li&gt;
+  &lt;li&gt;A General Informative Post (perhaps two, depending on time constraints)&lt;/li&gt;
+  &lt;li&gt;A Writing Exercise (perhaps two, depending on time constraints)&lt;/li&gt;
+  &lt;li&gt;Reviewing a Writing System, Class or Course (so that you don’t have to) (perhaps two, depending on time constraints)&lt;/li&gt;
+&lt;/ol&gt;
 
-&lt;p&gt;But let’s be honest—writing isn’t always easy. It’s a journey filled with highs and lows, moments of brilliance, and 
-periods of doubt. That’s why we’re committed to creating a supportive and encouraging environment where you can share 
-your triumphs and struggles. Here, you’ll find a community of like-minded individuals who understand the challenges and 
-rewards of the writing process.&lt;/p&gt;
-
-&lt;p&gt;We’ll be sharing expert advice, hilarious anecdotes, and inspiring stories from writers of all backgrounds. Whether 
-you’re looking for practical tips, a bit of humor, or a dose of motivation, we’ve got you covered. And we promise to 
-keep things light-hearted and fun, because let’s face it—writing should be enjoyable!&lt;/p&gt;
-
-&lt;p&gt;So grab a cup of coffee, pull up a chair, and let’s embark on this creative journey together. Welcome to The Write 
-Place — where every word matters and every story counts. You’ve found the right place to write!&lt;/p&gt;
-
-&lt;p&gt;In this first post, we want to set the stage for what you can expect from The Write Place. We’ll be diving into a wide 
-range of topics that matter to writers at all stages of their journey. From mastering the basics of storytelling to 
-exploring advanced techniques that add depth and dimension to your work, there’s something here for everyone.&lt;/p&gt;
-
-&lt;p&gt;Our goal is to create a vibrant space where you can learn and grow. So stay tuned, keep writing, 
-and remember—every great story starts with a single word.&lt;/p&gt;
-
-&lt;p&gt;So, welcome to The Write Place, where your writing journey finds its perfect home.&lt;/p&gt;
+&lt;p&gt;If there’s a post that you have questions about, or if you’d like to see me post something specific, please don’t hesitate to email me at info@thewriteplace.rocks.
+I will be adding my social media accounts at some point in the “Contact Us” section, as well, for communications purposes.&lt;/p&gt;
 
 &lt;div style=&quot;display: block; align-content: center&quot;&gt;
         &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
-&lt;/div&gt;</content><author><name>kojika</name></author><category term="writing" /><category term="writing" /><summary type="html">Welcome to The Write Place, your new favorite spot for all things writing! We’re thrilled to have you join our community of writers, readers, and word enthusiasts. Whether you’re a seasoned novelist, a budding poet, or someone who just loves a good story, you’re in the right place.</summary></entry></feed>
+&lt;/div&gt;</content><author><name>K°</name></author><category term="writing" /><category term="writing," /><category term="general" /><category term="post" /><summary type="html">What to Expect: It is my hope that I can post content at least five to ten times a day, time and parenting permitting.</summary></entry><entry><title type="html">My Writing Essentials:</title><link href="http://localhost:4000/blog/writing/2024/09/23/My-Essentials-for-Writing/" rel="alternate" type="text/html" title="My Writing Essentials:" /><published>2024-09-23T00:00:00-04:00</published><updated>2024-09-23T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/09/23/My-Essentials-for-Writing</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/09/23/My-Essentials-for-Writing/">&lt;h3 id=&quot;my-writing-essentials-list&quot;&gt;My Writing Essentials List:&lt;/h3&gt;
+&lt;p&gt;This is one of the most asked question, it seems. So you’re likely wondering what my essentials are.
+Well, buckle up, because my list is lengthy.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;My Macbook Pro is the computer that I use. Don’t come for me, but I feel that the Apple environment is easier to work with.&lt;/li&gt;
+  &lt;li&gt;The Notes app on my iPhone. I have well over three-hundred notes, all related in some form or fashion to writing.&lt;/li&gt;
+  &lt;li&gt;The Persona app (Mariner Software). It is a great character organizer. There’s not another app like it.&lt;/li&gt;
+  &lt;li&gt;The Scrivener app. This is my main writing tool.&lt;/li&gt;
+  &lt;li&gt;ProWritingAid - This is one of only two developmental editors that I’ll ever use.&lt;/li&gt;
+  &lt;li&gt;AutoCrit - This is the second developmental editor that I use.&lt;/li&gt;
+  &lt;li&gt;ChatGPT - I know this is “controversial,” now ask me if I give a damn… Newsflash, I don’t.&lt;/li&gt;
+  &lt;li&gt;Claude - Yes, another AI web UI. If you follow this blog you’re going to see me talk about AI a lot.&lt;/li&gt;
+  &lt;li&gt;Sudowrite - Once again, AI rears their fabulous head.&lt;/li&gt;
+  &lt;li&gt;OpenRouter - It’s literally an AI playground and I love exploring the different models. It’s so much fun.&lt;/li&gt;
+  &lt;li&gt;Rexy - It’s Future Fiction Academy’s AI Model. It’s a lot of fun.&lt;/li&gt;
+  &lt;li&gt;Logseq - It’s a repository for my manuscripts, much like Scrivener.&lt;/li&gt;
+  &lt;li&gt;CardBuddy - This app is just a fun repository. It is a bit limited, however.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;links---just-highlight-the-link-and-right-click-and-hit-the-go-to-option&quot;&gt;Links - Just Highlight the Link and Right Click and Hit the Go To Option:&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;Persona - https://persona.softwar.io/&lt;/li&gt;
+  &lt;li&gt;Scrivener - https://www.literatureandlatte.com/scrivener/overview&lt;/li&gt;
+  &lt;li&gt;ProWritingAid - https://prowritingaid.com/&lt;/li&gt;
+  &lt;li&gt;AutoCrit - https://www.autocrit.com/&lt;/li&gt;
+  &lt;li&gt;ChatGPT - https://chatgpt.com/&lt;/li&gt;
+  &lt;li&gt;Claude - https://claude.ai/new&lt;/li&gt;
+  &lt;li&gt;Sudowrite - https://editor.sudowrite.com/app&lt;/li&gt;
+  &lt;li&gt;OpenRouter - https://openrouter.ai/chat&lt;/li&gt;
+  &lt;li&gt;Rexy - https://futurefictionacademy.com/&lt;/li&gt;
+  &lt;li&gt;Logseq - https://logseq.com/&lt;/li&gt;
+  &lt;li&gt;CardBuddy - https://www.ussherpress.com/cardbuddy/&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div style=&quot;display: block; align-content: center&quot;&gt;
+        &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
+&lt;/div&gt;</content><author><name>K°</name></author><category term="writing" /><category term="writing," /><category term="essentials," /><category term="software," /><category term="hardware" /><summary type="html">My Writing Essentials List: This is one of the most asked question, it seems. So you’re likely wondering what my essentials are. Well, buckle up, because my list is lengthy.</summary></entry><entry><title type="html">A Romantic Outline:</title><link href="http://localhost:4000/blog/writing/2024/09/23/Love-Is-In-The-Air-Outline/" rel="alternate" type="text/html" title="A Romantic Outline:" /><published>2024-09-23T00:00:00-04:00</published><updated>2024-09-23T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/09/23/Love-Is-In-The-Air-Outline</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/09/23/Love-Is-In-The-Air-Outline/">&lt;h3 id=&quot;love-is-in-the-air&quot;&gt;Love is in the Air:&lt;/h3&gt;
+&lt;p&gt;There’s no one way to plot a romance. Everyone has their own system of structuring. &lt;em&gt;Romancing the Beat&lt;/em&gt; by Gwen Hayes is a popular one many romance writers swear by. I’m not great at following anyone else’s mold. The way I work is by making things up for myself and finding the way I need to do things. Below is the structure I’ve come up with for myself, but I’m not necessarily telling you to follow it. This is one example. Go forth and search for or create your own should you so choose not to use the one I’ve provided. The choice is yours!&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;consider-this&quot;&gt;Consider This:&lt;/h3&gt;
+&lt;p&gt;Act I - Scared of Love:&lt;br /&gt;
+Your character will be afraid of love because of something that happened to them in the past. It gives them a false belief about the world. They’re fighting against the love even though they’re both attracted to one another, and they’re doing this while you’re setting up the external plot.&lt;/p&gt;
+
+&lt;p&gt;Act IIa - Learning Love:&lt;br /&gt;
+Now that the two people realize they can’t fight the attraction they feel for each other, they learn little lessons (refer to character sheet – what they need to heal) and their barriers against love start to break down. The couple have put their vulnerable hearts on the line and made the leap to trust each other.&lt;/p&gt;
+
+&lt;p&gt;Act IIb - Unsure of Love:&lt;br /&gt;
+Now that they’ve committed to each other, their fears start to show. Plot points arise that put doubt in their minds based on their fears. At the end of this quarter, the big climax happens. Their fear becomes a reality (or at least, they think it has). They retreat, have a ‘woe is me’ moment until someone or something reminds them to trust new love.&lt;/p&gt;
+
+&lt;p&gt;Act III - Fighting For Love:&lt;br /&gt;
+Deciding to trust their new love, they are now fighting for it. The hero/heroine has shown them how to heal, and they become their ‘best me’ (check character sheet). They make a grand gesture, something to prove they’ve changed, and win the heart of their love. Don’t forget a chapter at the end to show them firmly in their new, love-filled life.&lt;/p&gt;
+
+&lt;p&gt;That’s not everything. There’s so much more to it. But that’s the broad stroke of what I’m thinking about when I plot the romantic relationship of my romance novels. There’s separate work that goes into each character’s internal arc, and then there’s the planning of the internal and external plots, as well.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;the-outline&quot;&gt;The Outline:&lt;/h3&gt;
+&lt;p&gt;The Meet Cute:&lt;br /&gt;
+Here’s where the lovers meet. This is where the seeds of their relationship are sown. There’s both attraction and conflict. The groundwork for the potential to reach a happily-ever-after, along with enough conflict to last the length of a novel, is set.&lt;/p&gt;
+
+&lt;p&gt;Rejection of the Relationship:&lt;br /&gt;
+One or both of the main characters are in denial about the attraction, or there’s some external reason in their way, so this cannot possibly work out. Here, the relationship is still very much at odds. We learn the reasons why the relationship won’t work and the external plot reasons why they cannot be together. But also… there are hints that they can’t quite stop thinking about each other, and something big is going to happen between them. It’s usually a situation of “they doth protest too much.”&lt;/p&gt;
+
+&lt;p&gt;Giving the Relationship a Chance:&lt;br /&gt;
+This is the “First Threshold” or the beginning of Act Two. For some reason, despite their attempts to stay apart, they’re forced to work together, often toward a common goal, sometimes as a reluctant agreement to date. There’s often some challenge that cannot be overcome without the other. They must accept that some sort of relationship is developing, though they are still adamant that a happily-ever-after is not in the cards for them. There’s still conflict and resistance to permanence, and no mentions of love, but they must face the truth: in order to continue on their journey, they will need to work together.&lt;/p&gt;
+
+&lt;p&gt;Three Dates:&lt;br /&gt;
+This is the first relationship development section. Usually, there’s a first date that happens here, along with other challenges. I’ve heard Liz Pelletier of Entangled say there’s usually three dates in this section, if there are dates, which not every romance has per se. But the lovers are together for a period of time, interacting in a get-to-know-you scenario demonstrating relationship chemistry in at least three major scenes. Each scene both deepens their affinity but also reaffirms the reason they cannot be together. It’s a “three steps forward, two steps back” pattern.&lt;/p&gt;
+
+&lt;p&gt;I Need You, But I Can’t Have You:&lt;br /&gt;
+In many romances, this is where some major form of physical intimacy takes place. A first kiss, a first love-making, or a first uninhibited admittance of, “I really like having you in my life.” There’s an intense moment of believing or seeing a glimpse of how meaningful this relationship could become. But it’s quickly dashed to pieces, often by one or the other getting scared by the growing intimacy and some external plot force tearing them apart.&lt;/p&gt;
+
+&lt;p&gt;Pulling Back Together:&lt;br /&gt;
+Something, most likely in the external plot, forces them back together. They’re forced to work together, and the attraction is stronger than ever. The relationship development that had begun in the first half now deepens. Often, their deepest fears are confessed, they’re left vulnerable and open to each other, and real intimacy builds.&lt;/p&gt;
+
+&lt;p&gt;The Fall:&lt;br /&gt;
+They fall for each other, hard. There’s usually another big moment of physical intimacy here, often lovemaking in a way that is meaningful. In romances where the couple has been engaging in casual sex, usually the love scene here is truly making love for the first time. They will separately admit they’ve fallen for the other, though not necessarily acknowledging it to each other. Sometimes one will declare themselves, but the other doesn’t reciprocate for some reason related to their internal flaw or wound.&lt;/p&gt;
+
+&lt;p&gt;The Break Up:&lt;br /&gt;
+They’re done. They’re over. The relationship is never going to happen. Their lives are in crisis. They try to go back to their ordinary world, and it’s a dismal fail. They’re irrevocably changed by the other person. They’re lost and miserable in their loneliness.&lt;/p&gt;
+
+&lt;p&gt;The Sacrifice:&lt;br /&gt;
+There’s a decision made by one or both of the lovers. They’re clinging to the fear of the wound/flaw, but this is overcome. There’s a letting go or sacrificing of the misbelief they’ve been carrying around this whole time, and giving up on the external plot reason for them not being together. The realization that whatever fear was stopping them is insignificant compared to their love for the other person.&lt;/p&gt;
+
+&lt;p&gt;The Declaration:&lt;br /&gt;
+There’s a declaration of love, a communion of the relationship. This is where the magic of the happily-ever-after comes to completion. It’s usually at first met with some trepidation. This is their first big leap of faith and giving of their hearts to each other. The trust circle between them is complete.&lt;/p&gt;
+
+&lt;p&gt;The Happily Ever After:&lt;br /&gt;
+The romance reader has to have their denouement. They want a glimpse of the lovers in their new happily-ever-after world, to make sure that everything is going okay. There’s usually a scene including friends and family, gaining an acknowledgment of the new relationship from important people in their lives. There’s a renewed promise of forever.&lt;/p&gt;
+
+&lt;div style=&quot;display: block; align-content: center&quot;&gt;
+        &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
+&lt;/div&gt;</content><author><name>K°</name></author><category term="writing" /><category term="writing," /><category term="outline" /><summary type="html">Love is in the Air: There’s no one way to plot a romance. Everyone has their own system of structuring. Romancing the Beat by Gwen Hayes is a popular one many romance writers swear by. I’m not great at following anyone else’s mold. The way I work is by making things up for myself and finding the way I need to do things. Below is the structure I’ve come up with for myself, but I’m not necessarily telling you to follow it. This is one example. Go forth and search for or create your own should you so choose not to use the one I’ve provided. The choice is yours!</summary></entry><entry><title type="html">The Story Beat of the Day:</title><link href="http://localhost:4000/blog/writing/2024/09/23/Applied-Phlebotinum-TBOTD/" rel="alternate" type="text/html" title="The Story Beat of the Day:" /><published>2024-09-23T00:00:00-04:00</published><updated>2024-09-23T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/09/23/Applied-Phlebotinum-TBOTD</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/09/23/Applied-Phlebotinum-TBOTD/">&lt;h3 id=&quot;applied-phlebotinum&quot;&gt;Applied Phlebotinum:&lt;/h3&gt;
+&lt;p&gt;Phlebotinum is the versatile substance that may be rubbed on anything to cause an effect needed by a plot.&lt;/p&gt;
+
+&lt;h3 id=&quot;examples-include-but-are-not-limited-to&quot;&gt;Examples include but are not limited to:&lt;/h3&gt;
+&lt;p&gt;Nanotechnology, magic crystal emanations, pixie dust, and Green Rocks. In essence, it is plot fuel. Without it, the story would grind to an abrupt halt. It’s the science that powers the FTL drive on the starship so the characters can get somewhere, it’s the magic that hatches the Egg MacGuffin so the protagonist can save an endangered species, it’s the strange things unknown to science or magic that do basically anything except those limits and dangers required by the plot. The reader does not know how Phlebotinum would work and the creators hope nobody cares. In essence, it’s a plot device that abstracts away the problem of hard science.&lt;/p&gt;
+
+&lt;h3 id=&quot;best-practice&quot;&gt;Best Practice:&lt;/h3&gt;
+&lt;p&gt;Consistency is key. While Phlebotinum doesn’t need to be scientifically explained, it should follow consistent rules within your story. For Aetheric Crystals:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Establish clear limitations (e.g., they become unstable if overused)&lt;/li&gt;
+  &lt;li&gt;Define specific applications and stick to them&lt;/li&gt;
+  &lt;li&gt;Create plot-relevant drawbacks or risks&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;By maintaining consistency, you keep the story engaging without frustrating readers with arbitrary changes to how the Phlebotinum works.&lt;/p&gt;
+
+&lt;div style=&quot;display: block; align-content: center&quot;&gt;
+        &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
+&lt;/div&gt;</content><author><name>K°</name></author><category term="writing" /><category term="writing," /><category term="individual" /><category term="story" /><category term="beats" /><summary type="html">Applied Phlebotinum: Phlebotinum is the versatile substance that may be rubbed on anything to cause an effect needed by a plot.</summary></entry><entry><title type="html">A Writing Exercise</title><link href="http://localhost:4000/blog/writing/2024/09/23/Zombies/" rel="alternate" type="text/html" title="A Writing Exercise" /><published>2024-09-23T00:00:00-04:00</published><updated>2024-09-23T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/09/23/Zombies</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/09/23/Zombies/">&lt;h3 id=&quot;zombies&quot;&gt;Zombies:&lt;/h3&gt;
+&lt;p&gt;Zombies, contrary to the popular image portrayed in &lt;em&gt;“The Walking Dead”&lt;/em&gt;, come in various forms and aren’t limited to the undead. They can manifest as rowdy soccer hooligans, cantankerous seniors, or even relentless social media mobs. These diverse representations of mob mentality exist across different genres, making them a versatile and potent narrative element. Unlike individual adversaries, confronting or reasoning with a crowd is often futile. In the face of such overwhelming numbers, your characters may find themselves with no choice but to flee or seek refuge, potentially teaming up with other survivors to increase their chances of survival.&lt;/p&gt;
+
+&lt;p&gt;However, every type of mob, whether real or metaphorical, has its weaknesses. These weaknesses can range from the susceptibility of the mob to infighting or their dependence on a charismatic leader. It falls upon your characters to uncover and exploit these vulnerabilities, providing a glimmer of hope in an otherwise bleak situation.&lt;/p&gt;
+
+&lt;p&gt;Furthermore, you can introduce an intriguing twist to your story by suggesting the possibility of a cure for the mob’s collective madness. Such a cure, if it exists, could be the key to restoring order and sanity to the world. However, it won’t be easy to find. Your character must embark on a perilous journey, navigating through the chaos and uncertainty of a world overrun by mobs. Along the way, they may encounter allies, uncover dark secrets, and face moral dilemmas, all while striving to locate the elusive cure that could save humanity from the clutches of mob mentality.&lt;/p&gt;
+
+&lt;p&gt;In this way, your narrative can explore not only the physical dangers posed by mobs but also the psychological and emotional challenges that arise when society itself turns into a relentless and mindless force.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-exercise&quot;&gt;The Exercise:&lt;/h3&gt;
+&lt;p&gt;This exercise is designed to develop your understanding of mob mentality as a narrative element and explore potential strategies for your characters to navigate or confront it within your story.&lt;/p&gt;
+
+&lt;h3 id=&quot;experts-knowledge&quot;&gt;Experts Knowledge:&lt;/h3&gt;
+&lt;p&gt;Consider experts or individuals with specialized knowledge whom your characters could consult within your narrative. These experts might have insights into dealing with different forms of mob mentality. Brainstorm a list of at least three experts, detailing their backgrounds, their expertise, and how they could assist your characters (and for bonus points, how they could potentially hinder them).&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;Example:&lt;/h3&gt;
+&lt;p&gt;Experts:&lt;br /&gt;
+Expert Name:&lt;br /&gt;
+Their Background:&lt;br /&gt;
+Their Expertise:&lt;br /&gt;
+How They Can Help:&lt;br /&gt;
+How They Can Hinder:&lt;/p&gt;
+
+&lt;h3 id=&quot;survivor-knowledge&quot;&gt;Survivor Knowledge:&lt;/h3&gt;
+&lt;p&gt;Reflect on whether this situation of mob mentality has occurred before in your story’s world. If so, think about how previous survivors coped and what strategies they employed. Explore how your characters can utilize this knowledge to their advantage.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;How did previous survivors cope with mob mentality?&lt;/li&gt;
+  &lt;li&gt;What strategies or tactics did they use to survive?&lt;/li&gt;
+  &lt;li&gt;How can your characters adapt or improve upon these strategies?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;mob-leader&quot;&gt;Mob Leader:&lt;/h3&gt;
+&lt;p&gt;Determine if the mob has a leader or figurehead. If so, delve into the character of this leader, their motivations, and the source of their influence over the mob. Then, brainstorm ways your characters could potentially challenge or take over this leadership position.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example:&lt;/h3&gt;
+&lt;p&gt;Mob Leader’s Name:&lt;br /&gt;
+Motivations and Goals:&lt;br /&gt;
+Source of Influence:&lt;br /&gt;
+Strategies for Challenging the Leader:&lt;/p&gt;
+
+&lt;h3 id=&quot;a-personal-connection&quot;&gt;A Personal Connection:&lt;/h3&gt;
+&lt;p&gt;Introduce a personal connection between your character and the mob. Consider someone the character loves or cares about who has become part of the mob. Reflect on how this personal connection adds complexity to the character’s journey and decisions.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-2&quot;&gt;Example:&lt;/h3&gt;
+&lt;p&gt;Character Loved by the Character:&lt;br /&gt;
+Relationship to the Character:&lt;br /&gt;
+How the Mob Mentality Has Affected Them:&lt;/p&gt;
+
+&lt;h3 id=&quot;understanding-the-mobs-desire&quot;&gt;Understanding the Mob’s Desire:&lt;/h3&gt;
+&lt;p&gt;Determine what the mob desires collectively. Explore how the narrative might change if the mob were to attain what they desire.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Is there a specific goal, resource, or outcome they seek?&lt;/li&gt;
+  &lt;li&gt;Would they disperse, grow stronger, or react differently?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div style=&quot;display: block; align-content: center&quot;&gt;
+        &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
+&lt;/div&gt;</content><author><name>K°</name></author><category term="writing" /><category term="writing," /><category term="exercise" /><summary type="html">Zombies: Zombies, contrary to the popular image portrayed in “The Walking Dead”, come in various forms and aren’t limited to the undead. They can manifest as rowdy soccer hooligans, cantankerous seniors, or even relentless social media mobs. These diverse representations of mob mentality exist across different genres, making them a versatile and potent narrative element. Unlike individual adversaries, confronting or reasoning with a crowd is often futile. In the face of such overwhelming numbers, your characters may find themselves with no choice but to flee or seek refuge, potentially teaming up with other survivors to increase their chances of survival.</summary></entry><entry><title type="html">The Story Beat of the Day</title><link href="http://localhost:4000/blog/writing/2024/09/22/A-Care-Parcel/" rel="alternate" type="text/html" title="The Story Beat of the Day" /><published>2024-09-22T00:00:00-04:00</published><updated>2024-09-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/09/22/A-Care-Parcel</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/09/22/A-Care-Parcel/">&lt;h3 id=&quot;a-care-parcel&quot;&gt;A Care Parcel:&lt;/h3&gt;
+
+&lt;h3 id=&quot;the-protagonists-key-relationship&quot;&gt;The Protagonist’s Key Relationship:&lt;/h3&gt;
+
+&lt;p&gt;Definition:
+The protagonist has a relationship with someone that he, she or they really cares for and will fight for.&lt;/p&gt;
+
+&lt;h3 id=&quot;important-notes&quot;&gt;Important Notes:&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;This beat often serves to humanizes the protagonist.&lt;/li&gt;
+  &lt;li&gt;This beat often serves to engender sympathy from the reader.&lt;/li&gt;
+  &lt;li&gt;This relationship has started &lt;em&gt;before&lt;/em&gt; the start of the story.&lt;/li&gt;
+  &lt;li&gt;It will touch on the protagonist’s flaws.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div style=&quot;display: block; align-content: center&quot;&gt;
+        &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
+&lt;/div&gt;</content><author><name>K°</name></author><category term="writing" /><category term="writing," /><category term="individual" /><category term="story" /><category term="beats" /><summary type="html">A Care Parcel:</summary></entry><entry><title type="html">A Writing Exercise:</title><link href="http://localhost:4000/blog/writing/2024/09/22/A-Heart-to-Heart/" rel="alternate" type="text/html" title="A Writing Exercise:" /><published>2024-09-22T00:00:00-04:00</published><updated>2024-09-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/09/22/A-Heart-to-Heart</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/09/22/A-Heart-to-Heart/">&lt;h3 id=&quot;a-heart-to-heart&quot;&gt;A Heart to Heart:&lt;/h3&gt;
+&lt;p&gt;Perhaps your protagonist and the antagonist are not as far apart as they believe, or perhaps it’s much worse than either of them ever could have realized. Only a heart to heart conversation will make it clear. Sometimes, it’s a stranger that your protagonist opens up to first, revealing the need for a conversation that they didn’t realize before. Granted, these conversations may never make it into the story, but they can reveal what’s driving your protagonist (and the antagonist) in the moment and foreshadow future events or introduce new complications to the plot. It may also give you useful dialogue. So don’t hold back. Allow them to take a deep breath and get everything off their chests.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-exercise&quot;&gt;The Exercise:&lt;/h3&gt;
+&lt;p&gt;A Conversation with a Confidant:
+List three characters your character could confide in.
+What drives your character to open up to someone?
+What emotions or circumstances lead to this need for conversation?&lt;/p&gt;
+
+&lt;p&gt;Now, with the understanding that you’ve gained from answering the two questions above, write a dialogue scene where this conversation with the confidant takes place.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-heart-to-heart&quot;&gt;The Heart to Heart:&lt;/h3&gt;
+&lt;p&gt;List three locations or situations in which your character and the antagonist could talk at length without a physical conflict.&lt;/p&gt;
+
+&lt;h3 id=&quot;some-questions-to-consider&quot;&gt;Some Questions to Consider:&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;What drives them emotionally or psychologically to seek out the conversation with the antagonist?&lt;/li&gt;
+  &lt;li&gt;How might these conversations change their relationship or the power balance between the character and the antagonist?&lt;/li&gt;
+  &lt;li&gt;How do these conversations align with or challenge the character’s core values and beliefs?&lt;/li&gt;
+  &lt;li&gt;How do these conversations align with or challenge the antagonist’s core values and beliefs?&lt;/li&gt;
+  &lt;li&gt;What internal conflicts or emotional struggles does the character face before and after these conversations?&lt;/li&gt;
+  &lt;li&gt;What internal conflicts or emotional struggles does the antagonist face before and after these conversations?&lt;/li&gt;
+  &lt;li&gt;How do these conversations impact the character’s relationships with other characters in the story?&lt;/li&gt;
+  &lt;li&gt;Are there moments of regret, revelation, or transformation associated with these dialogues?&lt;/li&gt;
+  &lt;li&gt;What growth or changes for the antagonist might occur as a result of these interactions?&lt;/li&gt;
+  &lt;li&gt;What growth or changes for the character might occur as a result of these interactions?&lt;/li&gt;
+  &lt;li&gt;In what ways can these conversations drive the plot forward or introduce new complications?&lt;/li&gt;
+  &lt;li&gt;How can these conversations influence the dynamics between the character and the antagonist?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now, with the understanding that you’ve gained from answering the twelve questions above, write a dialogue scene where this heart to heart conversation with the antagonist takes place.&lt;/p&gt;
+
+&lt;div style=&quot;display: block; align-content: center&quot;&gt;
+        &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
+&lt;/div&gt;</content><author><name>K°</name></author><category term="writing" /><category term="writing," /><category term="exercise" /><summary type="html">A Heart to Heart: Perhaps your protagonist and the antagonist are not as far apart as they believe, or perhaps it’s much worse than either of them ever could have realized. Only a heart to heart conversation will make it clear. Sometimes, it’s a stranger that your protagonist opens up to first, revealing the need for a conversation that they didn’t realize before. Granted, these conversations may never make it into the story, but they can reveal what’s driving your protagonist (and the antagonist) in the moment and foreshadow future events or introduce new complications to the plot. It may also give you useful dialogue. So don’t hold back. Allow them to take a deep breath and get everything off their chests.</summary></entry><entry><title type="html">The Plot Machine:</title><link href="http://localhost:4000/blog/writing/2024/09/22/The-Plot-Machine/" rel="alternate" type="text/html" title="The Plot Machine:" /><published>2024-09-22T00:00:00-04:00</published><updated>2024-09-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/09/22/The-Plot-Machine</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/09/22/The-Plot-Machine/">&lt;h2 id=&quot;the-current-world&quot;&gt;The Current World&lt;/h2&gt;
+&lt;p&gt;In what dynamic way do you want to welcome your readers into the world that your characters are experiencing? Consider this as the front stage for introducing a world and a scenario of your characters current status quo.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-major-dramatic-query&quot;&gt;The Major Dramatic Query&lt;/h2&gt;
+&lt;p&gt;With every story, you need to have both a visible plot query and a spiritual or emotional, inner motivation query that directly relates to your premise. These can be large or small, but something needs to occurs to pose a question or a problem to the characters. This is where status quo begins to change.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-choice-is-made&quot;&gt;A Choice is Made&lt;/h2&gt;
+&lt;p&gt;Be it subtle or dramatic, your characters have to react to the major dramatic query. They either take an action (one that is most likely incorrect, at first) or choose to ignore it entirely and do their own thing. Either way, the wheels of change begin to move due to this important choice.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-status-quo-attempt&quot;&gt;A Status Quo Attempt&lt;/h2&gt;
+&lt;p&gt;The character’s choice was not met with their desired consequence or their own internal uneasiness has compelled them to try and keep everything the same for the sake of self or sanity. Fortunately and unfortunately the one constant remains, in that nothing in this world can be forced to remain the same.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-slide-of-consequence&quot;&gt;The Slide of Consequence&lt;/h2&gt;
+&lt;p&gt;A large shift in the character’s current situation takes place that is a direct result of the character’s choices. Everything is suddenly changing and no one can do anything to prevent it from happening.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-taste-of-the-dark&quot;&gt;A Taste of the Dark&lt;/h2&gt;
+&lt;p&gt;The characters are suddenly catapulted into the darkness, whether this particular darkness is personal demons or a taste of the worst adventures to come, is unknown to them.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-cause-larger-than-oneself&quot;&gt;A Cause Larger Than Oneself&lt;/h2&gt;
+&lt;p&gt;The character is drawn away from the taste of the dark and it’s distractions by something larger than themselves. Perhaps it’s another character or thing that needs help, or perhaps they glimpse the larger picture and their possible destiny inside it. Either way, this cause needs to be larger than life itself.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-diligent-attempt&quot;&gt;A Diligent Attempt&lt;/h2&gt;
+&lt;p&gt;This is when the characters are making earnest attempts to move beyond their current situation. However, at this point, they lack three things required to move forward. First, they lack tangible skills, tools and abilities. Secondly, they lack the internal ability to grow and change. Lastly, the situation itself is preventing them from moving forward.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-dizzy-backwards&quot;&gt;The Dizzy Backwards&lt;/h2&gt;
+&lt;p&gt;Due to the lack of tangible skills, tools and abilities, the lack of an internal ability to grow and change and the current ever worsening status of the situation, the characters find themselves in an uphill battle that starts to slide backwards, growing into an even direr scenario.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-drop-shaft&quot;&gt;The Drop Shaft&lt;/h2&gt;
+&lt;p&gt;The characters chose to continue to attempt to pursue status quo and try to hold their current situation together, as best they can. However, the world, the situation and/or other characters have different plans for them. This is when the characters are suddenly tossed into A Forceful Diversion of the Path.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-forceful-diversion-of-the-path&quot;&gt;A Forceful Diversion of the Path&lt;/h2&gt;
+&lt;p&gt;This is when an event, or even a series of events occur and this event or events forces the characters to diverge from their desired path, whether the new path is right or wrong, good or bad, they have no choice but to proceed forward.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-dark-corridor&quot;&gt;A Dark Corridor&lt;/h2&gt;
+&lt;p&gt;The characters are presented with an opportunity to enter the dark side. This could be a tangible dark, such as crimes or great immoral acts, or a psychological dark such as deep internal conflicts. Either way, something tempts them down this path, and for now, the dark wins.&lt;/p&gt;
+
+&lt;h2 id=&quot;some-underworld-games&quot;&gt;Some Underworld Games&lt;/h2&gt;
+&lt;p&gt;Everything is upside down. Depending on your genre, the characters are either at their lowest point, or they’ve submitted to temptation and are dancing with the devil. Either way, they’re on the wrong side and this part is all about the ups and downs of playing a very dangerous game.&lt;/p&gt;
+
+&lt;h2 id=&quot;going-towards-the-light&quot;&gt;Going Towards the Light&lt;/h2&gt;
+&lt;p&gt;This is when the characters attempts to make an effort to quit the underworld and the dangerous games in order to attempt to choose a better, more helpful path forward.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-dark-lures-on&quot;&gt;The Dark Lures On&lt;/h2&gt;
+&lt;p&gt;The character chose to walk adjacent to the light, but not directly into it. They continue on in the underworld where they’re tempted to take it to an even deeper and darker level where new and even worse opportunities are set to present themselves.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-fan-blades&quot;&gt;The Fan Blades&lt;/h2&gt;
+&lt;p&gt;The characters get sucked into the secondary plot or other complications and it has caused their perspectives to completely change. The Underworld has now either lost its appeal or the characters are now being drawn elsewhere by a much stronger force.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-glimmer-of-light&quot;&gt;A Glimmer of Light&lt;/h2&gt;
+&lt;p&gt;This is where a small peek at a more hopeful world finally presents itself, and it’s entirely possible, that this time, it’s not just another false peak for the characters to egress.&lt;/p&gt;
+
+&lt;h2 id=&quot;going-upwards&quot;&gt;Going Upwards&lt;/h2&gt;
+&lt;p&gt;There’s definitely a more vibrant place ahead, one that is almost the antithesis of the underworld that the characters have been lurking in up until now and this is the time where you tease both the characters and the readers with a taste of it as the characters tentatively follow this new steep, unsure path.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-house-of-allure&quot;&gt;The House of Allure&lt;/h2&gt;
+&lt;p&gt;The characters have now elevated to a place where they’re no longer slogging or stuck, but are now in a place of vibrancy, even though none of the journey thus far has been easy. No matter the genre, this is the part of the book where the characters feel most alive and if you’ve done it right, so will the readers.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-seeking-stairs&quot;&gt;The Seeking Stairs&lt;/h2&gt;
+&lt;p&gt;After a lengthy stay in the house of allure and the many adventures contained within, the characters begin to realize there’s more to come, as new paths emerge. They’ve been having a lot of fun thus far, but now it’s time to find out where this particular new path goes.&lt;/p&gt;
+
+&lt;h2 id=&quot;as-the-secondary-plot-intensifies&quot;&gt;As the Secondary Plot Intensifies&lt;/h2&gt;
+&lt;p&gt;Whether it’s romance or a secondary action plot, the character’s immersion into it is stronger than ever and this of course will bring new complications and consequences.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-complications-factory&quot;&gt;The Complications Factory&lt;/h2&gt;
+&lt;p&gt;This is where the secondary plot will now come crashing into the primary plot. This is also where the characters are facing even more conflicts, challenges, complications and consequences than ever before and this is also where every choice that they make will be crucial.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-pit-of-power-loss&quot;&gt;The Pit of Power Loss&lt;/h2&gt;
+&lt;p&gt;This is where everything comes to a crushing and crashing halt for the characters. All is dark here and it feels like that there are no more options to be had… except there are…&lt;/p&gt;
+
+&lt;h2 id=&quot;a-monumental-leap&quot;&gt;A Monumental Leap&lt;/h2&gt;
+&lt;p&gt;From the pit of power loss, the characters felt like they had no more feasible options available to them, then they realize that options do still exist. A jump of faith, if you will… They must now take a massive action, make an impossible choice or try something absolutely crazy with catastrophic odds in order to finally move forward.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-tentative-road&quot;&gt;The Tentative Road&lt;/h2&gt;
+&lt;p&gt;The character’s monumental leap has opened all of the doors and options that were until now previously unseen and unavailable. However, they’re still walking a very unstable path and the characters must tentatively move forward in order to see what lies ahead, despite any still existing trepidations.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-house-of-clarity&quot;&gt;The House of Clarity&lt;/h2&gt;
+&lt;p&gt;The answers were here all along, but only now can the characters see what has been clouded all this time. Perhaps they see the truth within other characters. Perhaps it’s the consequences of all of their actions up until this moment. Either way, something valuable that they’ve all persistently ignored or a more subtle internal shift has occurred and now they must navigate the newest path before them.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-drop-chute&quot;&gt;A Drop Chute&lt;/h2&gt;
+&lt;p&gt;The characters newfound clarity regarding the situation sends the characters through a rush of internal and external growth and change. They’re blasted with memories of the past, but with a fresh comprehensibility and they’re sucked into the velocity of this growth and change occurring in their present world.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-new-frontier&quot;&gt;The New Frontier&lt;/h2&gt;
+&lt;p&gt;Welcome the characters into the new world. With newfound clarity and confidence the characters now have the confidence to march forth into this new, unfamiliar territory. There are still many challenges, but the characters have been forever changed and both their actions and feelings reflect it.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-final-race&quot;&gt;The Final Race&lt;/h2&gt;
+&lt;p&gt;This is where the characters race to conquer all of the remaining challenges and conflicts before them, utilizing all of their new tangible skills, tools and abilities, their new growth and change, clarity and confidence.&lt;/p&gt;
+
+&lt;h2 id=&quot;visions-of-the-new-world&quot;&gt;Visions of the New World&lt;/h2&gt;
+&lt;p&gt;The end game is here and all of the loose ends are going to be tied up now. This is where the characters journey has finally been brought full circle, containing many references to the beginning of their initial journey into adventure. Old things resurface into the new light, and all of the still pressing questions are answered. However, the characters have been forever changed by all of the events that have occurred up until now. The most important question to answer here now is, how is life different for all of them now and what are their current desires compared to the desires they held when they first started this epic journey into adventure.&lt;/p&gt;
+
+&lt;h2 id=&quot;some-future-glimpses&quot;&gt;Some Future Glimpses&lt;/h2&gt;
+&lt;p&gt;If your current book is going to be a part of a series, this is your golden opportunity to drop some alluring stepping stones into the ensuing books. However, if your book is a standalone, this is where you’ll offer a glimpse into what the future may look like for the characters after the completion of their journey into adventure. It can be subtle and mysterious or it can be simply a satisfying look forward. It can also raise more questions or alter the perceived reality of the book. Lastly, it can leave the reader in charge of its overall interpretation or off a comfortingly firm ending. The choice is ultimately yours.&lt;/p&gt;
+
+&lt;div style=&quot;display: block; align-content: center&quot;&gt;
+        &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
+&lt;/div&gt;</content><author><name>K°</name></author><category term="writing" /><category term="writing," /><category term="outline" /><summary type="html">The Current World In what dynamic way do you want to welcome your readers into the world that your characters are experiencing? Consider this as the front stage for introducing a world and a scenario of your characters current status quo.</summary></entry><entry><title type="html">A Time Traveling Outline</title><link href="http://localhost:4000/blog/writing/2024/09/22/Turbulent-Timelines-Outline/" rel="alternate" type="text/html" title="A Time Traveling Outline" /><published>2024-09-22T00:00:00-04:00</published><updated>2024-09-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/09/22/Turbulent-Timelines-Outline</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/09/22/Turbulent-Timelines-Outline/">&lt;h3 id=&quot;turbulent-timelines-outline&quot;&gt;Turbulent Timelines Outline:&lt;/h3&gt;
+&lt;p&gt;With the “Turbulent Timelines” outline, you’ll have a chance to write a book where readers will explore a richly imagined alternate history filled with divergent events, unique challenges, and the profound impact of choices made in an altered historical context.&lt;/p&gt;
+
+&lt;h3 id=&quot;introduction-to-the-protagonist&quot;&gt;Introduction to the Protagonist:&lt;/h3&gt;
+&lt;p&gt;Introduce the protagonist, who lives in an alternate historical timeline, and provide insight into their life and background.&lt;/p&gt;
+
+&lt;h3 id=&quot;from-ordinary-to-trapped&quot;&gt;From Ordinary to Trapped:&lt;/h3&gt;
+&lt;p&gt;Leaving their ordinary world is a shock, but the bigger shock is when they find themselves trapped in the alternate history.&lt;/p&gt;
+
+&lt;h3 id=&quot;some-alternate-world-building&quot;&gt;Some Alternate World Building:&lt;/h3&gt;
+&lt;p&gt;Describe the alternate historical setting, including the key divergence point from actual history, and the consequences of this change.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-inciting-incident&quot;&gt;The Inciting Incident:&lt;/h3&gt;
+&lt;p&gt;Present a significant event or circumstance in the alternate history that sets the stage for the story’s exploration of this altered reality.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-quest-for-understanding&quot;&gt;The Quest for Understanding:&lt;/h3&gt;
+&lt;p&gt;Establish the protagonist’s quest to understand the alternate history, uncover its secrets, or navigate its unique challenges.&lt;/p&gt;
+
+&lt;h3 id=&quot;conflicts-and-alliances&quot;&gt;Conflicts and Alliances:&lt;/h3&gt;
+&lt;p&gt;Highlight conflicts, political dynamics, or alliances that are specific to the alternate historical timeline and shape the protagonist’s journey.&lt;/p&gt;
+
+&lt;h3 id=&quot;diving-into-what-makes-things-different&quot;&gt;Diving into What Makes Things Different:&lt;/h3&gt;
+&lt;p&gt;The protagonist embarks on a journey to explore the nuances and intricacies of the alternate historical timeline.&lt;/p&gt;
+
+&lt;h3 id=&quot;alternate-figures-and-characters&quot;&gt;Alternate Figures and Characters:&lt;/h3&gt;
+&lt;p&gt;Introduce key historical figures or characters specific to this alternate history, some of whom may have pivotal roles in the narrative.&lt;/p&gt;
+
+&lt;h3 id=&quot;social-and-cultural-differences&quot;&gt;Social and Cultural Differences:&lt;/h3&gt;
+&lt;p&gt;Delve into the social norms, cultural differences, and technological advancements unique to the alternate history.&lt;/p&gt;
+
+&lt;h3 id=&quot;big-challenges-and-bigger-conflicts&quot;&gt;Big Challenges and Bigger Conflicts:&lt;/h3&gt;
+&lt;p&gt;Highlight the challenges and conflicts that arise due to the altered historical context, whether they are personal, political, or societal.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-point-of-no-return&quot;&gt;The Point of No Return:&lt;/h3&gt;
+&lt;p&gt;The protagonist faces a critical decision or historical event that will determine their role in shaping the course of the alternate history.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-climactic-divergence&quot;&gt;The Climactic Divergence:&lt;/h3&gt;
+&lt;p&gt;The climax involves a pivotal moment or event that could further alter the alternate history, leading to unforeseen consequences.&lt;/p&gt;
+
+&lt;h3 id=&quot;choices-and-consequences&quot;&gt;Choices and Consequences:&lt;/h3&gt;
+&lt;p&gt;Explore the choices made by the protagonist and other characters, as well as the potential consequences of these decisions on the alternate timeline.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-unraveling&quot;&gt;The Unraveling:&lt;/h3&gt;
+&lt;p&gt;Uncover hidden truths, conspiracies, or revelations that challenge the protagonist’s understanding of the alternate history.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-reckoning&quot;&gt;The Reckoning:&lt;/h3&gt;
+&lt;p&gt;A climactic confrontation or conflict related to the altered historical context takes place, forcing characters to confront their roles in shaping history.&lt;/p&gt;
+
+&lt;h3 id=&quot;resolution-of-reality&quot;&gt;Resolution of Reality:&lt;/h3&gt;
+&lt;p&gt;Conclude the alternate history narrative with a resolution that addresses the fate of the alternate timeline and its impact on the characters.&lt;/p&gt;
+
+&lt;h3 id=&quot;some-reflections-and-growth&quot;&gt;Some Reflections and Growth:&lt;/h3&gt;
+&lt;p&gt;The protagonist reflects on their journey through the alternate history, the lessons learned, and the personal growth experienced.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-legacy-of-change&quot;&gt;The Legacy of Change:&lt;/h3&gt;
+&lt;p&gt;Highlight the lasting impact of the changes to the alternate history on the characters and the world they inhabit.&lt;/p&gt;
+
+&lt;h3 id=&quot;lingering-alternate-questions&quot;&gt;Lingering Alternate Questions:&lt;/h3&gt;
+&lt;p&gt;End with hints of lingering questions or unresolved aspects of the altered timeline, suggesting that alternate history is a complex and evolving narrative.&lt;/p&gt;
+
+&lt;h3 id=&quot;final-reflections&quot;&gt;Final Reflections:&lt;/h3&gt;
+&lt;p&gt;Conclude with the protagonist’s final reflection on the power of choices, the malleability of history, and the enduring fascination with alternate timelines.&lt;/p&gt;
+
+&lt;div style=&quot;display: block; align-content: center&quot;&gt;
+        &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
+&lt;/div&gt;</content><author><name>K°</name></author><category term="writing" /><category term="writing," /><category term="outline" /><summary type="html">Turbulent Timelines Outline: With the “Turbulent Timelines” outline, you’ll have a chance to write a book where readers will explore a richly imagined alternate history filled with divergent events, unique challenges, and the profound impact of choices made in an altered historical context.</summary></entry><entry><title type="html">A Purpose:</title><link href="http://localhost:4000/blog/writing/2024/09/22/A-Purpose/" rel="alternate" type="text/html" title="A Purpose:" /><published>2024-09-22T00:00:00-04:00</published><updated>2024-09-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/writing/2024/09/22/A-Purpose</id><content type="html" xml:base="http://localhost:4000/blog/writing/2024/09/22/A-Purpose/">&lt;p&gt;When I told my husband that I wanted to create a website/blog, he was very supportive and was more than ready and willing to teach me how to do it and how to maintain it on my own, and while I don’t have everything involved committed to memory at the time that this post goes live, I do know that if I have any questions, he’s going to do his best to answer them and show me how to do what I’m asking for.&lt;/p&gt;
+
+&lt;p&gt;So, why am I talking about this? Well, it’s a bit of a segway into what I want to discuss, and that is helping out other new authors, and by help, I mean helping new authors hold on to their money.&lt;/p&gt;
+
+&lt;p&gt;When I thought about creating this blog, I thought that I want to be of help to writers like me. So, with that being said, I am going to review writing systems and writing courses, so that the new writers out there can save their money for publishing that magnum opus that will make them a New York bestseller.&lt;/p&gt;
+
+&lt;div style=&quot;display: block; align-content: center&quot;&gt;
+        &lt;img style=&quot;width:320px; display: block; margin-left: auto; margin-right: auto;&quot; alt=&quot;FAWN Engine Logo&quot; src=&quot;/assets/images/kojika-signature.png&quot; /&gt;
+&lt;/div&gt;</content><author><name>K°</name></author><category term="writing" /><category term="writing," /><category term="help" /><summary type="html">When I told my husband that I wanted to create a website/blog, he was very supportive and was more than ready and willing to teach me how to do it and how to maintain it on my own, and while I don’t have everything involved committed to memory at the time that this post goes live, I do know that if I have any questions, he’s going to do his best to answer them and show me how to do what I’m asking for.</summary></entry></feed>
