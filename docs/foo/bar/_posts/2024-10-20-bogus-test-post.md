@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Musings on the Berlin Interpretation"
-author: hiive
+title:  "Musings on a Bogus Post"
+author: groundh0g
 tags: gamedev
 ---
 
