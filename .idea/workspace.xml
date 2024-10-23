@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Addressed Joe's feedback for Berlin Interpretation post.">
-      <change beforePath="$PROJECT_DIR$/docs/foo/bar/_posts/2024-10-20-bogus-test-post.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/foo/bar/_posts/2024-10-20-bogus-test-post.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_layouts/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_layouts/post.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +41,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "groundh0g-patch-3",
-    "last_opened_file_path": "/Users/groundh0g/projects/hiive.github.io/docs/_posts",
+    "last_opened_file_path": "/Users/groundh0g/projects/hiive.github.io/docs",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -51,6 +52,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs" />
       <recent name="$PROJECT_DIR$/docs/_posts" />
       <recent name="$PROJECT_DIR$/docs/_includes" />
       <recent name="$PROJECT_DIR$/docs/assets/style/custom" />
@@ -86,7 +88,8 @@
       <workItem from="1717377555832" duration="2348000" />
       <workItem from="1720749513832" duration="2855000" />
       <workItem from="1720818466453" duration="5112000" />
-      <workItem from="1729563863213" duration="1564000" />
+      <workItem from="1729563863213" duration="1850000" />
+      <workItem from="1729647803765" duration="3358000" />
     </task>
     <task id="LOCAL-00001" summary="Updates to formatting.">
       <option name="closed" value="true" />
