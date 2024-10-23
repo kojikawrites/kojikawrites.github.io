@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06db65ca-0c7a-4344-b5cd-bbb938f566ea" name="Changes" comment="Addressed Joe's feedback for Berlin Interpretation post.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_layouts/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_layouts/post.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/blog.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/blog.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +88,7 @@
       <workItem from="1720749513832" duration="2855000" />
       <workItem from="1720818466453" duration="5112000" />
       <workItem from="1729563863213" duration="1850000" />
-      <workItem from="1729647803765" duration="3358000" />
+      <workItem from="1729647803765" duration="3491000" />
     </task>
     <task id="LOCAL-00001" summary="Updates to formatting.">
       <option name="closed" value="true" />

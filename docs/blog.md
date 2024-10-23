@@ -30,30 +30,3 @@ showTitle: false
 </ul>
 
 <p class="rss-subscribe">You can subscribe to receive new posts <a href='{{ "/feed.xml" | relative_url }}'>via RSS</a>.</p>
-
-<hr/>
-
-# All Tags Demo
-
-{% for tag in site.tags %}
-{% assign t = tag[0] %}
-* {{ tag[0] }}
-  {% for post in site.tags[t] %}
-    * {{ post.title }}
-      {% endfor %}
-      {% endfor %}
-
-<hr/>
-
-# All Categories Demo
-
-{% for cat in site.categories %}
-  {% assign c = cat[0] %}
-  * {{ c }}
-    {% for post in site.categories[c] %}
-    * {{ post.title }}
-    {% endfor %}
-{% endfor %}
-
-<hr/>
-
