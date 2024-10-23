@@ -194,6 +194,14 @@
     #navLinkBlog {{ activeStyle }}
     #navLinkBlog a::before { content: ">"; white-space: nowrap; }
     #navLinkBlog a::after { content: "<"; white-space: nowrap; }
+{% when "categories" %}
+  #navLinkCategories {{ activeStyle }}
+  #navLinkCategories a::before { content: ">"; white-space: nowrap; }
+  #navLinkCategories a::after { content: "<"; white-space: nowrap; }
+{% when "tags" %}
+  #navLinkTags {{ activeStyle }}
+  #navLinkTags a::before { content: ">"; white-space: nowrap; }
+  #navLinkTags a::after { content: "<"; white-space: nowrap; }
 {% when "contact-us" %}
     #navLinkContactUs {{ activeStyle }}
     #navLinkContactUs a::before { content: ">"; white-space: nowrap; }
