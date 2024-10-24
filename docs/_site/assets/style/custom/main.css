@@ -54,6 +54,14 @@
 
 .page-content h1 { color: #ffA707; font-weight: bolder !important; font-family: "Roboto", sans-serif !important; text-transform: none !important; }
 
+.post-tag { color: #ff6707; font-weight: bolder !important; font-family: "Roboto", sans-serif !important; text-transform: none !important; }
+
+.post-tag:hover { color: #ffA707; font-weight: bolder !important; font-family: "Roboto", sans-serif !important; text-transform: none !important; }
+
+.post-category { color: #ff6707; font-weight: bolder !important; font-family: "Roboto", sans-serif !important; text-transform: none !important; }
+
+.post-category:hover { color: #ffA707; font-weight: bolder !important; font-family: "Roboto", sans-serif !important; text-transform: none !important; }
+
 .page-content .post-meta { color: #808080; }
 
 .homepage h1 { font-size: 3em; font-weight: bolder; }

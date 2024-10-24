@@ -5,6 +5,10 @@ categories: writing, FtBotB
 author: K°
 tags: writing, FtBotB
 ---
+<div>
+{% assign imagePath = "/assets/images/MandA.png" | relative_url %}
+{% include post-image.liquid imagePath=imagePath content=content altText="Fawn" %}
+</div>
 
 From the Back of the Book:
 ---
