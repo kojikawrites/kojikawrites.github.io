@@ -7,6 +7,12 @@ showTitle: false
 
 The following tags appear on this site:
 
+[ {% for tag in site.tags %}
+  {% if forloop.first == false %} | {% endif -%}
+  <span><a href="#{{ tag[0] | slugify }}">#{{ tag[0] }}</a></span>
+{%- endfor %} ]
+<hr/>
+
 {% for tg in site.tags %}
 {% assign tag = tg[0] %}
 
