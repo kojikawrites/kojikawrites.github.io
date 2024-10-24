@@ -6,9 +6,7 @@ layout: default
 
   <p class="post-meta">
     {% assign date_format = site.minima.date_format | default: "%B %-d, %Y" %}
-<<<<<<< Updated upstream
-    Posted on {{ page.date | date: date_format }}{% if page.author %}, by {{ page.author }}{% endif %}{% if page.categories %}, about {{ page.categories }}{% endif %}.
-=======
+
     Posted on {{ page.date | date: date_format }}
     {%- if page.author %}, by {{ page.author }}{% endif %}
     {%- if page.categories %}, about
@@ -22,7 +20,6 @@ layout: default
         <span class="tag-wrapper"><a class="tag" href='{{ "/tags" | relative_url }}#{{ tag | slugify }}'>#{{ tag | slugify }}</a></span>
       {%- endfor %}
     {%- endif %}
->>>>>>> Stashed changes
   </p>
 
   <div class="post-content" itemprop="articleBody">
