@@ -3,7 +3,7 @@ layout: post
 title:  "World Building"
 categories: gamedev
 author: hiive
-tags: gamedev world-building terrain-generation procedural-generation c# rust roguelikes
+tags: gamedev world-building terrain-generation procedural-generation c-sharp rust roguelikes
 ---
 
 A bit more background before these blog post start getting into the development meat.

@@ -3,7 +3,7 @@ layout: post
 title:  "Tile Map Expansion"
 categories: gamedev
 author: hiive
-tags: gamedev world-building terrain-generation procedural-generation c# roguelikes
+tags: gamedev world-building terrain-generation procedural-generation c-sharp roguelikes
 ---
 
 For today's devlog, I'll present a high level overview of the tile map management system, as I glossed over a large 
