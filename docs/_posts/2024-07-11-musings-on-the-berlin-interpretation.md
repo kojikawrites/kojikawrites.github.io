@@ -3,7 +3,7 @@ layout: post
 title:  "Musings on the Berlin Interpretation"
 categories: gamedev
 author: hiive
-tags: gamedev
+tags: gamedev roguelikes musings
 ---
 
 If you’re familiar at all with Roguelike games, you may have heard of the *Berlin Interpretation*, an attempt at a 

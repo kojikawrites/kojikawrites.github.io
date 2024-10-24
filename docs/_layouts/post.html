@@ -18,7 +18,7 @@ layout: default
       <strong>Tags: </strong>
       {%- for tag in page.tags %}
         {%- if forloop.first == false %}, {% endif -%}
-        <a href='{{ "/tags" | relative_url }}#{{ tag | slugify }}'>#{{ tag | slugify }}</a>
+        <a class="tag" href='{{ "/tags" | relative_url }}#{{ tag | slugify }}'>#{{ tag | slugify }}</a>
       {%- endfor %}
     {%- endif %}
   </p>

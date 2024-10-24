@@ -3,7 +3,7 @@ layout: post
 title:  "Rogue Games: Can I have a little more plot with that?"
 categories: gamedev
 author: ellafae
-tags: gamedev
+tags: gamedev roguelikes musings
 ---
 
 Since its advent, gaming has made a profound impact on the lives of those who’ve enjoyed it.  As the technology improved and the variety increased, gamer culture began to grow exponentially. In fact, it’s grown so much that it has been, irreversibly, intertwined with the mainstream. Proof and point: my very non-gaming parents bought a Wii two years back.
