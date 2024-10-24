@@ -466,6 +466,8 @@ code, pre, code *, pre * {
   line-height: 2vmin;
 }
 
+<<<<<<< Updated upstream
+=======
 a.tag {
   font-size: 0.9em !important;
   background-color: darkgreen !important;
@@ -508,6 +510,28 @@ span.tag-wrapper {
   display: none;
 }
 
+a.category {
+  font-size: 0.9em !important;
+  background-color: darkred !important;
+  border-radius: 6px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: white !important;
+  color: white !important;
+  font-weight: bolder !important;
+  font-style: normal !important;
+  text-transform: uppercase !important;
+  padding: 1px 4px !important;
+  margin: 2px !important;
+}
+
+span.category-wrapper {
+  //background: red;
+  display: inline-block;
+  align-content: center;
+  min-height: 26px !important;
+}
+
 /* Change cursor to pointer when hovering over headers */
 .category-div h3 {
   cursor: pointer;
@@ -529,6 +553,7 @@ span.tag-wrapper {
 }
 
 
+>>>>>>> Stashed changes
 .homepage p {
   font-size: 1.05em;
   font-weight: normal;

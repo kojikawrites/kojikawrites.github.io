@@ -7,10 +7,9 @@ showTitle: false
 
 The following categories appear on this site:
 
-[ {% for cat in site.categories %}
-{% if forloop.first == false %} | {% endif -%}
-<span><a href="#{{ cat[0] | slugify }}">{{ cat[0] }}</a></span>
-{%- endfor %} ]
+{% for cat in site.categories %}
+<span class="category-wrapper"><a class="category" href="#{{ cat[0] | slugify }}">{{ cat[0] }}</a></span>
+{%- endfor %}
 <hr/>
 
 {% for category in site.categories %}

@@ -6,21 +6,23 @@ layout: default
 
   <p class="post-meta">
     {% assign date_format = site.minima.date_format | default: "%B %-d, %Y" %}
+<<<<<<< Updated upstream
+    Posted on {{ page.date | date: date_format }}{% if page.author %}, by {{ page.author }}{% endif %}{% if page.categories %}, about {{ page.categories }}{% endif %}.
+=======
     Posted on {{ page.date | date: date_format }}
     {%- if page.author %}, by {{ page.author }}{% endif %}
     {%- if page.categories %}, about
       {% for cat in page.categories %}
-        {%- if forloop.first == false %}, {% endif -%}
-    <a href='{{ "/categories" | relative_url }}#{{ cat | slugify }}'>{{ cat }}</a>
+    <span class="category-wrapper"><a class="category" href='{{ "/categories" | relative_url }}#{{ cat | slugify }}'>{{ cat }}</a></span>
       {%- endfor %}.
     {% endif %}
     <br/>{% if page.tags %}
       <strong>Tags: </strong>
       {%- for tag in page.tags %}
-        {%- if forloop.first == false %}, {% endif -%}
-        <a class="tag" href='{{ "/tags" | relative_url }}#{{ tag | slugify }}'>#{{ tag | slugify }}</a>
+        <span class="tag-wrapper"><a class="tag" href='{{ "/tags" | relative_url }}#{{ tag | slugify }}'>#{{ tag | slugify }}</a></span>
       {%- endfor %}
     {%- endif %}
+>>>>>>> Stashed changes
   </p>
 
   <div class="post-content" itemprop="articleBody">
