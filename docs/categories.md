@@ -7,12 +7,14 @@ showTitle: false
 
 The following categories appear on this site:
 
-{% for cat in site.categories %}
+{% assign sorted_categories = site.categories | sort %}
+
+{% for cat in sorted_categories %}
 <span class="category-wrapper"><a class="category" href="#{{ cat[0] | slugify }}">{{ cat[0] }}</a></span>
 {%- endfor %}
 <hr/>
 
-{% for category in site.categories %}
+{% for category in sorted_categories %}
 {% assign cat = category[0] %}
 
 <div id="{{ cat | slugify }}" class="category-div">

@@ -159,7 +159,7 @@ map were all sea, which would also be the out-of-bounds value. This would ensure
 map” weirdness and allow the player to wrap around the map if necessary in the standard “fake globe but is actually 
 a toroid” fashion.
 
-In the next devlog post, I will talk about the caching and storage mechanisms, as well as some differences between the 
+In the second part of this devlog post, I will talk about the caching and storage mechanisms, as well as some differences between the 
 Rust and C# implementations that were necessitated by Rust's borrow checker.
 
 ![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }})

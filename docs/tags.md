@@ -5,14 +5,17 @@ showTitle: false
 
 ## Posts By Tag
 
-Thex following tags appear on this site:
+The following tags appear on this site:
 
-{% for tag in site.tags %}
-<span class="tag-wrapper"><a class="tag" href="#{{ tag[0] | slugify }}">#{{ tag[0] }}</a></span>
+{% assign sorted_tags = site.tags | sort %}
+
+{% for tag in sorted_tags %}
+<span class="tag-wrapper"><a class="tag" href="#{{ tag[0]  }}">#{{ tag[0] }}</a></span>
 {%- endfor %}
 <hr/>
 
-{% for tg in site.tags %}
+
+{% for tg in sorted_tags %}
 {% assign tag = tg[0] %}
 
 <div id="{{ tag | slugify }}" class="tag-div">
