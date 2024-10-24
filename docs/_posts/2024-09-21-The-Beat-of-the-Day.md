@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "The Story Beat of the Day:"
-categories: writing
+title:  "The Story Beat of the Day - Retroactive Continuity (RetCon)"
+categories: writing, individual story beat
 author: K°
-tags: writing, individual story beats
+tags: writing, individual story beat
 ---
 
 ### Retroactive Continuity (RetCon):

@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "An Adventure:"
-categories: writing
+title:  "A Call to Adventure - An Adventurous Outline"
+categories: writing, outline
 author: K°
 tags: writing, outline
 ---

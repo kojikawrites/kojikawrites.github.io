@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "The Plot Machine:"
-categories: writing
+categories: writing, outline
 author: K°
 tags: writing, outline
 ---

@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "The Story Beat of the Day"
-categories: writing
+title:  "The Story Beat of the Day - A Care Parcel"
+categories: writing, individual story beat, seasoning
 author: K°
-tags: writing, individual story beats
+tags: writing, individual story beat, seasoning
 ---
 
 ### A Care Parcel:

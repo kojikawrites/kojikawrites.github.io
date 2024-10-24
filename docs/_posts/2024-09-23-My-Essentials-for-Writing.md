@@ -1,9 +1,9 @@
 ---
 layout: post
 title:  "My Writing Essentials:"
-categories: writing
+categories: writing, essentials, software, hardware, Life
 author: K°
-tags: writing, essentials, software, hardware
+tags: writing, essentials, software, hardware, Life
 ---
 
 ### My Writing Essentials List:

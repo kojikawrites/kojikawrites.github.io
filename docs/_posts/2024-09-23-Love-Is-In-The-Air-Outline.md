@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "A Romantic Outline:"
-categories: writing
+title:  "Love is in the Air - A Romantic Outline:"
+categories: writing, outline
 author: K°
 tags: writing, outline
 ---
@@ -65,3 +65,7 @@ The romance reader has to have their denouement. They want a glimpse of the love
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
+
+<script>
+    $(".navbar").removeClass("navbar").addClass("navbar-kiss");
+</script>

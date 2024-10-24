@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "A Time Traveling Outline"
-categories: writing
+title:  "Tubulent Timelines - A Time Traveling Outline"
+categories: writing, outline
 author: K°
 tags: writing, outline
 ---

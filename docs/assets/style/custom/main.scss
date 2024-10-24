@@ -95,6 +95,18 @@
   color: #ff6600 !important;
 }
 
+ .navbar-kiss {
+  background-image: url('{{ "/assets/images/kiss-dark.png" | relative_url }}');
+  background-size: cover;
+}
+
+.navbar-zombie {
+  background-image: url('{{ "/assets/images/zombie.png" | relative_url }}');
+  background-size: cover;
+}
+
+
+
 .home-img {
   width: 100%;
 }

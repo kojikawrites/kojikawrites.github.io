@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "My Posting Schedule"
-categories: writing
+title:  "My Posting Schedule (When Possible)"
+categories: writing, Life
 author: K°
-tags: writing, general post
+tags: writing, Life
 ---
 ### What to Expect:
 It is my hope that I can post content at least five to ten times a day, time and parenting permitting.

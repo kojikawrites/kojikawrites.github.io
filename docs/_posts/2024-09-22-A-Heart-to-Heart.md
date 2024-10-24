@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "A Writing Exercise:"
-categories: writing
+title:  "A Heart to Heart - An Exercise"
+categories: writing, exercise
 author: K°
 tags: writing, exercise
 ---

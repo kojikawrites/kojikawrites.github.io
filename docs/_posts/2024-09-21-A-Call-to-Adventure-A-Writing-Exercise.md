@@ -1,14 +1,16 @@
 ---
 layout: post
-title:  "A Writing Exercise:"
-categories: writing
+title:  "A Call to Adventure - An Adventurous Exercise:"
+categories: writing, exercise
 author: K°
 tags: writing, exercise
 ---
 
 # A Call to Adventure:
 
-When your character embarks on their journey, their familiar routines and surroundings are slowly left behind. They're then thrust into unfamiliar terrain, where they must navigate novel environments and interact with a cast of new and intriguing characters, not all of which will be the friendliest. This departure from the ordinary is a crucial element of their adventure, for it propels them out of their comfort zone, setting the stage for personal growth and transformation, often leading to profound character development.
+When your character embarks on their journey, their familiar routines and surroundings are slowly left behind.
+
+They're then thrust into unfamiliar terrain, where they must navigate novel environments and interact with a cast of new and intriguing characters, not all of which will be the friendliest. This departure from the ordinary is a crucial element of their adventure, for it propels them out of their comfort zone, setting the stage for personal growth and transformation, often leading to profound character development.
 
 A change of setting provides a storytelling opportunity to shift the very fabric of your narrative world. Everything from the climate and landscape to the local dialect and attire can be transformed. Imagine transplanting a Viking from the rugged Nordic fjords to the sun-soaked shores of Australia or transporting a towering Wookiee from the forests of Kashyyyk to the mysterious swamps of Dagobah. These changes in locale not only offer visual and sensory diversity, but also serve as powerful tools for evolving the plot and enhancing the overall narrative.
 

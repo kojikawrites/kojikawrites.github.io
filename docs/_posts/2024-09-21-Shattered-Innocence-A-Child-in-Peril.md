@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "A Child in Peril:"
-categories: writing
+title:  "Shattered Innocence - An Outline"
+categories: writing, outline
 author: K°
 tags: writing, outline
 ---
