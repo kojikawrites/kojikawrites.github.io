@@ -466,6 +466,69 @@ code, pre, code *, pre * {
   line-height: 2vmin;
 }
 
+a.tag {
+  font-size: 0.9em !important;
+  background-color: darkgreen !important;
+  border-radius: 6px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: white !important;
+  color: white !important;
+  font-weight: bolder !important;
+  font-style: normal !important;
+  text-transform: uppercase !important;
+  padding: 1px 4px !important;
+  margin: 2px !important;
+}
+
+span.tag-wrapper {
+  //background: red;
+  display: inline-block;
+  align-content: center;
+  min-height: 26px !important;
+}
+
+.tag-div h3 {
+  cursor: pointer;
+}
+.tag-div h3:hover {
+  filter: none;
+}
+
+.tag-header-inactive {
+  opacity: 0.75;
+  filter: blur(1.25px);
+}
+.tag-header-active {
+  opacity: 1;
+  filter: none;
+}
+
+.category-div ul {
+  display: none;
+}
+
+/* Change cursor to pointer when hovering over headers */
+.category-div h3 {
+  cursor: pointer;
+}
+.category-div h3:hover {
+  filter: none;
+}
+
+/* Styles for inactive headers */
+.category-header-inactive {
+  opacity: 0.75;
+  filter: blur(1.25px);
+}
+
+/* Styles for active header */
+.category-header-active {
+  opacity: 1;
+  filter: none;
+}
+
+
 .homepage p {
   font-size: 1.05em;
   font-weight: normal;

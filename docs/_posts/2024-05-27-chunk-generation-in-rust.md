@@ -3,7 +3,7 @@ layout: post
 title:  "Terrain Generation in Rust, Part 1"
 categories: gamedev
 author: hiive
-tags: gamedev
+tags: gamedev world-building terrain-generation procedural-generation c-sharp rust roguelikes
 ---
 
 Following on from my last entry, let’s go into a little more detail about how the landscape generation was done. 
@@ -132,11 +132,10 @@ In order to visualize what this looks like, consider the following sequence of i
 showing the results of a two layer generation sequence. As can be seen, the original test *layer 0* is an **8x8** 
 array of random byte values. *Layer 1* doubles in size to **16x16,** and *layer 2* again doubles to **32x32**.
 
-[//]: # (# ![[layer0.png]])
+[//]: # (![[layer0.png]])
 [//]: # (![[layer1.png]])
 [//]: # (![[layer2.png]])
 <div>
-
 
 {% assign imagePath = "/assets/images/blog/layer0.png" | relative_url %}
 {% include post-image-small.liquid imagePath=imagePath content=content altText="Layer 0 (8x8)" %}
