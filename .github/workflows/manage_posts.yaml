@@ -1,9 +1,9 @@
 name: Manage Posts and Drafts
 
 on:
-  push:
-    branches:
-      - main  # Change this to your default branch if different
+#  push:
+#    branches:
+#      - main  # Change this to your default branch if different
   schedule:
     - cron: '0 0 * * *'  # Runs daily at midnight UTC
 
