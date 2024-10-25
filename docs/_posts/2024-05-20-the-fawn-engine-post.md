@@ -3,7 +3,7 @@ layout: post
 title:  "Flexible Architecture for World-building and Narrative"
 categories: gamedev
 author: hiive
-tags: gamedev roguelikes musings game-engine
+tags: roguelikes musings game-engine
 ---
 
 Back in the dark times (mid-pandemic) I got an itch to create a new game. For background, I started out as a game developer for a short period of time immediately post-university, and quickly figured out that the mainstream game industry wasn't to my taste.

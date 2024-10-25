@@ -10,13 +10,15 @@ layout: default
     Posted on {{ page.date | date: date_format }}
     {%- if page.author %}, by {{ page.author }}{% endif %}
     {%- if page.categories %}, about
-      {% for cat in page.categories %}
+      {% assign sorted_categories = page.categories | sort %}
+      {% for cat in sorted_categories %}
     <span class="category-wrapper"><a class="category" href='{{ "/categories" | relative_url }}#{{ cat | slugify }}'>{{ cat }}</a></span>
-      {%- endfor %}.
+      {%- endfor %}
     {% endif %}
     <br/>{% if page.tags %}
+      {% assign sorted_tags = page.tags | sort %}
       <strong>Tags: </strong>
-      {%- for tag in page.tags %}
+      {%- for tag in sorted_tags %}
         <span class="tag-wrapper"><a class="tag" href='{{ "/tags" | relative_url }}#{{ tag | slugify }}'>#{{ tag | slugify }}</a></span>
       {%- endfor %}
     {%- endif %}
