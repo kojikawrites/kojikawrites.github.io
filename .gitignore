@@ -7,3 +7,5 @@ _site/
 .bundle/
 vendor/
 **/*.o
+
+docs/_site/

@@ -347,6 +347,8 @@ div.service-item {
 @media (max-width: 991px) {
 
   body {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    background-color: black;
     text-align: left;
   }
 
@@ -419,6 +421,8 @@ div.service-item {
 
 
 body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background-color: black;
   background-image: url('{{ "/assets/images/kojika-background.png" | relative_url }}');
   background-repeat: repeat;
   min-height: 100vh;
