@@ -1,0 +1,39 @@
+name: Manage Posts and Drafts
+
+on:
+  push:
+    branches:
+      - main  # Change this to your default branch if different
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+
+jobs:
+  manage_posts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Dependencies
+        run: |
+          pip install pytz
+
+      - name: Move Future Posts to Drafts and Publish Due Drafts
+        run: |
+          python manage_posts.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git add -A
+          git commit -m "Automated post and draft management"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
