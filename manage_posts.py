@@ -27,27 +27,32 @@ def move_future_posts_to_drafts():
                     file_path = os.path.join(root, file)
                     file_date = parse_date_from_filename(file)
                     if file_date and file_date > today:
-                        # Move to drafts
+                        # Calculate relative path
                         relative_path = os.path.relpath(root, posts_dir)
+                        # Construct target directory in _drafts
                         target_dir = os.path.join(drafts_dir, relative_path)
                         os.makedirs(target_dir, exist_ok=True)
+                        # Move file
                         shutil.move(file_path, os.path.join(target_dir, file))
                         print(f"Moved future post {file} to drafts.")
 
 def publish_due_drafts():
     today = datetime.now()
     for drafts_dir in find_directories('.', '_drafts'):
-        posts_dir = os.path.dirname(drafts_dir)
+        posts_dir = os.path.join(os.path.dirname(drafts_dir), '_posts')
+        os.makedirs(posts_dir, exist_ok=True)
         for root, dirs, files in os.walk(drafts_dir):
             for file in files:
                 if file.endswith('.md'):
                     file_path = os.path.join(root, file)
                     file_date = parse_date_from_filename(file)
                     if file_date and file_date <= today:
-                        # Move to posts
+                        # Calculate relative path
                         relative_path = os.path.relpath(root, drafts_dir)
-                        target_dir = os.path.join(posts_dir, '_posts', relative_path)
+                        # Construct target directory in _posts
+                        target_dir = os.path.join(posts_dir, relative_path)
                         os.makedirs(target_dir, exist_ok=True)
+                        # Move file
                         shutil.move(file_path, os.path.join(target_dir, file))
                         print(f"Published draft {file} to posts.")
 
