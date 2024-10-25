@@ -20,10 +20,6 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Dependencies
-        run: |
-          pip install pytz
-
       - name: Move Future Posts to Drafts and Publish Due Drafts
         run: |
           python manage_posts.py

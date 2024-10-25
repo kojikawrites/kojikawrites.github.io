@@ -3,8 +3,6 @@ import shutil
 from datetime import datetime
 import re
 
-import pytz
-
 def parse_date_from_filename(filename):
     match = re.match(r'(\d{4})-(\d{2})-(\d{2})-.*\.md$', filename)
     if match:
@@ -19,7 +17,7 @@ def find_directories(directory, target_dirname):
                 yield os.path.join(root, dirname)
 
 def move_future_posts_to_drafts():
-    today = datetime.now(pytz.timezone('America/New_York'))
+    today = datetime.now()
     for posts_dir in find_directories('.', '_posts'):
         drafts_dir = os.path.join(os.path.dirname(posts_dir), '_drafts')
         os.makedirs(drafts_dir, exist_ok=True)
@@ -37,7 +35,7 @@ def move_future_posts_to_drafts():
                         print(f"Moved future post {file} to drafts.")
 
 def publish_due_drafts():
-    today = datetime.now(pytz.timezone('America/New_York'))
+    today = datetime.now()
     for drafts_dir in find_directories('.', '_drafts'):
         posts_dir = os.path.dirname(drafts_dir)
         for root, dirs, files in os.walk(drafts_dir):
