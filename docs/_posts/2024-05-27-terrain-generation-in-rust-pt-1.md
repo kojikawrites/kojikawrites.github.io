@@ -3,7 +3,7 @@ layout: post
 title:  "Terrain Generation in Rust, Part 1"
 categories: gamedev
 author: hiive
-tags: world-building terrain-generation procedural-generation c-sharp rust roguelikes
+tags: world-building terrain-generation procedural-generation rust roguelikes
 ---
 
 Following on from my last entry, let’s go into a little more detail about how the landscape generation was done. 

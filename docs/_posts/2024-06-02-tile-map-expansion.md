@@ -46,7 +46,7 @@ chunk. As discussed in the previous post, layer 0 represented the top level worl
 contained the procedurally zoomed version of the previous layer, *n-1*. For performance and memory consumption reasons, 
 it made sense to have the chunks relatively small (say *128x64*) to ensure that on-the-fly chunk generation was 
 manageable in realtime as the player moved around the map.
-Note that the chunk is only access by its owning layer via the `GetTileAt(int x, int y)` and `SetTileAt(int x, int y)` 
+Note that the chunk is only accessed by its owning layer via the `GetTileAt(int x, int y)` and `SetTileAt(int x, int y)` 
 methods. The chunk also has *(x<sub>c</sub>, y<sub>c</sub>)* coordinates that define the offset of the top-left of the 
 chunk (which coincide with *(0, 0)* in the chunk frame of reference).
 

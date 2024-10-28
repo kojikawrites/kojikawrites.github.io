@@ -69,7 +69,7 @@ So why did I say that they are only *theoretically* my favorite game genre? You 
 randomness. I like them, in theory, but I can't shake the feeling that I'm just playing against a random number 
 generator. Recently some games have improved on this, with a particularly notable example being **Caves of Qud**. 
 (It has some other issues that I'm not so keen on, but it's the best of the bunch, for sure.) Another one I think I 
-should like (and I'm trying, honest!) is **KeeperRL**, and also **Dwarf Fortress** and **Soulash/Soulash 2**. 
+should like (and I'm trying, honest!) is **KeeperRL**, and also **Dwarf Fortress**. 
 There are many others that I haven’t mentioned, but that doesn’t mean they are any less good - it just means I haven’t 
 played them enough to make a decent judgment. In fact, the only modern Roguelike I have put any significant time into 
 recently would be Caves of Qud.
