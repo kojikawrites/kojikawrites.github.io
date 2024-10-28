@@ -18,8 +18,8 @@ These days, I work in the field of AI and Machine Learning for a large internati
 Recently, I got bitten by the Rust bug, and decided that a good learning project would be to convert some of my existing C# game libraries over to Rust. Most of these libraries had been used for prior game projects, but some of them were in development for the aforementioned mid-pandemic game idea. "You're waffling - what's the idea?" I hear you asking. Well, if you'd be a bit more patient, I'm about to tell you...
 
 ## What kind of game?
-I've always been a fan of getting the computer to do the hard stuff and the boring stuff for me. For this reason, Procedural Generation (PG) has always fascinated me as a technique for generating in-game content.
-Of course, the problem with PG is that it's purely random and pure randomness is just not interesting. It's boring, it's chaotic, and there's no structure.
+I've always been a fan of getting the computer to do the hard stuff and the boring stuff for me. For this reason, Procedural Generation (ProcGen) has always fascinated me as a technique for generating in-game content.
+Of course, the problem with ProcGen is that it's purely random and pure randomness is just not interesting. It's boring, it's chaotic, and there's no structure.
 Sure, you can create interesting looking landscapes and populated worlds but, frankly, they're just not that interesting because they aren't "designed". Interesting encounters have to be designed, and the player has to feel like there's a meaning behind their actions.
 For me, at least, the biggest immersion breaker in any game is the feeling that I'm just playing with a random number generator. I like there to be a coherent story, and the feeling that I'm playing an experience that has been designed for my enjoyment.
 
@@ -56,7 +56,7 @@ creating this kind of descriptive information in a procedurally generated world 
 output - or in other words, boring). 
 As I implied earlier, in order to be engaging, generated content has to "feel" like it was created with purpose. 
 Other than having an army of writers on 24-hour standby, using an LLM is the only practical and realistic way to 
-implement this kind of functionality in a PG environment.
+implement this kind of functionality in a ProcGen environment.
 
 I'm rambling again, and I've not even really talked about what the game is. Let me fix that.
 
@@ -64,7 +64,7 @@ I'm rambling again, and I've not even really talked about what the game is. Let 
 
 ## Okay, so what kind of game?
 One of my favorite types of game, (at least theoretically), is the Roguelike. Most readers should be familiar with the 
-concept, but the key feature of a roguelike is that the genre is arguably the first and oldest of the fully PG games.
+concept, but the key feature of a roguelike is that the genre is arguably the first and oldest of the fully ProcGen games.
 So why did I say that they are only *theoretically* my favorite game genre? You probably already know the answer: 
 randomness. I like them, in theory, but I can't shake the feeling that I'm just playing against a random number 
 generator. Recently some games have improved on this, with a particularly notable example being **Caves of Qud**. 
@@ -85,7 +85,7 @@ I could (and probably should) go into a lot more detail about specifics of these
 justice rather than deliver dismissive soundbites - but that will be a post for another time.
 
 So, the point of this long rambling post is that I'm thinking of making a Roguelike, bringing in some of the things 
-I've learned from working in the A.I. field from the past few years. Currently this involves working on various 
+I've learned from working in the A.I. field from the past few years. Currently, this involves working on various 
 support libraries that will make up the bones of the game.
 
 I'll talk about this in future posts, but I *will* announce the name of the engine I'm building... 
