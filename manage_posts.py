@@ -59,12 +59,12 @@ def publish_due_drafts():
                         shutil.move(file_path, os.path.join(target_dir, file))
                         print(f"Published draft {file} to posts.")
 
-    # Clean up empty _drafts directories
-    for posts_dir in find_posts_directories('.'):
-        drafts_dir = os.path.join(posts_dir, '_drafts')
-        if os.path.exists(drafts_dir):
-            if not os.listdir(drafts_dir):
-                os.rmdir(drafts_dir)
+#     # Clean up empty _drafts directories
+#     for posts_dir in find_posts_directories('.'):
+#         drafts_dir = os.path.join(posts_dir, '_drafts')
+#         if os.path.exists(drafts_dir):
+#             if not os.listdir(drafts_dir):
+#                 os.rmdir(drafts_dir)
 
 if __name__ == "__main__":
     move_future_posts_to_drafts()
