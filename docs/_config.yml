@@ -36,7 +36,7 @@ kramdown:
     display_math_delimiters: ['$$', '$$']
   parse_block_html: true
   syntax_highlighter_opts:
-    disable : true
+    disable : false
 
   # Use dollar signs for inline math
   # Uncomment the following lines if you prefer dollar signs
