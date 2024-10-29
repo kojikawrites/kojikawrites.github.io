@@ -2,7 +2,6 @@
 layout: page
 title: Mission Statement
 ---
-
 {% capture content %}
 ## Ethically Incorporating ML/AI into Game Design and Development
 

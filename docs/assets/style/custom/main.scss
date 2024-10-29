@@ -652,7 +652,7 @@ div.service-item {
   margin-left: 24px !important;
   border: 1px solid gray;
   background: black;
-  padding: 8px !important;
+  padding: 12px !important;
   font-weight: normal !important;
 }
 
@@ -796,12 +796,14 @@ div.hidden-content {
 // BEGIN table styles
 
 div.data-table th td {
-  padding: 4px !important;
+  // padding: 4px !important;
   border-collapse: collapse !important;
 }
 
 div.data-table table {
-  min-width: 640px;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  // min-width: 640px;
+  min-width: 100%;
 }
 
 div.data-table table th {
@@ -809,6 +811,7 @@ div.data-table table th {
   font-weight: bolder !important;
   font-size: 16px;
   border: dimgray 1px solid !important;
+  padding: 4px !important;
 }
 
 div.data-table table tr {
@@ -820,7 +823,8 @@ div.data-table table tr:nth-child(even) {
 }
 
 div.data-table td {
-  min-width: 180px;
+  // min-width: 180px;
+  padding: 4px;
   border: dimgray 1px solid !important;
 }
 
