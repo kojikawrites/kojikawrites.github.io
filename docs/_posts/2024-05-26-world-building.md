@@ -201,7 +201,6 @@ Here's a video of everything in action.
 </p>
 
 
-\
 Now, if you read my previous post, you'll have noticed that I talked about writing the game in Rust, so why am I 
 talking about all of this C# stuff? I will start to cover this in my next post, but the short version is that I am 
 taking the work I have done so far and converting it over to Rust.

@@ -28,16 +28,14 @@ markdown: kramdown
 
 kramdown:
   # math_engine: ''
-  input: GFM
-  hard_wrap: false
+  # input: GFM
+  # hard_wrap: false
   math_engine: mathjax
   math_engine_opts:
     delimiters: dollars
     inline_math_delimiters: ['$', '$']
     display_math_delimiters: ['$$', '$$']
   parse_block_html: true
-  # gfm_quirks: 
-  #  - no_auto_indented_code_blocks
   syntax_highlighter_opts:
     disable : false
 

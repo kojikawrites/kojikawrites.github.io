@@ -60,6 +60,7 @@ visual language has the power to change the world. If you're looking for visual 
 specific of concepts, visit their site. You'll find tons of high-quality icons and images for just about any topic.
 
 {% endcapture %}
+
 {% include about-resume-item.liquid 
     employer="Noun Project" 
     title="" 

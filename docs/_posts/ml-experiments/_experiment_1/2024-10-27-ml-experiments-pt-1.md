@@ -1,0 +1,251 @@
+---
+layout: post
+title:  "Machine Learning Experiments, Part 1"
+categories: gamedev machine-learning artificial-intelligence fuzzy-logic
+author: hiive
+tags: policy-based-learning game-ai npc-behavior llm function-approximation reinforcement-learning experiment-1
+---
+
+This post is about the first in a series of experiments to determine the utility of using an LLM to
+build behavior policies for NPCs. Specifically, I am setting up a simplistic gridworld environment with a narrowly
+defined set of rules and introducing an entity into that world in an attempt to teach it to survive.
+
+LLMs (Large Language Models) are somewhat controversial currently for a number of reasons, both valid and otherwise. Arguments about use of
+others' IP for training, energy cost of training and inference, and the threat to existing jobs being three that are 
+examples of valid complaints. Despite that, LLMs are a powerful tool that can be used to provide content and functionality
+for games (and other applications) without necessarily violating the last of those complaints. The first one is a 
+question for the lawyers and legislators, and the second is a sunk cost - inference uses very little energy in comparison
+to the initial training, and that's already been done. Anyway, as a friend of mine rightfully pointed out, this post is
+not about the ethics of LLMs -- it's about using them to get a hard start on what is otherwise a very time-consuming and
+often intractable problem. No jobs were harmed during the making of this post.
+
+For a simple problem like this, the traditional approach would be to use Reinforcement Learning (RL) to develop a policy
+(using a technique such as Q-Learning) to iteratively calculate the best action (or range of actions selected stochastically)
+for the entity to take in any given state. Note that one of the key features of this type of learning is that the best
+action to take ONLY depends on the current state. Or, in other words, if any historical information is important to the
+entity, then it has to be baked into the current state. This isn't important right now, but it will need consideration in
+future experiments.
+
+Although I am starting with an very simply entity (based loosely on an ant), the overall aim of this experiment is to 
+investigate whether LLMs will be useful in determining behavior policies for more complex game NPCs that would be otherwise
+difficult or impossible to train using standard RL (due to time or capacity constraints).
+
+##### Question 1: Can we use LLMs to shorten the time needed to develop a satisfactory NPC policy?
+
+Training a policy for a complex NPC from scratch would be prohibitive due to state complexity. The number of possible
+states for a non-trivial NPC would be huge, making policy determination an intractable problem. Traditional RL works
+by exploration of the state space. In other words, it tests actions (and sequences of actions) and scores the end 
+result of a particular sequence based on a defined reward function. These reward functions are difficult to get right
+even in simple cases, and defining one for a complex NPC would be even harder. On top of this, RL relies on a huge number 
+of repeated runs to iteratively search the entire action-state space in order to find a good policy. This is an active area
+of research (with a good example being the [Nethack Learning Environment](https://github.com/heiner/nle)), and producing 
+good results requires <i>a lot</i> of computing power. One of the questions that these experiments are attempting to answer is 
+whether we can use LLMs to significantly reduce the time taken to produce a good policy.
+
+Even if an LLM-produced policy isn't ideal, it might be able to provide us with a much better starting point than a 
+fully random policy would. We can then use traditional RL to refine the LLM-produced policy further, with the idea being
+that we can achieve similar results to traditional RL in a fraction of the time by short-circuiting a lot of the early 
+learning process. (We would still have the problem of defining a suitable reward function, so that may end up being 
+infeasible, in which case the focus should be on making sure the LLM-produced policy is sufficient.)
+
+##### Question 2: Can we ensure that the LLM-produced policy is efficient for large action-state spaces?
+
+With traditional RL, the size of the policy is a function of the number of possible actions and state variables. For a
+simple action-state space this size is manageable, but it can soon balloon to impractical levels with even a modest increase
+in either number of state variables or number of actions. This is known as the "curse of dimensionality"; The action-state
+space is an *n*-dimensional hyperspace with each action and state variable representing one axis of this space. 
+If you have *p* actions and *m* states, adding a single new action increases the total number of action-state pairs from 
+*p × m* to *(p + 1) × m*, resulting in an increase of m additional pairs. 
+Conversely, adding a new state variable with *k* possible values increases the number of states to *k × m*, leading to an 
+exponential expansion of the state space.
+
+There are various techniques to reduce the dimensionality of the state space, such as feature reduction methods that 
+project features into a lower-dimensional space without significant loss of fidelity. However, a drawback is that these 
+techniques require sufficient and representative data to identify which dimensions capture the most important 
+information. In the early stages of our experiment, without enough data or an established policy, it’s challenging to 
+determine which features can be safely reduced without losing critical information.
+
+Even with a good policy, it's still entirely possible that any reasonably complex NPC will have a large policy. The go-to
+method for dealing with this is to take advantage of the function approximation capabilities of neural networks and use
+a technique known as Deep Q-Learning, where the policy, instead of being represented as *n*-dimensional lookup table, 
+the policy is stored in a neural network that is trained to approximate the output of the lookup table.
+
+This approach has merit, and would likely solve the problem, but I think I'd like to try something a little simpler first,
+based on an older technique: Fuzzy Logic. After we have generated a policy (by whatever means) we can examine that policy
+dimension-by-dimension, and use a Monte-Carlo style search such as Simulated Annealing (or even a Fuzzy Clustering method) to fit the data points to fuzzy groups. If we can accurately
+represent the data with a few fuzzy groups per axis, this will greatly reduce the size of the policy table. We could then
+go on to perform other methods of dimensionality reduction if desired.
+
+However, this still leaves us with a chicken-and-egg problem: how do we get a reasonable policy to start with, which takes
+us neatly back to question 1.
+
+##### Experiment 1
+
+The aim of this first experiment is to establish a baseline and ensure that the approach is even feasible. 
+For this experiment, we will take our simple ant-like entity and place it in a small grid world, containing a refuge, 
+water sources, and food sources.
+
+At any time, the entity (or should I say *"ANTity"*?) will have four available actions to choose from: `FORAGE`, `EAT`,
+`DRINK` and `REST`.
+
+* `FORAGE` will cause the entity to search its immediate vicinity (defined as the entity's current square and eight 
+adjacent squares) for food, with a small percentage chance of food or water being revealed in one of the squares.
+
+* `EAT` will cause the entity to consume food from its immediate vicinity if any is available.
+
+* `DRINK` will cause the entity to consume food from its immediate vicinity if any is available.
+
+* `REST` will cause the entity to regain a small amount of energy per turn if it is currently in the refuge.
+
+The gridworld for this experiment is a simple 20×20 grid, identical to the image. This shows a 20×20 grid with one 
+<span style="color:limegreen">green</span> square (food), one <span style="color:cornflowerblue">blue</span> square 
+(water), one <span style="color:red">red</span> square (refuge) and a black circle (entity) within the refuge.
+
+<div>
+{% assign imagePath = "/assets/images/blog/ml/ex1/gridworld.png" | relative_url %}
+{% include post-image-small.liquid imagePath=imagePath content=content 
+altText="Experiment 1 Gridworld" %}
+</div>
+
+For the initial starting conditions, the entity starts out at the refuge with the attributes `100` energy `e`, 
+`100` food `f` and `100` water `w`.
+
+Additionally, at any given time, the entity knows if food and water are present, and if so, it knows the direction
+and Manhattan distance to reach it, as well as the direction and Manhattan distance to the refuge.
+
+As such, our state space comprises the following variables: Energy `e`, Food `f`, Water `w`, Distance to food `d(f)`, 
+Distance to water `d(w)`, and Distance to refuge `d(r)`, making our state space six dimensional (a relatively low number).
+
+So, each "turn" we evaluate the current state of the entity, expressed as `[e, f, w, d(f), d(w), d(r)]`, and look up 
+the best possible action to take based on the current state values. 
+For a simple, deterministic policy, that would be it, but in our case we are using a stochastic 
+policy. This returns us a probability for each action to be taken in a particular state. Deterministic policies are 
+simpler (both in calculation and implementation) but are also boring for a game - we want a bit of variability. Even 
+though our NPCs *are* automatons, we don't want them to seem that way. So, the final step is to randomly select an
+action weighted based on the returned probabilities, and then update the state based on the results of performing the
+selected action. 
+
+Once we've done that, we evaluate the new state and repeat the lookup, over and over until the end 
+condition is met, which in this case is entity death.
+
+The following table shows the effects for each action.
+
+<div class="data-table">
+
+| Action   | Description                         | Effect                                                                                  |
+|----------|-------------------------------------|:----------------------------------------------------------------------------------------|
+| `FORAGE` | Find nearby resources.              | Decrease `e` by `5`. 10% chance of food or water revealed in adjacent square            |
+| `EAT`    | Consume nearby water                | Increase `f` by `10` if food is adjacent, depleting food square, decreases `e` by `2`,  |
+| `DRINK`  | Consume nearby food                 | Increase `w` by `10` if water is adjacent, depleting water square, decreases `e` by `2` |
+| `REST`   | Rest to conserve or restore energy. | Increase `e` by `10` if at refuge.                                                      |
+
+</div>
+<br/>
+In addition to the effects in the table, `f`, `w` and `e` each decrease by `1` per turn. If either of `f` or `w` is 
+already at zero, the loss is instead applied to `e`, meaning that if the entity is hungry and thirsty, `e` will decrease 
+by `3` units per turn.
+
+When `e` reaches `0`, the entity dies and the run is over.
+
+Note that these cost and effect values aren't exact, as I did a lot of tweaking during the experiment, and that included the costs and 
+effects. However, these values are not far off the eventual final values.
+
+<br/>
+As the entity performs actions, these attributes are increased or decreased depending on the action and its results.
+After each run (i.e. when it dies) the entity is rewarded based on how long it managed to survive. This reward is then 
+applied to each state the entity found itself in, increasing the likelihood that an action is chosen again in a specific
+state if the survival time was longer than the expected value (this is the survival time of the entity if it remained in
+the open taking no actions), or decreasing it if the survival time is less than the expected value. The delta applied to
+the action-state selection is the difference between the expected value and the actual value, multiplied by 
+<span class="equation-snippet">$\alpha$</span>, the learning rate. The learning rate is a small valued constant 
+ensures that updates to the policy are gradual, helping to avoid overshooting optimal values on the policy’s hypersurface. 
+
+{% capture hidden_content %}
+<p>Mathematically, this looks like this:</p>
+<p><span class="equation">
+$\delta=R_{actual}-R_{expected}$
+</span></p>  
+<p><span class="equation-note">
+&ndash; where <span class="equation-snippet">$R$</span> is the given reward value for the specified circumstance.
+</span></p>
+<p>
+This is applied as a policy update rule, that looks like this:
+</p>
+<p><span class="equation">
+$\pi_{new}(a\|s)=\pi_{old}(a\|s) \times \alpha \times (R_{actual} - R_{expected})$
+</span>
+</p>
+<p><span class="equation-note">
+&ndash; where <span class="equation-snippet">$\pi_{new}(a\|s)$</span> is read as
+"new policy value for action $a$ in state $s$".
+</span></p>
+<p>So the entire equation can be read as:</p>
+<p style="padding-left: 8px">
+"Set the new policy value for action <span class="equation-snippet">$a$</span> 
+in state <span class="equation-snippet">$s$</span> to the old policy value for action 
+<span class="equation-snippet">$a$</span> in state <span class="equation-snippet">$s$</span> multiplied by the learning 
+rate <span class="equation-snippet">$\alpha$</span> and the difference between the actual reward 
+<span class="equation-snippet">$R_{actual}$</span> and the expected reward <span class="equation-snippet">$R_{expected}$
+</span>."</p>
+Note that in a stochastic policy (as opposed to a deterministic policy), the policy value for an action in a given state 
+is expressed as a probability of that particular action being selected in that state.
+{% endcapture %}
+
+{% include content-warning.liquid 
+           id="math" 
+           warning="CONTENT WARNING: EXCESSIVE MATH &mdash; CLICK TO SHOW AT YOUR OWN RISK!" 
+           content=hidden_content
+%}
+
+<br/>
+This is nothing new. In fact, this is more or less standard RL. The difference is our starting point -- how we create the 
+initial policy for refinement.
+
+In order to generate a good starting policy, we can make use of an LLM as a generalized function approximator. To do 
+this, we provide the LLM with the gridworld environment rules and constraints discussed above, and then present it with
+a specific state and ask it what action the entity should take in that state in order to best ensure its continued 
+survival. In order to prevent past context affecting the action selection, we have to ensure that the LLM query is 
+initialized with a fresh context for every query. Additionally, to mitigate the chance of LLM hallucinations, we can 
+query the LLM multiple times for a given state and use the returned action distribution as our initial probability 
+distribution. Note that in the future, I may experiment with asking the LLM to rank and score each available action in
+order to save time and hopefully improve accuracy of the initial policy, but given the simple nature of self-hosted
+LLMs, I chose not to do this for the initial experiment.
+
+I'm deliberately glossing over how the rules and current state are presented to the LLM. There are two reasons for this.
+The first is that I haven't fully evaluated the efficacy of the current method, and the second is that I think that 
+topic deserves a blog post of its own.
+
+There are various potential methods of sampling the action-state space, but I chose a relatively simple adaptive 
+approach for this first test.
+
+Firstly, I restrict all possible state variable values to integers. Then, I generate a set of coordinates for each of
+the six axes that encompass the corners and midpoints of each edge of the hypercube. Once these points are evaluated, 
+adjacent points are compared. If those points do not resolve to the same action (within a certain tolerance level due
+to the stochasticity), then that edge is subdivided in two, and the new point is added to the list to be processed.
+This continues until an edge can be divided no further (due to the integer constraint on state variable values) or 
+adjacent points have the same resolved action. Clearly this is not a foolproof approach, but it can get us started.
+
+Below is a visualization of a policy generated in such a fashion. Bear in mind that while it may look pretty, it's not
+actually very informative, due to having to collapse a six dimensional state space into a simulated three dimensional
+plot.
+
+
+
+<span style="color: red; font-size: 32px !important;"><br/>TODO</span>
+
+
+
+
+
+[//]: # (<details>)
+[//]: # (  <summary style="cursor: pointer; font-weight: bold; color: #a70000;">)
+[//]: # (    WARNING: HIDDEN MATH - CLICK TO SHOW)
+[//]: # (  </summary>)
+[//]: # (  <div style="margin-top: 10px;">)
+[//]: # (    <!-- Your predefined content goes here -->)
+[//]: # (    <p>This is your hidden content. It will be displayed when the warning is clicked.</p>)
+[//]: # (  </div>)
+[//]: # (</details>)
+
+![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }} "hiive's Signature")
+

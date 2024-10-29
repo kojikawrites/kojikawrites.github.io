@@ -795,32 +795,33 @@ div.hidden-content {
 
 // BEGIN table styles
 
-table, th, td {
-  border: dimgrey 1px solid;
-  padding: 4px;
+div.data-table th td {
+  padding: 4px !important;
   border-collapse: collapse !important;
 }
 
-table {
+div.data-table table {
   min-width: 640px;
 }
 
-th {
+div.data-table table th {
   background: #40404080;
   font-weight: bolder !important;
   font-size: 16px;
+  border: dimgray 1px solid !important;
 }
 
-tr {
+div.data-table table tr {
   background: #00000080;
 }
 
-tr:nth-child(even) {
+div.data-table table tr:nth-child(even) {
   background-color: #20202080;
 }
 
-td {
+div.data-table td {
   min-width: 180px;
+  border: dimgray 1px solid !important;
 }
 
 // END table styles
