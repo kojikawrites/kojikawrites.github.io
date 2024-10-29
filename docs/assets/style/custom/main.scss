@@ -592,14 +592,22 @@ div.service-item {
   color: white !important;
 }
 
-.post-content h3 {
-  color: #ff6707;
-}
-
 .post-content h2 {
   color: #ff6707;
 }
 
+.post-content h3 {
+  color: #ff6707;
+}
+.post-content h4 {
+  color: #ff6707;
+}
+.post-content h5 {
+  color: #ff6707;
+}
+.post-content h6 {
+  color: #ff6707;
+}
 
 .about-resume-avatar {
   width: 33vmin;
@@ -639,6 +647,24 @@ div.service-item {
   color: #ff6707;
 }
 
+.equation {
+  color: #FFE38D !important;
+  margin-left: 24px !important;
+  border: 1px solid gray;
+  background: black;
+  padding: 8px !important;
+
+}
+
+.equation-note {
+  margin-left: 16px !important;
+}
+
+.equation-snippet {
+  color: #FFE38D !important;
+}
+
+
 
 .post-image {
   width: 65vw;
@@ -651,6 +677,33 @@ div.service-item {
   margin: 16px auto;
   // border: 1px solid #444;
 }
+
+div.hidden-content-warning {
+  cursor: pointer;
+  padding: 8px;
+  background-color: #ffdddd;
+  border: 1px solid #ff5c5c;
+  color: #a70000;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  width: 100%;
+}
+
+div.hidden-content {
+  display: none;
+  background: #ff5c5c10;
+  padding: 8px;
+  border: 1px solid #ffdddd20;
+  width: 100%;
+
+  /*margin-top: 10px;*/
+  /*padding: 10px;*/
+  /*background-color: #e7f3fe;*/
+  /*border: 1px solid #b3d7ff;*/
+  /*color: #004085;*/
+}
+
 
 @media (min-width: 992px) {
   h1.post-title { display: none; }
@@ -729,6 +782,38 @@ div.service-item {
     align-content: center;
   }
 }
+
+// BEGIN table styles
+
+table, th, td {
+  border: dimgrey 1px solid;
+  padding: 4px;
+  border-collapse: collapse !important;
+}
+
+table {
+  min-width: 640px;
+}
+
+th {
+  background: #40404080;
+  font-weight: bolder !important;
+  font-size: 16px;
+}
+
+tr {
+  background: #00000080;
+}
+
+tr:nth-child(even) {
+  background-color: #20202080;
+}
+
+td {
+  min-width: 180px;
+}
+
+// END table styles
 
 
 

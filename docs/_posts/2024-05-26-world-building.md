@@ -211,5 +211,5 @@ to learn Rust. The second reason is that I can apply the lessons learned during 
 to improve upon the design for the Rust conversion. Hopefully that will help offset some of the novice Rust mistakes 
 I will inevitably make during the conversion.
 
-![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }})
+![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }} "hiive's Signature")
 

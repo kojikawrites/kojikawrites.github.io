@@ -97,6 +97,6 @@ The <span class="hiive-highlight">&quot;Flexible Architecture for World-building
 </div>
 AKA <span class="hiive-highlight">"The FAWN Engine"</span>.
 
-![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }})
+![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }} "hiive's Signature")
 
 

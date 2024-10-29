@@ -444,4 +444,4 @@ framework, but the true measure of a roguelike is in how it engages and challeng
 mechanics, compelling narratives, or intricate designs, the goal should always be to create a fun and memorable 
 experience.
 
-![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }})
+![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }} "hiive's Signature")

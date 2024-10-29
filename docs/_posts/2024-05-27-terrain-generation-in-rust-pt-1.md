@@ -162,4 +162,4 @@ a toroid” fashion.
 In the second part of this devlog post, I will talk about the caching and storage mechanisms, as well as some differences between the 
 Rust and C# implementations that were necessitated by Rust's borrow checker.
 
-![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }})
+![hiive's Signature]({{ "/assets/images/signature-hiive.png" | relative_url }} "hiive's Signature")
