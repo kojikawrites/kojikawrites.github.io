@@ -36,8 +36,8 @@ kramdown:
     inline_math_delimiters: ['$', '$']
     display_math_delimiters: ['$$', '$$']
   parse_block_html: true
-  gfm_quirks: 
-    - no_auto_indented_code_blocks
+  # gfm_quirks: 
+  #  - no_auto_indented_code_blocks
   syntax_highlighter_opts:
     disable : false
 
