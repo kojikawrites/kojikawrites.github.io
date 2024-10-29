@@ -25,6 +25,28 @@ github_username:  hiive
 
 # Build settings
 markdown: kramdown
+
+kramdown:
+  # math_engine: ''
+  input: GFM
+  math_engine: mathjax
+  math_engine_opts:
+    delimiters: dollars
+    inline_math_delimiters: ['$', '$']
+    display_math_delimiters: ['$$', '$$']
+  parse_block_html: true
+  syntax_highlighter_opts:
+    disable : true
+
+  # Use dollar signs for inline math
+  # Uncomment the following lines if you prefer dollar signs
+  # For kramdown >= 2.3.0
+  # :delimiters: 'dollars'
+
+  # For kramdown < 2.3.0, use the following options
+  # :inline_math_delimiters: ['$', '$']
+  # :display_math_delimiters: ['$$', '$$']
+
 #highlighter: rouge
 #  input: GFM
 # theme: minima

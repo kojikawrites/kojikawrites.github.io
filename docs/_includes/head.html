@@ -13,8 +13,23 @@
     gtag('config', 'UA-3294285-12');
   </script>
 
-  {% include read-config.liquid %}
+  <!-- MathJax Configuration -->
+  <script type="text/javascript">
+    MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+          integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei"
+          crossorigin="anonymous"></script>
 
+  {% include read-config.liquid %}
 
   <!-- Required meta tags -->
   <meta charset="utf-8">

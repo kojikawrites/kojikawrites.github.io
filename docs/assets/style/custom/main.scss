@@ -653,7 +653,7 @@ div.service-item {
   border: 1px solid gray;
   background: black;
   padding: 8px !important;
-
+  font-weight: normal !important;
 }
 
 .equation-note {
@@ -662,6 +662,7 @@ div.service-item {
 
 .equation-snippet {
   color: #FFE38D !important;
+  font-weight: normal !important;
 }
 
 
@@ -678,16 +679,16 @@ div.service-item {
   // border: 1px solid #444;
 }
 
-div.hidden-content-warning {
-  cursor: pointer;
-  padding: 8px;
-  background-color: #ffdddd;
-  border: 1px solid #ff5c5c;
-  color: #a70000;
-  font-weight: bold;
-  font-size: 18px;
-  text-align: center;
-  width: 100%;
+button.hidden-content-warning {
+  cursor: pointer !important;
+  padding: 8px !important;
+  background-color: #ffdddd !important;
+  border: 1px solid #ff5c5c !important;
+  color: #a70000 !important;
+  font-weight: bold !important;
+  font-size: 18px !important;
+  text-align: center !important;
+  min-width: 100% !important;
 }
 
 div.hidden-content {
@@ -702,6 +703,15 @@ div.hidden-content {
   /*background-color: #e7f3fe;*/
   /*border: 1px solid #b3d7ff;*/
   /*color: #004085;*/
+}
+
+@media print {
+  div.hidden-content {
+    display: block !important;
+  }
+  button.hidden-content-warning {
+    display: none !important;
+  }
 }
 
 
