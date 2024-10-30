@@ -3,7 +3,7 @@ import sys
 import json
 import argparse
 from datetime import datetime, timezone
-from atproto import Client
+from atproto import Client, models
 import re
 from urllib.parse import quote_plus
 
@@ -62,9 +62,21 @@ def extract_metadata_from_file(file_path, slug):
 
     return title, categories
 
-def post_to_bluesky(title, url, client, testrun=False):
+def post_to_bluesky(title, url, categories, client, testrun=False):
     # Construct the message
-    message = f"New blog post: {title}\n\nRead it here: {url}"
+
+    if categories is None:
+        categories = []
+    message = "New blog post!\nAs always, comments and questions are welcome.\n\n"
+    for category in categories:
+        message += f"#{category}\n"
+    embed = models.AppBskyEmbedExternal.Main(
+        external=models.AppBskyEmbedExternal.External(
+            title=title,
+            description=f"New Blog Post: {title}",
+            uri=url,
+        )
+    )
 
     if testrun:
         print(f"[Test Run] Would post to Bluesky: {message}")
@@ -72,7 +84,7 @@ def post_to_bluesky(title, url, client, testrun=False):
 
     # Post the message
     try:
-        client.send_post(text=message)
+        client.send_post(text=message, embed=embed)
         print(f"Successfully posted to Bluesky: {title}")
         return True
     except Exception as e:
@@ -149,7 +161,8 @@ def main():
                             'id': post_id,
                             'title': title,
                             'url': url,
-                            'date': file_date
+                            'date': file_date,
+                            'categories': categories
                         })
 
     if not posts_to_announce:
@@ -186,7 +199,8 @@ def main():
         title = post['title']
         url = post['url']
         post_id = post['id']
-        success = post_to_bluesky(title, url, client, testrun=args.testrun)
+        categories = post['categories']
+        success = post_to_bluesky(title, url, categories, client, testrun=args.testrun)
         if success:
             if not args.testrun:
                 posted_posts.append(post_id)
