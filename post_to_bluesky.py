@@ -89,7 +89,7 @@ def post_to_bluesky(title, url, categories, client, testrun=False):
 
     # Post the message
     try:
-        client.send_post(text=tb, embed=embed, tags=tags)
+        client.send_post(text=tb, embed=embed)
         print(f"Successfully posted to Bluesky: {title}")
         return True
     except Exception as e:
