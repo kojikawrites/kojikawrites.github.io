@@ -34,12 +34,10 @@ jobs:
         env:
           BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
           BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
-          ROOT_URL: ${{ vars.ROOT_URL }}
-          ANNOUNCE_START_DATE: ${{ vars.ANNOUNCE_START_DATE }}
         run: |
           python post_to_bluesky.py \
-            --root-url "$ROOT_URL" \
-            --announce-start-date "$ANNOUNCE_START_DATE"
+            --root-url "${{ vars.ROOT_URL }}" \
+            --announce-start-date "${{ vars.ANNOUNCE_START_DATE }}"
 
       - name: Commit and Push Changes
         if: always()
