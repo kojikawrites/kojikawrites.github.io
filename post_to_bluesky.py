@@ -116,6 +116,8 @@ def main():
         posted_posts = []
 
     posted_ids = set(posted_posts)
+    # Get current date and time in UTC
+    current_datetime = datetime.now(timezone.utc)
 
     # Find all posts in the _posts directories
     posts_to_announce = []
