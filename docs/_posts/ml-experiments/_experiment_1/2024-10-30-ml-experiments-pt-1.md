@@ -30,7 +30,7 @@ Although I am starting with an very simply entity (based loosely on an ant), the
 investigate whether LLMs will be useful in determining behavior policies for more complex game NPCs that would be otherwise
 difficult or impossible to train using standard RL (due to time or capacity constraints).
 
-##### Question 1: Can we use LLMs to shorten the time needed to develop a satisfactory NPC policy?
+### Question 1: Can we use LLMs to shorten the time needed to develop a satisfactory NPC policy?
 
 Training a policy for a complex NPC from scratch would be prohibitive due to state complexity. The number of possible
 states for a non-trivial NPC would be huge, making policy determination an intractable problem. Traditional RL works
@@ -48,11 +48,11 @@ that we can achieve similar results to traditional RL in a fraction of the time 
 learning process. (We would still have the problem of defining a suitable reward function, so that may end up being 
 infeasible, in which case the focus should be on making sure the LLM-produced policy is sufficient.)
 
-##### Question 2: Can we ensure that the LLM-produced policy is efficient for large action-state spaces?
+### Question 2: Can we ensure that the LLM-produced policy is efficient for large action-state spaces?
 
 With traditional RL, the size of the policy is a function of the number of possible actions and state variables. For a
 simple action-state space this size is manageable, but it can soon balloon to impractical levels with even a modest increase
-in either number of state variables or number of actions. This is known as the "curse of dimensionality"; The action-state
+in either number of state variables or number of actions. This is known as the "curse of dimensionality". The action-state
 space is an *n*-dimensional hyperspace with each action and state variable representing one axis of this space. 
 If you have *p* actions and *m* states, adding a single new action increases the total number of action-state pairs from 
 *p × m* to *(p + 1) × m*, resulting in an increase of m additional pairs. 
@@ -79,7 +79,7 @@ go on to perform other methods of dimensionality reduction if desired.
 However, this still leaves us with a chicken-and-egg problem: how do we get a reasonable policy to start with, which takes
 us neatly back to question 1.
 
-##### Experiment 1
+### Experiment 1
 
 The aim of this first experiment is to establish a baseline and ensure that the approach is even feasible. 
 For this experiment, we will take our simple ant-like entity and place it in a small grid world, containing a refuge, 
@@ -103,7 +103,7 @@ The gridworld for this experiment is a simple 20×20 grid, identical to the imag
 
 <div>
 {% assign imagePath = "/assets/images/blog/ml/ex1/gridworld.png" | relative_url %}
-{% include post-image-small.liquid imagePath=imagePath content=content 
+{% include post-image-medium.liquid imagePath=imagePath content=content 
 altText="Experiment 1 Gridworld" %}
 </div>
 
@@ -163,16 +163,19 @@ ensures that updates to the policy are gradual, helping to avoid overshooting op
 {% capture hidden_content %}
 <p>Mathematically, this looks like this:</p>
 <p><span class="equation">
-$\delta=R_{actual}-R_{expected}$
+$\Delta_R=R_{actual}-R_{expected}$
 </span></p>  
 <p><span class="equation-note">
-&ndash; where <span class="equation-snippet">$R$</span> is the given reward value for the specified circumstance.
+&ndash; where <span class="equation-snippet">$R_C$</span> is the given reward value for the given circumstance 
+<span class="equation-snippet">$C$</span> (<span class="equation-snippet">$actual$</span> or 
+<span class="equation-snippet">$expected$</span>) and <span class="equation-snippet">$\Delta_R$</span> is the difference 
+between them.
 </span></p>
 <p>
-This is applied as a policy update rule, that looks like this:
+This is applied as a policy update rule, that looks roughly like this (simplified for clarity):
 </p>
 <p><span class="equation">
-$\pi_{new}(a\|s)=\pi_{old}(a\|s) \times \alpha \times (R_{actual} - R_{expected})$
+$\pi_{new}(a\|s) = \pi_{old}(a\|s) \cdot (1.0 + \alpha \cdot \Delta_R)$
 </span>
 </p>
 <p><span class="equation-note">
@@ -198,8 +201,8 @@ is expressed as a probability of that particular action being selected in that s
 %}
 
 <br/>
-This is nothing new. In fact, this is more or less standard RL. The difference is our starting point -- how we create the 
-initial policy for refinement.
+This is nothing new. In fact, this is more or less standard RL (with a few minor tweaks for simplicity). 
+The difference is our starting point -- how we create the initial policy for refinement.
 
 In order to generate a good starting policy, we can make use of an LLM as a generalized function approximator. To do 
 this, we provide the LLM with the gridworld environment rules and constraints discussed above, and then present it with
@@ -227,15 +230,136 @@ adjacent points have the same resolved action. Clearly this is not a foolproof a
 
 Below is a visualization of a policy generated in such a fashion. Bear in mind that while it may look pretty, it's not
 actually very informative, due to having to collapse a six dimensional state space into a simulated three dimensional
-plot.
+plot. However, what can be (just about) seen is that there are several regions of similar actions and relatively smooth 
+transitions between them.
+
+This makes sense from an intuitive point of view. We would not expect the best action to vary wildly between similar 
+states. If the entity has an `f` value of `10` or, whether it has an `f` value of `11`, then it's still hungry and 
+needs to `EAT`, assuming that other attributes aren't in more pressing need of attention. 
+
+<div>
+{% assign imagePath = "/assets/images/blog/ml/ex1/raw_policy.png" | relative_url %}
+{% include post-image-medium.liquid imagePath=imagePath
+altText="Raw Policy" %}
+
+Now, this intuitive observation, coupled with the realization that for any non-trivial entity the policy table could 
+get *very* large, lends itself to the possibility of significant optimization of storage without significant loss of 
+fidelity. There are several possible approaches to this, but a relatively simple approach that I'm personally fond of
+is a fuzzy patch representation.
+
+{% capture hidden_content %}
+##### What is a Fuzzy Patch representation?
+
+A fuzzy patch representation is a method used to approximate a function or policy over a continuous, high-dimensional 
+state space by partitioning it into overlapping fuzzy regions, known as patches. Instead of dealing with an 
+impractically large or infinite number of precise states, fuzzy patches allow us to represent the state space with a 
+finite set of fuzzy sets along each axis. Each fuzzy patch is characterized by membership functions that define the 
+degree to which a particular state belongs to that patch.
+
+Key Components:
+
+1.	`Fuzzy Sets on Each Axis`: For every axis (state variable), we define fuzzy sets with associated membership functions (e.g., `Low`, `Medium`, `High`).
+2.	`Membership Functions`: These functions assign a membership degree between 0 and 1 to any value along the axis, indicating how much that value belongs to the fuzzy set.
+3.	`Combination of Axes`: By calculating the fuzzy membership for each axis independently, we combine them to form multi-dimensional fuzzy patches that cover the entire state space.
+4.	`Policy Approximation`: The policy is then defined over these fuzzy patches, reducing the complexity of the policy table and enabling smoother transitions between actions.
+
+###### Worked Example:
+
+Imagine controlling the temperature of a room:
+
+-	State Variable: Temperature (in degrees Celsius).
+-	Fuzzy Sets: “Cold,” “Comfortable,” “Hot.”
+-	Membership Functions:
+-	Cold: High membership for lower temperatures, decreasing as temperature rises.
+-	Comfortable: Peak membership around the desired temperature range.
+-	Hot: Low membership at lower temperatures, increasing as it gets hotter.
+-	Policy: Adjust heating or cooling based on the fuzzy membership degrees.
+
+The membership function definitions are shown in the following table:
+
+<div class="data-table">
+
+| Fuzzy Set   | Membership Function                                                                                                                                                         |
+|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Cold`        | $$\mu_{\text{Cold}}(T) = \begin{cases} 1, & T \leq 15 \\ \dfrac{20 - T}{5}, & 15 < T < 20 \\ 0, & T \geq 20 \end{cases}$$                                                   |
+| `Comfortable` | $$\mu_{\text{Comfortable}}(T) = \begin{cases} 0, & T \leq 17 \text{ or } T \geq 23 \\ \dfrac{T - 17}{3}, & 17 < T < 20 \\ \dfrac{23 - T}{3}, & 20 \leq T < 23 \end{cases}$$ |
+| `Hot`         | $$ \mu_{\text{Hot}}(T) = \begin{cases} 0, & T \leq 25 \\ \dfrac{T - 25}{5}, & 25 < T < 30 \\ 1, & T \geq 30 \end{cases}$$                                                   |
+
+</div>
+<br/>
+
+These membership functions can be visualized as in the following plot:
+{% assign imagePath = "/assets/images/blog/ml/ex1/fuzzy_membership_temp.png" | relative_url %}
+{% include post-image-medium.liquid imagePath=imagePath
+altText="Membership functions for Temperature fuzzy set" %}
 
 
+Let’s consider a temperature of 18°C and calculate our membership degrees.
 
-<span style="color: red; font-size: 32px !important;"><br/>TODO</span>
+- `Cold`: Since $15 < 18 < 20$: 
 
+$$\mu_{\text{Cold}}(18) = \dfrac{20 - 18}{5} = \dfrac{2}{5} = 0.4$$
 
+- `Comfortable`: Since $17 < 18 < 20$:
 
+$$\mu_{\text{Comfortable}}(18) = \dfrac{18 - 17}{3} = \dfrac{1}{3} \approx 0.333$$
 
+- `Hot`: Since $18 \leq 25$:
+
+$$\mu_{\text{Hot}}(18) = 0$$
+
+To interpret this, we can say that at 18°C, the temperature is:
+-	Partially `Cold`: Membership degree of `0.4`.
+-	Slightly `Comfortable`: Membership degree of approximately `0.333`.
+-	Not `Hot`: Membership degree of `0`.
+
+Obviously, we can also reverse the process to obtain a concrete temperature from a set of fuzzy membership values, and
+this is the approach we will use to optimize our policy.
+
+Although this example is 1D, the following plot shows a 2D example  and, although we can't visualize it without a large 
+helping of strong hallucinogenics, we can imagine how the process could be extended to an arbitrary number of 
+dimensions.
+
+{% assign imagePath = "/assets/images/blog/ml/ex1/2d_fuzzy_patches.png" | relative_url %}
+{% include post-image-medium.liquid imagePath=imagePath
+altText="Membership sets for an autonomous vehicle navigating based on speed and distance to an obstacle." %}
+
+Note also that in these examples, we are using triangular membership functions for simplicity. However we are in no way
+restricted to this kind of membership function. We can use any arbitrary membership function that best suits our needs.
+
+{% endcapture %}
+
+{% include content-warning.liquid
+id="fuzzy"
+warning="CONTENT WARNING: EXCESSIVE FUZZY DETAILS &mdash; CLICK TO SHOW AT YOUR OWN RISK!"
+content=hidden_content
+%}
+
+<br/>
+
+Rather than use fixed membership sets, I instead estimate an initial number of fuzzy sets per axis based on variance,
+and then use a genetic algorithm to tweak the membership function parameters to find the best fit for the raw data, 
+using cross-entropy loss as the fitness function.
+
+The resulting fuzzy policy for the previous raw policy is shown below:
+
+{% assign imagePath = "/assets/images/blog/ml/ex1/fuzzy_policy.png" | relative_url %}
+{% include post-image-medium.liquid imagePath=imagePath
+altText="Fuzzy Policy" %}
+
+And the following plot shows the fuzzy policy overlaid onto the raw policy. Visually, it can be seen that both policies
+align quite well. In this particular case, the match was about 90% (obtained by comparing each populated raw policy 
+value with its fuzzy counterpart. The fuzzy policy was required significantly less storage space, but I believe that
+there is still room for improvement in terms of both storage and accuracy -- particularly with more complex entities.
+
+{% assign imagePath = "/assets/images/blog/ml/ex1/fuzzy_raw_policy.png" | relative_url %}
+{% include post-image-medium.liquid imagePath=imagePath
+altText="Fuzzy Policy overlaid on Raw Policy" %}
+</div>
+
+That's quite a lot of writing for one post, and I think that this is a good stopping point. In the next post on this
+topic, I will discuss the results of running the policy, various other approaches I have taken in 
+producing, evaluating and improving the policy, and provide more information on methods of prompt design for the LLM.  
 
 [//]: # (<details>)
 [//]: # (  <summary style="cursor: pointer; font-weight: bold; color: #a70000;">)

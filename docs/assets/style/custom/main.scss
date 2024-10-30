@@ -679,6 +679,17 @@ div.service-item {
   // border: 1px solid #444;
 }
 
+.post-image-medium {
+  width: 30vw;
+  margin: 16px auto;
+  // border: 1px solid #444;
+}
+
+.figure-caption-medium
+{
+  width: 30vw;
+}
+
 button.hidden-content-warning {
   cursor: pointer !important;
   padding: 8px !important;
@@ -791,7 +802,19 @@ div.hidden-content {
     width: 50%;
     align-content: center;
   }
+
+  .post-image-medium {
+    width: 80%;
+    align-content: center;
+  }
+
+  .figure-caption-medium
+  {
+    width: 80%;
+  }
 }
+
+
 
 // BEGIN table styles
 
