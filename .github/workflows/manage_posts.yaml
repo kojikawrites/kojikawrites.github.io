@@ -1,15 +1,12 @@
 name: Manage Posts and Drafts
 
 on:
-#  push:
-#    branches:
-#      - main  # Change this to your default branch if different
-  workflow_dispatch:
+  #  push:
+  #    branches:
+  #      - main  # Change this to your default branch if different
   schedule:
     - cron: '0 0 * * *'  # Runs daily at midnight UTC
-
-env:
-  ROOT_URL: ${{ env.ROOT_URL }}  # ROOT_URL is already set in the environment
+  workflow_dispatch:  # Allows manual triggering with inputs
 
 jobs:
   manage_posts:
@@ -38,9 +35,12 @@ jobs:
           BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
           BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
         run: |
-          python post_to_bluesky.py
+          python post_to_bluesky.py \
+            --root-url ${{ env.ROOT_URL }} \
+            --announce-start-date ${{ env.ANNOUNCE_START_DATE }}
 
       - name: Commit and Push Changes
+        if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
