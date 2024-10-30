@@ -2,10 +2,14 @@ import os
 import sys
 import json
 import argparse
+import pathlib
 from datetime import datetime, timezone
 from atproto import Client, models, client_utils
 import re
 from urllib.parse import quote_plus
+import markdown
+import random
+from bs4 import BeautifulSoup
 
 def parse_date_from_filename(filename):
     match = re.match(r'(\d{4})-(\d{2})-(\d{2})-(.*)\.md$', filename)
@@ -23,52 +27,129 @@ def construct_post_url(date, slug, root_url, categories):
     categories_path = '/'.join(quote_plus(cat.strip()) for cat in categories)
     return f"{root_url}{categories_path}/{date_str}/{slug}/"
 
-def extract_metadata_from_file(file_path, slug):
-    with open(file_path, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
+def strip_markdown(md_text):
+    """
+    Convert markdown text to plain text, removing Liquid syntax and HTML tags.
 
+    Args:
+        md_text (str): The markdown-formatted text.
+
+    Returns:
+        str: The plain text.
+    """
+    # Remove Liquid tags
+    md_text = re.sub(r'{%.*?%}', '', md_text)
+    md_text = re.sub(r'{{.*?}}', '', md_text)
+
+    # Convert Markdown to HTML
+    html = markdown.markdown(md_text)
+    # Parse HTML and extract text
+    soup = BeautifulSoup(html, 'html.parser')
+    text = soup.get_text()
+    # Normalize whitespace
+    text = re.sub(r'\s+', ' ', text)
+    return text.strip()
+
+def extract_random_image_path(content_body):
+    """
+    Extract image paths from the markdown content.
+
+    Args:
+        content_body (str): The markdown content of the post.
+
+    Returns:
+        list: A list of image paths found in the content.
+    """
+    # Regular expression to match the image declaration pattern
+    # Matches strings like: "/path/filename.png" | relative_url
+    pattern = r'["\'](/[^"\']+\.png)["\']\s*\|\s*relative_url'
+
+    image_paths = re.findall(pattern, content_body, flags=re.IGNORECASE)
+    if len(image_paths) <= 1:
+        return None
+    image_paths = image_paths[:-1]
+    return random.choice(image_paths)
+
+def extract_metadata_from_file(file_path, slug, root_dir):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    # Split front matter and content
+    parts = content.split('---')
+    if len(parts) >= 3:
+        front_matter = parts[1]
+        content_body = '---'.join(parts[2:])
+    else:
+        front_matter = ''
+        content_body = content
+
+    # Process front matter
     title = None
     categories = []
-    in_front_matter = False
-    for line in lines:
+    summary = None
+    for line in front_matter.strip().split('\n'):
         stripped_line = line.strip()
-        if stripped_line == '---':
-            in_front_matter = not in_front_matter
-            continue
-        if in_front_matter:
-            if stripped_line.startswith('title:'):
-                # YAML front matter title
-                title = stripped_line[6:].strip().strip('"').strip("'")
-            elif stripped_line.startswith('categories:'):
-                # Categories can be a list or space-separated
-                categories_line = stripped_line[11:].strip()
-                if categories_line.startswith('[') and categories_line.endswith(']'):
-                    # Handle list format: categories: [cat1, cat2]
-                    categories = [cat.strip().strip('"').strip("'") for cat in categories_line[1:-1].split(',')]
-                else:
-                    # Handle space-separated: categories: cat1 cat2
-                    categories = categories_line.split()
-        elif not in_front_matter and not title and stripped_line.startswith('# '):
-            # Markdown header
-            title = stripped_line[2:].strip()
-            break
-        if title and categories:
-            break
+        if stripped_line.startswith('title:'):
+            title = stripped_line[6:].strip().strip('"').strip("'")
+        elif stripped_line.startswith('categories:'):
+            categories_line = stripped_line[11:].strip()
+            if categories_line.startswith('[') and categories_line.endswith(']'):
+                categories = [cat.strip().strip('"').strip("'") for cat in categories_line[1:-1].split(',')]
+            else:
+                categories = categories_line.split()
+        elif stripped_line.startswith('summary:'):
+            summary = stripped_line[8:].strip().strip('"').strip("'")
 
     if not title:
-        title = slug.replace('-', ' ').title()
+        # Try to find title in content
+        match = re.search(r'^#\s+(.+)$', content_body, flags=re.MULTILINE)
+        if match:
+            title = match.group(1).strip()
+        else:
+            title = slug.replace('-', ' ').title()
+
     if not categories:
         categories = []
 
-    return title, categories
+    if not summary:
+        # Extract first paragraph
+        paragraphs = content_body.strip().split('\n\n')
+        if paragraphs:
+            first_paragraph = paragraphs[0]
+            summary = strip_markdown(first_paragraph)
+        else:
+            summary = ''
 
-def post_to_bluesky(title, url, categories, client, testrun=False):
+    # Extract image paths
+    image_path = extract_random_image_path(content_body)
+    if image_path is None:
+        full_image_path = None
+    else:
+        # Construct the full path relative to the root directory
+        #full_image_path = pathlib.Path(root_dir).joinpath(image_path)
+        # if full_image_path == image_path:
+        if not root_dir.endswith(os.sep) and not image_path.startswith(os.sep):
+            root_dir += os.sep
+        full_image_path = root_dir + image_path
+
+        if not os.path.exists(full_image_path):
+            full_image_path = None
+
+    return title, categories, summary, full_image_path
+
+def post_to_bluesky(title, summary, image_path, url, categories, client, testrun=False):
     # Construct the message
 
     if categories is None:
         categories = []
 
-
+    try:
+        with open(image_path, 'rb') as f:
+          img_data = f.read()
+          thumb = client.upload_blob(img_data)
+          blob = thumb.blob
+    except:
+        blob = None
     tb = client_utils.TextBuilder()
     tb.text("New blog post!\nAs always, comments and questions are welcome.\n\n")
     for category in categories:
@@ -77,15 +158,16 @@ def post_to_bluesky(title, url, categories, client, testrun=False):
     embed = models.AppBskyEmbedExternal.Main(
         external=models.AppBskyEmbedExternal.External(
             title=title,
-            description=f"New Blog Post: {title}",
+            description=f"New Blog Post: {summary}",
             uri=url,
+            thumb = blob
         )
     )
-    tb.text("\n\n(This was an automated post.)")
+    tb.text("\n\n(This is an automated post.)")
 
 
     if testrun:
-        print(f"[Test Run] Would post to Bluesky: {message}")
+        (f"[Test Run] Would post to Bluesky: {tb.build_text()}")
         return True
 
     # Post the message
@@ -161,14 +243,16 @@ def main():
                         if post_id in posted_ids:
                             continue
 
-                        title, categories = extract_metadata_from_file(file_path, slug)
+                        title, categories, summary, image_path = extract_metadata_from_file(file_path, slug, args.root_dir)
                         url = construct_post_url(file_date, slug, root_url, categories)
                         posts_to_announce.append({
                             'id': post_id,
                             'title': title,
                             'url': url,
                             'date': file_date,
-                            'categories': categories
+                            'categories': categories,
+                            'summary': summary,
+                            'image_path': image_path,
                         })
 
     if not posts_to_announce:
@@ -206,7 +290,9 @@ def main():
         url = post['url']
         post_id = post['id']
         categories = post['categories']
-        success = post_to_bluesky(title, url, categories, client, testrun=args.testrun)
+        summary = post['summary']
+        image_path = post['image_path']
+        success = post_to_bluesky(title, summary, image_path, url, categories, client, testrun=args.testrun)
         if success:
             if not args.testrun:
                 posted_posts.append(post_id)

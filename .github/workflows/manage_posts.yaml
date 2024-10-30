@@ -11,7 +11,7 @@ env:
   # Setting environment variables with the value of a configuration variable
   ROOT_URL: ${{ vars.ROOT_URL }}
   ANNOUNCE_START_DATE: ${{ vars.ANNOUNCE_START_DATE }}
-  
+
 jobs:
   manage_posts:
     runs-on: ubuntu-latest
@@ -27,7 +27,7 @@ jobs:
 
       - name: Install Required Python Packages
         run: |
-          pip install atproto
+          pip install -r requirements.txt
 
       - name: Run Python Script to Manage Posts and Drafts
         run: |
