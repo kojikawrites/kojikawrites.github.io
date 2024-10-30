@@ -8,6 +8,9 @@ on:
   schedule:
     - cron: '0 0 * * *'  # Runs daily at midnight UTC
 
+env:
+  ROOT_URL: ${{ env.ROOT_URL }}  # ROOT_URL is already set in the environment
+
 jobs:
   manage_posts:
     runs-on: ubuntu-latest
@@ -21,16 +24,36 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Move Future Posts to Drafts and Publish Due Drafts
+      - name: Install Required Python Packages
+        run: |
+          pip install atproto
+
+      - name: Run Python Script to Manage Posts and Drafts
         run: |
           python manage_posts.py
 
+      - name: Post to Bluesky
+        if: always()
+        env:
+          BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
+          BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+        run: |
+          python post_to_bluesky.py
+
       - name: Commit and Push Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+          # Stage all changes
           git add -A
-          git commit -m "Automated post and draft management"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # Check if there are any changes to commit
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Automated post and draft management [skip ci]"
+            git push
+          fi
