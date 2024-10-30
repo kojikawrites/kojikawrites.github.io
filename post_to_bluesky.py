@@ -72,7 +72,7 @@ def post_to_bluesky(title, url, categories, client, testrun=False):
     tb = client_utils.TextBuilder()
     tb.text("New blog post!\nAs always, comments and questions are welcome.\n\n")
     for category in categories:
-        tb.tag(f"{category}\n", "atproto")
+        tb.tag(f"#{category}\n", "atproto")
 
     embed = models.AppBskyEmbedExternal.Main(
         external=models.AppBskyEmbedExternal.External(
@@ -81,6 +81,7 @@ def post_to_bluesky(title, url, categories, client, testrun=False):
             uri=url,
         )
     )
+    tb.text("\n\n(This was an automated post.)")
 
 
     if testrun:
