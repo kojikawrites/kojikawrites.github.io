@@ -3,7 +3,7 @@ import sys
 import json
 import argparse
 from datetime import datetime, timezone
-from atproto import Client, models
+from atproto import Client, models, client_utils
 import re
 from urllib.parse import quote_plus
 
@@ -67,9 +67,13 @@ def post_to_bluesky(title, url, categories, client, testrun=False):
 
     if categories is None:
         categories = []
-    message = "New blog post!\nAs always, comments and questions are welcome.\n\n"
+
+
+    tb = client_utils.TextBuilder()
+    tb.text("New blog post!\nAs always, comments and questions are welcome.\n\n")
     for category in categories:
-        message += f"#{category}\n"
+        tb.tag(f"{category}\n", "atproto")
+
     embed = models.AppBskyEmbedExternal.Main(
         external=models.AppBskyEmbedExternal.External(
             title=title,
@@ -77,7 +81,7 @@ def post_to_bluesky(title, url, categories, client, testrun=False):
             uri=url,
         )
     )
-    tags = categories
+
 
     if testrun:
         print(f"[Test Run] Would post to Bluesky: {message}")
@@ -85,7 +89,7 @@ def post_to_bluesky(title, url, categories, client, testrun=False):
 
     # Post the message
     try:
-        client.send_post(text=message, embed=embed, tags=tags)
+        client.send_post(text=tb, embed=embed, tags=tags)
         print(f"Successfully posted to Bluesky: {title}")
         return True
     except Exception as e:
