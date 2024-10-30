@@ -126,10 +126,10 @@ def extract_metadata_from_file(file_path, slug, root_dir):
         full_image_path = None
     else:
         # Construct the full path relative to the root directory
-        #full_image_path = pathlib.Path(root_dir).joinpath(image_path)
-        # if full_image_path == image_path:
-        if not root_dir.endswith(os.sep) and not image_path.startswith(os.sep):
-            root_dir += os.sep
+        full_image_path = pathlib.Path(root_dir).joinpath(image_path)
+
+#         if not root_dir.endswith(os.sep) and not image_path.startswith(os.sep):
+#             root_dir += os.sep
         full_image_path = root_dir + image_path
 
         if not os.path.exists(full_image_path):
@@ -158,7 +158,7 @@ def post_to_bluesky(title, summary, image_path, url, categories, client, testrun
     embed = models.AppBskyEmbedExternal.Main(
         external=models.AppBskyEmbedExternal.External(
             title=title,
-            description=f"New Blog Post: {summary}",
+            description=summary,
             uri=url,
             thumb = blob
         )
