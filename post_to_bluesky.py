@@ -77,6 +77,7 @@ def post_to_bluesky(title, url, categories, client, testrun=False):
             uri=url,
         )
     )
+    tags = categories
 
     if testrun:
         print(f"[Test Run] Would post to Bluesky: {message}")
@@ -84,7 +85,7 @@ def post_to_bluesky(title, url, categories, client, testrun=False):
 
     # Post the message
     try:
-        client.send_post(text=message, embed=embed)
+        client.send_post(text=message, embed=embed, tags=tags)
         print(f"Successfully posted to Bluesky: {title}")
         return True
     except Exception as e:
