@@ -22,6 +22,7 @@ layout: default
         <span class="tag-wrapper"><a class="tag" href='{{ "/tags" | relative_url }}#{{ tag | slugify }}'>#{{ tag | slugify }}</a></span>
       {%- endfor %}
     {%- endif %}
+    <br/><span class="reading-time">{% include reading-time.liquid content=content %}</span>
   </p>
 
   <div class="post-content" itemprop="articleBody">
