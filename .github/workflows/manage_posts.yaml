@@ -8,9 +8,6 @@ on:
     - cron: '0 0 * * *'  # Runs daily at midnight UTC
   workflow_dispatch:  # Allows manual triggering with inputs
 
-env:
-  ROOT_URL: ${{ env.ROOT_URL }}  # ROOT_URL is already set in the environment
-  ANNOUNCE_START_DATE: ${{ env.ANNOUNCE_START_DATE }}  # ANNOUNCE_START_DATE is already set in the environment
 jobs:
   manage_posts:
     runs-on: ubuntu-latest
