@@ -16,7 +16,7 @@ examples of valid complaints. Despite that, LLMs are a powerful tool that can be
 for games (and other applications) without necessarily violating the last of those complaints. The first one is a 
 question for the lawyers and legislators, and the second is a sunk cost - inference uses very little energy in comparison
 to the initial training, and that's already been done. Anyway, as a friend of mine rightfully pointed out, this post is
-not about the ethics of LLMs -- it's about using them to get a hard start on what is otherwise a very time-consuming and
+not about the ethics of LLMs -- it's about using them to get a head start on what is otherwise a very time-consuming and
 often intractable problem. No jobs were harmed during the making of this post.
 
 For a simple problem like this, the traditional approach would be to use Reinforcement Learning (RL) to develop a policy
@@ -354,7 +354,8 @@ altText="Fuzzy Policy overlaid on Raw Policy" %}
 
 That's quite a lot of writing for one post, and I think that this is a good stopping point. In the next post on this
 topic, I will discuss the results of running the policy, various other approaches I have taken in 
-producing, evaluating and improving the policy, and provide more information on methods of prompt design for the LLM.  
+producing, evaluating and improving the policy, and provide more information on methods of prompt design for the LLM.
+
 
 [//]: # (<details>)
 [//]: # (  <summary style="cursor: pointer; font-weight: bold; color: #a70000;">)
