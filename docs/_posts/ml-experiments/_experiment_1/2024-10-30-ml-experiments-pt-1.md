@@ -134,10 +134,10 @@ The following table shows the effects for each action.
 
 | Action   | Description                         | Effect                                                                                  |
 |----------|-------------------------------------|:----------------------------------------------------------------------------------------|
-| `FORAGE` | Find nearby resources.              | Decrease `e` by `5`. 10% chance of food or water revealed in adjacent square            |
-| `EAT`    | Consume nearby water                | Increase `f` by `10` if food is adjacent, depleting food square, decreases `e` by `2`,  |
+| `FORAGE` | Find nearby resources.              | Decrease `e` by `5`; 10% chance of food or water revealed in adjacent square            |
+| `EAT`    | Consume nearby water                | Increase `f` by `10` if food is adjacent, depleting food square, decreases `e` by `2`   |
 | `DRINK`  | Consume nearby food                 | Increase `w` by `10` if water is adjacent, depleting water square, decreases `e` by `2` |
-| `REST`   | Rest to conserve or restore energy. | Increase `e` by `10` if at refuge.                                                      |
+| `REST`   | Rest to conserve or restore energy | Increase `e` by `10` if at refuge, if `f>0` and `w>0`                                   |
 
 </div>
 <br/>
@@ -150,7 +150,6 @@ When `e` reaches `0`, the entity dies and the run is over.
 Note that these cost and effect values aren't exact, as I did a lot of tweaking during the experiment, and that included the costs and 
 effects. However, these values are not far off the eventual final values.
 
-<br/>
 As the entity performs actions, these attributes are increased or decreased depending on the action and its results.
 After each run (i.e. when it dies) the entity is rewarded based on how long it managed to survive. This reward is then 
 applied to each state the entity found itself in, increasing the likelihood that an action is chosen again in a specific
@@ -186,10 +185,9 @@ $\pi_{new}(a\|s) = \pi_{old}(a\|s) \cdot (1.0 + \alpha \cdot \Delta_R)$
 <p style="padding-left: 8px">
 "Set the new policy value for action <span class="equation-snippet">$a$</span> 
 in state <span class="equation-snippet">$s$</span> to the old policy value for action 
-<span class="equation-snippet">$a$</span> in state <span class="equation-snippet">$s$</span> multiplied by the learning 
-rate <span class="equation-snippet">$\alpha$</span> and the difference between the actual reward 
-<span class="equation-snippet">$R_{actual}$</span> and the expected reward <span class="equation-snippet">$R_{expected}$
-</span>."</p>
+<span class="equation-snippet">$a$</span> in state <span class="equation-snippet">$s$</span> multiplied by the sum of
+one plus the product of the learning rate <span class="equation-snippet">$\alpha$</span> and the reward delta <span 
+class="equation-snippet">$\Delta_R$</span>."</p>
 Note that in a stochastic policy (as opposed to a deterministic policy), the policy value for an action in a given state 
 is expressed as a probability of that particular action being selected in that state.
 {% endcapture %}
@@ -200,7 +198,6 @@ is expressed as a probability of that particular action being selected in that s
            content=hidden_content
 %}
 
-<br/>
 This is nothing new. In fact, this is more or less standard RL (with a few minor tweaks for simplicity). 
 The difference is our starting point -- how we create the initial policy for refinement.
 
@@ -234,8 +231,8 @@ plot. However, what can be (just about) seen is that there are several regions o
 transitions between them.
 
 This makes sense from an intuitive point of view. We would not expect the best action to vary wildly between similar 
-states. If the entity has an `f` value of `10` or, whether it has an `f` value of `11`, then it's still hungry and 
-needs to `EAT`, assuming that other attributes aren't in more pressing need of attention. 
+states. We would expect the difference between the entity having an `f` value of `10` or an `f` value of `11` to be 
+minor; it's still hungry and needs to `EAT`, assuming that other attributes aren't in more pressing need of attention. 
 
 <div>
 {% assign imagePath = "/assets/images/blog/ml/ex1/raw_policy.png" | relative_url %}
@@ -268,11 +265,11 @@ Key Components:
 Imagine controlling the temperature of a room:
 
 -	State Variable: Temperature (in degrees Celsius).
--	Fuzzy Sets: “Cold,” “Comfortable,” “Hot.”
+-	Fuzzy Sets: `Cold`, `Comfortable`, `Hot`.
 -	Membership Functions:
--	Cold: High membership for lower temperatures, decreasing as temperature rises.
--	Comfortable: Peak membership around the desired temperature range.
--	Hot: Low membership at lower temperatures, increasing as it gets hotter.
+-	`Cold`: High membership for lower temperatures, decreasing as temperature rises.
+-	`Comfortable`: Peak membership around the desired temperature range.
+-	`Hot`: Low membership at lower temperatures, increasing as it gets hotter.
 -	Policy: Adjust heating or cooling based on the fuzzy membership degrees.
 
 The membership function definitions are shown in the following table:
@@ -313,7 +310,7 @@ To interpret this, we can say that at 18°C, the temperature is:
 -	Slightly `Comfortable`: Membership degree of approximately `0.333`.
 -	Not `Hot`: Membership degree of `0`.
 
-Obviously, we can also reverse the process to obtain a concrete temperature from a set of fuzzy membership values, and
+We can also reverse the process to obtain a concrete temperature from a set of fuzzy membership values, and
 this is the approach we will use to optimize our policy.
 
 Although this example is 1D, the following plot shows a 2D example  and, although we can't visualize it without a large 
@@ -326,7 +323,6 @@ altText="Membership sets for an autonomous vehicle navigating based on speed and
 
 Note also that in these examples, we are using triangular membership functions for simplicity. However we are in no way
 restricted to this kind of membership function. We can use any arbitrary membership function that best suits our needs.
-
 {% endcapture %}
 
 {% include content-warning.liquid
@@ -335,7 +331,6 @@ warning="CONTENT WARNING: EXCESSIVE FUZZY DETAILS &mdash; CLICK TO SHOW AT YOUR 
 content=hidden_content
 %}
 
-<br/>
 
 Rather than use fixed membership sets, I instead estimate an initial number of fuzzy sets per axis based on variance,
 and then use a genetic algorithm to tweak the membership function parameters to find the best fit for the raw data, 
