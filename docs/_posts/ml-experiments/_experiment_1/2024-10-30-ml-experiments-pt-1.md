@@ -180,7 +180,8 @@ $\pi_{new}(a\|s) = \pi_{old}(a\|s) \cdot (1.0 + \alpha \cdot \Delta_R)$
 </p>
 <p><span class="equation-note">
 &ndash; where <span class="equation-snippet">$\pi_{new}(a\|s)$</span> is read as
-"new policy value for action $a$ in state $s$".
+"new policy value for action <span class="equation-snippet">$a$</span> 
+in state <span class="equation-snippet">$s$</span>".
 </span></p>
 <p>So the entire equation can be read as:</p>
 <p style="padding-left: 8px">
