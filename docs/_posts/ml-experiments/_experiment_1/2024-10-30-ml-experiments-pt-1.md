@@ -355,8 +355,9 @@ altText="Fuzzy Policy overlaid on Raw Policy" %}
 </div>
 
 That's quite a lot of writing for one post, and I think that this is a good stopping point. In the next post on this
-topic, I will discuss the results of running the policy, various other approaches I have taken in 
-producing, evaluating and improving the policy, and provide more information on methods of prompt design for the LLM.
+topic, I will discuss the results of running the policy, comparisons between the raw policy and the fuzzy approximation, 
+various other approaches I have taken in producing, evaluating and improving the policy, and provide more information 
+on methods of prompt design for the LLM.
 
 
 [//]: # (<details>)
