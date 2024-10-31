@@ -152,7 +152,7 @@ def post_to_bluesky(title, summary, image_path, url, categories, client, testrun
     except:
         blob = None
     tb = client_utils.TextBuilder()
-    tb.text("New blog post!\nAs always, comments and questions are welcome.\n\n")
+    tb.text(f"New blog post: {title}!\n\nAs always, comments and questions are welcome.\n\n")
     for category in categories:
         tb.tag(f"#{category}\n", "atproto")
 
