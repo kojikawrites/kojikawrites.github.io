@@ -126,13 +126,12 @@ def extract_metadata_from_file(file_path, slug, root_dir):
         full_image_path = None
     else:
         # Construct the full path relative to the root directory
-        # full_image_path = pathlib.Path('/docs').joinpath(image_path)
-        # print(f"image path: {root_dir}, {image_path}, {full_image_path}")
-        doc_dir = os.sep + 'docs'
+        working_directory = os.path.dirname(os.path.realpath(__file__)) + '/docs'
         if not image_path.startswith(os.sep):
-            doc_dir += os.sep
-        full_image_path = doc_dir + image_path
+            working_directory += os.sep
+        full_image_path = working_directory + image_path
 
+        print(f"image path: {full_image_path}")
         if not os.path.exists(full_image_path):
             print("image not found")
             full_image_path = None
