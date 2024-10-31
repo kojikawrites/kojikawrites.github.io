@@ -154,7 +154,7 @@ def post_to_bluesky(title, summary, image_path, url, categories, client, testrun
     tb = client_utils.TextBuilder()
     tb.text(f"New blog post: {title}!\n\nAs always, comments and questions are welcome.\n\n")
     for category in categories:
-        tb.tag(f"#{category}\n", "atproto")
+        tb.tag(f"#{category}\n", category)
 
     embed = models.AppBskyEmbedExternal.Main(
         external=models.AppBskyEmbedExternal.External(
