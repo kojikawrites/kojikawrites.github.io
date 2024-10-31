@@ -86,7 +86,7 @@ def extract_metadata_from_file(file_path, slug, root_dir):
     # Process front matter
     title = None
     categories = []
-    summary = None
+    description = None
     for line in front_matter.strip().split('\n'):
         stripped_line = line.strip()
         if stripped_line.startswith('title:'):
@@ -97,8 +97,8 @@ def extract_metadata_from_file(file_path, slug, root_dir):
                 categories = [cat.strip().strip('"').strip("'") for cat in categories_line[1:-1].split(',')]
             else:
                 categories = categories_line.split()
-        elif stripped_line.startswith('summary:'):
-            summary = stripped_line[8:].strip().strip('"').strip("'")
+        elif stripped_line.startswith('description:'):
+            description = stripped_line[12:].strip().strip('"').strip("'")
 
     if not title:
         # Try to find title in content
@@ -111,14 +111,14 @@ def extract_metadata_from_file(file_path, slug, root_dir):
     if not categories:
         categories = []
 
-    if not summary:
+    if not description:
         # Extract first paragraph
         paragraphs = content_body.strip().split('\n\n')
         if paragraphs:
             first_paragraph = paragraphs[0]
-            summary = strip_markdown(first_paragraph)
+            description = strip_markdown(first_paragraph)
         else:
-            summary = ''
+            description = ''
 
     # Extract image paths
     image_path = extract_random_image_path(content_body)
@@ -126,8 +126,12 @@ def extract_metadata_from_file(file_path, slug, root_dir):
         full_image_path = None
     else:
         # Construct the full path relative to the root directory
-        working_directory = os.path.dirname(os.path.realpath(__file__)) + '/docs'
-        if not image_path.startswith(os.sep):
+        working_directory = os.path.dirname(os.path.realpath(__file__)) # + '/docs'
+        if not working_directory.endswith(os.sep) and not root_dir.startswith(os.sep):
+            working_directory += os.sep
+        working_directory += root_dir
+
+        if not image_path.startswith(os.sep) and not working_directory.endswith(os.sep):
             working_directory += os.sep
         full_image_path = working_directory + image_path
 
@@ -136,9 +140,9 @@ def extract_metadata_from_file(file_path, slug, root_dir):
             print("image not found")
             full_image_path = None
 
-    return title, categories, summary, full_image_path
+    return title, categories, description, full_image_path
 
-def post_to_bluesky(title, summary, image_path, url, categories, client, testrun=False):
+def post_to_bluesky(title, description, image_path, url, categories, client, testrun=False):
     # Construct the message
 
     if categories is None:
@@ -151,6 +155,7 @@ def post_to_bluesky(title, summary, image_path, url, categories, client, testrun
           blob = thumb.blob
     except:
         blob = None
+
     tb = client_utils.TextBuilder()
     tb.text(f"New blog post: {title}!\n\nAs always, comments and questions are welcome.\n\n")
     for category in categories:
@@ -159,16 +164,15 @@ def post_to_bluesky(title, summary, image_path, url, categories, client, testrun
     embed = models.AppBskyEmbedExternal.Main(
         external=models.AppBskyEmbedExternal.External(
             title=title,
-            description=summary,
+            description=description,
             uri=url,
             thumb = blob
         )
     )
     tb.text("\n\n(This is an automated post.)")
 
-
     if testrun:
-        (f"[Test Run] Would post to Bluesky: {tb.build_text()}")
+        print(f"[Test Run] Would post to Bluesky: {tb.build_text()}\n{embed}")
         return True
 
     # Post the message
@@ -186,7 +190,7 @@ def main():
     parser.add_argument('--root-url', type=str, help='Root URL of the website')
     parser.add_argument('--announce-start-date', type=str, help='Start date for announcements (YYYY-MM-DD)')
     parser.add_argument('--testrun', action='store_true', help='Perform a test run without posting or updating the tracking list')
-    parser.add_argument('--root-dir', type=str, default='.', help='Root directory to start searching from')
+    parser.add_argument('--root-dir', type=str, default='docs', help='Root directory to start searching from')
     args = parser.parse_args()
 
     # Retrieve or set ROOT_URL
@@ -244,15 +248,16 @@ def main():
                         if post_id in posted_ids:
                             continue
 
-                        title, categories, summary, image_path = extract_metadata_from_file(file_path, slug, args.root_dir)
+                        title, categories, description, image_path = extract_metadata_from_file(file_path, slug, args.root_dir)
                         url = construct_post_url(file_date, slug, root_url, categories)
+
                         posts_to_announce.append({
                             'id': post_id,
                             'title': title,
                             'url': url,
                             'date': file_date,
                             'categories': categories,
-                            'summary': summary,
+                            'description': description,
                             'image_path': image_path,
                         })
 
@@ -291,9 +296,9 @@ def main():
         url = post['url']
         post_id = post['id']
         categories = post['categories']
-        summary = post['summary']
+        description = post['description']
         image_path = post['image_path']
-        success = post_to_bluesky(title, summary, image_path, url, categories, client, testrun=args.testrun)
+        success = post_to_bluesky(title, description, image_path, url, categories, client, testrun=args.testrun)
         if success:
             if not args.testrun:
                 posted_posts.append(post_id)

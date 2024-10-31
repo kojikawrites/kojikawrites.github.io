@@ -45,7 +45,7 @@
   {% assign theTitle = page.title | default: config.metadata.title | default: site.title | strip_html | escape %}
   <title>{{ theTitle }}</title>
 
-  {% assign theDescription = page.excerpt | default: config.metadata.description | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape %}
+  {% assign theDescription = page.description | default: page.excerpt | default: config.metadata.description | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape %}
   <meta name="description" content="{{ theDescription }}">
 
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">

@@ -24,7 +24,7 @@ The following tags appear on this site:
 <ul>
 {% for post in site.tags[tag] %}
   <li><a href="{{ post.url }}">{{ post.title }}</a><br/>
-    {{ post.excerpt }}
+    {{ post.description | default: post.excerpt }}
   </li>
 {% endfor %}
 </ul>

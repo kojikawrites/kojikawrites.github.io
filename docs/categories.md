@@ -23,7 +23,7 @@ The following categories appear on this site:
 <ul>
 {% for post in site.categories[cat] %}
   <li><a href="{{ post.url }}">{{ post.title }}</a><br/>
-    {{ post.excerpt }}
+    {{ post.description | default: post.excerpt }}
   </li>
 {% endfor %}
 </ul>

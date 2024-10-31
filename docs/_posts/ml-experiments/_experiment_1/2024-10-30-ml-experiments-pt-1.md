@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Machine Learning Experiments, Part 1"
-# summary: A post discussing the use of LLMs to create behavior policies for game NPCs.
+# description: A post discussing the use of LLMs to create behavior policies for game NPCs.
 categories: gamedev machine-learning artificial-intelligence fuzzy-logic
 author: hiive
 tags: policy-based-learning game-ai npc-behavior llm function-approximation reinforcement-learning experiment-1
