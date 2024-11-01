@@ -1,8 +1,9 @@
 ---
 
 metadata:
-  title: <span class="navbar-white">h</span><span class="navbar-hiive-orange">i</span><span class="navbar-white">ive</span><span class="navbar-hiive-orange">labs</span><small><small><span class="navbar-white">.com</span></small></small>
-  # tagline: The latest buzz around Hiive, LLC.
+  title: <img class="navbar-logo" src = "/assets/images/hiivelabs-dot-com.svg" alt="hiivelabs.com"/ width="80">
+  # title: <span class="navbar-white">h</span><span class="navbar-hiive-orange">i</span><span class="navbar-white">ive</span><span class="navbar-hiive-orange">labs</span><small><small><span class="navbar-white">.com</span></small></small>  
+# tagline: The latest buzz around Hiive, LLC.
   description: > # Description for the site ...
     The launching point for all things Hiive, LLC. Personal and professional musings.
   legal: # used for privacy policy, terms of use, etc ...

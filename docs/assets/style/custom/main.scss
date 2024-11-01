@@ -350,14 +350,20 @@ code, pre, code *, pre * {
   margin-left: 10px;
 }
 
-.navbar-brand{
-  text-transform: lowercase;
-  // font-size: 1.25em;
-  // font-weight: bolder !important;
-  font-family: 'Arial Black', 'Roboto', sans-serif;
-  font-weight: bolder;
-  font-style: normal;
+img.navbar-logo {
+  width: 96px;
+  position: relative;
+  top:-4px;
 }
+
+//.navbar-brand{
+//  text-transform: lowercase;
+//  // font-size: 1.25em;
+//  // font-weight: bolder !important;
+//  font-family: 'Arial Black', 'Roboto', sans-serif;
+//  font-weight: bolder;
+//  font-style: normal;
+//}
 
 .navbar-orange {
   color: #ff6600 !important;
@@ -841,12 +847,12 @@ div.hidden-content {
 // ios specific
 @supports (-webkit-touch-callout: none) {
   /* CSS specific to iOS devices */
-  .navbar-brand {
-    font-family: 'Archivo Black', 'Arial Black', 'Roboto', sans-serif;
-    font-weight: 900;
-    text-shadow: 0.5px 0;
-    font-style: normal;
-  }
+  //.navbar-brand {
+  //  font-family: 'Archivo Black', 'Arial Black', 'Roboto', sans-serif;
+  //  font-weight: 900;
+  //  text-shadow: 0.5px 0;
+  //  font-style: normal;
+  //}
 }
 
 
