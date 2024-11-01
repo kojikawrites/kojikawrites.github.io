@@ -70,6 +70,16 @@ def extract_random_image_path(content_body):
     image_paths = image_paths[:-1]
     return random.choice(image_paths)
 
+def get_working_path_to_file(root_dir, file_path):
+    working_directory = os.path.dirname(os.path.realpath(__file__)) # + '/docs'
+    if not working_directory.endswith(os.sep) and not root_dir.startswith(os.sep):
+        working_directory += os.sep
+    working_directory += root_dir
+    if not file_path.startswith(os.sep) and not working_directory.endswith(os.sep):
+        working_directory += os.sep
+    full_file_path = working_directory + file_path
+    return full_file_path
+
 def extract_metadata_from_file(file_path, slug, root_dir):
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
@@ -126,23 +136,15 @@ def extract_metadata_from_file(file_path, slug, root_dir):
         full_image_path = None
     else:
         # Construct the full path relative to the root directory
-        working_directory = os.path.dirname(os.path.realpath(__file__)) # + '/docs'
-        if not working_directory.endswith(os.sep) and not root_dir.startswith(os.sep):
-            working_directory += os.sep
-        working_directory += root_dir
-
-        if not image_path.startswith(os.sep) and not working_directory.endswith(os.sep):
-            working_directory += os.sep
-        full_image_path = working_directory + image_path
-
-        print(f"image path: {full_image_path}")
+        full_image_path = get_working_path_to_file(root_dir, image_path)
+        print(f"***FULL IMAGE PATH: {full_image_path}, {image_path}")
         if not os.path.exists(full_image_path):
             print("image not found")
             full_image_path = None
 
     return title, categories, description, full_image_path
 
-def post_to_bluesky(title, description, image_path, url, categories, client, testrun=False):
+def post_to_bluesky(title, description, image_path, url, categories, category_aliases, client, testrun=False):
     # Construct the message
 
     if categories is None:
@@ -160,6 +162,14 @@ def post_to_bluesky(title, description, image_path, url, categories, client, tes
     tb.text(f"New blog post: {title}!\n\nAs always, comments and questions are welcome.\n\n")
     for category in categories:
         tb.tag(f"#{category}\n", category)
+        print(f"#{category}")
+        aliases = category_aliases.get(category)
+        if aliases is not None:
+            for alias in aliases:
+                tb.tag(f"#{alias}\n", alias)
+                print(f"#{alias}")
+
+
 
     embed = models.AppBskyEmbedExternal.Main(
         external=models.AppBskyEmbedExternal.External(
@@ -183,6 +193,19 @@ def post_to_bluesky(title, description, image_path, url, categories, client, tes
     except Exception as e:
         print(f"Error posting to Bluesky: {e}")
         return False
+
+def load_aliases_from_config(root_dir):
+    try:
+        import yaml
+        full_file_path = get_working_path_to_file(root_dir, '_jekyllfaces/config.md')
+        with open(full_file_path, 'r') as file:
+            docs = yaml.safe_load_all(file)
+            config = next(docs)
+            aliases = config["metadata"]["aliases"]
+            return aliases
+    except:
+        print(f"Error loading config: {full_file_path}")
+        return {}
 
 def main():
     # Parse command-line arguments
@@ -291,6 +314,7 @@ def main():
         print("[Test Run] Skipping Bluesky login.")
 
     # Post to Bluesky and update the tracking list
+    category_aliases = load_aliases_from_config(args.root_dir)
     for post in posts_to_announce:
         title = post['title']
         url = post['url']
@@ -298,7 +322,7 @@ def main():
         categories = post['categories']
         description = post['description']
         image_path = post['image_path']
-        success = post_to_bluesky(title, description, image_path, url, categories, client, testrun=args.testrun)
+        success = post_to_bluesky(title, description, image_path, url, categories, category_aliases, client, testrun=args.testrun)
         if success:
             if not args.testrun:
                 posted_posts.append(post_id)
@@ -312,5 +336,7 @@ def main():
     else:
         print("[Test Run] Tracking list not updated.")
 
+
 if __name__ == '__main__':
     main()
+

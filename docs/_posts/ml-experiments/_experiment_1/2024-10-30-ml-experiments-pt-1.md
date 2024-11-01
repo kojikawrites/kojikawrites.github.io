@@ -9,7 +9,9 @@ description: |
   intelligent, responsive NPC behavior that could transform gameplay dynamics in future applications.
 categories: gamedev machine-learning artificial-intelligence fuzzy-logic
 author: hiive
-tags: policy-based-learning game-ai npc-behavior llm function-approximation reinforcement-learning experiment-1
+tags: |
+  policy-based-learning game-ai npc-behavior large-language-model function-approximation reinforcement-learning 
+  experiment-1
 ---
 
 This post is about the first in a series of experiments to determine the utility of using an LLM to

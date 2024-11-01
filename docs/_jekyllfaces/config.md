@@ -10,9 +10,18 @@ metadata:
     #company: Joe Hall  # {metadata.title} when blank
     #website: http://joehall.net/  # http://{metadata.title}.com when blank
     #jurisdiction: Georgia  # e.g. Georgia, "United States" when blank
-  trademark: "hiivelabs and its logo are registered trademarks of hiive llc." 
-  copyright: "All content &copy; 2005-CURRENT_YEAR by hiive llc."
+  trademark: "hiivelabs and its logo are registered trademarks of hiive." 
+  copyright: "All content &copy; 2005-CURRENT_YEAR by hiive."
   lang: en
+  aliases:
+    machine-learning:
+      - ml
+    artificial-intelligence:
+      - ai
+    large-language-model:
+      - llm
+    reinforcement-learning:
+      - rl
 
 customize:
   theme: lux       # one of: cerulean | cosmo | cyborg | darkly | default | flatly | journal | litera | lumen | lux | materia | minty | pulse | sandstone | simplex | sketchy | slate | solar | spacelab | superhero | united | yeti
