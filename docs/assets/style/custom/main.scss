@@ -671,6 +671,15 @@ div.service-item {
 }
 
 
+.quote-block {
+  display: block;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  margin: 1em 2vw;
+  color: #FFF3AD !important;
+  background: #00000060 !important;
+  max-width: 80%;
+}
+
 
 .post-image {
   width: 65vw;
@@ -817,6 +826,11 @@ div.hidden-content {
   {
     width: 80%;
   }
+  .quote-block {
+    margin: 1em 1vw;
+    max-width: unset;
+  }
+
 }
 
 

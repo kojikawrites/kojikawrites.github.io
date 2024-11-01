@@ -138,12 +138,12 @@ The following table shows the effects for each action.
 
 <div class="data-table">
 
-| Action   | Description                         | Effect                                                                                  |
-|----------|-------------------------------------|:----------------------------------------------------------------------------------------|
-| `FORAGE` | Find nearby resources.              | Decrease `e` by `5`; 10% chance of food or water revealed in adjacent square            |
-| `EAT`    | Consume nearby water                | Increase `f` by `10` if food is adjacent, depleting food square, decreases `e` by `2`   |
-| `DRINK`  | Consume nearby food                 | Increase `w` by `10` if water is adjacent, depleting water square, decreases `e` by `2` |
-| `REST`   | Rest to conserve or restore energy | Increase `e` by `10` if at refuge, if `f>0` and `w>0`                                   |
+| Action   | Description                         | Effect                                                                                   |
+|----------|-------------------------------------|:-----------------------------------------------------------------------------------------|
+| `FORAGE` | Find nearby resources.              | Decrease `e` by `5`; 10% chance of food or water revealed in adjacent square             |
+| `EAT`    | Consume nearby water                | Increase `f` to `100` if food is adjacent, depleting food square, decreases `e` by `2`   |
+| `DRINK`  | Consume nearby food                 | Increase `w` to `100` if water is adjacent, depleting water square, decreases `e` by `2` |
+| `REST`   | Rest to conserve or restore energy | Increase `e` by `10` if at refuge, if `f>0` and `w>0`                                    |
 
 </div>
 <br/>

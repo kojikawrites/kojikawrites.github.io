@@ -23,7 +23,7 @@ The original text of the Berlin Interpretation is below. And I have issues with 
 The Berlin interpretation is split into two sections; a preamble, and a list of general principles, further subdivided 
 into “high value” and “low value” principles.
 
-```
+<div class="quote-block">
 ==Preamble==
 
 This definition of "Roguelike" was created at the International
@@ -141,7 +141,7 @@ corridors.
 
 The numbers used to describe the character (hit points, attributes
 etc.) are deliberately shown.
-```
+</div>
 
 Let’s go through this definition point-by-point and see what we think about it. (Or more accurately, what **I** think 
 about it, but you’re sure to agree with me, right? Right??)
@@ -155,12 +155,13 @@ We’ll start with the “high-value” factors. These are the factors that the 
 are most important for the roguelike genre.
 
 ### Random Environment Generation
-```
+<div class="quote-block">
 The game world is randomly generated in a way that increases
 replayability. Appearance and placement of items is random.
 Appearance of monsters is fixed, their placement is random.
 Fixed content (plots or puzzles or vaults) removes randomness.
-```
+</div>
+
 Okay, so we’ve already run into a problem. The first sentence is okay, if a little vague. Randomly generating a world 
 does not in any way guarantee replayability. The random process needs to be guided somehow. Admittedly, I’m nit-picking 
 a little here, so let’s assume that the random procedural generation is sufficiently constrained to create consistently 
@@ -196,12 +197,13 @@ randomized, even if only selected from another set of fixed options. (E.g. an ab
 monster lair.)
 
 ### Permadeath
-```
+<div class="quote-block">
 You are not expected to win the game with your first character. You
 start over from the first level when you die. (It is possible to save
 games but the savefile is deleted upon loading.) The random
 environment makes this enjoyable rather than punishing.
-```
+</div>
+
 Well… That seems a bit draconian, doesn’t it? I mean, I can see the point from a gameplay perspective; but I think 
 “enjoyable rather than punishing” is doing a lot of heavy lifting there.
 Not all roguelikes - and particularly the more modern roguelikes - necessarily lend themselves as well to short repeated 
@@ -219,10 +221,11 @@ modes based on how long the player wants to play for, but we are a long way from
 Back to the point, though… Permadeath is a core feature of roguelikes, but having other options doesn’t make the game 
 any less of a roguelike.
 ### Turn-Based
-```
+<div class="quote-block">
 Each command corresponds to a single action/movement. The game is not
 sensitive to time, you can take your time to choose your action.
-```
+</div>
+
 No arguments here. I think that being turn-based is one of the core defining factors of roguelike games. Reflexes not 
 required. That’s not to say that it needs to be purely turn-based to achieve the same effect. For example, there have 
 been plenty of games that implement real-time action that automatically switches to a form a turn-based when something 
@@ -234,10 +237,11 @@ player stopped, so did time. And behind the scenes, all of the action was implem
 have been classified as turn-based by the purists? Honestly, I don’t know. When playing, it was difficult to tell 
 unless you knew what to look for.
 ### Grid-Based
-```
+<div class="quote-block">
 The world is represented by a uniform grid of tiles. Monsters (and
 the player) take up one tile, regardless of size.
-```
+</div>
+
 Okay, so this one is just silly. Yes, having the game as tile-based is often the most sensible approach for ease of 
 access and situational understanding for the player, but a requirement? I don’t see why. In my case, I will be 
 implementing a tile-based game, but still, I don’t see why a game that didn’t implement it would not be considered so. 
@@ -257,11 +261,12 @@ immediately comes to mind is [**Lost Flame**](https://store.steampowered.com/app
 
 
 ### Non-Modal
-```
+<div class="quote-block">
 Movement, battle and other actions take place in the same mode. Every
 action should be available at any point of the game. Violations to
 this are ADOM's overworld or Angband's and Crawl's shops.
-```
+</div>
+
 I mean, yeah, this one makes sense, but I don’t see it as a necessity. It’s good for immersion, sure, but to have this 
 as a high value factor to be classified as a roguelike. Honestly, I don’t even have much to say about this one. 
 It’s silly. It shouldn’t even be in the list, especially given that two exceptions are listed in the next sentence.
@@ -281,21 +286,23 @@ design. As I said… Silly.
 
 
 ### Complexity
-```
+<div class="quote-block">
 The game has enough complexity to allow several solutions to common
 goals. This is obtained by providing enough item/monster and item/item
 interactions and is strongly connected to having just one mode.
-```
+</div>
+
 I like this guideline, although I think it’s fairly self-evident. It should apply to most games, not just to 
 roguelikes, so I’m not sure it needs to be delineated as a “major roguelike feature” given that it’s actually more of 
 an “interesting game feature” that goes far beyond the roguelike genre.
 However, it’s still a fairly amorphous goal. How many is “several”? Two? Three? Twenty?
 And look there, at the end - a total non-sequitur about how this is “strongly connected to having one mode”. Nonsense.
 ### Resource Management
-```
+<div class="quote-block">
 You have to manage your limited resources (e.g. food, healing potions)
 and find uses for the resources you receive.
-```
+</div>
+
 Again, as with the previous guideline, I don’t think that this needs to be spelled out. However, it’s also very easy to 
 make this kind of mechanism (colloquially called Hunger Clocks) more onerous than it needs to be. Sure, getting 
 hungry/thirsty/etc. certainly should be part of a traditional roguelike game, but it shouldn’t get in the way of fun. 
@@ -307,12 +314,13 @@ One of the most frequent complaints that I’ve noticed about various roguelike 
 way of actually playing and enjoying the game. As a game designer, I would prefer that players enjoy the game rather 
 than be forced to micromanage their character’s bodily needs in lieu.
 ### Hack'n'Slash
-```
+<div class="quote-block">
 Even though there can be much more to the game, killing lots of
 monsters is a very important part of a roguelike. The game is player-
 vs-world: there are no monster/monster relations (like enmities, or
 diplomacy). 
-```
+</div>
+
 This principle is overly restrictive, and - in my opinion - only serves to stifle innovation. For example, what’s wrong 
 with being able to improve your characters reputation with a certain faction (e.g. orcs) such that they won’t attack 
 you on sight? To my mind this kind of interactivity only serves to improve the game, and certainly doesn’t make it any 
@@ -327,11 +335,12 @@ springs to mind.
 {% include post-image-small.liquid imagePath=imagePath content=content altText="Doors of Trithius (Jake Donkersgoed)" %}
 
 ### Exploration and Discovery
-```
+<div class="quote-block">
 The game requires careful exploration of the dungeon levels and
 discovery of the usage of unidentified items. This has to be done anew
 every time the player starts a new game.
-```
+</div>
+
 Ignoring the fact that this principle assumes that the roguelike will take place in a multilevel dungeon (as has 
 historically been the case, and fortunately ignored by modern roguelikes), this particular principle at least has its 
 heart in the right place.
@@ -346,11 +355,12 @@ You know, I’m not even sure that I agree with how the principles are split int
 the high value section that I’d push into the low value section (or even completely exclude), and vice versa. I’ll 
 leave it as an exercise for the reader *(Hi Joe!)* to figure out which is which.
 ### Single Player Character
-```
+<div class="quote-block">
 The player controls a single character. The game is player-centric,
 the world is viewed through that one character and that character's
 death is the end of the game.
-```
+</div>
+
 Most roguelikes tend to be single player character, but some have party-based gameplay.  However most TTRPGs (of which 
 I’d argue that Roguelikes are an attempt to computerize) are, in fact, party-based. The “Single Player Character Only” 
 principle may be too restrictive for modern roguelikes, which benefit from the added complexity, narrative depth, and 
@@ -358,37 +368,41 @@ replayability that multiple characters can offer. Embracing a broader approach c
 contemporary gaming audiences.
 
 ### Monsters are Similar to Players
-```
+<div class="quote-block">
 Rules that apply to the player apply to monsters as well. They have
 inventories, equipment, use items, cast spells etc.
-```
+</div>
+
 It’s fairer if monsters adhere to the same rule system as the player, and this principle has clear advantages in 
 creating a balanced and immersive game world, but it also can pose challenges in terms of variety and balancing. 
 However, of all of the principles so far, this is the one I have the least problem with - and it definitely encourages 
 the development of a sound AI engine to control the monsters’ behavior to sufficiently challenge an advanced player.
 ### Tactical challenge
-```
+<div class="quote-block">
 You have to learn about the tactics before you can make any
 significant progress. This process repeats itself, i.e. early game
 knowledge is not enough to beat the late game. (Due to random
 environments and permanent death, roguelikes are challenging to new
 players.)
-```
+</div>
+
 This principle allows the game to offer significant benefits in terms of engagement, replayability, and game design 
 complexity. However, it also presents challenges related to casual appeal, development resources, and time investment 
 that would need to be carefully balanced. However, it also seems a bit redundant - I mean, I’d be hard pressed to think 
 of many video games that don’t offer some form of tactical challenge.
 ### ASCII display
-```
+<div class="quote-block">
 The traditional display for roguelikes is to represent the tiled world
 by ASCII characters.
-```
+</div>
+
 So?
 ### Dungeons
-```
+<div class="quote-block">
 Roguelikes contain dungeons, such as levels composed of rooms and
 corridors.
-```
+</div>
+
 Sure, in the abstract, but it’s a bit limiting if the intent is to restrict the game to dungeons only. However, as 
 written, this does not imply that restriction. I’m sure a roguelike could be made without dungeons (conceptual or 
 otherwise), and I’d argue that [**FTL**](https://subsetgames.com/ftl.html){:target="_blank"} would be one contender for that position, but I certainly don’t see a problem 
@@ -399,10 +413,11 @@ dungeons (in one form or other) or not.
 {% include post-image-small.liquid imagePath=imagePath content=content altText="FTL - Faster Than Light (Subset Games)" %}
 
 ### Numbers
-```
+<div class="quote-block">
 The numbers used to describe the character (hit points, attributes
 etc.) are deliberately shown.
-```
+</div>
+
 To be fair, allowing the player to see the numbers behind the gameplay events enhances transparency, depth, and 
 customization in roguelike games, which in turn allows for strategic planning and detailed character development. 
 However, it can also introduce complexity, potential for min-maxing, and immersion issues.
