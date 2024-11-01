@@ -1,6 +1,9 @@
 ---
 layout: post
 title:  "Rogue Games: Can I have a little more plot with that?"
+description: |
+  This inaugural guest post reflects on the evolution of gaming culture and the increasing integration of narrative elements 
+  into Roguelike games. It examines the balance between procedural generation and storytelling in game design.
 categories: gamedev
 author: ellafae
 tags: roguelikes musings
@@ -49,3 +52,5 @@ When it comes down to it, rogue-like games probably aren’t for me, or at least
 fully one genre or another anymore, and I would be greatly interested in seeing a rogue game mixed in with other genres;
 then you can get all the fun of questing, with the added bonus of a plot to explain why we’ve decided that all those 
 tombs just had to be vandalized.
+
+![ellafae's Signature]({{ "/assets/images/signature-ellafae.png" | relative_url }} "ellafae's Signature")

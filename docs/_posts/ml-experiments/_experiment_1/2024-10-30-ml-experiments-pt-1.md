@@ -1,7 +1,12 @@
 ---
 layout: post
 title:  "Machine Learning Experiments, Part 1"
-# description: A post discussing the use of LLMs to create behavior policies for game NPCs.
+description: |
+  This post kicks off a series of experiments by focusing on the first attempt to use Large Language Models (LLMs) to 
+  generate NPC behavior policies in a gridworld environment centered on survival tasks. 
+  It explores whether LLMs can efficiently create adaptive and complex strategies that might outperform traditional 
+  reinforcement learning in certain cases. Through this initial test, the post evaluates the potential of LLMs to drive 
+  intelligent, responsive NPC behavior that could transform gameplay dynamics in future applications.
 categories: gamedev machine-learning artificial-intelligence fuzzy-logic
 author: hiive
 tags: policy-based-learning game-ai npc-behavior llm function-approximation reinforcement-learning experiment-1

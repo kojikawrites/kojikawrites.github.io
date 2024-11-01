@@ -1,27 +1,49 @@
 ---
 layout: post
 title:  "Flexible Architecture for World-building and Narrative"
+description: |
+  This article introduces the “Flexible Architecture for World-building and Narrative” (FAWN) engine, a project aimed at 
+  integrating artificial intelligence and machine learning into game design to create procedurally generated experiences 
+  that feel handcrafted. It discusses the motivation behind the project and its intended goals. 
 categories: gamedev
 author: hiive
 tags: roguelikes musings game-engine
 ---
 
-Back in the dark times (mid-pandemic) I got an itch to create a new game. For background, I started out as a game developer for a short period of time immediately post-university, and quickly figured out that the mainstream game industry wasn't to my taste.
-So, I did what any self-respecting twenty-something would do, quit the game industry and moved over to the finance industry where I did the same kind of thing (programming is pretty much the same wherever you go) for five times the pay.
+Back in the dark times (mid-pandemic) I got an itch to create a new game. For background, I started out as a game 
+developer for a short period of time immediately post-university, and quickly figured out that the mainstream game 
+industry wasn't to my taste.
+So, I did what any self-respecting twenty-something would do, quit the game industry and moved over to the finance 
+industry where I did the same kind of thing (programming is pretty much the same wherever you go) for five times the 
+pay.
 
-(As an aside, if any of you readers want to go into the games industry as programmers, I strongly recommend against it. Go into a field that appropriately compensates your skills, and keep game development as a hobby - working in the field is a sure-fire way of having any enjoyment of it sucked out of you.)
+(As an aside, if any of you readers want to go into the games industry as programmers, I strongly recommend against it. 
+Go into a field that appropriately compensates your skills, and keep game development as a hobby - working in the field 
+is a sure-fire way of having any enjoyment of it sucked out of you.)
 
-In my case, keeping game development as a hobby after my initial foray into the field allowed me to also keep my sanity and will to live - as well as create a few relatively small, well-received indie games on the side.
+In my case, keeping game development as a hobby after my initial foray into the field allowed me to also keep my sanity 
+and will to live - as well as create a few relatively small, well-received indie games on the side.
 
-These days, I work in the field of AI and Machine Learning for a large international consultancy. I still haven't lost my interest in games and, in fact, my go-to project for learning any new technology is to implement a game (or utility library for a game) using said technology.
+These days, I work in the field of AI and Machine Learning for a large international consultancy. I still haven't lost 
+my interest in games and, in fact, my go-to project for learning any new technology is to implement a game (or utility 
+library for a game) using said technology.
 
-Recently, I got bitten by the Rust bug, and decided that a good learning project would be to convert some of my existing C# game libraries over to Rust. Most of these libraries had been used for prior game projects, but some of them were in development for the aforementioned mid-pandemic game idea. "You're waffling - what's the idea?" I hear you asking. Well, if you'd be a bit more patient, I'm about to tell you...
+Recently, I got bitten by the Rust bug, and decided that a good learning project would be to convert some of my 
+existing C# game libraries over to Rust. Most of these libraries had been used for prior game projects, but some of 
+them were in development for the aforementioned mid-pandemic game idea. "You're waffling - what's the idea?" I hear you 
+asking. Well, if you'd be a bit more patient, I'm about to tell you...
 
 ## What kind of game?
-I've always been a fan of getting the computer to do the hard stuff and the boring stuff for me. For this reason, Procedural Generation (ProcGen) has always fascinated me as a technique for generating in-game content.
-Of course, the problem with ProcGen is that it's purely random and pure randomness is just not interesting. It's boring, it's chaotic, and there's no structure.
-Sure, you can create interesting looking landscapes and populated worlds but, frankly, they're just not that interesting because they aren't "designed". Interesting encounters have to be designed, and the player has to feel like there's a meaning behind their actions.
-For me, at least, the biggest immersion breaker in any game is the feeling that I'm just playing with a random number generator. I like there to be a coherent story, and the feeling that I'm playing an experience that has been designed for my enjoyment.
+I've always been a fan of getting the computer to do the hard stuff and the boring stuff for me. For this reason, 
+Procedural Generation (ProcGen) has always fascinated me as a technique for generating in-game content.
+Of course, the problem with ProcGen is that it's purely random and pure randomness is just not interesting. It's boring, 
+it's chaotic, and there's no structure.
+Sure, you can create interesting looking landscapes and populated worlds but, frankly, they're just not that interesting 
+because they aren't "designed". Interesting encounters have to be designed, and the player has to feel like there's a 
+meaning behind their actions.
+For me, at least, the biggest immersion breaker in any game is the feeling that I'm just playing with a random number 
+generator. I like there to be a coherent story, and the feeling that I'm playing an experience that has been designed 
+for my enjoyment.
 
 ## This is where AI comes in, right?
 With the massive explosion of AI over the past couple of years (you noticed, right?) and the (somewhat) understandable 
