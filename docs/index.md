@@ -8,7 +8,7 @@ logo: "/assets/images/hiive-logo.svg"
 #copyright: "All content &copy; 2012-CURRENT_YEAR by Hiive, LLC."
 ---
 
-**[Welcome](about.md) to h<span class="hiive-highlight">i</span>ive<span class="hiive-highlight">labs</span>**
+**[Welcome](about.md) to h<span class="hiive-highlight">i</span>ive<span class="hiive-highlight">labs</span>**.
 
 At h<span class="hiive-highlight">i</span>ive<span class="hiive-highlight">labs</span>, the integration of artificial intelligence and machine learning 
 with game design leads to procedurally generated experiences that feel 
