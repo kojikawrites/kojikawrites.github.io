@@ -15,9 +15,9 @@ hiive has written several books, all connected in some way or other with his lov
 of these being a very well-received book on game architecture and design, which has been the reference for many college
 and secondary education courses. In his spare time, you may see him working on games. He, sadly, does not have much 
 time to play them anymore.
-He has been writing software for over 25 years, and is knowledgeable across a wide range of industries and programming 
-languages, ranging from BASIC and Z80 assembler in the early days, through C/C++, and out the other side to Python, 
-C# and (more recently) Rust. 
+He has been writing software professionally for since the last millennium, and is knowledgeable across a wide range of 
+industries and programming languages, ranging from BASIC and Z80 assembler in the early days, through C/C++, and out the 
+other side to Python, C# and (more recently) Rust. 
 
 Note that his avatar is not really what he actually looks like. However, it is what AI thinks he looks like based
 on a text description and an uploaded photo. He'll take it.
@@ -38,8 +38,8 @@ staying updated on the latest accessibility practices and innovations. Her dedic
 enhances her creative projects but also contributes to making the world of gaming and literature more welcoming 
 and accommodating for everyone. 
 
-Kojika is a skilled writer and story-teller, and is currently learning Python so that she doesn't have to keep asking 
-hiive to write programs for her.
+Kojika is a skilled writer and story-teller, and is currently learning Python and Web Programming so that she doesn't 
+have to keep asking hiive to write programs for her.
 
 Her avatar is far closer to her real-life appearance than hiive's. We'll take it.
 

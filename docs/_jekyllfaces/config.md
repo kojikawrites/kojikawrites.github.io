@@ -1,7 +1,7 @@
 ---
 
 metadata:
-  title: <span class="navbar-white">h</span>i<span class="navbar-white">ive</span>labs<small><small><span class="navbar-white">.com</span></small></small>
+  title: <span class="navbar-white">h</span><span class="navbar-hiive-orange">i</span><span class="navbar-white">ive</span><span class="navbar-hiive-orange">labs</span><small><small><span class="navbar-white">.com</span></small></small>
   # tagline: The latest buzz around Hiive, LLC.
   description: > # Description for the site ...
     The launching point for all things Hiive, LLC. Personal and professional musings.
@@ -147,6 +147,7 @@ metedata:
             imports: # a list of font names to import, also applicable at the page/post level
               - Luckiest Guy
               - Gochi Hand
+              - Archivo Black
         icons:
           fontawesome:
             name:    Font Awesome (Free)

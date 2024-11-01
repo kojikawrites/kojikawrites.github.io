@@ -353,8 +353,10 @@ code, pre, code *, pre * {
 .navbar-brand{
   text-transform: lowercase;
   // font-size: 1.25em;
-  font-weight: bolder !important;
-  font-family: 'Roboto', sans-serif;
+  // font-weight: bolder !important;
+  font-family: 'Arial Black', 'Roboto', sans-serif;
+  font-weight: bolder;
+  font-style: normal;
 }
 
 .navbar-orange {
@@ -363,6 +365,10 @@ code, pre, code *, pre * {
 
 .navbar-white {
   color: white !important;
+}
+
+.navbar-hiive-orange {
+  color: #ff7707 !important;
 }
 
 .home-img {
@@ -389,7 +395,6 @@ code, pre, code *, pre * {
   font-size: calc(1em + 0.3vmin);
   font-weight: normal;
 }
-
 
 .not-found-404 {
   margin: 0;
@@ -830,9 +835,19 @@ div.hidden-content {
     margin: 1em 1vw;
     max-width: unset;
   }
-
 }
 
+
+// ios specific
+@supports (-webkit-touch-callout: none) {
+  /* CSS specific to iOS devices */
+  .navbar-brand {
+    font-family: 'Archivo Black', 'Arial Black', 'Roboto', sans-serif;
+    font-weight: 900;
+    text-shadow: 0.5px 0;
+    font-style: normal;
+  }
+}
 
 
 // BEGIN table styles
