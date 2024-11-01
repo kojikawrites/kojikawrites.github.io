@@ -52,6 +52,7 @@ kramdown:
 #  input: GFM
 # theme: minima
 plugins:
+  - jekyll-random
   - jekyll-feed
 
 # Exclude from processing.

@@ -41,7 +41,7 @@ even in simple cases, and defining one for a complex NPC would be even harder. O
 of repeated runs to iteratively search the entire action-state space in order to find a good policy. This is an active area
 of research (with a good example being the [Nethack Learning Environment](https://github.com/heiner/nle)), and producing 
 good results requires <i>a lot</i> of computing power. One of the questions that these experiments are attempting to answer is 
-whether we can use LLMs to significantly reduce the time taken to produce a good policy.
+whether we can use LLMs to significantly reduce the complexity and time taken to produce a good policy.
 
 Even if an LLM-produced policy isn't ideal, it might be able to provide us with a much better starting point than a 
 fully random policy would. We can then use traditional RL to refine the LLM-produced policy further, with the idea being
