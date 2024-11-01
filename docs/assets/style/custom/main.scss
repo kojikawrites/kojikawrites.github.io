@@ -9,6 +9,11 @@
 //  font-style: italic;
 //}
 
+a {
+  color: #ff6707 !important;
+  font-style: italic;
+}
+
 .typeahead,
 .tt-query,
 .tt-hint {
@@ -95,18 +100,6 @@
   color: #ff6600 !important;
 }
 
- .navbar-kiss {
-  background-image: url('{{ "/assets/images/kiss-dark.png" | relative_url }}');
-  background-size: cover;
-}
-
-.navbar-zombie {
-  background-image: url('{{ "/assets/images/zombie.png" | relative_url }}');
-  background-size: cover;
-}
-
-
-
 .home-img {
   width: 100%;
 }
@@ -176,6 +169,19 @@
   font-style: italic;
 }
 
+.post-list .post-link:hover {
+  color: #ffA707;
+}
+
+.archive-link {
+  color: #ff6707;
+  font-style: italic;
+}
+
+.archive-link:hover {
+  color: #ffA707;
+}
+
 .page-content h1 {
   color: #ffA707;
   font-weight: bolder !important;
@@ -195,6 +201,91 @@
   font-weight: bolder !important;
   font-family: "Roboto", sans-serif !important;
   text-transform: none !important;
+}
+
+// tag and category pages
+a.tag {
+  font-size: 0.9em !important;
+  background-color: darkgreen !important;
+  border-radius: 6px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: white !important;
+  color: white !important;
+  font-weight: bolder !important;
+  font-style: normal !important;
+  text-transform: uppercase !important;
+  padding: 1px 4px !important;
+  margin: 2px !important;
+}
+
+span.tag-wrapper {
+  //background: red;
+  display: inline-block;
+  align-content: center;
+  min-height: 26px !important;
+}
+
+.tag-div h3 {
+  cursor: pointer;
+}
+.tag-div h3:hover {
+  filter: none;
+}
+
+.tag-header-inactive {
+  opacity: 0.75;
+  filter: blur(1.25px);
+}
+.tag-header-active {
+  opacity: 1;
+  filter: none;
+}
+
+.category-div ul {
+  display: none;
+}
+
+a.category {
+  font-size: 0.9em !important;
+  background-color: darkred !important;
+  border-radius: 6px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: white !important;
+  color: white !important;
+  font-weight: bolder !important;
+  font-style: normal !important;
+  text-transform: uppercase !important;
+  padding: 1px 4px !important;
+  margin: 2px !important;
+}
+
+span.category-wrapper {
+  //background: red;
+  display: inline-block;
+  align-content: center;
+  min-height: 26px !important;
+}
+
+/* Change cursor to pointer when hovering over headers */
+.category-div h3 {
+  cursor: pointer;
+}
+.category-div h3:hover {
+  filter: none;
+}
+
+/* Styles for inactive headers */
+.category-header-inactive {
+  opacity: 0.75;
+  filter: blur(1.25px);
+}
+
+/* Styles for active header */
+.category-header-active {
+  opacity: 1;
+  filter: none;
 }
 
 .post-category {
@@ -338,6 +429,12 @@ div.service-item {
   // border: 1px solid #444;
 }
 
+.reading-time {
+  position:relative;
+  top: -12px;
+  color: #AAAAAA;
+}
+
 @media (min-width: 992px) {
   h1.post-title { display: none; }
 
@@ -428,4 +525,79 @@ body {
   min-height: 100vh;
   min-width: 100vw;
   color: white;
+}
+
+// BEGIN table styles
+
+th td {
+  // padding: 4px !important;
+  border-collapse: collapse !important;
+}
+
+table {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  // min-width: 640px;
+  min-width: 100%;
+}
+
+table th {
+  background: #40404080;
+  font-weight: bolder !important;
+  font-size: 16px;
+  border: dimgray 1px solid !important;
+  padding: 4px !important;
+}
+
+table tr {
+  background: #00000080;
+}
+
+table tr:nth-child(even) {
+  background-color: #20202080;
+}
+
+td {
+  // min-width: 180px;
+  padding: 4px;
+  border: dimgray 1px solid !important;
+}
+
+// END table styles
+
+// image stuff
+
+.navbar-kiss {
+  background-image: url('{{ "/assets/images/kiss-dark.png" | relative_url }}');
+  background-size: cover;
+}
+
+.navbar-zombie {
+  background-image: url('{{ "/assets/images/zombie.png" | relative_url }}');
+  background-size: cover;
+}
+
+// text bubble stuff
+
+.speech-bubble {
+  position: relative;
+  background-color: #f0f0f0; /* Bubble background color */
+  padding: 15px;
+  border-radius: 8px; /* Rounded corners for the bubble */
+  max-width: 200px;
+  font-size: 16px;
+  color: #333;
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top-color: #f0f0f0; /* Matches the background color */
+  border-bottom: 0;
+  margin-left: -10px;
+  margin-bottom: -10px;
 }

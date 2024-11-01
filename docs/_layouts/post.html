@@ -20,7 +20,13 @@ layout: default
       {%- if forloop.first == false %}, {% endif -%}
     <a class="post-tag" href='{{ "/tags" | relative_url }}#{{ tag | slugify }}'>#{{ tag | slugify }}</a>
       {%- endfor %}
-    {%- endif %}  </p>
+    {%- endif %}
+    <div class="reading-time">
+      {% include reading-time.liquid content=content %}
+    </div>
+  </p>
+
+
 
   <div class="post-content" itemprop="articleBody">
     {{ content }}

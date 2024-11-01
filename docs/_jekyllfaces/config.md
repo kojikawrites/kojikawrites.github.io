@@ -79,7 +79,7 @@ analytics:
   baseurl: # only used by matomo; ex: mysite.com/piwik
 
 comments:
-  provider: false # one of: false | facebook | disqus | intensedebate | duoshuo
+  provider: facebook # false # one of: false | facebook | disqus | intensedebate | duoshuo
   siteid: 0000000000000000
 
 # --- JekyllFaces Metadata ---
