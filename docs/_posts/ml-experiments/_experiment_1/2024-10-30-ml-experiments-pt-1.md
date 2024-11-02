@@ -265,7 +265,7 @@ degree to which a particular state belongs to that patch.
 Key Components:
 
 1.	`Fuzzy Sets on Each Axis`: For every axis (state variable), we define fuzzy sets with associated membership functions (e.g., `Low`, `Medium`, `High`).
-2.	`Membership Functions`: These functions assign a membership degree between 0 and 1 to any value along the axis, indicating how much that value belongs to the fuzzy set.
+2.	`Membership Functions`: These functions assign a membership degree between `0` and `1` to any value along the axis, indicating how much that value belongs to the fuzzy set.
 3.	`Combination of Axes`: By calculating the fuzzy membership for each axis independently, we combine them to form multi-dimensional fuzzy patches that cover the entire state space.
 4.	`Policy Approximation`: The policy is then defined over these fuzzy patches, reducing the complexity of the policy table and enabling smoother transitions between actions.
 
@@ -293,6 +293,25 @@ The membership function definitions are shown in the following table:
 
 </div>
 <br/>
+
+<!--
+The table entries can be read as:
+- Membership of `Cold` for `T` is:
+  - `1` if `T` is less than or equal to `15`.
+  - `20` minus `T` all divided by `5` if `T` is greater than `15` and less than `20`.
+  - `0` if `T` is greater than or equal to `20`.  
+
+- Membership of `Ideal` for `T` is: 
+  - `0` if `T` is less than or equal to `17` or greater than or equal to `23`.
+  - `T` minus `17` all divided by `3` if `T` is greater than `17` and less than `20`.
+  - `23` minus `T` all divided by `3` if `T` is greater than or equal to `20` and less than `23`.  
+
+- Membership of `Hot` for `T` is:
+  - `0` if `T` is less than or equal to `25`.
+  - `T` minus `25` all divided by `5` if `T` is greater than `25` and less than `30`.
+  - `1` if `T` is greater than or equal to `30`.  
+
+-->
 
 These membership functions can be visualized as in the following plot:
 {% assign imagePath = "/assets/images/blog/ml/ex1/fuzzy_membership_temp.png" | relative_url %}
