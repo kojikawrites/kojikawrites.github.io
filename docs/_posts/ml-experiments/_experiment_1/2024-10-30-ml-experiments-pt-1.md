@@ -14,11 +14,11 @@ tags: |
   experiment-1
 ---
 
-This post is about the first in a series of experiments to determine the utility of using an LLM to
-build behavior policies for NPCs. Specifically, I am setting up a simplistic gridworld environment with a narrowly
+This post is about the first in a series of experiments to determine the utility of using an LLM (Large Language Model) 
+to build behavior policies for NPCs. Specifically, I am setting up a simplistic gridworld environment with a narrowly
 defined set of rules and introducing an entity into that world in an attempt to teach it to survive.
 
-LLMs (Large Language Models) are somewhat controversial currently for a number of reasons, both valid and otherwise. Arguments about use of
+LLMs are somewhat controversial currently for a number of reasons, both valid and otherwise. Arguments about use of
 others' IP for training, energy cost of training and inference, and the threat to existing jobs being three that are 
 examples of valid complaints. Despite that, LLMs are a powerful tool that can be used to provide content and functionality
 for games (and other applications) without necessarily violating the last of those complaints. The first one is a 
@@ -34,7 +34,7 @@ action to take ONLY depends on the current state. Or, in other words, if any his
 entity, then it has to be baked into the current state. This isn't important right now, but it will need consideration in
 future experiments.
 
-Although I am starting with an very simply entity (based loosely on an ant), the overall aim of this experiment is to 
+Although I am starting with an very simple entity (based loosely on an ant), the overall aim of this experiment is to 
 investigate whether LLMs will be useful in determining behavior policies for more complex game NPCs that would be otherwise
 difficult or impossible to train using standard RL (due to time or capacity constraints).
 
@@ -45,10 +45,10 @@ states for a non-trivial NPC would be huge, making policy determination an intra
 by exploration of the state space. In other words, it tests actions (and sequences of actions) and scores the end 
 result of a particular sequence based on a defined reward function. These reward functions are difficult to get right
 even in simple cases, and defining one for a complex NPC would be even harder. On top of this, RL relies on a huge number 
-of repeated runs to iteratively search the entire action-state space in order to find a good policy. This is an active area
+of repeated runs to iteratively search the action-state space in order to find a good policy. This is an active area
 of research (with a good example being the [Nethack Learning Environment](https://github.com/heiner/nle)), and producing 
 good results requires <i>a lot</i> of computing power. One of the questions that these experiments are attempting to answer is 
-whether we can use LLMs to significantly reduce the complexity and time taken to produce a good policy.
+whether we can use LLMs to significantly reduce the complexity and time taken to produce a good enough policy.
 
 Even if an LLM-produced policy isn't ideal, it might be able to provide us with a much better starting point than a 
 fully random policy would. We can then use traditional RL to refine the LLM-produced policy further, with the idea being
@@ -63,8 +63,8 @@ simple action-state space this size is manageable, but it can soon balloon to im
 in either number of state variables or number of actions. This is known as the "curse of dimensionality". The action-state
 space is an *n*-dimensional hyperspace with each action and state variable representing one axis of this space. 
 If you have *p* actions and *m* states, adding a single new action increases the total number of action-state pairs from 
-*p × m* to *(p + 1) × m*, resulting in an increase of m additional pairs. 
-Conversely, adding a new state variable with *k* possible values increases the number of states to *k × m*, leading to an 
+*p×m* to *(p+1)×m*, resulting in an increase of m additional pairs. 
+Conversely, adding a new state variable with *k* possible values increases the number of states to *k×m*, leading to an 
 exponential expansion of the state space.
 
 There are various techniques to reduce the dimensionality of the state space, such as feature reduction methods that 
@@ -73,10 +73,10 @@ techniques require sufficient and representative data to identify which dimensio
 information. In the early stages of our experiment, without enough data or an established policy, it’s challenging to 
 determine which features can be safely reduced without losing critical information.
 
-Even with a good policy, it's still entirely possible that any reasonably complex NPC will have a large policy. The go-to
-method for dealing with this is to take advantage of the function approximation capabilities of neural networks and use
-a technique known as Deep Q-Learning, where the policy, instead of being represented as *n*-dimensional lookup table, 
-the policy is stored in a neural network that is trained to approximate the output of the lookup table.
+Even with a good policy, it's still entirely possible that any reasonably complex NPC's policy will be impractically 
+large. The go-to method for dealing with this is to take advantage of the function approximation capabilities of neural 
+networks and use a technique known as Deep Q-Learning, where the policy, instead of being represented as *n*-dimensional 
+lookup table, the policy is stored in a neural network that is trained to approximate the output of the lookup table.
 
 This approach has merit, and would likely solve the problem, but I think I'd like to try something a little simpler first,
 based on an older technique: Fuzzy Logic. After we have generated a policy (by whatever means) we can examine that policy
@@ -84,8 +84,8 @@ dimension-by-dimension, and use a Monte-Carlo style search such as Simulated Ann
 represent the data with a few fuzzy groups per axis, this will greatly reduce the size of the policy table. We could then
 go on to perform other methods of dimensionality reduction if desired.
 
-However, this still leaves us with a chicken-and-egg problem: how do we get a reasonable policy to start with, which takes
-us neatly back to question 1.
+However, this still leaves us with a chicken-and-egg problem: how do we get a reasonable policy to start with? 
+Which takes us neatly back to question 1.
 
 ### Experiment 1
 
@@ -101,7 +101,7 @@ adjacent squares) for food, with a small percentage chance of food or water bein
 
 * `EAT` will cause the entity to consume food from its immediate vicinity if any is available.
 
-* `DRINK` will cause the entity to consume food from its immediate vicinity if any is available.
+* `DRINK` will cause the entity to consume water from its immediate vicinity if any is available.
 
 * `REST` will cause the entity to regain a small amount of energy per turn if it is currently in the refuge.
 
@@ -140,12 +140,12 @@ The following table shows the effects for each action.
 
 <div class="data-table">
 
-| Action   | Description                         | Effect                                                                                   |
-|----------|-------------------------------------|:-----------------------------------------------------------------------------------------|
-| `FORAGE` | Find nearby resources.              | Decrease `e` by `5`; 10% chance of food or water revealed in adjacent square             |
-| `EAT`    | Consume nearby water                | Increase `f` to `100` if food is adjacent, depleting food square, decreases `e` by `2`   |
-| `DRINK`  | Consume nearby food                 | Increase `w` to `100` if water is adjacent, depleting water square, decreases `e` by `2` |
-| `REST`   | Rest to conserve or restore energy | Increase `e` by `10` if at refuge, if `f>0` and `w>0`                                    |
+| Action   | Description                | Effect                                                                                   |
+|----------|----------------------------|:-----------------------------------------------------------------------------------------|
+| `FORAGE` | Find nearby resources.     | Decrease `e` by `5`; 10% chance of food or water revealed in adjacent square             |
+| `EAT`    | Consume nearby food        | Increase `f` to `100` if food is adjacent, depleting food square, decreases `e` by `2`   |
+| `DRINK`  | Consume nearby water       | Increase `w` to `100` if water is adjacent, depleting water square, decreases `e` by `2` |
+| `REST`   | Conserve or restore energy | Increase `e` by `10` if at refuge, if `f>0` and `w>0`                                    |
 
 </div>
 <br/>
@@ -164,8 +164,8 @@ applied to each state the entity found itself in, increasing the likelihood that
 state if the survival time was longer than the expected value (this is the survival time of the entity if it remained in
 the open taking no actions), or decreasing it if the survival time is less than the expected value. The delta applied to
 the action-state selection is the difference between the expected value and the actual value, multiplied by 
-<span class="equation-snippet">$\alpha$</span>, the learning rate. The learning rate is a small valued constant 
-ensures that updates to the policy are gradual, helping to avoid overshooting optimal values on the policy’s hypersurface. 
+<span class="equation-snippet">$\alpha$</span>, the learning rate. The learning rate is a small valued constant that
+ensures updates to the policy are gradual, helping to avoid overshooting optimal values on the policy’s hypersurface. 
 
 {% capture hidden_content %}
 <p>Mathematically, this looks like this:</p>
@@ -214,11 +214,11 @@ In order to generate a good starting policy, we can make use of an LLM as a gene
 this, we provide the LLM with the gridworld environment rules and constraints discussed above, and then present it with
 a specific state and ask it what action the entity should take in that state in order to best ensure its continued 
 survival. In order to prevent past context affecting the action selection, we have to ensure that the LLM query is 
-initialized with a fresh context for every query. Additionally, to mitigate the chance of LLM hallucinations, we can 
+initialized with a fresh context for every query. Additionally, to mitigate the effect of LLM hallucinations, we can 
 query the LLM multiple times for a given state and use the returned action distribution as our initial probability 
 distribution. Note that in the future, I may experiment with asking the LLM to rank and score each available action in
-order to save time and hopefully improve accuracy of the initial policy, but given the simple nature of self-hosted
-LLMs, I chose not to do this for the initial experiment.
+order to save time and hopefully improve accuracy of the initial policy, as well as query a selection of different LLMs, 
+but given the simple nature of self-hosted LLMs, I chose not to do this for the initial experiment.
 
 I'm deliberately glossing over how the rules and current state are presented to the LLM. There are two reasons for this.
 The first is that I haven't fully evaluated the efficacy of the current method, and the second is that I think that 
@@ -229,9 +229,9 @@ approach for this first test.
 
 Firstly, I restrict all possible state variable values to integers. Then, I generate a set of coordinates for each of
 the six axes that encompass the corners and midpoints of each edge of the hypercube. Once these points are evaluated, 
-adjacent points are compared. If those points do not resolve to the same action (within a certain tolerance level due
-to the stochasticity), then that edge is subdivided in two, and the new point is added to the list to be processed.
-This continues until an edge can be divided no further (due to the integer constraint on state variable values) or 
+adjacent selected points are compared. If those points do not resolve to the same action (within a certain tolerance level due
+to the stochasticity), then that axis is subdivided in two, and the new point is added to the list to be processed.
+This continues until an axis can be divided no further (due to the integer constraint on state variable values) or 
 adjacent points have the same resolved action. Clearly this is not a foolproof approach, but it can get us started.
 
 Below is a visualization of a policy generated in such a fashion. Bear in mind that while it may look pretty, it's not
@@ -258,7 +258,7 @@ is a fuzzy patch representation.
 
 A fuzzy patch representation is a method used to approximate a function or policy over a continuous, high-dimensional 
 state space by partitioning it into overlapping fuzzy regions, known as patches. Instead of dealing with an 
-impractically large or infinite number of precise states, fuzzy patches allow us to represent the state space with a 
+impractically large number of precise states, fuzzy patches allow us to represent the state space with a 
 finite set of fuzzy sets along each axis. Each fuzzy patch is characterized by membership functions that define the 
 degree to which a particular state belongs to that patch.
 
@@ -353,7 +353,7 @@ altText="Fuzzy Policy" %}
 
 And the following plot shows the fuzzy policy overlaid onto the raw policy. Visually, it can be seen that both policies
 align quite well. In this particular case, the match was about 90% (obtained by comparing each populated raw policy 
-value with its fuzzy counterpart. The fuzzy policy was required significantly less storage space, but I believe that
+value with its fuzzy counterpart. The fuzzy policy also required significantly less storage space, but I believe that
 there is still room for improvement in terms of both storage and accuracy -- particularly with more complex entities.
 
 {% assign imagePath = "/assets/images/blog/ml/ex1/fuzzy_raw_policy.png" | relative_url %}
