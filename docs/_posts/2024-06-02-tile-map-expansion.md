@@ -20,7 +20,7 @@ that relied on third party code the least. This meant I could focus on learning 
 already intimately familiar with, and additionally I wouldn't be relying on external code to do the heavy lifting 
 (which I would not learn as much from). So what did I learn from this?
 
-I'll go into more detail in a future post, but the TDLR version is that I learned that I hated the borrow checker 
+I'll go into more detail in a future post, but the TLDR version is that I learned that I hated the borrow checker 
 for the first couple of weeks, but after I figured out how to write idiomatic Rust, I found that the resulting code 
 was almost enjoyable to write - and it ended up being faster, more memory efficient *and* easier to maintain, so "yay" 
 all around. 
@@ -44,9 +44,9 @@ removal prior to the decision to switch to Rust. (The class maintained additiona
 useful for ensuring that tiles got put in the right place while the code was originally being developed.)
 
 # `Chunk<T>`
-The `Chunk<T>` class was responsible for managing of a rectangular array of tiles. The width and height of the chunk 
+The `Chunk<T>` class was responsible for managing a rectangular array of tiles. The width and height of the chunk 
 was usually much smaller than the containing layer, with the exception of *layer 0* that only contained one layer-sized 
-chunk. As discussed in the previous post, layer 0 represented the top level world map, and subsequent layers *1* to *n* 
+chunk. As discussed in the previous post, layer *0* represented the top level world map, and subsequent layers *1* to *n* 
 contained the procedurally zoomed version of the previous layer, *n-1*. For performance and memory consumption reasons, 
 it made sense to have the chunks relatively small (say *128x64*) to ensure that on-the-fly chunk generation was 
 manageable in realtime as the player moved around the map.
@@ -83,7 +83,7 @@ generate the target chunk and perform the requested operation.
 The chunk generation process itself was touched upon in a previous post, but let's talk about it here too.
 Let's assume that we are requesting a tile at coordinates *(x<sub>c</sub>, y<sub>c</sub>, ℓ) = (10, 10, 4)* from a 
 chunk manager of layer depth 5 (layers *0* to *4*), initialized with a pre-created top level map in layer *0*.
-The internal process would be something like that following:
+The internal process would be something like the following:
 
 - Request the tile at position *(10, 10)* from layer *4*.
     - Check if the containing chunk exists.
@@ -97,8 +97,8 @@ initialized.
     chunk. These chunks also do not exist, so layer *3* informs the manager that it needs generation. The chunk manager 
     then queries layer *2* and the process is repeated, and so on, until layer *0* is queried by layer *1*. Layer *0* is 
     fully populated, so at that point, the missing layer *1* chunk is generated using layer *0* as the source, which then 
-    becomes immediately available for the missing layer *2* chunk, which then becomes available... You see where I'm 
-    going with this, right?
+    becomes immediately available for the missing layer *2* chunk, which then becomes immediately available... You see 
+    where I'm going with this, right?
 
 In a nutshell, when a chunk needs to be generated, it's pushed onto a stack until all chunks that it depends upon have 
 been created (also pushed onto the stack), and then popped off one-by-one until the stack is empty.
