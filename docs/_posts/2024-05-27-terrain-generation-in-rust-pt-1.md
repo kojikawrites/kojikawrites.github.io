@@ -4,8 +4,8 @@ title:  "Terrain Generation in Rust, Part 1"
 description: |
   This post explores the process of landscape generation using Rust, focusing on a seeded expansion algorithm to ensure 
   consistent chunk generation. It provides a detailed look into the methods employed for procedural terrain creation.
-categories: gamedev
 author: hiive
+categories: gamedev
 tags: world-building terrain-generation procedural-generation rust roguelikes
 ---
 

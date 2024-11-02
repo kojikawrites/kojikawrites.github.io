@@ -1,33 +1,41 @@
-<button id={{ include.id | append: "Warning" }} class="hidden-content-warning"
-        aria-expanded="false" aria-controls={{ include.id | append: "HiddenContent" }}>
+
+{% assign content_length = include.content | size %}
+{% assign warning_length = include.warning | size %}
+{% assign random_suffix = content_length | plus: warning_length | random_number: 0, 2147483647 | append: "" %}
+
+{% assign _id = include.id | default: "__cwuid_" %}
+{% assign unique_id = _id | append: "_" | append: random_suffix %}
+
+<button id={{ unique_id | append: "Warning" }} class="hidden-content-warning"
+        aria-expanded="false" aria-controls={{ unique_id | append: "HiddenContent" }}>
     <span style="position: relative; top: 2px; padding-right: 8px;">
-        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#C00000" d="M569.5 440C588 472 564.8 512 527.9 512H48.1c-36.9 0-60-40.1-41.6-72L246.4 24c18.5-32 64.7-32 83.2 0l239.9 416zM288 354c-25.4 0-46 20.6-46 46s20.6 46 46 46 46-20.6 46-46-20.6-46-46-46zm-43.7-165.3l7.4 136c.3 6.4 5.6 11.3 12 11.3h48.5c6.4 0 11.6-5 12-11.3l7.4-136c.4-6.9-5.1-12.7-12-12.7h-63.4c-6.9 0-12.4 5.8-12 12.7z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M569.5 440C588 472 564.8 512 527.9 512H48.1c-36.9 0-60-40.1-41.6-72L246.4 24c18.5-32 64.7-32 83.2 0l239.9 416zM288 354c-25.4 0-46 20.6-46 46s20.6 46 46 46 46-20.6 46-46-20.6-46-46-46zm-43.7-165.3l7.4 136c.3 6.4 5.6 11.3 12 11.3h48.5c6.4 0 11.6-5 12-11.3l7.4-136c.4-6.9-5.1-12.7-12-12.7h-63.4c-6.9 0-12.4 5.8-12 12.7z"/></svg>
     </span>
     {{ include.warning }}
     <span style="position: relative; top: 2px; padding-right: 8px;">
-        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#C00000" d="M569.5 440C588 472 564.8 512 527.9 512H48.1c-36.9 0-60-40.1-41.6-72L246.4 24c18.5-32 64.7-32 83.2 0l239.9 416zM288 354c-25.4 0-46 20.6-46 46s20.6 46 46 46 46-20.6 46-46-20.6-46-46-46zm-43.7-165.3l7.4 136c.3 6.4 5.6 11.3 12 11.3h48.5c6.4 0 11.6-5 12-11.3l7.4-136c.4-6.9-5.1-12.7-12-12.7h-63.4c-6.9 0-12.4 5.8-12 12.7z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M569.5 440C588 472 564.8 512 527.9 512H48.1c-36.9 0-60-40.1-41.6-72L246.4 24c18.5-32 64.7-32 83.2 0l239.9 416zM288 354c-25.4 0-46 20.6-46 46s20.6 46 46 46 46-20.6 46-46-20.6-46-46-46zm-43.7-165.3l7.4 136c.3 6.4 5.6 11.3 12 11.3h48.5c6.4 0 11.6-5 12-11.3l7.4-136c.4-6.9-5.1-12.7-12-12.7h-63.4c-6.9 0-12.4 5.8-12 12.7z"/></svg>
     </span>
 </button>
 
-<div id={{ include.id | append: "HiddenContent" }} class="hidden-content">
+<div id={{ unique_id | append: "HiddenContent" }} class="hidden-content">
     {{ include.content }}
 </div>
 
 <script>
-    const toggleDiv{{ include.id }} = document.getElementById('{{ include.id | append: "Warning" }}');
-    const contentDiv{{ include.id }} = document.getElementById('{{ include.id | append: "HiddenContent" }}');
+    const toggleDiv{{ unique_id }} = document.getElementById('{{ unique_id | append: "Warning" }}');
+    const contentDiv{{ unique_id }} = document.getElementById('{{ unique_id | append: "HiddenContent" }}');
 
-    toggleDiv{{ include.id }}.addEventListener('click', function() {
-        const isExpanded = toggleDiv{{ include.id }}.getAttribute('aria-expanded') === 'true';
+    toggleDiv{{ unique_id }}.addEventListener('click', function() {
+        const isExpanded = toggleDiv{{ unique_id }}.getAttribute('aria-expanded') === 'true';
         if (!isExpanded) {
-            contentDiv{{ include.id }}.style.display = 'block';
-            toggleDiv{{ include.id }}.style.display = 'none';
-            // toggleDiv{{ include.id }}.textContent = 'CLICK TO HIDE';
-            toggleDiv{{ include.id }}.setAttribute('aria-expanded', 'true');
+            contentDiv{{ unique_id }}.style.display = 'block';
+            toggleDiv{{ unique_id }}.style.display = 'none';
+            // toggleDiv{{ unique_id }}.textContent = 'CLICK TO HIDE';
+            toggleDiv{{ unique_id }}.setAttribute('aria-expanded', 'true');
         } else {
-            contentDiv{{ include.id }}.style.display = 'none';
-            // toggleDiv{{ include.id }}.innerHTML = '{{ include.warningsign }}{{ include.warning }}';
-            toggleDiv{{ include.id }}.setAttribute('aria-expanded', 'false');
+            contentDiv{{ unique_id }}.style.display = 'none';
+            // toggleDiv{{ unique_id }}.innerHTML = '{{ include.warningsign }}{{ include.warning }}';
+            toggleDiv{{ unique_id }}.setAttribute('aria-expanded', 'false');
         }
     });
 </script>

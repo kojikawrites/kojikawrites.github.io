@@ -5,8 +5,8 @@ description: |
   This development log provides an overview of a tile map management system, detailing its architecture and 
   functionality. It serves as a continuation of previous discussions, offering insights into the system’s design and 
   implementation.
-categories: gamedev
 author: hiive
+categories: gamedev
 tags: world-building terrain-generation procedural-generation c-sharp roguelikes
 ---
 

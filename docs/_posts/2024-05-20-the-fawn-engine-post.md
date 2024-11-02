@@ -5,8 +5,8 @@ description: |
   This article introduces the “Flexible Architecture for World-building and Narrative” engine, a project aimed at 
   integrating artificial intelligence and machine learning into game design to create procedurally generated experiences 
   that feel handcrafted. It discusses the motivation behind the project and its intended goals. 
-categories: gamedev
 author: hiive
+categories: gamedev
 tags: roguelikes musings game-engine
 ---
 

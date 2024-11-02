@@ -4,8 +4,8 @@ title:  "Rogue Games: Can I have a little more plot with that?"
 description: |
   This inaugural guest post reflects on the evolution of gaming culture and the increasing integration of narrative elements 
   into Roguelike games. It examines the balance between procedural generation and storytelling in game design.
-categories: gamedev
 author: ellafae
+categories: gamedev
 tags: roguelikes musings
 ---
 

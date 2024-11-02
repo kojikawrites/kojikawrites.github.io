@@ -4,8 +4,8 @@ title:  "World Building"
 description: |
   This entry offers background information pertinent to upcoming development discussions, setting the stage for 
   more in-depth technical explorations in future posts.
-categories: gamedev
 author: hiive
+categories: gamedev
 tags: world-building terrain-generation procedural-generation c-sharp rust roguelikes
 ---
 

@@ -7,8 +7,8 @@ description: |
   It explores whether LLMs can efficiently create adaptive and complex strategies that might outperform traditional 
   reinforcement learning in certain cases. Through this initial test, the post evaluates the potential of LLMs to drive 
   intelligent, responsive NPC behavior that could transform gameplay dynamics in future applications.
-categories: gamedev machine-learning artificial-intelligence fuzzy-logic
 author: hiive
+categories: gamedev machine-learning artificial-intelligence fuzzy-logic
 tags: |
   policy-based-learning game-ai npc-behavior large-language-model function-approximation reinforcement-learning 
   experiment-1
@@ -202,7 +202,7 @@ is expressed as a probability of that particular action being selected in that s
 {% endcapture %}
 
 {% include content-warning.liquid 
-           id="math" 
+           id="fuzzy" 
            warning="CONTENT WARNING: EXCESSIVE MATH &mdash; CLICK TO SHOW AT YOUR OWN RISK!" 
            content=hidden_content
 %}
@@ -274,10 +274,10 @@ Key Components:
 Imagine controlling the temperature of a room:
 
 -	State Variable: Temperature (in degrees Celsius).
--	Fuzzy Sets: `Cold`, `Comfortable`, `Hot`.
+-	Fuzzy Sets: `Cold`, `Ideal`, `Hot`.
 -	Membership Functions:
 -	`Cold`: High membership for lower temperatures, decreasing as temperature rises.
--	`Comfortable`: Peak membership around the desired temperature range.
+-	`Ideal`: Peak membership around the desired temperature range.
 -	`Hot`: Low membership at lower temperatures, increasing as it gets hotter.
 -	Policy: Adjust heating or cooling based on the fuzzy membership degrees.
 
@@ -285,11 +285,11 @@ The membership function definitions are shown in the following table:
 
 <div class="data-table">
 
-| Fuzzy Set   | Membership Function                                                                                                                                                         |
-|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Cold`        | $$\mu_{\text{Cold}}(T) = \begin{cases} 1, & T \leq 15 \\ \dfrac{20 - T}{5}, & 15 < T < 20 \\ 0, & T \geq 20 \end{cases}$$                                                   |
-| `Comfortable` | $$\mu_{\text{Comfortable}}(T) = \begin{cases} 0, & T \leq 17 \text{ or } T \geq 23 \\ \dfrac{T - 17}{3}, & 17 < T < 20 \\ \dfrac{23 - T}{3}, & 20 \leq T < 23 \end{cases}$$ |
-| `Hot`         | $$ \mu_{\text{Hot}}(T) = \begin{cases} 0, & T \leq 25 \\ \dfrac{T - 25}{5}, & 25 < T < 30 \\ 1, & T \geq 30 \end{cases}$$                                                   |
+| Fuzzy Set | Membership Function                                                                                                                                                         |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Cold`    | $$\mu_{\text{Cold}}(T) = \begin{cases} 1, & T \leq 15 \\ \dfrac{20 - T}{5}, & 15 < T < 20 \\ 0, & T \geq 20 \end{cases}$$                                                   |
+| `Ideal`   | $$\mu_{\text{Ideal}}(T) = \begin{cases} 0, & T \leq 17 \text{ or } T \geq 23 \\ \dfrac{T - 17}{3}, & 17 < T < 20 \\ \dfrac{23 - T}{3}, & 20 \leq T < 23 \end{cases}$$ |
+| `Hot`     | $$ \mu_{\text{Hot}}(T) = \begin{cases} 0, & T \leq 25 \\ \dfrac{T - 25}{5}, & 25 < T < 30 \\ 1, & T \geq 30 \end{cases}$$                                                   |
 
 </div>
 <br/>
@@ -306,9 +306,9 @@ Let’s consider a temperature of 18°C and calculate our membership degrees.
 
 $$\mu_{\text{Cold}}(18) = \dfrac{20 - 18}{5} = \dfrac{2}{5} = 0.4$$
 
-- `Comfortable`: Since $17 < 18 < 20$:
+- `Ideal`: Since $17 < 18 < 20$:
 
-$$\mu_{\text{Comfortable}}(18) = \dfrac{18 - 17}{3} = \dfrac{1}{3} \approx 0.333$$
+$$\mu_{\text{Ideal}}(18) = \dfrac{18 - 17}{3} = \dfrac{1}{3} \approx 0.333$$
 
 - `Hot`: Since $18 \leq 25$:
 
@@ -316,7 +316,7 @@ $$\mu_{\text{Hot}}(18) = 0$$
 
 To interpret this, we can say that at 18°C, the temperature is:
 -	Partially `Cold`: Membership degree of `0.4`.
--	Slightly `Comfortable`: Membership degree of approximately `0.333`.
+-	Slightly `Ideal`: Membership degree of approximately `0.333`.
 -	Not `Hot`: Membership degree of `0`.
 
 We can also reverse the process to obtain a concrete temperature from a set of fuzzy membership values, and

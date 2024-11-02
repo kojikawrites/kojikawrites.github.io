@@ -5,8 +5,8 @@ description: |
   This article delves into the Berlin Interpretation, a framework attempting to define the essential characteristics of 
   Roguelike games. It discusses the criteria set forth by this interpretation and reflects on its relevance and impact 
   on the genre.
-categories: gamedev
 author: hiive
+categories: gamedev
 tags: roguelikes musings
 ---
 
