@@ -25,7 +25,7 @@ I settled on Raylib.cslo, as it seems to be relatively simple, well-supported ac
 clean XNA-like interface.
 
 After updating my core libraries to support the new backend, I also wrote some additional support libraries focused on 
-procedural generation, that would be needed for a Roguelike, such as map generation, path finding, and several other 
+procedural generation useful for a Roguelike, such as map generation, path finding, and several other 
 variant DSLs that will be covered in later posts.
 
 I even got a decent prototype up and running, which allowed for full procedural landscape generation in real time, 
@@ -80,7 +80,7 @@ much use other than for a visual sanity check, but it did look pretty, which is 
 
 \
 To decide what biomes went where, I used another three generated shader textures. The first two were for altitude and 
-rainfall. The altitude map was modulated with the biome texture to ensure than land near the sea was close to sea 
+rainfall. The altitude map was modulated with the biome texture to ensure that land near the sea was close to sea 
 level. Both of these used Simplex Noise as the base technique for their implementations. The third map was a 
 temperature map. This was implemented in a simple fashion, first by creating horizontal stripes representing 
 temperature, and then applying a seeded random vertical distortion across the texture.
@@ -123,7 +123,7 @@ Each region was then randomly assigned a culture (e.g. Germanic, English, Japane
 named using Markov Chains seeded with location names from that culture.
 
 The final step (for capital cities) was to generate a road network between the capitals. Again, for simplicity and 
-speed, this roads were routed along the edges of Voronoi Cells where possible, taking the lowest scoring route, with 
+speed, the roads were routed along the edges of Voronoi Cells where possible, taking the lowest scoring route, with 
 the score based on altitude change, terrain type (including whether there was already an existing road that could be 
 reused), and overall distance, as well as a massive penalty for straying outside the geopolitical region. Once all the 
 capitals had been linked, each city had roads formed for any cities or towns within a certain range, then each town to 

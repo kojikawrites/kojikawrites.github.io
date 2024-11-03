@@ -105,7 +105,7 @@ I could (and probably should) go into a lot more detail about specifics of these
 justice rather than deliver dismissive soundbites - but that will be a post for another time.
 
 So, the point of this long rambling post is that I'm thinking of making a roguelike, bringing in some of the things 
-I've learned from working in the A.I. field from the past few years. Currently, this involves working on various 
+I've learned from working in the A.I. field for the past few years. Currently, this involves working on various 
 support libraries that will make up the bones of the game.
 
 I'll talk about this in future posts, but I *will* announce the name of the engine I'm building... 

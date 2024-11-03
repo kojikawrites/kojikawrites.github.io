@@ -34,7 +34,7 @@ layout: default
     {{ content }}
   </div>
 
-<div style="display: block; margin-top: 64px">
+<div style="display: block; margin-top: 64px; margin-bottom: 96px">
   <span class="PageNavigation" style="float: left">
     {% if page.previous.url %}
     <a class="prev" href="{{page.previous.url}}">&laquo; {{page.previous.title}}</a>
@@ -49,5 +49,4 @@ layout: default
 <br/>
 
 <!--{% include comments.liquid %}-->
-
 {% include footer.html %}

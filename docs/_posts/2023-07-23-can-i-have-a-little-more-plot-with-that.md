@@ -35,12 +35,12 @@ And like any good Family Guy episode, here’s a jump to something only slightly
 The first time I played a rogue-like game was last month.
 
 Eventually, once I was able to play the less than educational games, I gravitated to J-RPGs. Zelda: A Link to the Past 
-(I love puns!) was actually the first in this genre I every played, and I loved it. What I enjoy about RPGs are the 
+(I love puns!) was actually the first in this genre I ever played, and I loved it. What I enjoy about RPGs are the 
 stories, so jumping into rogue-like games was a big shock for me.
 
 I played two games on recommendation from hiive, as a means of getting to know the genre: Hack, Slash, Loot and Legends 
 of Yore. Both of which are fun games, in their own right; however, I kept craving that overarching story line. Because, 
-while the exploring, questing, and desecrating tombs are all fun, the general lack of depth to the plot that jogs me 
+while the exploring, questing, and desecrating tombs are all fun, the general lack of depth to the plot irked me 
 the most.  It leaves a gap for the players, like myself, who became attached to other genres first.
 
 And certainly, this isn't saying that rogue-like games aren't good games; it's quite the opposite. While I didn't have 
