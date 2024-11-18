@@ -24,7 +24,7 @@ def construct_post_url(date, slug, root_url, categories):
         sys.exit(1)
     date_str = date.strftime('%Y/%m/%d')
     # Join categories into a path
-    categories_path = '/'.join(quote_plus(cat.strip()) for cat in categories)
+    categories_path = '/'.join(quote_plus(cat.strip()) for cat in categories).lower()
     return f"{root_url}{categories_path}/{date_str}/{slug}/"
 
 def strip_markdown(md_text):
