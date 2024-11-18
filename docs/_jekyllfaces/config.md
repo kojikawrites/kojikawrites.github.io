@@ -12,7 +12,31 @@ metadata:
   trademark: "thewriteplace.rocks and its logo are registered trademarks of hiive llc." 
   copyright: "All content &copy; 2005-CURRENT_YEAR by hiive llc."
   lang: en
-
+  aliases:
+    machine-learning:
+      - ml
+    artificial-intelligence:
+      - ai
+    large-language-model:
+      - llm
+    reinforcement-learning:
+      - rl
+    beat-of-the-day:
+      - BotD
+    from-the-back-of-the-book:
+      - FtBotB
+    life:
+    prompts:
+    archetypes:
+    book-review:
+    course-review:
+    exercise:
+    life:
+    names:
+    outline:
+    software:
+    writing:
+      
 customize:
   theme: lux       # one of: cerulean | cosmo | cyborg | darkly | default | flatly | journal | litera | lumen | lux | materia | minty | pulse | sandstone | simplex | sketchy | slate | solar | spacelab | superhero | united | yeti
   http404: shrug     # one of: badge | default | dog | droids | glass | link | milk | monster | potty | shrug | sticky | tweet | zork
