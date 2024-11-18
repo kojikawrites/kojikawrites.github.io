@@ -12,19 +12,14 @@ metadata:
   trademark: "thewriteplace.rocks and its logo are registered trademarks of hiive llc." 
   copyright: "All content &copy; 2005-CURRENT_YEAR by hiive llc."
   lang: en
+  # Fawn: Put Aliases Here!
   aliases:
-    machine-learning:
-      - ml
-    artificial-intelligence:
-      - ai
-    large-language-model:
-      - llm
-    reinforcement-learning:
-      - rl
-    beat-of-the-day:
-      - BotD
-    from-the-back-of-the-book:
-      - FtBotB
+    FtBotB:
+      - FromTheBackOfTheBook
+    BotD:
+      - BeatOfTheDay
+
+    # end of aliases
     life:
     prompts:
     archetypes:

@@ -8,4 +8,5 @@ docs/_site/
 .bundle/
 vendor/
 **/*.o
-
+.venv/
+.env
