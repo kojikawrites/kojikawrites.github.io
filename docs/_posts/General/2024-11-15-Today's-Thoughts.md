@@ -1,0 +1,31 @@
+---
+layout: post
+title:  "Today's Thoughts"
+description: In this daily reflection post, I share both the challenges and bright moments of my day. Despite dealing with chronic pain, late starts, and worried moments, I found joy in unexpected places - like some meaningful progress with my work. I'm learning to acknowledge both the ups and downs, celebrating small victories like posting content even when I don't feel like doing it. This kind of honest daily check-in helps me stay grounded and might become a regular feature of my blog.
+categories: Life
+author: K°
+tags: Life
+---
+## My Positives:
+I've posted six new posts today, and I am hopeful that I will reach one-hundred posts today so that I can take the site live finally.
+I drank all of my coffee this morning.
+It's been an okay pain day thus far.
+I gave myself grace yesterday and only posted what I could, which ended up being three posts.
+I am getting the hang of webstorm the more I use it.
+
+## My Negatives:
+I haven't eaten anything by mouth yet today.
+
+## My Thoughts on Today:
+I am overall in a good mood today. I'm also having a decent pain day. Here's to tomorrow being as good as today or better.
+
+### Questions to Consider:
+What are your thoughts about today?  
+What are your negatives regarding today?  
+What are your positives regarding today?
+
+Drop me a comment down below.
+
+<!-- signature -->
+{% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
+{% include post-image-signature.liquid imagePath = imagePath %}

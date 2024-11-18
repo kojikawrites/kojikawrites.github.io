@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang='en'>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <head>
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Roboto">
@@ -27,9 +27,9 @@
   <title>About</title>
 
   
-  <meta name="description" content="The launching point for all things Hiive, LLC. Personal and professional musings.">
+  <meta name="description" content="A Website about writing.">
 
-  <link rel="canonical" href="http://localhost:4000/about/">
+  <link rel="canonical" href="http://0.0.0.0:4000/about/">
   <link rel="alternate" type="application/rss+xml" title="&lt;span class=&quot;navbar-orange&quot;&gt;thewriteplace&lt;/span&gt;&lt;small&gt;&lt;small&gt;.rocks&lt;/small&gt;&lt;/small&gt;" href='/feed.xml'>
 
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
@@ -61,6 +61,13 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js"
           integrity="sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M"
           crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css"
+        integrity="sha512-Velp0ebMKjcd9RiCoaHhLXkR1sFoCCWXNp6w4zj1hfMifYB5441C+sKeBl/T/Ka6NjBiRfBBQRaQq65ekYz3UQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"
+          integrity="sha512-Y2IiVZeaBwXG1wSV7f13plqlmFOx8MdjuHyYFVoYzhyRr3nH/NMDjTBSswijzADdNzMyWNetbLMfOpIPl6Cv9g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   
 
@@ -153,6 +160,16 @@
 <!--    -->
 <!--  </style>-->
 
+  <script type="text/javascript">
+
+
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+      //alert("clicked"); //to test this function ran
+      event.preventDefault();
+      $(this).ekkoLightbox({ alwaysShowClose: true });
+    });
+  </script>
+
   <body>
 
     
@@ -177,6 +194,12 @@
 <!--      </li>-->
       <li class="nav-item" id="navLinkBlog">
         <a class="nav-link" href='/blog'>BLOG</a>
+      </li>
+      <li class="nav-item" id="navLinkCategories">
+        <a class="nav-link" href='/categories'>CATEGORIES</a>
+      </li>
+      <li class="nav-item" id="navLinkTags">
+        <a class="nav-link" href='/tags'>TAGS</a>
       </li>
     </ul>
     <ul class="navbar-nav d-flex justify-content-end">
@@ -228,116 +251,31 @@
 
 <p>Her keen interest in accessibility drives her to develop games and stories that are enjoyable and engaging for all 
 audiences, regardless of their abilities. She continually seeks to broaden her knowledge and skills in the industry, 
-staying updated on the latest accessibility practices and innovations. Kojika’s dedication to inclusivity not 
+staying updated on the latest accessibility practices and innovations. Being that she is both blind and hard of hearing, Kojika’s dedication to inclusivity not 
 only enhances her creative projects but also contributes to making the world of gaming and literature more 
 welcoming and accommodating for everyone.</p>
 
 <p>Through her work, Kojika is on a journey to make storytelling and game design more inclusive for all.</p>
+
+<p>Kojika is an obligate homebody who prefers spending time with her husband, her kids and their four cats.</p>
+
+<p>Her favorite books include Stephen King’s Needful Things and Mark Tufo’s Zombie Fallout and Indian Hill series. Her favorite television shows include The Walking Dead, Game of Thrones, GRIMM, and The 100. Her favorite films inculde Battle Royale, Oldboy, Sympathy for Mr. Vengence, A Tale of Two Sisters and the Death Note series.</p>
+
+<p>Kojika is currently working on a children’s book, a series of Middle Grade history books for Scholastic and multiple mixed genre manuscripts. She hopes to publish something by Q3 of 2025.</p>
 
 
     </div>
   </div>
 </div>
 
-<!-- ---------------------- Special Thanks ---------------------- -->
+<div class="container" style="display: block; align-content: center">
+    <a href="/assets/images/kojika-signature.png" data-toggle="lightbox" data-title="FAWN Engine Logo">
+        <img class="container post-image" alt="FAWN Engine Logo" src="/assets/images/kojika-signature.png" />
 
-<div class="about-resume-item about-resume-item-section">
-  <h1><br />Special Thanks</h1>
-</div>
-
-<div class="about-resume-item">
- <div class="about-resume-row row">
-  <div class="about-resume-col-detail col-md-3 col-sm-5">
-   <h3>Noun Project</h3>
-    
-    
-    <div class="about-resume-location"><a href="https://thenounproject.com/">thenounproject.com</a></div>
-  </div>
-  <div class="about-resume-col-detail col-md-9 col-sm-7">
-    
-<p>Most of the icons on this site are works derived from assets found on The Noun Project. Their core belief is that 
-visual language has the power to change the world. If you’re looking for visual assets to represent the most generic or 
-specific of concepts, visit their site. You’ll find tons of high-quality icons and images for just about any topic.</p>
-
-
-  </div>
- </div>
-</div>
-
-<div class="about-resume-item">
- <div class="about-resume-row row">
-  <div class="about-resume-col-detail col-md-3 col-sm-5">
-   <h3>GitHub Pages</h3>
-    
-    
-    <div class="about-resume-location"><a href="https://pages.github.com/">pages.github.com</a></div>
-  </div>
-  <div class="about-resume-col-detail col-md-9 col-sm-7">
-    
-<p>This content is hosted on GitHub Pages. They make it easy to create and host websites for you and your projects. 
-Your content is hosted directly from your GitHub repository. Just edit, push, and your changes are live. 
-It couldn’t be easier.</p>
-
-
-  </div>
- </div>
-</div>
-
-<div class="about-resume-item">
- <div class="about-resume-row row">
-  <div class="about-resume-col-detail col-md-3 col-sm-5">
-   <h3>Jekyll</h3>
-    
-    
-    <div class="about-resume-location"><a href="https://jekyllrb.com/">jekyllrb.com</a></div>
-  </div>
-  <div class="about-resume-col-detail col-md-9 col-sm-7">
-    
-<p>At its core, this content is powered by Jekyll — a tool that allows you to transform your plain text into static 
-websites and blogs. You work in <a href="https://github.github.com/gfm/">GitHub-flavored Markdown (GFM)</a> and Jekyll spits out 
-the templated HTML that your site’s visitors see.</p>
-
-
-  </div>
- </div>
-</div>
-
-<div class="about-resume-item">
- <div class="about-resume-row row">
-  <div class="about-resume-col-detail col-md-3 col-sm-5">
-   <h3>JekyllFaces</h3>
-    
-    
-    <div class="about-resume-location"><a href="http://jekyllfaces.com/">jekyllfaces.com</a></div>
-  </div>
-  <div class="about-resume-col-detail col-md-9 col-sm-7">
-    
-<p>Jekyll is great at managing blogs and static pages, but sometimes you want a little more interaction, or you want to 
-present content other than a blog post or landing page. That’s where JekyllFaces comes in. It provides 
-GitHub-Pages-friendly extensions to make managing content for your projects easier to promote and manage. 
-<strong>NOTE:</strong> <em>This site uses a pre-release version of JekyllFaces since it’s not quite ready for general use.</em></p>
-
-
-  </div>
- </div>
-</div>
-
-<div class="about-resume-item">
- <div class="about-resume-row row">
-  <div class="about-resume-col-detail col-md-3 col-sm-5">
-   <h3>Joseph B. Hall</h3>
-    
-    
-    <div class="about-resume-location"><a href="http://joehall.net/">joehall.net</a></div>
-  </div>
-  <div class="about-resume-col-detail col-md-9 col-sm-7">
-    
-<p>Joseph Hall is responsible for the design and layout of this site. He also wrote the underlying JekyllFaces 
-implementation that this site uses.</p>
-
-
-  </div>
- </div>
+    </a>
+    <div class="container figure-caption" style="margin-top: -16px !important; text-align: center; margin-bottom: 16px">
+        FAWN Engine Logo
+    </div>
 </div>
 
 
@@ -351,12 +289,6 @@ implementation that this site uses.</p>
 
 <p class="copyright">thewriteplace.rocks and its logo are registered trademarks of hiive llc.<br/>All content &copy; 2005-2024 by hiive llc.</p>
 
-
-
-
-
-
-  
 
 
 </article>

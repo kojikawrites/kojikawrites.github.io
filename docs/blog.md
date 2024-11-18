@@ -5,10 +5,10 @@ showTitle: false
 
 ## Recent Posts
 
-{% assign maxCount = 5 %}
+{% assign maxCount = 25 %}
 {% assign postCount = site.posts | size %}
 {% if postCount > maxCount %}
-  The most recent {{ maxCount }} posts are listed below. To view the complete archive of {{ postCount }} posts, [click here]({{ "/blog-archive" | relative_url }}).
+  The most recent {{ maxCount }} posts are listed below. To view the complete archive of {{ postCount }} posts, <a class="archive-link" href="{{ "/blog-archive" | relative_url }}">click here</a>.
 {% elsif postCount == 0 %}
   Uh oh! There are no posts.
 {% elsif postCount <= maxCount %}
@@ -22,7 +22,7 @@ showTitle: false
     {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
     <span class="post-list-title">{{ post.title | escape }}</span><br/>
     <span class="post-meta">{{ post.date | date: date_format }}</span>
-    <p>{{ post.excerpt | strip_html }}<br/>
+    <p>{{ post.description | default: post.excerpt | strip_html }}<br/>
     <a class="post-link" href="{{ post.url | relative_url }}">Read More &raquo;</a></p>
     <br/>
   </li>

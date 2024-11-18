@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang='en'>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <head>
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Roboto">
@@ -27,9 +27,9 @@
   <title>thewriteplace.rocks</title>
 
   
-  <meta name="description" content="The launching point for all things Hiive, LLC. Personal and professional musings.">
+  <meta name="description" content="A Website about writing.">
 
-  <link rel="canonical" href="http://localhost:4000/">
+  <link rel="canonical" href="http://0.0.0.0:4000/">
   <link rel="alternate" type="application/rss+xml" title="&lt;span class=&quot;navbar-orange&quot;&gt;thewriteplace&lt;/span&gt;&lt;small&gt;&lt;small&gt;.rocks&lt;/small&gt;&lt;/small&gt;" href='/feed.xml'>
 
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
@@ -61,6 +61,13 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js"
           integrity="sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M"
           crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css"
+        integrity="sha512-Velp0ebMKjcd9RiCoaHhLXkR1sFoCCWXNp6w4zj1hfMifYB5441C+sKeBl/T/Ka6NjBiRfBBQRaQq65ekYz3UQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"
+          integrity="sha512-Y2IiVZeaBwXG1wSV7f13plqlmFOx8MdjuHyYFVoYzhyRr3nH/NMDjTBSswijzADdNzMyWNetbLMfOpIPl6Cv9g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   
 
@@ -152,6 +159,16 @@
 <!--    -->
 <!--  </style>-->
 
+  <script type="text/javascript">
+
+
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+      //alert("clicked"); //to test this function ran
+      event.preventDefault();
+      $(this).ekkoLightbox({ alwaysShowClose: true });
+    });
+  </script>
+
   <body>
 
     
@@ -176,6 +193,12 @@
 <!--      </li>-->
       <li class="nav-item" id="navLinkBlog">
         <a class="nav-link" href='/blog'>BLOG</a>
+      </li>
+      <li class="nav-item" id="navLinkCategories">
+        <a class="nav-link" href='/categories'>CATEGORIES</a>
+      </li>
+      <li class="nav-item" id="navLinkTags">
+        <a class="nav-link" href='/tags'>TAGS</a>
       </li>
     </ul>
     <ul class="navbar-nav d-flex justify-content-end">
@@ -213,14 +236,9 @@
   </header>
 
   <div class="post-content">
-    <p>Welcome to The Write Place, where we’re all just trying to make sense of this whole writing thing together! 
-Whether you’re a seasoned pro, a hopeful novelist, or someone who just enjoys a good story, our blog offers a mix of 
-practical advice, humorous insights, and the occasional misstep we’ve turned into a learning experience. 
-Discover tips on crafting memorable characters, dodging writer’s block, and finding your voice amidst the chaos. 
-Join our community of writers who know that every story is a journey, complete with a few laughs and a lot of heart. 
-Dive in and let’s embrace the wonderfully messy world of writing!</p>
+    <p>My name is K°, and welcome to The Write Place, where I’m on a mission to make sense of this whole writing thing. Whether you’re a seasoned pro, a hopeful novelist, or someone who simply enjoys a good story, my blog offers a blend of practical advice, humorous insights, and the occasional misstep turned into a learning experience.</p>
 
-<p>Because at The Write Place, we help you find the right words in the right place.</p>
+<p>Explore tips on crafting memorable characters, dodging writer’s block, and finding your voice amidst the chaos. Join me, where every story is a journey, complete with a few laughs, a lot of heart, and a plethora of endings.</p>
 
   </div>
 
@@ -231,9 +249,6 @@ Dive in and let’s embrace the wonderfully messy world of writing!</p>
 <hr/>
 
 <p class="copyright">thewriteplace.rocks and its logo are registered trademarks of hiive llc.<br/>All content &copy; 2005-2024 by hiive llc.</p>
-
-
-
 
 
 

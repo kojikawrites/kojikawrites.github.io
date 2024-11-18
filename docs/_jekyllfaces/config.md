@@ -12,7 +12,26 @@ metadata:
   trademark: "thewriteplace.rocks and its logo are registered trademarks of hiive llc." 
   copyright: "All content &copy; 2005-CURRENT_YEAR by hiive llc."
   lang: en
+  # Fawn: Put Aliases Here!
+  aliases:
+    FtBotB:
+      - FromTheBackOfTheBook
+    BotD:
+      - BeatOfTheDay
 
+    # end of aliases
+    life:
+    prompts:
+    archetypes:
+    book-review:
+    course-review:
+    exercise:
+    life:
+    names:
+    outline:
+    software:
+    writing:
+      
 customize:
   theme: lux       # one of: cerulean | cosmo | cyborg | darkly | default | flatly | journal | litera | lumen | lux | materia | minty | pulse | sandstone | simplex | sketchy | slate | solar | spacelab | superhero | united | yeti
   http404: shrug     # one of: badge | default | dog | droids | glass | link | milk | monster | potty | shrug | sticky | tweet | zork
@@ -79,7 +98,7 @@ analytics:
   baseurl: # only used by matomo; ex: mysite.com/piwik
 
 comments:
-  provider: false # one of: false | facebook | disqus | intensedebate | duoshuo
+  provider: facebook # false # one of: false | facebook | disqus | intensedebate | duoshuo
   siteid: 0000000000000000
 
 # --- JekyllFaces Metadata ---

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang='{{ page.lang | default: config.metadata.lang | default: site.lang | default: "en" }}'>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   {% include head.html %}
 
 <!--  <style tyep="text/css">-->
@@ -21,6 +21,16 @@
 <!--    }-->
 <!--    {% endif %}-->
 <!--  </style>-->
+
+  <script type="text/javascript">
+
+
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+      //alert("clicked"); //to test this function ran
+      event.preventDefault();
+      $(this).ekkoLightbox({ alwaysShowClose: true });
+    });
+  </script>
 
   <body>
 

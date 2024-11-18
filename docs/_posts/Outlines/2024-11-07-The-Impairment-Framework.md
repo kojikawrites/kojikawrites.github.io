@@ -1,0 +1,40 @@
+---
+layout: post
+title:  "The Impairment Framework"
+description: Injuries add realism and grit. Let’s face it, how many action movies have we watched where the heroes walk into a haze of bullets and come out on the other side completely unscathed? Come on, you are capable of better than that boring schtick. Ultimately, injuries are story catalysts. They inspire change, though that change is almost universally unwelcome and painful on both physical and psychological levels. Moreover, injuries and pain show us what characters are truly made of. Now, there are six distinct phases of the injury plot. Here they are, broken down by individual section.
+categories: outline
+author: K°
+tags: outline
+---
+Each of these parts of your story are incredibly important, but what's most important is the concept that what happens has to matter. It's meaningless for your character to be injured without it affecting them in some manner on an emotional level, not to mention a physical one. The injury should serve the story, not the other way around. Above all, your character should face additional challenges related to their primary goal in order for the reader to care.
+
+### The Beginning:
+### The Inciting Injury:
+This is the moment and manner in which the injury to the character occurs. At its core, the Inciting Injury is the catalyst of the injury plot. It’s the moment when the leg snaps, the hammer comes down, or the bullet strikes. It’s the blossom of pain, the initial moment of agony. There are two significant portions of the Inciting Injury: what happens, and why it happens. What is going to determine the way the arc works. Is your character shot in the chest? Did they twist their ankle? Maybe they have a concussion, or a broken arm. You get the idea. Of course, there’s also the why. The injury might be the effect of some other plot element that is causing your character harm.
+
+### The Immediate Treatment:
+This is what the character does right away in order to begin feeling better and to avoid any further immediate injury. The Immediate Treatment phase of the injury plot is fairly straightforward: it is anything your characters do in the moments following an injury in order to feel better and to get to safety. Oftentimes, this is instinctive. If someone is punched in the face hard enough to break the nose, for example, the first response is to shield the nose by protecting it with the hands. This is part and parcel of the Immediate Treatment – as is the tissue (or tampon) in the nostril to stop the bleeding. But so are fighting back and running away. In fact, according to Tactical Combat Casualty Care, the standard course for combat and SWAT medics, the first duty of a medic treating a downed comrade isn’t to treat the wounded. Their first duty is to return fire, because that’s how the group – and the medic themself – stays safe. So the Immediate Treatment of an injury may be to inflict further injuries to the opposing party.
+
+### The Progressive Complications:
+If nothing gets in the way, there’s no drama. If your hero wants something, and they get it right away, it wasn’t worth very much. Instead they need to face challenges to overcome. It’s no different when it concerns the overcoming of injuries.
+
+### The Middle:
+### The Definitive Treatment:
+This is when the character receives the attention for their injury that they require, that will ultimately begin the healing process. The middle of an injury story begins when the character receives care for their injuries which is “permanent,” and which begins the healing process. This is when a wound that has been bandaged is finally stitched, when the bone that has been broken is permanently set, when the gunshot wound that had been packed with gauze is now operated upon. For your character’s minor injuries, like sprains and strains, the definitive treatment might be nothing more than RICE: Rest, Ice, Compression, and Elevation. Staying off a sprained ankle for a few days. Letting a cut heal. The nature of the injury you’ve selected is going to determine the nature of the definitive treatments. Fractures require casts and sometimes surgery; deep cuts can require surgery if tendons are damaged or muscles are severed; head injuries can require CT scans and potentially surgery. Sometimes, for especially complicated injuries, the Definitive Treatment might be spread out. Nasty fractures might take multiple surgeries to truly fix, or a character recovering from a gunshot wound may have to go back to the OR if they begin bleeding internally again.
+
+### The Rocky Road to Recovery:
+This is when the character faces a number of challenges relating to their new disability and this is how they cope with the issues associated with the challenges and their new disability, during healing. This is, by far, the longest part of the injury story. Most significant injuries take weeks or months to heal, and that recovery process is far from linear. I want you to take note of the name. This is not simply the Recovery period. This is the Rocky Road to Recovery period, because this is an area in which we should see the character experience significant bumps and hurdles in the process of recovering. The Rocky Road could be compared to the Progressive Complications portion of an overall story arc: things get worse (even as, in the recovery arc, the character is getting better.) But as an author, this is also your major chance to find where your injury plot and the emotional arc of your story intersect. What are the problems your main character faces that their disability – no matter how temporary – makes more difficult? They may experience physical hardship, but where does it hit home? In short: Why do we care?
+
+### Nearing the End:
+### The Big Test:
+This is the moment when a character must overcome a much larger challenge related to the global plot, all while still recovering from their injury and dealing with their current disability. The Big Test is the climax of the injury arc. In its most basic form, it’s like this: while a character is still recovering from their injuries, they must face a challenge with a physical component that is made more difficult by their disability. It may be something that would have been easy before, or it may have been difficult and is now almost impossible. When it’s done well, The Big Test coincides with the climax of the global story: this is where the two stories meet. This can be extremely powerful when done correctly. When done poorly, it doesn’t exist at all. I can think of a few really good stories, including The Hunger Games and The Empire Strikes Back, that don’t include a Big Test with their injury plots. In removing this crucial element, they drastically reduce the potency of the injury plot.
+
+### The Re-Injury:
+This latest injury should not exactly the same as before. In other words, this needs to be for lack of a better word, an upgrade. Only his time the bad from the inciting injury needs to be much worse. This time it’s going to have some permanent effect on our character: her psyche, her ability, her career, something. For this to work, it’s crucial for the injury to be worse than it was before. The character has to understand the risks going in, and they have to make the choice to face the Big Bad anyway. If you wanted, this could restart the injury plot cycle completely, or you could take another path all together.
+
+### The New Normal:
+This is when your character's final level of disability becomes most apparent. This is also when the character has extra time to accept the level of disability. The New Normal is the character’s baseline after the plot is all said and done. Is your character now disabled? Totally? Partially? Or not at all? These are the choices you must make, grounded and guided by realism. For example, is it realistic for your character to fully recover? Or for them to have some level of disability going forward?
+
+<!-- signature -->
+{% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
+{% include post-image-signature.liquid imagePath = imagePath %}
