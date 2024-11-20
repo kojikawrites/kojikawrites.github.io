@@ -6,6 +6,9 @@
 .bundle/
 vendor/
 **/*.o
+# Ignore Python env
 .venv/
 .env
-/docs/_site/
+
+# Other ignores
+docs/_site/
