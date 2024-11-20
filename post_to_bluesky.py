@@ -10,6 +10,56 @@ from urllib.parse import quote_plus
 import markdown
 import random
 from bs4 import BeautifulSoup
+from PIL import Image
+
+def process_thumbnail(image_path, testrun = False):
+    """
+    Process the thumbnail image: convert to JPEG if necessary and reduce size if it exceeds 975KB.
+    Save the reduced image with '_thumbnail' appended to its name.
+
+    Args:
+        image_path (str): Path to the image file.
+
+    Returns:
+        str: Path to the processed thumbnail image, or the original image if no changes were necessary.
+    """
+    max_size = 975 * 1024  # 975KB
+    if not os.path.exists(image_path):
+        print(f"Image not found: {image_path}")
+        return image_path
+
+    # Check the image size
+    image_size = os.path.getsize(image_path)
+    if image_size <= max_size:
+        return image_path  # No changes needed
+
+    # Open the image
+    with Image.open(image_path) as img:
+        # Convert to JPEG if not already
+        if img.format != 'JPEG':
+            img = img.convert("RGB")
+
+        # Generate the new filename
+        base, ext = os.path.splitext(image_path)
+        thumbnail_path = f"{base}_thumbnail.jpg"
+
+        # Reduce dimensions until the size is below the threshold
+        original_image_size = image_size
+        while image_size > max_size:
+            img.save(thumbnail_path, "JPEG", quality=85)
+            image_size = os.path.getsize(thumbnail_path)
+            if image_size > max_size:
+                width, height = img.size
+                img = img.resize((width // 2, height // 2))
+
+        # Save the final image
+        img.save(thumbnail_path, "JPEG", quality=85)
+        print(f"Thumbnail image reduced from {original_image_size} to {os.path.getsize(thumbnail_path)}")
+    # Check into GitHub
+    if not testrun:
+        os.system(f'git add "{thumbnail_path}" && git commit -m "Add resized thumbnail: {thumbnail_path}"')
+
+    return thumbnail_path
 
 def parse_date_from_filename(filename):
     match = re.match(r'(\d{4})-(\d{2})-(\d{2})-(.*)\.md$', filename)
@@ -145,16 +195,22 @@ def extract_metadata_from_file(file_path, slug, root_dir):
     return title, categories, description, full_image_path
 
 def post_to_bluesky(title, description, image_path, url, categories, category_aliases, client, testrun=False):
-    # Construct the message
+    # Process the thumbnail
+    image_path_thumbnail = None
+    if image_path:
+        image_path_thumbnail = process_thumbnail(image_path, testrun)
+        image_path = image_path_thumbnail
+        url = url.rsplit('/', 1)[0] + '/' + os.path.basename(image_path)
 
+    # Construct the message
     if categories is None:
         categories = []
 
     try:
         with open(image_path, 'rb') as f:
-          img_data = f.read()
-          thumb = client.upload_blob(img_data)
-          blob = thumb.blob
+            img_data = f.read()
+            thumb = client.upload_blob(img_data)
+            blob = thumb.blob
     except:
         blob = None
 
@@ -162,26 +218,24 @@ def post_to_bluesky(title, description, image_path, url, categories, category_al
     tb.text(f"New blog post: {title}!\n\nAs always, comments and questions are welcome.\n\n")
     for category in categories:
         tb.tag(f"#{category}\n", category)
-        print(f"#{category}")
         aliases = category_aliases.get(category)
         if aliases is not None:
             for alias in aliases:
                 tb.tag(f"#{alias}\n", alias)
-                print(f"#{alias}")
-
-
 
     embed = models.AppBskyEmbedExternal.Main(
         external=models.AppBskyEmbedExternal.External(
             title=title,
             description=description,
             uri=url,
-            thumb = blob
+            thumb=blob
         )
     )
     tb.text("\n\n(This is an automated post.)")
 
     if testrun:
+        if image_path_thumbnail:
+            os.remove(image_path_thumbnail)
         print(f"[Test Run] Would post to Bluesky: {tb.build_text()}\n{embed}")
         return True
 
