@@ -226,10 +226,13 @@ span.tag-wrapper {
   min-height: 26px !important;
 }
 
-.tag-div h3 {
+.tag-div h6 {
+  color: #ff6707;
+  font-size: 20px;
   cursor: pointer;
+  text-transform: uppercase !important;
 }
-.tag-div h3:hover {
+.tag-div h6:hover {
   filter: none;
 }
 
@@ -269,10 +272,13 @@ span.category-wrapper {
 }
 
 /* Change cursor to pointer when hovering over headers */
-.category-div h3 {
+.category-div h6 {
+  color: #ff6707;
+  font-size: 20px;
   cursor: pointer;
+  text-transform: uppercase !important;
 }
-.category-div h3:hover {
+.category-div h6:hover {
   filter: none;
 }
 

@@ -18,7 +18,7 @@ The following categories appear on this site:
 {% assign cat = category[0] %}
 
 <div id="{{ cat | slugify }}" class="category-div">
-<h3 name="{{ cat | slugify }}">{{ cat }}</h3>
+<h6 name="{{ cat | slugify }}">{{ cat }}</h6>
 
 <ul>
 {% for post in site.categories[cat] %}
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Set all headers to inactive
-    var headers = document.querySelectorAll('.category-div h3');
+    var headers = document.querySelectorAll('.category-div h6');
     headers.forEach(function(header) {
       header.classList.remove('category-header-active');
       header.classList.add('category-header-inactive');
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function openSection(id) {
     closeAllSections();
     var content = document.querySelector('#' + id + ' ul');
-    var header = document.querySelector('#' + id + ' h3');
+    var header = document.querySelector('#' + id + ' h6');
     if (content && header) {
       content.style.display = 'block';
       // Set the active header class
@@ -61,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Add click event listeners to all h3 headers
-  var headers = document.querySelectorAll('.category-div h3');
+  // Add click event listeners to all h6 headers
+  var headers = document.querySelectorAll('.category-div h6');
   headers.forEach(function(header) {
     header.addEventListener('click', function() {
       var id = header.parentElement.id;

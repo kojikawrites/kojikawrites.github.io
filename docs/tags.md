@@ -19,7 +19,7 @@ The following tags appear on this site:
 {% assign tag = tg[0] %}
 
 <div id="{{ tag | slugify }}" class="tag-div">
-<h3 class="tag-header-inactive" name="{{ tag | slugify }}">#{{ tag }}</h3>
+<h6 class="tag-header-inactive" name="{{ tag | slugify }}">#{{ tag }}</h6>
 
 <ul>
 {% for post in site.tags[tag] %}
@@ -51,7 +51,7 @@ function closeAllSections() {
   });
 
   // Set all headers to inactive
-  var headers = document.querySelectorAll('.tag-div h3');
+  var headers = document.querySelectorAll('.tag-div h6');
   headers.forEach(function(header) {
     header.classList.remove('tag-header-active');
     header.classList.add('tag-header-inactive');
@@ -61,7 +61,7 @@ function closeAllSections() {
 function openSection(id) {
   closeAllSections();
   var content = document.querySelector('#' + id + ' ul');
-  var header = document.querySelector('#' + id + ' h3');
+  var header = document.querySelector('#' + id + ' h6');
   if (content && header) {
     content.style.display = 'block';
     // Set the active header class
@@ -70,8 +70,8 @@ function openSection(id) {
   }
 }
 
-  // Add click event listeners to all h3 headers
-  var headers = document.querySelectorAll('.tag-div h3');
+  // Add click event listeners to all h6 headers
+  var headers = document.querySelectorAll('.tag-div h6');
   headers.forEach(function(header) {
     header.addEventListener('click', function() {
       var id = header.parentElement.id;
