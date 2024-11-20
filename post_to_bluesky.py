@@ -56,8 +56,8 @@ def process_thumbnail(image_path, testrun = False):
         img.save(thumbnail_path, "JPEG", quality=85)
         print(f"Thumbnail image reduced from {original_image_size} to {os.path.getsize(thumbnail_path)}")
     # Check into GitHub
-    if not testrun:
-        os.system(f'git add "{thumbnail_path}" && git commit -m "Add resized thumbnail: {thumbnail_path}"')
+    # if not testrun:
+    #     os.system(f'git add "{thumbnail_path}" && git commit -m "Add resized thumbnail: {thumbnail_path}"')
 
     return thumbnail_path
 
@@ -200,7 +200,7 @@ def post_to_bluesky(title, description, image_path, url, categories, category_al
     if image_path:
         image_path_thumbnail = process_thumbnail(image_path, testrun)
         image_path = image_path_thumbnail
-        url = url.rsplit('/', 1)[0] + '/' + os.path.basename(image_path)
+        # url = url.rsplit('/', 1)[0] + '/' + os.path.basename(image_path)
 
     # Construct the message
     if categories is None:
