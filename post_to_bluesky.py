@@ -312,6 +312,7 @@ def main():
                 for file in post_files:
                     if file.endswith('.md'):
                         file_path = os.path.join(post_root, file)
+                        print(f"FILE: {post_dirs}, {file}")
                         relative_path = os.path.relpath(file_path, args.root_dir)
                         post_id = relative_path.replace('\\', '/')
 
