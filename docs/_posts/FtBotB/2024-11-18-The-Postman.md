@@ -22,7 +22,7 @@ Ezwatti Levar has dedicated his life to being a postman for the Interstellar Pos
 2. Would you read this novel if it were given to you as a gift?
 3. How do you feel after having read the synopsis?
 4. What is your overall opinion of the genre?
-5. Have you ever read a novel space adventure before?
+5. Have you ever read a space adventure before?
 
 Drop me a comment down below!
 
