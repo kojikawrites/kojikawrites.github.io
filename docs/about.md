@@ -28,7 +28,7 @@ Kojika is currently working on a children's book, a series of Middle Grade histo
 {% assign imagePath = "/assets/images/kojika.png" | relative_url %}
 {% include about-resume-person.liquid imagePath=imagePath content=content altText="Kojikas avatar" %}
 
+<!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post-image.liquid imagePath=imagePath content=content altText="FAWN Engine Logo" %}
-
+{% include post-image-signature.liquid imagePath = imagePath %}
 
