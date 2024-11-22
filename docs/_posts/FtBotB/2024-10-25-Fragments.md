@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "FtBotB - Fragments"
+title:  "FtBotB - Fragments - When Love and Lies Combine"
 description: I've crafted a paranormal romance that flips traditional relationship dynamics by featuring two characters with supernatural powers of persuasion. Through Evangelija Markov's story, a skilled manipulator who meets her match in Diomid Petrescu, I explore themes of deception, revenge, and the dark side of romance. What begins as a seemingly straightforward love story transforms into a dangerous game of power and retribution when Evangelija discovers she's been manipulated by someone with abilities similar to her own. I'm curious whether readers would be drawn to this darker take on paranormal romance, where love and manipulation intertwine.
 categories: FtBotB
 author: K°
@@ -18,7 +18,17 @@ tags: FtBotB
 Fragments - When Love and Lies Combine
 
 ### Story Synopsis:
-Evangelija Markov had a gift, one she’s used for personal gain since she was a young girl. With just a bat of her eyelashes and a dulcet tone to her voice, she could convince anyone to do her bidding. Over the years, she manipulated countless wealthy men into giving her money, jewels, cars - anything she desired, really. To the outside world, she was seen as a beautiful, but manipulative gold digger. However, Evangelija didn't see it that way. To her, it was just good business. When she met Diomid Petrescu, a charming real estate mogul, she thought she had finally found true love. Diomid was intensely passionate and seemed to adore Evangelija. Swept up in romance, she let her guard down and vowed to leave her old ways behind. A few months into their whirlwind relationship, Diomid suggested Evangelija transfer all her assets to a shared account. Eager to start their new life together, she immediately agreed and contacted her financial advisor to begin the process. However, when the advisor questioned inconsistencies in Diomid's records, a horrifying realization dawned on Evangelija - Diomid possessed the same powers of persuasion that she did. He had played her using her own tricks against her. Fury and heartbreak warred within Evangelija at Diomid's betrayal. She realized then that she had never turned her powers off as she claimed. Diomid had simply overpowered her gift with his own. But no more. She would not be manipulated and discarded so easily. Evangelija steeled herself, ready to fight fire with fire. She would show Diomid just how dangerous she could be when provoked. The game was on, and this time she would be the victor. She would take everything back from him and more. Evangelija vowed Diomid would regret the day he dared to cross her. Once she was through with him, he would be left with nothing but heartbreak, just as she had been.
+Evangelija Markov had a gift, one she had used for personal gain since she was a young girl. With just a bat of her eyelashes and a dulcet tone to her voice, she could convince anyone to do her bidding. Over the years, she had manipulated countless wealthy men into giving her money, jewels, cars—anything she desired, really. To the outside world, she was a beautiful but manipulative gold digger. To Evangelija, however, it was simply good business.  
+
+When she met Diomid Petrescu, a charming real estate mogul, everything seemed to change. Diomid was intensely passionate and seemed to adore Evangelija in a way no one else ever had. Swept up in romance, she let her guard down, believing she had finally found true love. For the first time, she vowed to leave her old ways behind and begin a new chapter.  
+
+A few months into their whirlwind relationship, Diomid suggested they consolidate their assets into a shared account to build their future together. Eager to prove her commitment, Evangelija readily agreed and contacted her financial advisor to begin the process. But when her advisor pointed out inconsistencies in Diomid’s records, Evangelija’s perfect world shattered.  
+
+A horrifying realization dawned on her—Diomid possessed the same powers of persuasion she did. He had played her, using her own tricks against her. Fury and heartbreak warred within her as she understood that Diomid’s charm had not bypassed her defenses; it had overpowered her gift entirely. She had been outplayed by someone even more skilled than herself.  
+
+But Evangelija was not one to accept defeat. She steeled herself, ready to fight fire with fire. Diomid may have thought he could manipulate and discard her like one of his deals, but he had underestimated her resolve. The game was on, and this time, she would be the victor.  
+
+Evangelija vowed to take everything back from Diomid—and more. She would leave him with nothing but the bitter taste of regret. The heartbreak he had inflicted on her would pale in comparison to the reckoning she planned. Diomid Petrescu would rue the day he dared to cross Evangelija Markov.  
 
 ### Questions:
 1. Would you purchase and read this novel if you saw it in a bookstore?

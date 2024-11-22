@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "FtBotB - When the Bones Speak (Book Two of The Klaite Moran Chronicles)"
+title:  "FtBotB - A Crime Thriller - When the Bones Speak (Book Two of The Klaite Moran Chronicles)"
 description: I've crafted a sequel that follows Klaite Moran three years after Reynel Joris' execution, as she investigates a mass grave discovered on the Baure family farm. While exploring the connection between Reynel and the Baures' own decades of criminal activity, Klaite grapples with why Reynel kept this secret from her. The story examines her journey toward ethical redemption as she works to expose the truth about over 100 victims, despite threats to her safety. Through this investigation, Klaite finds a way to confront her past choices while pursuing justice through legitimate means.
 categories: FtBotB
 author: K°
@@ -16,7 +16,19 @@ tags: FtBotB
 When the Bones Speak (Book Two of The Klaite Moran Chronicles)
 
 ## Story Synopsis:
-Three years after Reynel Joris’ execution, Klaite Moran has struggled to recover from her trauma and regain her moral compass. She is more cautious about crossing ethical lines for a story. However, her journalist instincts of old kick in when some unsuspecting contractors uncover a decades-old mass grave on Enzoc Baure’s Farm. As Klaite investigates further, she discovers connections between the farm, its reclusive owners, and her late interview subject Reynel. She learns the Baure allowed Reynel to dispose of some his victims' bodies on their land, in exchange for a seat in the political sphere, money and other small favors, thus raising his previous body count from that of fifty, to now, well over one-hundred. Though Reynel is gone, Klaite pieces together clues he left behind about the skeletons buried on the farm. Things become even murkier when DNA evidence suggests some victims may have been killed by the Jedd Baure himself, as early as the 1950s. With a combination of intrigue and repulsion, Klaite digs deeper into the Baure's murky past, while also reflecting on her complicated relationship with Reynel. She wonders why Reynel kept this secret when he’d swore that he had told her everything. If he’d told her, she could have prevented additional deaths by exposing the truth about the Baure's complicity, while Reynel was still alive. Her reporting reveals the Baures were involved in political criminal activity, overseas black market dealings with known terrorist networks, human trafficking and murders, beyond those connected to Reynel. As she closes in on the full scope of the decades-long killing spree, the Baures begin targeting Klaite, in order to silence her permanently. She debates warning them off with some of Reynel's intimidation tactics, but knows she must find a moral way to bring them to justice and give these new victims' families closure. Klaite decides exposing the truth publicly is the only way, even if it puts her life at risk again. With Reynel gone, Klaite realizes the mantle has fallen to her to unravel the Baure's crimes, as thoroughly as she did his. While still filled with regret over her past ethical transgressions, Klaite finds new purpose and redemption in making sure the full truth about the Baure's murderous secrets is finally revealed.
+Three years after Reynel Joris’ execution, Klaite Moran continues to struggle with her trauma and the task of regaining her moral compass. She is more cautious now about crossing ethical lines for a story, yet her journalist instincts kick in when some unsuspecting contractors uncover a decades-old mass grave on Enzoc Baure’s farm.  
+
+As Klaite investigates further, she discovers shocking connections between the farm, its reclusive owners, and her late interview subject, Reynel. She learns the Baures had allowed Reynel to dispose of some of his victims’ bodies on their land in exchange for political favors, money, and other perks. This revelation raises Reynel’s confirmed body count from fifty to well over one hundred.  
+
+Though Reynel is gone, Klaite pieces together clues he left behind about the skeletons buried on the Baure property. Her investigation takes a darker turn when DNA evidence suggests some victims may have been killed by Jedd Baure himself, as far back as the 1950s. Filled with a combination of intrigue and repulsion, Klaite digs deeper into the Baures’ murky past, reflecting on her complicated relationship with Reynel.  
+
+She can’t shake the question of why Reynel kept this secret when he’d sworn to her that he had confessed everything. If he had told her about the Baures, Klaite believes she might have been able to expose their complicity and prevent further deaths while Reynel was still alive.  
+
+Her reporting reveals the Baures’ involvement in political corruption, black market dealings with known terrorist networks, human trafficking, and murders far beyond those tied to Reynel. As Klaite closes in on the full scope of the decades-long killing spree, the Baures begin targeting her to silence her permanently.  
+
+Klaite debates whether to warn them off using some of Reynel’s intimidation tactics but decides she must find a moral way to bring them to justice. She is determined to provide closure for the new victims’ families and expose the truth publicly, even if it means risking her life again.  
+
+With Reynel gone, Klaite realizes the mantle has fallen to her to unravel the Baures’ crimes, just as thoroughly as she had exposed his. While still grappling with regret over her past ethical transgressions, Klaite finds a renewed sense of purpose and redemption in ensuring the full truth about the Baures’ murderous secrets is finally revealed.  
 
 ## Questions:
 1. Would you purchase and read this novel if you saw it in a bookstore?
