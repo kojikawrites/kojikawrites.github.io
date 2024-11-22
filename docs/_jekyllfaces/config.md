@@ -98,9 +98,9 @@ analytics:
   baseurl: # only used by matomo; ex: mysite.com/piwik
 
 comments:
-  provider: false # false # one of: false | facebook | disqus | intensedebate | duoshuo
+  provider: bluesky # false # one of: false | facebook | disqus | intensedebate | duoshuo | bluesky
   siteid: 0000000000000000
-
+  blueskyusername: kojika.bsky.social
 # --- JekyllFaces Metadata ---
 
 metedata:

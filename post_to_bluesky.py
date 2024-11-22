@@ -325,6 +325,7 @@ def main():
     parser.add_argument('--announce-start-date', type=str, help='Start date for announcements (YYYY-MM-DD)')
     parser.add_argument('--testrun', action='store_true', help='Perform a test run without posting or updating the tracking list')
     parser.add_argument('--root-dir', type=str, default='docs', help='Root directory to start searching from')
+    parser.add_argument('--data-dir', type=str, default='docs/_data', help='Output directory for json')
     args = parser.parse_args()
 
     # Retrieve or set ROOT_URL
@@ -347,7 +348,8 @@ def main():
         sys.exit(1)
 
     # Load the tracking list
-    tracking_file = 'bluesky_posted.json'
+
+    tracking_file = os.path.join(args.data_dir, 'bluesky_posted.json')
     if os.path.exists(tracking_file):
         with open(tracking_file, 'r', encoding='utf-8') as f:
             posted_posts = json.load(f)
@@ -456,8 +458,8 @@ def main():
         else:
             print(f"Failed to post: {title}")
         if not args.testrun:
-            # pause for 5 seconds to ensure we can't exceed rate limit.
-            time.sleep(5)
+            # pause for a few seconds to ensure we can't exceed rate limit.
+            time.sleep(7)
 
     # Save the updated tracking list
     if not args.testrun:
