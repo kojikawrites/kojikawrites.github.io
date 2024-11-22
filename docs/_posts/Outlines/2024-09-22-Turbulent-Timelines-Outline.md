@@ -75,6 +75,6 @@ Conclude with the protagonist's final reflection on the power of choices, the ma
 {% include post-image-signature.liquid imagePath = imagePath %}
 
 <!-- comments -->
-{% assign atprotoURI = "<<atprotoURI>>" %}
-{% assign atHandle = "<<atHandle>>" %}
+{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbiwoyxfpb2w" %}
+{% assign atHandle = "kojika.bsky.social" %}
 {% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

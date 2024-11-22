@@ -151,6 +151,6 @@ I hope that you find a use for this outline. Let me know down in the comments.
 {% include post-image-signature.liquid imagePath = imagePath %}
 
 <!-- comments -->
-{% assign atprotoURI = "<<atprotoURI>>" %}
-{% assign atHandle = "<<atHandle>>" %}
+{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbix3zyt2h2c" %}
+{% assign atHandle = "kojika.bsky.social" %}
 {% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

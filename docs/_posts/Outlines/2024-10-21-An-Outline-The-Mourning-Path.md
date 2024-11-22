@@ -118,6 +118,6 @@ This is one of my favorites. It showcases grief in it's own outline inside whate
 {% include post-image-signature.liquid imagePath = imagePath %}
 
 <!-- comments -->
-{% assign atprotoURI = "<<atprotoURI>>" %}
-{% assign atHandle = "<<atHandle>>" %}
+{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbiwt3no4f2c" %}
+{% assign atHandle = "kojika.bsky.social" %}
 {% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

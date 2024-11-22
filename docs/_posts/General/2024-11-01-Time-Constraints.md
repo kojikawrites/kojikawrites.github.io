@@ -14,6 +14,6 @@ I hate behind-the-scenes days. Most of the time it's tedious and boring as fuck.
 {% include post-image-signature.liquid imagePath = imagePath %}
 
 <!-- comments -->
-{% assign atprotoURI = "<<atprotoURI>>" %}
-{% assign atHandle = "<<atHandle>>" %}
+{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbiwzb5qdt2c" %}
+{% assign atHandle = "kojika.bsky.social" %}
 {% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}
