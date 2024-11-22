@@ -29,6 +29,6 @@ How do you feel about this particular beat? Would you use it in your story? Drop
 {% include post-image-signature.liquid imagePath = imagePath %}
 
 <!-- comments -->
-{% assign atprotoURI = "<<atprotoURI>>" %}
-{% assign atHandle = "<<atHandle>>" %}
+{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbiw3drq7o2w" %}
+{% assign atHandle = "kojika.bsky.social" %}
 {% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}
