@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import json
 import argparse
 import pathlib
@@ -454,6 +455,9 @@ def main():
                 # update_blog_post_with_embed(file_path, embed_code)
         else:
             print(f"Failed to post: {title}")
+        if not args.testrun:
+            # pause for 5 seconds to ensure we can't exceed rate limit.
+            time.sleep(5)
 
     # Save the updated tracking list
     if not args.testrun:
