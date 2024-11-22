@@ -31,4 +31,3 @@ Kojika is currently working on a children's book, a series of Middle Grade histo
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
-

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments Component Test</title>
+</head>
+<body>
+<div id="comments-root"></div>
+
+<!-- Include the bundled JavaScript file -->
+<script src="./dist/comments.bundle.js"></script>
+
+<!-- Initialize the component -->
+<script>
+    // Provide the necessary props
+    const atprotoURI = 'your-atproto-uri';
+    const handle = 'your-handle';
+
+    // Call the exported function
+    CommentsComponent.initializeComments(
+        document.getElementById('comments-root'),
+        { atprotoURI, handle }
+    );
+</script>
+</body>
+</html>

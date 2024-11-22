@@ -32,6 +32,8 @@ layout: default
     {{ content }}
   </div>
 
+{% include comments.liquid %}
+
 <div style="display: block; margin-top: 64px; margin-bottom: 96px">
   <span class="PageNavigation" style="float: left">
     {% if page.previous.url %}
@@ -45,7 +47,5 @@ layout: default
   </span>
 </div>
 <br/>
-
-{% include comments.liquid %}
 
 {% include footer.html %}

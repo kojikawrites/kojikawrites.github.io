@@ -12,3 +12,5 @@ vendor/
 
 # Other ignores
 docs/_site/
+/comments-component/dist/
+/comments-component/node_modules/

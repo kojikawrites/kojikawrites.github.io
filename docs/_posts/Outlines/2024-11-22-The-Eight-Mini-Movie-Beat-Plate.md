@@ -36,3 +36,4 @@ I know everything concerning the story diamond is really daunting, if you have a
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
+

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "strict": true,
+    "noEmit": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "skipLibCheck": true
+  },
+  "include": ["./src/**/*"]
+}
