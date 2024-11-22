@@ -21,8 +21,7 @@ Resolution: Eventually things come to a head as the hero meets the monster, rein
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
 
-<!-- commments -->
+<!-- comments -->
 {% assign atprotoURI = "<<atprotoURI>>" %}
 {% assign atHandle = "<<atHandle>>" %}
 {% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}
-

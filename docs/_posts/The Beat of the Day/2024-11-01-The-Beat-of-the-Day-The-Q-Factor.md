@@ -23,3 +23,8 @@ TIP: Brainstorm Q factors for Act 3, then go back and write the scenes to plant 
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
+
+<!-- comments -->
+{% assign atprotoURI = "<<atprotoURI>>" %}
+{% assign atHandle = "<<atHandle>>" %}
+{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

@@ -31,3 +31,8 @@ This isn't just one beat, so it's not truly a beat of the day, but at the same t
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
+
+<!-- comments -->
+{% assign atprotoURI = "<<atprotoURI>>" %}
+{% assign atHandle = "<<atHandle>>" %}
+{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

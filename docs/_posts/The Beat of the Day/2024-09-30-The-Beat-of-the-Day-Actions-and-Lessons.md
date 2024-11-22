@@ -23,3 +23,8 @@ Do you recognize when you are being heavy-handed with a beat? Let's discuss it. 
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
+
+<!-- comments -->
+{% assign atprotoURI = "<<atprotoURI>>" %}
+{% assign atHandle = "<<atHandle>>" %}
+{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

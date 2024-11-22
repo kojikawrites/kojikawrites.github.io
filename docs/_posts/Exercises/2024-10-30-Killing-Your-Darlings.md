@@ -177,3 +177,8 @@ I know that this exercise is a doozy, but I feel it is well worth it to get this
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
+
+<!-- comments -->
+{% assign atprotoURI = "<<atprotoURI>>" %}
+{% assign atHandle = "<<atHandle>>" %}
+{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

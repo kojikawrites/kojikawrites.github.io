@@ -17,3 +17,8 @@ Do you have ADHD? What do you do in order to stay focused on your writing? I'd l
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
+
+<!-- comments -->
+{% assign atprotoURI = "<<atprotoURI>>" %}
+{% assign atHandle = "<<atHandle>>" %}
+{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

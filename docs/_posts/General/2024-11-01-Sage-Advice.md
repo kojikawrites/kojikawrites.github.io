@@ -68,3 +68,12 @@ Sixty-One Things That I Wish I Had Been Told, So I'm Telling You:
 59. Don’t let your details take away from your story. Your readers are reading your book because they want to be enchanted, so enchant them. There's nothing less enchanting than a textbook.
 60. If you simply write five-hundred and forty-seven words per day for three-hundred and sixty-five days, and then on the three-hundred and sixty-sixth day, you write three-hundred and forty-five words, you will have written two-hundred-thousand words.
 61. Novels that purport to reflect real life must include profanity if the life they reflect includes use of profanity. This is difficult to accept for many people of a certain age, dismayed by the ubiquity of swearwords in modern literature, who have had the distinct disadvantage of having grown up during an era when books and movies were censored. However, let’s get real for a moment here. In the Old West, cantankerous, intoxicated cowboys did not refer to each other as “You no-good so-and-so,” and in combat, to paraphrase a well-known expression, there are no decorous speakers in foxholes. Admittedly, popular entertainment often goes overboard in drenching dialogue in profanity, but that is merely an exaggeration, not a fabrication, of reality. If you’re going to write novels or short stories, it seems that to be honest with yourself and your readers, if a story takes place in a milieu in which profanity is uttered, at least some of your characters are going to be swearing. If, however, the setting does not lend itself to cursing, it’s not an issue.
+
+<!-- signature -->
+{% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
+{% include post-image-signature.liquid imagePath = imagePath %}
+
+<!-- comments -->
+{% assign atprotoURI = "<<atprotoURI>>" %}
+{% assign atHandle = "<<atHandle>>" %}
+{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

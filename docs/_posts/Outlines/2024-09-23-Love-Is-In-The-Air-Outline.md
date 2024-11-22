@@ -68,3 +68,8 @@ The romance reader has to have their denouement. They want a glimpse of the love
 <script>
     $(".navbar").removeClass("navbar").addClass("navbar-kiss");
 </script>
+
+<!-- comments -->
+{% assign atprotoURI = "<<atprotoURI>>" %}
+{% assign atHandle = "<<atHandle>>" %}
+{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}
