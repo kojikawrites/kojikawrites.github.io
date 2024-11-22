@@ -11,7 +11,7 @@ I hate behind-the-scenes days. Most of the time it's tedious and boring as fuck.
 
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
-{% include post -image-signature.liquid imagePath = imagePath %}
+{% include post-image-signature.liquid imagePath = imagePath %}
 
 <!-- comments -->
 {% assign atprotoURI = "<<atprotoURI>>" %}
