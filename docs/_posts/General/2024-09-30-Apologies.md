@@ -14,8 +14,3 @@ I haven't felt well and posting felt daunting, so I didn't do it. Now, however, 
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
-
-<!-- comments -->
-{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbiwruyl752c" %}
-{% assign atHandle = "kojika.bsky.social" %}
-{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

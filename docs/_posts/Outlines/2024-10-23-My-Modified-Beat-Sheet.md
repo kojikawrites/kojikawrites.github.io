@@ -176,8 +176,3 @@ This is a long outline, would you prefer me putting all four parts into one post
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
-
-<!-- comments -->
-{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbiwtpf5i62c" %}
-{% assign atHandle = "kojika.bsky.social" %}
-{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

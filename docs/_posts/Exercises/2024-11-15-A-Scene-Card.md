@@ -2,9 +2,9 @@
 layout: post
 title:  "A Scene Card - An Exercise"
 description: I break down the key differences between illustrative and non-illustrative scenes in writing. Strong scenes actively challenge characters and show them making decisions in varied environments, revealing growth through their changing responses to similar situations. To help writers create more dynamic scenes, I've developed a checklist of essential elements - from setting and timing to emotional arcs and conflict sources. This framework helps identify whether you're truly showing character development or merely telling readers what to think.
-categories: Exercise
+categories: exercise
 author: K°
-tags: Exercise
+tags: exercise
 ---
 
 Do you want to create more illustrative scenes?  
@@ -32,8 +32,3 @@ Are you showing the reader what’s going on or are you telling the reader what�
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
-
-<!-- comments -->
-{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbix5b2hee2q" %}
-{% assign atHandle = "kojika.bsky.social" %}
-{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

@@ -18,8 +18,3 @@ I am willing to bet that you've used this beat more than once in your writing jo
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
-
-<!-- comments -->
-{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbiwrq2tft2z" %}
-{% assign atHandle = "kojika.bsky.social" %}
-{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

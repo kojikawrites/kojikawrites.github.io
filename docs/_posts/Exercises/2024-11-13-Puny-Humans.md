@@ -2,9 +2,9 @@
 layout: post
 title:  "Puny Humans - An Exercise"
 description: I've developed a comprehensive exercise exploring how cataclysmic events can reveal deeper character truths, even for stories dealing with smaller-scale conflicts. Through examining characters' responses to scenarios like asteroid impacts, plagues, or alien invasions, we can uncover vital insights about their values, relationships, and decision-making processes. I provide specific prompts about survival choices, moral dilemmas, and emotional arcs, along with tools like character journals and scene emotion maps to help writers dig deeper into their characters' core nature. By understanding how characters react when everything falls apart, we can better portray their responses to any level of conflict.
-categories: Exercise
+categories: exercise
 author: K°
-tags: Exercise
+tags: exercise
 ---
 
 Analyzing how your characters respond to major cataclysmic events, such as asteroid impacts, deadly plagues, devastating tsunamis, or robot uprisings, can indeed offer valuable insights into their character and behavior when faced with more relatable, human-level jeopardy. This approach allows you to delve into the depths of your character's resilience, decision-making, and emotional responses. To gain a better understanding, let's explore the process of "blowing things up," figuratively speaking, and the insights it can provide:
@@ -101,8 +101,3 @@ What do you think of this exercise? Throw a comment at me down below. I would lo
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
-
-<!-- comments -->
-{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbix3g6j5r2z" %}
-{% assign atHandle = "kojika.bsky.social" %}
-{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

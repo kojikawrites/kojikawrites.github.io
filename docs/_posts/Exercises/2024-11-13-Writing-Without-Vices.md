@@ -3,9 +3,9 @@ layout: post
 title:  "Writing Without Vices - An Exercise"
 description:
   I've created an exercise focused on identifying and breaking troublesome writing habits, drawing from my own experience with overemphasizing physical movement and overusing words like 'glance.' By prompting writers to identify their worst habits, most used words, writing crutches, and reliance on glue words, I provide a framework for more conscious writing choices. Through deliberately writing without these familiar patterns, we can discover whether they're truly necessary or just comfortable fallbacks, ultimately strengthening our storytelling craft.
-categories: Exercise
+categories: exercise
 author: K°
-tags: Exercise
+tags: exercise
 ---
 
 This exercise as short as it is, is designed to help you break free from troublesome writing habits. We all have them, and I'm no exception. When we've been immersed in a writing project for an extended period, it's easy to slip into familiar patterns, repeating mistakes, and forming habits that hinder our creativity. In my case, two of my most persistent bad writing habits are overemphasizing physical movement in my narratives, often at the expense of storytelling, and an over-reliance on the word 'glance.' While these may seem like separate issues, they're interconnected, and recognizing these crutches is the first step to improvement.
@@ -25,8 +25,3 @@ What do you think of this exercise? Throw a comment at me down below. I would lo
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
-
-<!-- comments -->
-{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbix3bf22x2c" %}
-{% assign atHandle = "kojika.bsky.social" %}
-{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}

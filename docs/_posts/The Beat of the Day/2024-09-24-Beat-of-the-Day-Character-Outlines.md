@@ -18,11 +18,7 @@ The sun is setting, and dinner has been eaten. Now, Anne and Steve Robinson are 
 A character outline is just that, a very detailed account of what each character is doing within a specific scene. This accounting is especially helpful when you’re having trouble making a particular scene work, in that you can look at what each individual character is doing in the hopes that it will provide more detail and more options.
 
 I absolutely love this beat. It is one of my favorites, especially when I am feeling stuck. Tell me, do you use this beat? Drop me a comment below.
+
 <!-- signature -->
 {% assign imagePath = "/assets/images/kojika-signature.png" | relative_url %}
 {% include post-image-signature.liquid imagePath = imagePath %}
-
-<!-- comments -->
-{% assign atprotoURI = "at://did:plc:i4icu3qqri2fdw423aufa4z7/app.bsky.feed.post/3lbiwqy2btv22" %}
-{% assign atHandle = "kojika.bsky.social" %}
-{% include bluesky.liquid atprotoURI = atprotoURI atHandle = atHandle %}
