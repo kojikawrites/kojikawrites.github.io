@@ -98,7 +98,7 @@ def publish_due_drafts():
     # Save the published posts to a JSON file
     if published_posts:
         with open('published_posts.json', 'w', encoding='utf-8') as f:
-            json.dump(published_posts, f, ensure_ascii=False)
+            json.dump(published_posts, f, ensure_ascii=False, indent=2)
         print("Saved published posts information to published_posts.json")
 
 def construct_post_url(date, slug):
