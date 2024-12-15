@@ -48,7 +48,23 @@
             @apply text-lg normal-case my-0;
         }
         code {
-            @apply color-text-highlight-color inline-block text-base;
+            @apply color-text-highlight-color inline-block;
+            @apply text-xs lg:text-base text-wrap lg:text-nowrap;
+        }
+        pre {
+
+            @apply max-w-full lg:w-fit lg:pr-4 lg:min-w-[120ch];
+            span {
+                @apply max-w-[120ch];
+                @apply lg:min-w-[100ch];
+            }
+        }
+
+        pre[data-language="plaintext"]
+        {
+            span {
+                @apply color-text-highlight-color !important;
+            }
         }
 
         ol {
