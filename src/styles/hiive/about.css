@@ -1,6 +1,7 @@
 @layer components {
     /* about page */
     .about {
+        @apply lg:mt-8;
         h2 {
             @apply uppercase lg:pt-0 lg:mt-0;
         }
@@ -14,6 +15,10 @@
                 @apply border border-gray-600;
             }
         }
+        .bio:first-child {
+            @apply mt-8 lg:mt-0;
+        }
+
 
         .special-thanks {
             @apply pt-4 lg:pt-1;
