@@ -7,7 +7,37 @@ export function getSiteCode(): string {
 export async function getSiteConfig() {
     const site = getSiteCode();
 
-    const yamlGlobs = import.meta.glob<{ default: any }>('/src/assets/config/*.yml');
+    interface ThemedImage {
+        dark: string;
+        light: string;
+        alt: string;
+    }
+    interface NavbarEntry {
+        code: string;
+        href: string;
+        label: string;
+    }
+
+    const yamlGlobs = import.meta.glob<{
+        blog_path: string;
+        blog_prefix: string;
+        navbar: {
+            logo: ThemedImage,
+            left: NavbarEntry[];
+            right: NavbarEntry[];
+        };
+        footer: {
+            content: string[];
+        };
+        bluesky: {
+            include: boolean;
+        }
+        tags_and_categories : {
+            aliases: any;
+        }
+
+        default: any
+    }>('/src/assets/config/*.yml');
     const yamlKeys = Object.keys(yamlGlobs);
     const matchingKey = yamlKeys.find(key => key.includes(site));
     if (!matchingKey) {

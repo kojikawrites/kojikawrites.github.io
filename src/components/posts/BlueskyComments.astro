@@ -3,9 +3,10 @@ interface Props {
     filename: string;
 }
 
-const { filename } = Astro.props;
 import blueskyJson from "../../assets/_private/state/bluesky_posted.json"
 import {getSiteConfig} from "../../utils/getSiteConfig";
+
+const { filename } = Astro.props;
 const siteConfig = await getSiteConfig();
 
 function trimPathToBlog(path: string): string {
