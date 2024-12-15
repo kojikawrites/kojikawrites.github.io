@@ -19,20 +19,6 @@
         /* dark theme transformer settings */
         --bg-code-highlight: #3E3E3E;
     }
-    /* global tweaks */
-    pre {
-        @apply min-w-[100ch];
-        @apply max-w-[120ch];
-    }
-
-    pre[data-language="plaintext"]
-    {
-        @apply w-fit;
-        span {
-
-            @apply color-text-highlight-color !important;
-        }
-    }
 
     code.astro-code {
         /* change the code box style */
