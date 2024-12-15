@@ -6,7 +6,10 @@ interface Props {
     id?: string;
     description?: string;
 }
+
+import { Image } from 'astro:assets';
 import toSafeId from '../../utils/toSafeId';
+import getImageMetadata from "../../utils/getImageMetadata";
 
 const {
     alt,
@@ -52,7 +55,7 @@ const imgId = `${id}-img`;
 </style>
 
 <div id={id} class="flex cursor-pointer">
-    <img src={src} alt={alt} class=`lightbox-image  ${className}` id={imgId} title={alt} {...next} />
+    <Image src={getImageMetadata(src)} alt={alt} class=`lightbox-image  ${className}` id={imgId} title={alt} {...next} />
 </div>
 
 <script is:inline define:vars={{id, imgId, alt, description}} data-astro-rerun>
