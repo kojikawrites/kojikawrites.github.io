@@ -61,10 +61,15 @@ function getKeyToPostsDictionary(keyType: string) {
 
 const tcDict = getKeyToPostsDictionary(keyType);
 const tcKeys = sortKeysUngroupedAware(Object.keys(tcDict));
-const tcBtnIds = Object.fromEntries(tcKeys.map(k => [toSafeKey(k), getKeyId(keyType, k)]));
 
 const title = "Posts grouped by " + (keyType == KeyType.Tags ? "Tag" : "Category");
 const keyPrefix = keyType == KeyType.Tags ? "#" : "";
+
+function getKeyPrefix(keyIdx: number): string {
+    if (keyPrefix === "" || tcKeys[tcKeys.length - 1] !== ungroupedKey) return keyPrefix;
+    return keyIdx < tcKeys.length-1 ? keyPrefix : "";
+}
+const tcBtnIds = Object.fromEntries(tcKeys.map(k => [toSafeKey(k), getKeyId(keyType, k)])); // DO NOT REMOVE
 
 ---
 <div class="container key-list">
@@ -75,7 +80,7 @@ const keyPrefix = keyType == KeyType.Tags ? "#" : "";
     </header>
     {tcKeys.map((key, ix) => (
         <div id={toSafeId(key, false)} class="key-div my-0 py-0">
-            <h2 class="key-header-inactive key-post-header" data-name={key}>{ix < tcKeys.length-1 ? keyPrefix : ''}{key}</h2>
+            <h2 class="key-header-inactive key-post-header" data-name={key}>{getKeyPrefix(ix)}{key}</h2>
             <ul class="key-post-list post-list">
                 {tcDict[key].map((post) => (
                     <PostSummary post={post} />
