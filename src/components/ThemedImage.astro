@@ -90,9 +90,9 @@ const themedImageGlobs = buildSrcList(srcList, srcString, images, ['dark', 'ligh
            data-theme={theme}
            {...rest} />
     ))}
-<script type="module" define:vars={{ srcList, themedImgId, srcString }} data-astro-rerun>
-    import getActiveTheme from '/src/utils/client/getActiveTheme';
 
+<script is:inline src="/scripts/client/getActiveTheme.js" data-astro-rerun />
+<script type="module" define:vars={{ srcList, themedImgId, srcString }} data-astro-rerun>
     function setThemedImage()  {
         var themedImgs = document.querySelectorAll(`[id='${themedImgId}']`);
         const theme = getActiveTheme();

@@ -1,4 +1,4 @@
-export default function getActiveTheme() : string {
+function getActiveTheme() {
 
     if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
         return localStorage.getItem('theme');
