@@ -13,17 +13,6 @@ const description = '404.';
 
 const allPostPaths = getPosts().map((p: any) => siteConfig.blog_prefix + getPostData(p).path); // DO NOT DELETE
 
-
-
-// const redirect = checkForRedirect(allPostPaths);
-
-// {redirect ? (
-// <meta
-//         http-equiv="refresh"
-//         content={ `${ redirect.timing ? redirect.timing : '0' }; url=${ redirect.url }` }
-// />
-//     ) : null}
-
 ---
 <BaseLayout title={title} description={description} permalink="">
     <div class="c404">

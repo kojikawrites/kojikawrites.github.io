@@ -35,6 +35,15 @@
     .c404 {
         @apply pt-5 text-center;
 
+        h1 {
+            @apply text-4xl lg:text-5xl;
+        }
+
+        h2 {
+            @apply t-bright-low;
+            @apply text-3xl lg:text-[1.8rem]
+        }
+
         p {
             @apply text-2xl;
             @apply font-family-monospace;
@@ -42,17 +51,14 @@
         }
 
         .shrug {
-            @apply pb-6;
+            @apply mt-0 lg:pb-6;
             @apply color-text-main;
         }
 
         hr {
-            @apply my-10;
+            @apply hidden lg:block lg:my-10;
         }
 
-        h2 {
-            @apply t-bright-low;
-        }
 
         /* auto-redirect formatting */
         .redirect {
@@ -81,7 +87,7 @@
             }
 
             .redirect-instruction {
-                @apply text-xl t-bright-low;
+                @apply text-base lg:text-xl t-bright-low;
                 .redirect-countdown {
                     @apply color-secondary-color;
                 }
