@@ -8,8 +8,9 @@ interface Props {
 }
 
 import ThemedImage from './ThemedImage.astro';
-import siteConfig from "../assets/config/site_config.yml"
 import getSafeId from '../utils/toSafeId';
+import {getSiteConfig} from "../utils/getSiteConfig";
+const siteConfig = await getSiteConfig();
 
 const id = getSafeId(Astro.props.id ?? Astro.props.alt, false);
 const { class: logoClass, dark, light } = Astro.props;

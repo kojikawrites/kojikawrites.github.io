@@ -1,7 +1,8 @@
 ---
 import ThemeToggleButton from './ThemeToggleButton.svelte';
-import siteConfig from "../assets/config/site_config.yml"
 import SiteLogo from './SiteLogo.astro';
+import {getSiteConfig} from "../utils/getSiteConfig";
+const siteConfig = await getSiteConfig();
 const { current = '', showTheme = false } = Astro.props;
 const selected = "selected max-w-fit text-nowrap text-left lg:text-center lg:px-2 py-1";
 const notSelected = "max-w-fit text-nowrap text-left lg:text-center lg:px-2 py-1";

@@ -7,5 +7,5 @@ export default function getImageMetadata(src: string): Promise<{default: ImageMe
     if (!value) {
         console.warn(`No image glob found for ${src}`);
     }
-    return value()
+    return value();
 }

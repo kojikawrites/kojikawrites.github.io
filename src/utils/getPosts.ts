@@ -1,37 +1,25 @@
-import siteConfig from "../assets/config/site_config.yml"
+import { getSiteConfig, getSiteCode } from "./getSiteConfig";
 
-const isDev = import.meta.env.DEV;
+const siteConfig = await getSiteConfig();
+const site = getSiteCode();
+const blog_path = siteConfig.blog_path;
 
 export default function getPosts() {
     const posts = () => {
-        switch (siteConfig.blog_path) {
-            case "posts":
-                if (isDev) {
-                    return import.meta.glob(
-                        ['../assets/posts/**/*.{md,mdx}',
-                            '!../assets/posts/**/_drafts/**'],
-                        {eager: true});
-                }
-                return import.meta.glob(
-                    ['../assets/posts/**/*.{md,mdx}',
-                        '!../assets/posts/**/_drafts/**',
-                        '!../assets/posts/**/_test/**'],
-                    {eager: true});
-            default:
-                if (isDev) {
-                    return import.meta.glob(
-                        ['../assets/blog/**/*.{md,mdx}',
-                            '!../assets/blog/**/_drafts/**'],
-                        {eager: true});
-                }
-                return import.meta.glob(
-                    ['../assets/blog/**/*.{md,mdx}',
-                        '!../assets/blog/**/_drafts/**',
-                        '!../assets/blog/**/_test/**'],
-                    {eager: true});
-        }
-
+        return import.meta.glob(
+            [`../assets/**/posts/**/*.{md,mdx}`,
+             '../assets/**/blog/**/*.{md,mdx}',
+             '!../assets/**/posts/**/_drafts/**',
+             '!../**/assets/blog/**/_drafts/**'],
+            {eager: true});
     };
 
-    return Object.values(posts()).map((p: any) => p);
+    const pathFilter = `${blog_path}/${site}/`;
+    let filteredPosts = Object.values(posts()).map((p: any) => p)
+        .filter(p => p.file.includes(pathFilter))
+    // filter out any dev mode.
+    if (import.meta.env.PROD) {
+        filteredPosts = filteredPosts.filter(p => !p.file.includes('/_test/'));
+    }
+    return filteredPosts;
 }
