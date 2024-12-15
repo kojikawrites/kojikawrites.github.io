@@ -20,7 +20,7 @@ console.warn('id', id);
 <script is:inline define:vars={{id}} data-astro-rerun>
 
     function addImageEventHandler(img, idx) {
-        img.addEventListener("click", evt => {
+        img.addEventListener("click", _ => {
             Spotlight.show(galleryList, null, idx);//, null, img.dataset.idx);
         });
     }
@@ -40,7 +40,7 @@ console.warn('id', id);
             img.id = `${id}_${idx}`;
             addImageEventHandler(img, idx);
             return {
-                src: div.getAttribute('data-src') || '',
+                src: img.src || '', //div.getAttribute('data-src') || '',
                 title: div.getAttribute('data-alt') || '',
                 description: div.getAttribute('data-description') || '',
                 theme: theme
