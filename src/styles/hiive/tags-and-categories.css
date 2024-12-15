@@ -1,0 +1,83 @@
+@layer components {
+
+    /* tag/category listing setup */
+    .key-list {
+
+        h1 {
+            @apply uppercase text-4xl lg:py-2;
+        }
+
+        header {
+            @apply pb-4;
+            .key-type-preamble {
+                @apply text-base pt-0 pb-2;
+            }
+        }
+    }
+
+    .key-post-header {
+        --bg-post-header-color: #50505030;
+        @apply bg-[var(--bg-post-header-color)];
+        @apply cursor-pointer;
+        @apply animate-blur;
+        @apply hover:animate-sharpen;
+        @apply pl-4 py-0.5 mb-1;
+    }
+
+    .key-post-list {
+        @apply mb-12 lg:mb-8 h-fit;
+        /*@apply transition ease-linear delay-300;*/
+    }
+
+    .key-header-inactive {
+        /*@apply brightness-50;*/
+    }
+
+    .key-header-active {
+        @apply animate-none;
+    }
+
+
+    /* tag/category button setup */
+    .key-button-border-color {
+        border-color: var(--primary-color-contrast);
+    }
+
+    .key-button-common {
+        @apply relative -top-1 h-fit w-fit;
+        @apply m-0.5 px-1 py-[1px];
+        @apply not-italic uppercase font-extrabold font-family-sans-alt;
+        @apply rounded-md border-[1px] key-button-border-color color-primary-color-contrast;
+    }
+
+    .tag-button-background-color {
+        --tag-background-color: darkgreen;
+        background-color: var(--tag-background-color);
+    }
+
+    .category-button-background-color {
+        --category-background-color: darkred;
+        background-color: var(--category-background-color);
+    }
+
+    /* tags */
+    a.tag {
+        @apply key-button-common;
+        @apply tag-button-background-color;
+    }
+    /* categories */
+    a.category {
+        @apply key-button-common;
+        @apply category-button-background-color;
+    }
+
+    a.tag, a.category {
+        @apply block relative;
+    }
+
+    a.tag::before, a.category::before {
+        @apply underline-link-hover;
+        @apply hover:scale-x-95;
+        @apply bottom-[3px] w-full h-[1px] bg-color-primary-color-contrast;
+    }
+}

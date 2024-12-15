@@ -1,0 +1,22 @@
+---
+interface Props {
+    id: string;
+    alt?: string;
+    src: string;
+}
+
+import ThemedImage from "../ThemedImage.astro";
+const {id, alt = "", src} = Astro.props;
+const portraitId = `${id}-portrait`;
+---
+
+<div class="bio" id={id}>
+    <ThemedImage id={portraitId}
+                 alt={alt}
+                 src={src}
+                 class="portrait"/>
+    <div>
+        <slot />
+    </div>
+    <hr/>
+</div>

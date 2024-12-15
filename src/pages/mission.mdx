@@ -1,0 +1,60 @@
+---
+title: Mission Statement
+---
+import ThemedImage from '../components/ThemedImage.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+export const logoSrc = {
+    dark: '/src/assets/images/svc/svc-gamedev-dark.svg',
+    light: '/src/assets/images/svc/svc-gamedev-light.svg'
+};
+
+<BaseLayout title={frontmatter.title} current="mission">
+    <div class="container mission">
+        <div class="ml-auto mr-auto w-fit lg:w-full">
+            <ThemedImage id="svc-gamedev-img" srcList={logoSrc}
+                         class="float-none lg:float-start w-56 h-56 lg:w-72 lg:h-72 lg:pr-2"/>
+        </div>
+
+        ## Ethically Incorporating ML/AI into Game Design and Development
+
+        h<span class="color-secondary-color">i</span>ive<span class="color-secondary-color">labs</span>
+        explores the integration of machine learning (ML) and artificial intelligence
+        (AI) into game design. This project aims to create procedurally generated
+        experiences that emulate the intricacies of hand-crafted content.
+        By leveraging advanced AI techniques, the goal is to develop unique, engaging,
+        and immersive gaming environments. The research investigates how ML/AI can
+        enhance procedural generation, ensuring game elements exhibit depth, coherence,
+        and creativity.
+
+        AI algorithms analyze and replicate complex design patterns found in manually
+        created game elements. This process uses data analysis and algorithmic design,
+        drawing from a diverse dataset of game designs and player feedback.
+        By balancing randomness with structure, the goal is to produce content
+        that surprises and delights players while ensuring a logical and enjoyable
+        gameplay experience.
+
+        ### Key areas of focus include:
+
+        1. **<span class="color-secondary-color">Terrain Generation</span>**: Creating vast, detailed landscapes that feel organic and believable. The terrain generation process employs AI to simulate natural geological processes, resulting in realistic mountains, valleys, rivers, and forests. Each generated landscape is unique, yet maintains the coherence and visual appeal of a hand-crafted world. The AI adapts to various environmental factors, such as climate and vegetation, to create immersive and diverse biomes that enhance the player's exploration experience.
+
+        2. **<span class="color-secondary-color">Character Development</span>**: Designing diverse and complex characters with unique backstories and behaviors. Characters are generated with intricate personal histories, motivations, and personality traits that influence their interactions with the player and the game world. AI-driven behavior models enable characters to react dynamically to player actions and environmental changes, creating a more engaging and lifelike experience. The characters' development is intertwined with the game's narrative, ensuring that they contribute meaningfully to the story and gameplay.
+
+        3. **<span class="color-secondary-color">Quest Creation</span>**: Generating multi-layered dynamic quests that offer meaningful choices and consequences across different conceptual levels. This includes personal character arcs that delve into individual stories and motivations, mid-level quests that involve interactions and conflicts within small groups or communities, and overarching world-changing events that alter the game’s broader landscape. Each layer of quests is interconnected, allowing player decisions to influence subsequent quests and the overall narrative. AI ensures that quests remain fresh and varied, adapting to the evolving game world and player actions.
+
+        4. **<span class="color-secondary-color">Narrative Design</span>**: Crafting cohesive and immersive storylines that adapt to player actions. The narrative is dynamically generated, allowing for a fluid and personalized storytelling experience. AI algorithms track player choices and in-game events to weave a story that responds to the player's decisions, ensuring that each playthrough is unique. The narrative structure accommodates branching storylines, multiple endings, and character development arcs that provide depth and replayability. This adaptive approach ensures that the story remains engaging and relevant throughout the game.
+
+        5. **<span class="color-secondary-color">Living Worlds</span>**: Developing believable worlds where ecosystems interact dynamically, AI-driven NPCs behave realistically, and systems of politics, economics, and social interactions evolve over time. These living worlds react to player actions, creating a sense of immersion and realism. AI models simulate the interactions between flora and fauna, weather patterns, and resource cycles to create a vibrant and evolving ecosystem. NPCs have their own goals and routines, influenced by the political and economic systems in place. Additionally, AI generates cities, villages, towns, and other artificial settlements with their own unique cultures, economies, and political systems. These settlements grow and change over time, influenced by the player’s actions and the world’s evolving dynamics. This complexity ensures that the game world feels alive and responsive, offering players a rich and dynamic environment to explore.
+
+        6. **<span class="color-secondary-color">Adaptive Play Style</span>**: Reacting to the player’s play style, making the adventure as big or small as the player desires without explicit input. The AI observes and learns from the player's interactions, preferences, and decisions to adjust the scope and scale of the adventure dynamically. This ensures that the gameplay experience aligns with the player's style, whether they prefer a grand epic journey or a series of smaller, more personal adventures. The game world and narrative adapt in real-time, providing a tailored experience that remains engaging and immersive throughout.
+
+        The ultimate aim is to create a roguelike game that is fully procedurally generated but feels hand-crafted.
+        By exploring AI's possibilities in game design,
+        h<span class="color-secondary-color">i</span>ive<span class="color-secondary-color">labs</span> contributes to a broader
+        understanding of ML/AI applications in creative fields. The project aims to inspire new approaches to game development,
+        showcasing AI's potential to enhance creativity and innovation. Driven by a passion for exploring uncharted territories
+        in technology and creativity, h<span class="color-secondary-color">i</span>ive<span class="color-secondary-color">labs</span>
+        seeks to push the envelope of what can be achieved in the gaming industry. The results aim to demonstrate that AI can
+        craft game experiences as rich and nuanced as those created by human designers, opening new horizons for developers
+        and players.
+    </div>
+</BaseLayout>

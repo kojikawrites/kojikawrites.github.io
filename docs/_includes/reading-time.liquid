@@ -1,8 +1,0 @@
-{% assign wordCount = include.content | number_of_words | default: 0 | plus: 0 %}
-{% assign readMinutes = wordCount | divided_by: 180 %}
-
-{% if wordCount > 250 %}
-    <span class="span-read-time">{{ readMinutes }}-minute read time.</span>
-{% else %}
-    <span class="span-read-time">One minute read time.</span>
-{% endif %}

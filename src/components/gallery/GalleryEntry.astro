@@ -1,0 +1,13 @@
+---
+interface Props {
+    src: string;
+    alt: string;
+    description: string;
+    class?: string;
+}
+
+const { src, alt, description, class:className, ...next } = Astro.props;
+---
+<div class="cursor-pointer" data-src={src} data-alt={alt} data-description={description} data-gallery-entry>
+    <img src={src} alt={alt} class=`lightbox-image ${className}` title={alt} {...next} />
+</div>

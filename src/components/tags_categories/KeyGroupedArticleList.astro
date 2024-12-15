@@ -1,0 +1,186 @@
+---
+import KeyList from "./KeyList.astro";
+import { KeyType } from "../../utils/enums";
+
+interface Props {
+    keyType: KeyType,
+}
+
+import PostSummary from "../../components/posts/PostSummary.astro";
+
+import { extractKeyList } from "../../utils/getPostData";
+import getPosts from "../../utils/getPosts";
+import toSafeId from "../../utils/toSafeId";
+import { getKeyId, toSafeKey } from "../../utils/keyUtils";
+
+const keyType = Astro.props.keyType;
+const ungroupedKey = keyType == KeyType.Tags ? "~untagged~" : "~uncategorized~";
+
+function sortKeysUngroupedAware(keys) {
+    return keys.slice().sort((a, b) => {
+        // If 'a' is the lastString, move it after 'b'
+        if (a === ungroupedKey) return 1;
+        // If 'b' is the lastString, move it after 'a'
+        if (b === ungroupedKey) return -1;
+        // Otherwise, compare alphabetically
+        return a.localeCompare(b);
+    });
+}
+
+function getKeyToPostsDictionary(keyType: string) {
+    const tcDictionary = {};
+    const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
+
+    const allKeyedPosts = allPosts.map(p => (
+        { post: p, keys: extractKeyList(p.frontmatter[keyType]) }
+    ));
+
+    // Process each entry
+    for (const entry of allKeyedPosts) {
+        let keys = entry.keys;
+
+        // If tags are undefined or null, set to ["untagged"]
+        if (keys == null) {
+            keys = [ungroupedKey];
+        } else {
+            // Replace any null/undefined within the array
+            keys = keys.map(tc => tc == null ? ungroupedKey : tc);
+        }
+
+        // Populate the dictionary
+        for (const key of keys) {
+            if (!tcDictionary[key]) {
+                tcDictionary[key] = [];
+            }
+            tcDictionary[key].push(entry.post);
+        }
+    }
+    return tcDictionary;
+}
+
+
+const tcDict = getKeyToPostsDictionary(keyType);
+const tcKeys = sortKeysUngroupedAware(Object.keys(tcDict));
+const tcBtnIds = Object.fromEntries(tcKeys.map(k => [toSafeKey(k), getKeyId(keyType, k)]));
+
+const title = "Posts grouped by " + (keyType == KeyType.Tags ? "Tag" : "Category");
+const keyPrefix = keyType == KeyType.Tags ? "#" : "";
+
+---
+<div class="container key-list">
+    <h1>{title}</h1>
+    <header>
+        <div class="key-type-preamble">The following {keyType} appear on this site:</div>
+        <KeyList keys={tcKeys} keyType={keyType} samePageLink={true} />
+    </header>
+    {tcKeys.map((key, ix) => (
+        <div id={toSafeId(key, false)} class="key-div my-0 py-0">
+            <h2 class="key-header-inactive key-post-header" data-name={key}>{ix < tcKeys.length-1 ? keyPrefix : ''}{key}</h2>
+            <ul class="key-post-list post-list">
+                {tcDict[key].map((post) => (
+                    <PostSummary post={post} />
+                ))}
+            </ul>
+        </div>
+    ))}
+</div>
+<!-- script -->
+<script is:inline define:vars={{ tcBtnIds }} data-astro-rerun>
+
+    function closeAllSections() {
+        var contents = document.querySelectorAll('.key-post-list');
+        contents.forEach(function(content) {
+            // content.style.display = 'none';
+            content.classList.add('hidden');
+        });
+
+        // Set all headers to inactive
+        var headers = document.querySelectorAll('.key-post-header');
+        headers.forEach(function(header) {
+            header.classList.remove('key-header-active');
+            header.classList.add('key-header-inactive');
+        });
+    }
+
+    function openSection(id) {
+        closeAllSections();
+        var content = document.querySelector(`#${id} .key-post-list`);
+        var header = document.querySelector(`#${id} .key-post-header`);
+        if (content && header) {
+            // content.style.display = 'block';
+            content.classList.remove('hidden');
+            // Set the active header class
+            header.classList.remove('key-header-inactive');
+            header.classList.add('key-header-active');
+        }
+    }
+
+    // Add click event listeners to all h2 headers
+    var headers = document.querySelectorAll('.key-div .key-post-header');
+    headers.forEach(function(header) {
+        // add a click handler for the header.
+        function headerClickHandler(headerId) {
+            if(history.replaceState) {
+                history.replaceState(null, null, `#${headerId}`);
+            }
+            else {
+                location.hash = `#${headerId}`;
+            }
+            openSection(headerId);
+        }
+
+        const id = header.parentElement.id;
+        header.addEventListener('click', function() {
+            headerClickHandler(id);
+        });
+        const tcId = tcBtnIds[id];
+        const tcBtn = document.getElementById(tcId);
+        if (tcBtn) {
+            tcBtn.addEventListener('click', function() {
+                headerClickHandler(id);
+            });
+        }
+    });
+
+    // Function to open section based on hash
+    function handleHash() {
+        if (window.location.hash) {
+            const hashId = window.location.hash.substring(1);
+            openSection(hashId);
+            // Scroll to the section
+            var elem = document.getElementById(hashId);
+
+            if (elem) {
+                elem.scrollIntoView();
+            }
+        } else {
+            var keyDivs = document.querySelectorAll('.key-div');
+            if (keyDivs.length === 1) {
+                // If only one tag, open it by default
+                var id = keyDivs[0].id;
+                openSection(id);
+            } else {
+                // If multiple tags, close all sections
+                closeAllSections();
+            }
+        }
+    }
+
+    // On hash change
+    window.addEventListener('hashchange', handleHash);
+
+    // document.addEventListener("astro:after-swap", function() {
+    //     // On page load
+    //     // console.log('hash: ', window.location.hash);
+    //     handleHash();
+    // });
+    //
+    // document.addEventListener("astro:page-load", function() {
+    //     // On page load
+    //     // console.log('hash: ', window.location.hash);
+    //     handleHash();
+    // });
+
+    handleHash();
+
+</script>
