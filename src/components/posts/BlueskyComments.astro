@@ -4,8 +4,9 @@ interface Props {
 }
 
 const { filename } = Astro.props;
-import siteConfig from "../../assets/config/site_config.yml"
-import blueskyJson from "../../assets/config/state/bluesky_posted.json"
+import blueskyJson from "../../assets/_private/state/bluesky_posted.json"
+import {getSiteConfig} from "../../utils/getSiteConfig";
+const siteConfig = await getSiteConfig();
 
 function trimPathToBlog(path: string): string {
     // Remove leading and trailing slashes for consistent splitting

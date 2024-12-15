@@ -6,7 +6,9 @@ interface Props {
 
 
 import getPostData from "../../utils/getPostData";
-import siteConfig from "../../assets/config/site_config.yml"
+
+import {getSiteConfig} from "../../utils/getSiteConfig";
+const siteConfig = await getSiteConfig();
 
 const post = Astro.props.post;
 

@@ -1,5 +1,7 @@
-import siteConfig from "../assets/config/site_config.yml";
 import getPostData from "./getPostData";
+
+import {getSiteConfig} from "./getSiteConfig";
+const siteConfig = await getSiteConfig();
 
 export default function buildPostHref(post, prefix='/') : string {
     const {  path } = getPostData(post);

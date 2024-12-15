@@ -3,7 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 import getPosts from "../utils/getPosts";
 import getPostData from "../utils/getPostData";
-import siteConfig from "../assets/config/site_config.yml"
+
+import {getSiteConfig} from "../utils/getSiteConfig";
+const siteConfig = await getSiteConfig();
 
 const title = '404';
 const description = '404.';

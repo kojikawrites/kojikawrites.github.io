@@ -3,13 +3,13 @@ layout: ../layouts/BaseLayout.astro
 title: Home
 ---
 import SiteLogo from '../components/SiteLogo.astro';
-import siteConfig from "../assets/config/site_config.yml"
+import {getSiteConfig} from "../utils/getSiteConfig";
 
 
 <div class="container">
-    <SiteLogo alt={siteConfig.main.logo.alt}
-              dark={siteConfig.main.logo.dark}
-              light={siteConfig.main.logo.light}
+    <SiteLogo alt={(await getSiteConfig()).main.logo.alt}
+              dark={(await getSiteConfig()).main.logo.dark}
+              light={(await getSiteConfig()).main.logo.light}
               id="main-page-logo"
               class="main-page-logo"/>
 
