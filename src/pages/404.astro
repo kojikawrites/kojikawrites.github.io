@@ -33,9 +33,8 @@ const allPostPaths = getPosts().map((p: any) => siteConfig.blog_prefix + getPost
                 may have been moved to:
             </div>
             <div class="redirect-to-url cursor-pointer">
-                <!--<a href={redirect.url}>-->
-                <!--    {Astro.site.href}{redirect.url.substring(1)}-->
-                <!--</a>-->
+                <a class="redirect-to-url-link" href="/">
+                </a>
             </div>
             <div class="redirect-info">
                 Please update your bookmarks.
@@ -105,8 +104,11 @@ const allPostPaths = getPosts().map((p: any) => siteConfig.blog_prefix + getPost
         document.querySelectorAll('.no-redirect').forEach((el) => {el.classList.add('hidden'); } );
         // update the redirect-from-url
         document.querySelectorAll('.redirect-from-url')[0].innerText = redirect.fromUrl;
-        document.querySelectorAll('.redirect-to-url')[0].innerText = redirect.toUrl;
+        const toLink = document.querySelectorAll('.redirect-to-url-link')[0];
+        toLink.innerText = redirect.toUrl;
+        toLink.href = redirect.toUrl;
 
+        // set up redirect
         const meta = document.createElement('meta');
         meta.setAttribute('http-equiv', 'refresh');
         meta.setAttribute('content', `${redirect.timing ? redirect.timing : '0'}; url=${redirect.toUrl}`);
