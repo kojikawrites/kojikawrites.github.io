@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import KeyGroupedArticleList  from "../components/tags_categories/KeyGroupedArticleList.astro";
+import {KeyType} from "../utils/enums";
+
+const title = 'Categories';
+const description = 'Posts grouped by Category.';
+const permalink = `${Astro.site.href}categories`;
+---
+<BaseLayout title={title} description={description} permalink={permalink} current="categories">
+    <KeyGroupedArticleList keyType={KeyType.Categories} />
+</BaseLayout>

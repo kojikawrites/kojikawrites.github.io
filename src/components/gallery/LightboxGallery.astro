@@ -1,0 +1,52 @@
+---
+interface Props {
+
+    id?: string;
+}
+
+
+import toSafeId from '../../utils/toSafeId';
+
+const { id:rawId } = Astro.props;
+
+const id = rawId ?? toSafeId(rawId);
+console.warn('id', id);
+---
+
+<div id={id} class="lightbox-gallery flex space-x-1 lg:space-x-4">
+    <slot />
+</div>
+
+<script is:inline define:vars={{id}} data-astro-rerun>
+
+    function addImageEventHandler(img, idx) {
+        img.addEventListener("click", evt => {
+            Spotlight.show(galleryList, null, idx);//, null, img.dataset.idx);
+        });
+    }
+
+    function initGallery() {
+        const galleryDiv = document.getElementById(id);
+        if (!galleryDiv) {
+            return [];
+        }
+
+        const galleryEntries = galleryDiv.querySelectorAll('[data-gallery-entry]');
+        const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
+        let idx = 0
+        return Array.from(galleryEntries).map(div => {
+            const img = div.querySelector('img');
+            idx += 1;
+            img.id = `${id}_${idx}`;
+            addImageEventHandler(img, idx);
+            return {
+                src: div.getAttribute('data-src') || '',
+                title: div.getAttribute('data-alt') || '',
+                description: div.getAttribute('data-description') || '',
+                theme: theme
+            };
+
+        });
+    }
+    const galleryList = initGallery(id);
+</script>

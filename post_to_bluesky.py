@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import json
 import argparse
 import pathlib
@@ -67,6 +68,7 @@ def parse_date_from_filename(filename):
         year, month, day, slug = match.groups()
         return datetime(int(year), int(month), int(day), tzinfo=timezone.utc), slug
     return None, None
+
 
 def construct_post_url(date, slug, root_url, categories):
     if not root_url:
@@ -237,16 +239,16 @@ def post_to_bluesky(title, description, image_path, url, categories, category_al
         if image_path_thumbnail:
             os.remove(image_path_thumbnail)
         print(f"[Test Run] Would post to Bluesky: {tb.build_text()}\n{embed}")
-        return True
+        return True, None
 
     # Post the message
     try:
-        client.send_post(text=tb, embed=embed)
+        response = client.send_post(text=tb, embed=embed)
         print(f"Successfully posted to Bluesky: {title}")
-        return True
+        return True, response
     except Exception as e:
         print(f"Error posting to Bluesky: {e}")
-        return False
+        return False, None
 
 def load_aliases_from_config(root_dir):
     try:
@@ -261,6 +263,61 @@ def load_aliases_from_config(root_dir):
         print(f"Error loading config: {full_file_path}")
         return {}
 
+def generate_embed_code(post_uri):
+    # Parse the URI to extract DID and RKEY
+    # Example URI: 'at://did:plc:xyz1234/app.bsky.feed.post/3jtuqlrzi2v24'
+    # https://bsky.app/profile/kojika.bsky.social/post/3lbgeb7w5jo2w
+    #
+    match = re.match(r'^at://(did:[^/]+)/app\.bsky\.feed\.post/([^/]+)$', post_uri)
+    if match:
+        did = match.group(1)
+        rkey = match.group(2)
+        # Construct the embed URL
+        embed_url = f"https://staging.bsky.app/profile/{did}/post/{rkey}"
+        # Create the embed code (adjust according to your blog's requirements)
+        embed_code = f'<iframe src="{embed_url}" frameborder="0" allowfullscreen></iframe>'
+        return embed_code
+    else:
+        print(f"Invalid post URI: {post_uri}")
+        return ""
+
+# def update_blog_post_with_embed(file_path, embed_code):
+#     # Read the original markdown content
+#     with open(file_path, 'r', encoding='utf-8') as f:
+#         content = f.read()
+#
+#     # Decide where to insert the embed code
+#     # For this example, we'll append it at the end of the content
+#     updated_content = content.strip() + f'\n\n<!-- Bluesky Embed -->\n{embed_code}\n'
+#
+#     # Write the updated content back to the file
+#     with open(file_path, 'w', encoding='utf-8') as f:
+#         f.write(updated_content)
+
+def replace_in_file(file_path, post_uri):
+    """
+    Opens the file at file_path, replaces occurrences of '<<atprotoURI>>' with post_uri, and saves the file.
+
+    :param file_path: The path to the text file.
+    :param post_uri: The string to replace '<<atprotoURI>>' with.
+    """
+    try:
+        # Open the file in read mode and read its content
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+
+        # Replace all occurrences of '<<atprotoURI>>' with the value of post_uri
+        updated_content = content.replace('<<atprotoURI>>', post_uri)
+        bluesky_username = os.environ.get('BLUESKY_USERNAME')
+        updated_content = updated_content.replace('<<atHandle>>', bluesky_username)
+        # Open the file in write mode and write the updated content back to the file
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.write(updated_content)
+
+        print(f"Successfully updated the file at '{file_path}'.")
+    except Exception as e:
+        print(f"An error occurred while processing the file: {e}")
+
 def main():
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Post new blog posts to Bluesky.")
@@ -268,6 +325,7 @@ def main():
     parser.add_argument('--announce-start-date', type=str, help='Start date for announcements (YYYY-MM-DD)')
     parser.add_argument('--testrun', action='store_true', help='Perform a test run without posting or updating the tracking list')
     parser.add_argument('--root-dir', type=str, default='docs', help='Root directory to start searching from')
+    parser.add_argument('--data-dir', type=str, default='docs/_data', help='Output directory for json')
     args = parser.parse_args()
 
     # Retrieve or set ROOT_URL
@@ -290,14 +348,15 @@ def main():
         sys.exit(1)
 
     # Load the tracking list
-    tracking_file = 'bluesky_posted.json'
+
+    tracking_file = os.path.join(args.data_dir, 'bluesky_posted.json')
     if os.path.exists(tracking_file):
         with open(tracking_file, 'r', encoding='utf-8') as f:
             posted_posts = json.load(f)
     else:
         posted_posts = []
 
-    posted_ids = set(posted_posts)
+    posted_ids = set([p["post_id"] for p in posted_posts])
     # Get current date and time in UTC
     current_datetime = datetime.now(timezone.utc)
 
@@ -312,6 +371,7 @@ def main():
                 for file in post_files:
                     if file.endswith('.md'):
                         file_path = os.path.join(post_root, file)
+                        # print(f"FILE: {post_dirs}, {file}")
                         relative_path = os.path.relpath(file_path, args.root_dir)
                         post_id = relative_path.replace('\\', '/')
 
@@ -376,12 +436,30 @@ def main():
         categories = post['categories']
         description = post['description']
         image_path = post['image_path']
-        success = post_to_bluesky(title, description, image_path, url, categories, category_aliases, client, testrun=args.testrun)
+        success, response = post_to_bluesky(title, description, image_path, url, categories, category_aliases, client, testrun=args.testrun)
         if success:
             if not args.testrun:
-                posted_posts.append(post_id)
+                # Extract embedding info
+                post_uri = response.uri  # The unique identifier of the post
+                post_cid = response.cid   # The content ID
+                # Use the embedding info as needed
+                # For example, update the blog post with the embed code
+                # TODO
+                posted_posts.append( {
+                    "post_id": post_id,
+                    "post_uri": post_uri,
+                    "post_cid": post_cid,
+                })
+
+                file_path = os.path.join(args.root_dir, post_id)
+                replace_in_file(file_path, post_uri)
+                # embed_code = generate_embed_code(post_uri)
+                # update_blog_post_with_embed(file_path, embed_code)
         else:
             print(f"Failed to post: {title}")
+        if not args.testrun:
+            # pause for a few seconds to ensure we can't exceed rate limit.
+            time.sleep(7)
 
     # Save the updated tracking list
     if not args.testrun:
@@ -393,4 +471,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

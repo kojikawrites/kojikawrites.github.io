@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../../../../../layouts/BaseLayout.astro';
+
+import PostHeader from "../../../../../../components/posts/PostHeader.astro";
+import PostContent from "../../../../../../components/posts/PostContent.astro";
+import PostFooter from "../../../../../../components/posts/PostFooter.astro";
+
+import getPosts from "../../../../../../utils/getPosts";
+import getPostData  from '../../../../../../utils/getPostData';
+import buildPostHref  from '../../../../../../utils/buildPostHref';
+
+
+export async function getStaticPaths() {
+  // Fetch all the posts from the collection 'blog'
+  const posts = getPosts();
+  // Iterate over the posts, generating the tokens and
+  // setting them inside the `params` key.
+  // Astro will use anything inside `params` as the token
+  // for a dynamic route segment.
+  return posts.map((p: any) => {
+    return {
+      params: getPostData(p),
+      props: { post: p },
+  }});
+}
+
+
+const post = Astro.props.post;
+
+const permalink = `${buildPostHref(post, Astro.site.href)}`;
+console.log('permalink', permalink);
+const { title, description} = post.frontmatter;
+
+---
+
+<BaseLayout title={title} description={description} permalink={permalink} current="blog">
+  <div class="post-content">
+    <div class="container">
+      <PostHeader post={post}/>
+      <PostContent post={post}/>
+      <PostFooter post={post}/>
+    </div>
+  </div>
+</BaseLayout>
+
+

@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* global defaults */
+@layer base {
+
+    html {
+        @apply overflow-y-scroll;
+    }
+
+    @supports (scrollbar-gutter: stable) {
+        html {
+            @apply overflow-y-auto;
+            scrollbar-gutter: stable;
+        }
+    }
+
+    *,
+    *:before,
+    *:after {
+        @apply box-border
+    }
+
+    body {
+        /*min-height: 100vh;*/
+        /*min-width: 100vw;*/
+        @apply m-0 min-h-dvh min-w-full;
+        padding: env(safe-area-inset-top)
+                 env(safe-area-inset-right)
+                 env(safe-area-inset-bottom)
+                 env(safe-area-inset-left);
+    }
+
+    p,
+    ul,
+    ol {
+        @apply mx-0;
+    }
+
+    ol,
+    ul {
+        @apply pl-8;
+        /*-webkit-padding-start: 5%;*/
+        /*-webkit-padding-end: 5%;*/
+    }
+
+    ol {
+        @apply list-decimal leading-4;
+    }
+
+    li {
+        @apply mx-0 mb-4;
+    }
+
+    li p {
+        @apply mx-0 my-2;
+    }
+
+    img {
+        @apply max-w-full h-auto;
+    }
+
+    hr {
+        @apply p-0 border-0 h-0.5 mx-auto mt-6 mb-2;
+    }
+
+    footer {
+        @apply w-full py-8 mx-auto my-8 text-center;
+    }
+
+    .quote-block {
+        @apply block my-4 mx-2 px-4 max-w-[100ch];
+    }
+}
+
+@layer components {
+    /* site specific features */
+    /* navbar container */
+    .navbar {
+        a {
+            @apply text-inherit block relative ml-2;
+        }
+
+        .theme-toggle-container {
+            @apply w-20;
+
+            .theme-toggle {
+                /*border-radius: 99em;*/
+                @apply inline-flex items-center py-1 px-2 ml-2 gap-2 rounded-full;
+
+                .checked {
+                    @apply opacity-100;
+                }
+
+                label {
+                    @apply relative flex items-center justify-center cursor-pointer opacity-50;
+                }
+
+                input[name='theme-toggle'] {
+                    @apply absolute opacity-0 top-0 right-0 bottom-0 left-0 -z-10;
+                }
+
+                label:focus-within {
+                    @apply outline-2 outline-transparent;
+
+                }
+            }
+        }
+    }
+
+    div.container {
+        @apply py-0 lg:py-6 px-6 mx-auto;
+        @apply text-balance;
+    }
+}
+
+
