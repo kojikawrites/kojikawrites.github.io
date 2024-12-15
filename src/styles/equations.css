@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @layer components {
     .equation {
         @apply bg-color-background-feature color-text-highlight-color;
