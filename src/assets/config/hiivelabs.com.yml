@@ -1,16 +1,16 @@
 # main page logo
 main:
   logo:
-    dark: "/src/assets/images/logos/hiive-logo-dark.svg"
-    light: "/src/assets/images/logos/hiive-logo-light.svg"
+    dark: "/src/assets/images/hiivelabs.com/logos/hiive-logo-dark.svg"
+    light: "/src/assets/images/hiivelabs.com/logos/hiive-logo-light.svg"
     alt: "hiivelabs.com"
 
 # navbar setup
 navbar:
     # navbar logo setup
     logo:
-      dark: "/src/assets/images/logos/hiivelabs-dot-com-dark.svg"
-      light: "/src/assets/images/logos/hiivelabs-dot-com-light.svg"
+      dark: "/src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-dark.svg"
+      light: "/src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-light.svg"
       alt: "hiivelabs.com"
 
     left:

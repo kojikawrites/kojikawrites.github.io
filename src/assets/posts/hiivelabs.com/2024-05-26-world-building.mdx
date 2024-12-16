@@ -32,7 +32,7 @@ using a chunk system to generate persistent chunks on demand.
 
 ## Land Mass and Biome Generation
 
-<LightboxImage src="/src/assets/images/blog/voronoi_graph.jpg"
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/voronoi_graph.jpg"
                alt="Basic Voronoi Graph" />
 
 \
@@ -55,7 +55,7 @@ instantaneous. Other worldgen packages I had looked at took a few seconds minimu
 indistinguishable, why do the extra processing?)
 As an additional simplification step, I deleted all internal cells that were totally surrounded by sea.
 
-<LightboxImage src="/src/assets/images/blog/voronoi_land_masses.jpg"
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/voronoi_land_masses.jpg"
                alt="Land masses from Voronoi Graph" />
 
 \
@@ -66,14 +66,14 @@ see the edges of the landmasses clearly defined with a red outline, which show t
 the top left of the image). If that slider was reduced to zero, there would be no red outline. At maximum, there would
 be a much larger red outline (meaning more land erosion).
 
-<LightboxImage src="/src/assets/images/blog/map_biome_generation.jpg"
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/map_biome_generation.jpg"
                alt="Biome Generation Texture" />
 
 \
 The next image shows a cleaner polygonal view of the generated biomes combined with the height map. Honestly it wasn’t
 much use other than for a visual sanity check, but it did look pretty, which is why I included it here.
 
-<LightboxImage src="/src/assets/images/blog/world_biome_map.png"
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/world_biome_map.png"
                alt="Polygonal Shaded Biome Map" />
 \
 To decide what biomes went where, I used another three generated shader textures. The first two were for altitude and
@@ -85,9 +85,9 @@ temperature, and then applying a seeded random vertical distortion across the te
 The following three images show the modulated altitude, moisture and temperature maps respectively.
 
 <LightboxGallery>
-    <GalleryEntry src="/src/assets/images/blog/modulated_altitude_map.png" alt="Terrain modulated altitude map"  />
-    <GalleryEntry src="/src/assets/images/blog/world_precipitation.png" alt="Precipitation Map" />
-    <GalleryEntry src="/src/assets/images/blog/world_heatmap.png" alt="Temperature Map" />
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/modulated_altitude_map.png" alt="Terrain modulated altitude map"  />
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/world_precipitation.png" alt="Precipitation Map" />
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/world_heatmap.png" alt="Temperature Map" />
 </LightboxGallery>
 
 
@@ -96,7 +96,7 @@ I used the three maps as a 3D lookup into a pre-defined biome table to assign bi
 and rainfall. The table itself was based on real-world biome zoning - specifically the Holdridge life zone
 classification scheme, shown here (sourced from [Wikipedia](https://en.wikipedia.org/wiki/Holdridge_life_zones)).
 
-<LightboxImage src="/src/assets/images/blog/holdridge_life_zone_wikipedia.png"
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/holdridge_life_zone_wikipedia.png"
                alt="Holdridge life zone classification scheme" />
 
 \
@@ -129,7 +129,7 @@ The resulting geopolitical map ended up looking something like the image below. 
 shading for each color-coded region is based on the scoring for the Voronoi points within that region (normalized for
 the region). As can be seen, I also weighted for proximity to a coastline.
 
-<LightboxImage src="/src/assets/images/blog/world_roads_and_capitals.png"
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/world_roads_and_capitals.png"
                alt="Geopolitical Regions, Roads and Capitals" />
 
 \
@@ -137,7 +137,7 @@ From this point, I had all the data I needed to be able to generate a top level 
 relationship between source map pixels and biome tiles. Initially I just focused on having the landscape display
 correctly, producing output that looked something like the following image.
 
-<LightboxImage src="/src/assets/images/blog/landscape_zoomx0.png"
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/landscape_zoomx0.png"
                alt="Tile map at zoom level 0" />
 
 \
@@ -186,7 +186,7 @@ Realistically, a zoom level of 4 or 5 would probably be sufficient for most situ
 exactly which zoom level to use. It will depend upon a lot of gameplay factors that have yet to be decided, so I will
 ensure that the map generation remains flexible throughout the development until a determination can be made.
 
-<LightboxImage src="/src/assets/images/blog/landscape_zoomx4.png"
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/landscape_zoomx4.png"
                alt="Tile map at zoom level 4" />
 
 Here's a video of everything in action.
