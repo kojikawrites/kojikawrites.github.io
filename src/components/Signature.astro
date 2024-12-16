@@ -1,0 +1,20 @@
+---
+import ThemedImage from './ThemedImage.astro'
+import getSafeId from '../utils/toSafeId';
+import { getSiteCode } from "../utils/getSiteConfig";
+interface Props {
+    signature: string
+}
+
+const { signature } = Astro.props
+const id = getSafeId(signature, false);
+const siteCode = getSiteCode();
+const themed_src: Record<string, string> = {
+    'dark': `/src/assets/images/${siteCode}/signatures/signature-${signature}-dark.png`,
+    'light': `/src/assets/images/${siteCode}/signatures/signature-${signature}-light.png`
+};
+
+---
+
+<!--<img alt={signature} src={img_src} />-->
+<ThemedImage id={id} alt={signature}  srcList={themed_src} class="signature" />

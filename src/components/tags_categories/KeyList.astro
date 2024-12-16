@@ -1,0 +1,41 @@
+---
+interface Props {
+	keys: string[] | string;
+    keyType: KeyType;
+    class?: string;
+    samePageLink?: boolean;
+}
+
+import { KeyType } from "../../utils/enums";
+import { getKeyId, toSafeKey} from "../../utils/keyUtils";
+import { extractKeyList } from "../../utils/getPostData";
+
+const {
+    keys = [],
+    class: keyClass = Astro.props.keyType == KeyType.Tags ? "tag" : "category",
+    keyType,
+    samePageLink = false,
+    ...rest
+} = Astro.props;
+const extractedKeys = extractKeyList(keys);
+const keyPrefix = keyType == KeyType.Tags ? "#" : "";
+
+function getKeyLink(keyType: KeyType, key:string) : string {
+    const hash = `#${toSafeKey(key)}`
+    const linkPrefix = samePageLink ? '' : `/${keyType}`;
+    return `${linkPrefix}${hash}`
+}
+
+
+---
+
+{keys && keys.length > 0 &&
+    <div class="flex flex-row flex-wrap">
+        {extractedKeys.map(key => (
+            <a href={getKeyLink(keyType, key)}
+               class={`${keyClass} text-nowrap`}
+               id={getKeyId(keyType, key)}
+               {...rest}>{toSafeKey(key, keyPrefix)}</a>
+        ))}
+    </div>
+ }

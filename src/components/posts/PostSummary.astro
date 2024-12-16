@@ -1,0 +1,36 @@
+---
+import FormattedDate from "../FormattedDate.astro";
+interface Props {
+    post: any
+}
+
+
+import getPostData from "../../utils/getPostData";
+
+import {getSiteConfig} from "../../utils/getSiteConfig";
+const siteConfig = await getSiteConfig();
+
+const post = Astro.props.post;
+
+const { path } = getPostData(post);
+const href = `/${siteConfig.blog.prefix}${path}/`;
+
+const { frontmatter } = post;
+const { title, publishDate, description} = frontmatter;
+---
+
+<li>
+    <!--{ index !== 0 && <hr /> }-->
+    <div class="post-item">
+        <h3 class="post-list-title">
+            <a href={href}>{title}</a>
+        </h3>
+        <span class="post-item-date">
+              <FormattedDate date={publishDate} />
+            </span>
+        <p>{description}</p>
+    </div>
+    <div class="post-item-footer">
+        <a class="post-link" href={href}>Read more »</a>
+    </div>
+</li>

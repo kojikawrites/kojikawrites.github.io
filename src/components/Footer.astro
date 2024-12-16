@@ -1,0 +1,16 @@
+---
+import {getSiteConfig} from "../utils/getSiteConfig";
+const siteConfig = await getSiteConfig();
+---
+
+<footer>
+  {siteConfig.footer.content.map((item, _) => (
+      <div class="page-footer">
+        {item.replace('[CURRENT_YEAR]', new Date().getFullYear().toString())}
+      </div>
+  ))}
+
+  <div class="page-footer">
+    Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>.
+  </div>
+</footer>

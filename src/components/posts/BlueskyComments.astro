@@ -1,0 +1,63 @@
+---
+interface Props {
+    filename: string;
+}
+
+import blueskyJson from "../../assets/_private/state/bluesky_posted.json"
+import {getSiteConfig} from "../../utils/getSiteConfig";
+
+const { filename } = Astro.props;
+const siteConfig = await getSiteConfig();
+
+function trimPathToBlog(path: string): string {
+    // Remove leading and trailing slashes for consistent splitting
+    const trimmedPath = path.replace(/^\/+|\/+$/g, '');
+    // Split the path into components using '/' as the separator
+    const components = trimmedPath.split('/');
+
+    // Find the index of 'blog' in the components array
+    const blogIndex = components.indexOf(siteConfig.blog.path);
+
+
+    if (blogIndex !== -1) {
+        // Slice the array from 'blog' onwards and join back into a path
+        const newPathComponents = components.slice(blogIndex);
+        // console.log('newPath', newPathComponents.join('/'));
+        return newPathComponents.join('/');
+    } else {
+        // If 'blog' is not found, return the original path or handle as needed
+        return trimmedPath;
+    }
+}
+
+
+interface BlueskyPostEntry {
+    post_id: string;
+    post_uri: string;
+    post_cid: string;
+}
+
+function getBlueskyPostId(originalFilename: string) : string {
+    if (!siteConfig.bluesky.include) {
+        return null;
+    }
+    const thisId = trimPathToBlog(originalFilename);
+    // Convert the array to a dictionary mapping post_id to post_uri
+    const postIdToUriMap: Record<string, string> = blueskyJson.reduce(
+        (accumulator: Record<string, string>, entry: BlueskyPostEntry) => {
+            accumulator[entry.post_id] = entry.post_uri;
+            return accumulator;
+        },
+        {}
+    );
+    return thisId in postIdToUriMap ? postIdToUriMap[thisId] : null;
+}
+const blueskyPostId = getBlueskyPostId(filename);
+---
+{blueskyPostId != null &&
+<hr />
+<div>
+    { getBlueskyPostId(filename) }
+</div>}
+
+

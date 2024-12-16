@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PagePostCount from '../../components/posts/PagePostCount.astro';
+import PostSummary from "../../components/posts/PostSummary.astro";
+import Pagination from "../../components/Pagination.astro";
+
+import getPosts from "../../utils/getPosts";
+import {getSiteConfig} from "../../utils/getSiteConfig";
+import getPostData from "../../utils/getPostData";
+
+const allPostsCount = getPosts().length;
+const siteConfig = await getSiteConfig();
+const paginationSize = siteConfig.blog.pagination_size;
+
+const title = 'Blog';
+const description = 'Latest articles.';
+const permalink = `${Astro.site.href}blog`;
+
+export async function getStaticPaths({ paginate }) {
+  const siteConfig = await getSiteConfig();
+  const paginationSize = siteConfig.blog.pagination_size;
+
+  const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
+
+  return paginate(allPosts, {
+    pageSize: paginationSize,
+  })
+}
+const { page } = Astro.props;
+
+const pathname = new URL(Astro.request.url).pathname.split('/');
+const firstPath = pathname[1];
+
+---
+
+<BaseLayout title={title} description={description} permalink={permalink} current="blog">
+  <div class="container post-list min-h-[75vh]">
+    <h1>Recent Posts</h1>
+    <PagePostCount postCount={allPostsCount} postsPerPage={paginationSize} class="post-count" />
+    <ul>
+    {page.data.map((post, _) => (
+        <PostSummary post={post} />
+    ))}
+    </ul>
+
+    {allPostsCount > paginationSize
+        ? (
+        <div class="pagination-wrapper">
+          <Pagination
+              length={page.lastPage}
+              currentUrl={page.url.current}
+              currentPage={page.currentPage}
+              firstUrl={`/${firstPath}`}
+              prevUrl={page.url.prev}
+              nextUrl={page.url.next}
+              lastUrl={`/${firstPath}/${page.lastPage}`}
+          />
+        </div>
+        )
+        : null
+    }
+  </div>
+</BaseLayout>

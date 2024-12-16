@@ -1,0 +1,24 @@
+---
+interface Props {
+    name: string;
+    url?: string;
+}
+
+const { name, url } = Astro.props;
+// Remove everything up to and including "//" and trailing slashes
+const displayUrl = url
+    ?.replace(/^.*?\/\//, '')
+    .replace(/\/+$/, '');
+
+---
+<div class="text-nowrap">
+    <h3>{name}</h3>
+    {url ?
+        <a href={url} target="_blank">{displayUrl}</a>
+        : ""
+    }
+</div>
+<div>
+    <slot/>
+    <hr class="lg:hidden opacity-25" />
+</div>

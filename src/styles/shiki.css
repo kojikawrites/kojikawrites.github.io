@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    /* light mode*/
+    :root {
+        --bg-code-highlight: #DDEEFF;
+        --color-code-line-number: rgb(115,138,148);
+    }
+
+    /* dark mode */
+    :root.theme-dark {
+        /* dark theme master settings*/
+        .astro-code,
+        .astro-code span {
+            @apply text-[var(--shiki-dark)];
+            /*@apply text-[var(--shiki-dark)]*/
+            /*background-color: var(--shiki-dark-bg) !important; !* this needs to stay important *!*/
+            @apply bg-[var(--shiki-dark-bg)] !important;
+        }
+
+        /* dark theme transformer settings */
+        --bg-code-highlight: #3E3E3E;
+    }
+
+    code.astro-code {
+        /* change the code box style */
+        counter-reset: step;
+        counter-increment: step 0;
+
+        @apply flex flex-col;
+    }
+
+    code.astro-code .line::before {
+        content: counter(step);
+        counter-increment: step;
+
+        @apply w-4 mr-6 inline-block text-right;
+        @apply text-[var(--color-code-line-number)];
+    }
+
+    /* overrides */
+    .astro-code {
+        /* transformer settings */
+
+        /* transformerNotationHighlight, e.g: fizzbuzz_to(100); // [!code highlight]  */
+        span.highlighted.line {
+            @apply min-w-full !important;
+            @apply bg-[var(--bg-code-highlight)] !important;
+            span {
+                /* this contains the code */
+                @apply bg-[var(--bg-code-highlight)] !important;
+            }
+        }
+    }
+}
+
+
+
+

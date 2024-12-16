@@ -1,0 +1,37 @@
+@layer components {
+    /* navbar site logo */
+    .site-logo {
+        width: 128px;
+        min-width: 128px;
+        position: relative;
+        top: -2px;
+        padding-bottom: 5px;
+        @apply w-32;
+    }
+
+    /* navbar container */
+    .navbar {
+        @apply bg-color-background-feature;
+
+        a {
+            @apply text-inherit text-lg block relative ml-2;
+        }
+
+        a:not(.selected) {
+            @apply opacity-70;
+        }
+
+        a::before {
+            @apply underline-link-hover;
+            @apply bg-color-text-secondary bottom-1 w-full h-0.5;
+        }
+
+        .selected::before {
+            @apply scale-x-100 bg-color-primary-color;
+        }
+
+        .site-logo {
+            @apply w-32 min-w-32 relative -top-0.5 pb-[5px];
+        }
+    }
+}

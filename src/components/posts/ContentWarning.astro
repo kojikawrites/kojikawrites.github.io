@@ -1,0 +1,67 @@
+---
+import getSafeId from "../../utils/toSafeId";
+interface Props {
+	id?: string,
+}
+
+const {id} = Astro.props
+const contentWarningId = `cw-${getSafeId(id)}`;
+const warningId = `${contentWarningId}-warning`;
+const hiddenId = `${contentWarningId}-hidden`;
+
+---
+<style>
+
+    @media print {
+        .hidden-content {
+            @apply block;
+        }
+
+        .hidden-content-warning {
+            @apply hidden;
+        }
+    }
+</style>
+
+<div id={contentWarningId} transition:persist>
+    <button id={warningId} class="hidden-content-warning p-4 border rounded-lg w-full
+                                  cursor-pointer
+                                  font-bold text-lg text-center lg:ml-2 mt-1 mb-4"
+            aria-expanded="false" aria-controls={hiddenId}>
+        <span class="flex flex-row align-middle justify-center items-center space-x-2">
+            <svg class="warning-icon relative -top-[2px] pl-2 h-20 lg:px-0 lg:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M569.5 440C588 472 564.8 512 527.9 512H48.1c-36.9 0-60-40.1-41.6-72L246.4 24c18.5-32 64.7-32 83.2 0l239.9 416zM288 354c-25.4 0-46 20.6-46 46s20.6 46 46 46 46-20.6 46-46-20.6-46-46-46zm-43.7-165.3l7.4 136c.3 6.4 5.6 11.3 12 11.3h48.5c6.4 0 11.6-5 12-11.3l7.4-136c.4-6.9-5.1-12.7-12-12.7h-63.4c-6.9 0-12.4 5.8-12 12.7z"/></svg>
+
+            <slot name="warning" />
+
+            <svg class="warning-icon pr-2 h-20 lg:px-0 lg:h-5" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M569.5 440C588 472 564.8 512 527.9 512H48.1c-36.9 0-60-40.1-41.6-72L246.4 24c18.5-32 64.7-32 83.2 0l239.9 416zM288 354c-25.4 0-46 20.6-46 46s20.6 46 46 46 46-20.6 46-46-20.6-46-46-46zm-43.7-165.3l7.4 136c.3 6.4 5.6 11.3 12 11.3h48.5c6.4 0 11.6-5 12-11.3l7.4-136c.4-6.9-5.1-12.7-12-12.7h-63.4c-6.9 0-12.4 5.8-12 12.7z"/></svg>
+        </span>
+    </button>
+
+    <div id={hiddenId} class="hidden-content hidden min-w-fit">
+        <slot name="content" />
+    </div>
+
+</div>
+<script type="module" define:vars={{ warningId, hiddenId }}>
+    const toggleDiv = document.getElementById(warningId);
+    const contentDiv = document.getElementById(hiddenId);
+
+
+    // match fill to warning color
+    const warningStyle = window?.getComputedStyle(toggleDiv);
+    if (warningStyle?.color) {
+        toggleDiv.style.fill = warningStyle.color;
+    }
+
+    toggleDiv.addEventListener('click', function() {
+        const isExpanded = toggleDiv.getAttribute('aria-expanded') === 'true';
+        if (!isExpanded) {
+            contentDiv.classList.remove('hidden');
+            toggleDiv.classList.add('hidden');
+            toggleDiv.setAttribute('aria-expanded', 'true');
+        } else {
+            // contentDiv.classList.add('hidden');
+            toggleDiv.setAttribute('aria-expanded', 'false');
+        }
+    });
+</script>
