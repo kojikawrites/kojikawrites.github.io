@@ -61,7 +61,7 @@ const allPostPaths = getPosts().map((p: any) => siteConfig.blog_prefix + getPost
 
 <script is:inline define:vars={{ allPostPaths }} data-astro-rerun >
     function checkForRedirect(paths) {
-        const url = window.location.href.replace(/^.*\/\/[^/]+/, '');
+        const url = window.location.href.replace(/^.*?:\/\/[^/]+/, '');
 
         const parts = url.split('/').filter(Boolean);
         const dateIndex = parts.findIndex((part, i, arr) =>

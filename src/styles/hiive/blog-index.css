@@ -17,7 +17,7 @@
 
         .post-list-title {
             @apply mb-0 py-0;
-            @apply normal-case relative color-secondary-color text-xl font-bold leading-3 w-fit;
+            @apply normal-case relative color-secondary-color text-xl font-bold leading-5 w-fit;
 
         }
 
