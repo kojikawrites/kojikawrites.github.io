@@ -3,6 +3,7 @@ layout: ../layouts/BaseLayout.astro
 title: Home
 ---
 import SiteLogo from '../components/SiteLogo.astro';
+import HiiveLabs from '../components/custom/hiivelabs/HiiveLabsText.astro'
 import {getSiteConfig} from "../utils/getSiteConfig";
 
 
@@ -14,26 +15,22 @@ import {getSiteConfig} from "../utils/getSiteConfig";
               class="main-page-logo"/>
 
     <p class="text-center lg:text-left">
-    **[Welcome](about) to h<span class="color-secondary-color">i</span>ive<span class="color-secondary-color">labs</span>**.
+    **[Welcome](about) to <HiiveLabs />**.
     </p>
 
-    At h<span class="color-secondary-color">i</span>ive<span class="color-secondary-color">labs</span>, the integration of artificial intelligence and machine learning
-    with game design leads to procedurally generated experiences that feel
-    hand-crafted. This experimental project explores innovative AI techniques
-    to develop immersive and engaging gaming environments that dynamically
-    adapt to player actions and preferences. It also serves as an opportunity to
-    delve into the Rust programming language, pushing the boundaries of both
-    technology and creativity.
+    <HiiveLabs /> explores how artificial intelligence and machine learning can contribute to game design, creating
+    procedurally generated worlds that still feel handcrafted. This work focuses on techniques that adapt environments,
+    narratives, and characters to player decisions and preferences, all while experimenting with the Rust programming
+    language to refine performance and reliability. Rather than relying on static content, the approach involves
+    AI-driven systems that respond dynamically, offering a more personal and evolving gameplay experience.
 
-    The [mission](mission) of h<span class="color-secondary-color">i</span>ive<span class="color-secondary-color">labs</span> is to
-    investigate how AI can enhance game design, ensuring that the generated content
-    exhibits depth, coherence, and creativity. By focusing on key areas such as
-    terrain generation, character development, quest creation, narrative design,
-    and living worlds, h<span class="color-secondary-color">i</span>ive<span class="color-secondary-color">labs</span>
-    aims to create unique adventures that are both dynamic and adaptive.
+    The core [mission](mission) involves using these technologies to shape everything from terrain and character
+    behavior to quests, storylines, and thriving virtual communities. By emphasizing adaptability, coherence, and
+    inclusivity, hiivelabs seeks to broaden the appeal of gaming experiences, ensuring that the result not only
+    demonstrates what AI can achieve but also resonates with a wide range of players. Such efforts are supported by
+    existing research in procedural content generation, narrative design, and adaptive gameplay systems.
 
-    Accessibility and inclusivity are also central to this endeavor, ensuring that
-    the games are enjoyable for all players. [Discover](blog) how AI and human ingenuity
-    can come together to create compelling gaming experiences at
-    h<span class="color-secondary-color">i</span>ive<span class="color-secondary-color">labs</span>.
+    Accessibility and inclusivity are also central to this endeavor, ensuring that the games are enjoyable for all
+    players. [Discover](blog) how AI and human ingenuity can come together to create compelling gaming experiences
+    at <HiiveLabs />.
 </div>
