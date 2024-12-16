@@ -40,7 +40,7 @@
 
     ol,
     ul {
-        @apply pl-8;
+        @apply pl-4 lg:pl-8;
         /*-webkit-padding-start: 5%;*/
         /*-webkit-padding-end: 5%;*/
     }
@@ -110,8 +110,8 @@
     }
 
     div.container {
-        @apply py-0 lg:py-6 px-6 mx-auto;
-        @apply text-balance;
+        @apply py-0 lg:py-6 px-0 lg:px-6 mx-auto;
+        /*@apply text-balance;*/
     }
 }
 
