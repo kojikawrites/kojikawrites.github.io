@@ -111,6 +111,10 @@
         background: var(--text-secondary)
     }
 
+    .border-text-secondary {
+        border-color: var(--text-secondary)
+    }
+
     .highlight {
         @apply color-secondary-color;
     }

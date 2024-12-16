@@ -43,8 +43,10 @@ navbar:
 # blog path (can be posts or blog)
 # posts = src/assets/posts/...
 # blog = src/assets/blog/...
-blog_path: posts
-blog_prefix: blog/
+blog:
+  pagination_size: 10
+  path: posts
+  prefix: blog/
 
 # footer setup
 footer:

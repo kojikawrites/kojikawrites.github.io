@@ -19,8 +19,11 @@ export async function getSiteConfig() {
     }
 
     const yamlGlobs = import.meta.glob<{
-        blog_path: string;
-        blog_prefix: string;
+        blog: {
+            pagination_size: number;
+            path: string;
+            prefix: string;
+        };
         navbar: {
             logo: ThemedImage,
             left: NavbarEntry[];

@@ -16,7 +16,7 @@ function trimPathToBlog(path: string): string {
     const components = trimmedPath.split('/');
 
     // Find the index of 'blog' in the components array
-    const blogIndex = components.indexOf(siteConfig.blog_path);
+    const blogIndex = components.indexOf(siteConfig.blog.path);
 
 
     if (blogIndex !== -1) {

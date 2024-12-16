@@ -11,7 +11,7 @@ const title = '404';
 const description = '404.';
 // const url = Astro.url.pathname;
 
-const allPostPaths = getPosts().map((p: any) => siteConfig.blog_prefix + getPostData(p).path); // DO NOT DELETE
+const allPostPaths = getPosts().map((p: any) => siteConfig.blog.prefix + getPostData(p).path); // DO NOT DELETE
 
 ---
 <BaseLayout title={title} description={description} permalink="">
