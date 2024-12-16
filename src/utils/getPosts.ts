@@ -2,16 +2,20 @@ import { getSiteConfig, getSiteCode } from "./getSiteConfig";
 
 const siteConfig = await getSiteConfig();
 const site = getSiteCode();
-const blog_path = siteConfig.blog_path;
+const blog_path = siteConfig.blog.path;
 
-export default function getPosts() {
+export default function getPosts(paginationSize: number | undefined) {
     const posts = () => {
-        return import.meta.glob(
+        const allPosts = import.meta.glob(
             [`../assets/**/posts/**/*.{md,mdx}`,
              '../assets/**/blog/**/*.{md,mdx}',
              '!../assets/**/posts/**/_drafts/**',
              '!../**/assets/blog/**/_drafts/**'],
             {eager: true});
+        if (paginationSize) {
+            // paginate
+        }
+        return allPosts;
     };
 
     const pathFilter = `${blog_path}/${site}/`;

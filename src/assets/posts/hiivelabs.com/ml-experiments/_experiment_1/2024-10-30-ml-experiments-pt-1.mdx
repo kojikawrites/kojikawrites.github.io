@@ -108,7 +108,7 @@ The gridworld for this experiment is a simple 20×20 grid, identical to the imag
 <span style="color:limegreen">green</span> square (food), one <span style="color:cornflowerblue">blue</span> square
 (water), one <span style="color:red">red</span> square (refuge) and a black circle (entity) within the refuge.
 
-<LightboxImage src="/src/assets/images/blog/ml/ex1/gridworld.png"
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ml/ex1/gridworld.png"
                alt="Experiment 1 Gridworld" />
 
 For the initial starting conditions, the entity starts out at the refuge with the attributes `100` energy `e`,
@@ -236,7 +236,7 @@ states. We would expect the difference between the entity having an `f` value of
 minor; it's still hungry and needs to `EAT`, assuming that other attributes aren't in more pressing need of attention.
 
 <div>
-    <LightboxImage src="/src/assets/images/blog/ml/ex1/raw_policy.png"
+    <LightboxImage src="/src/assets/images/hiivelabs.com/blog/ml/ex1/raw_policy.png"
                    alt="Raw Policy" />
 
     Now, this intuitive observation, coupled with the realization that for any non-trivial entity the policy table could
@@ -305,7 +305,7 @@ minor; it's still hungry and needs to `EAT`, assuming that other attributes aren
 
 
             These membership functions can be visualized as in the following plot:
-            <LightboxImage src="/src/assets/images/blog/ml/ex1/fuzzy_membership_temp.png"
+            <LightboxImage src="/src/assets/images/hiivelabs.com/blog/ml/ex1/fuzzy_membership_temp.png"
                            alt="Membership functions for Temperature fuzzy set" />
 
 
@@ -339,7 +339,7 @@ minor; it's still hungry and needs to `EAT`, assuming that other attributes aren
             helping of strong hallucinogenics, we can imagine how the process could be extended to an arbitrary number of
             dimensions.
 
-            <LightboxImage src="/src/assets/images/blog/ml/ex1/2d_fuzzy_patches.png"
+            <LightboxImage src="/src/assets/images/hiivelabs.com/blog/ml/ex1/2d_fuzzy_patches.png"
                            alt="Membership sets for an autonomous vehicle navigating based on speed and distance to an obstacle." />
 
             Note also that in these examples, we are using triangular membership functions for simplicity. However we are in no way
@@ -353,7 +353,7 @@ minor; it's still hungry and needs to `EAT`, assuming that other attributes aren
 
     The resulting fuzzy policy for the previous raw policy is shown below:
 
-    <LightboxImage src="/src/assets/images/blog/ml/ex1/fuzzy_policy.png"
+    <LightboxImage src="/src/assets/images/hiivelabs.com/blog/ml/ex1/fuzzy_policy.png"
                    alt="Fuzzy Policy" />
 
     And the following plot shows the fuzzy policy overlaid onto the raw policy. Visually, it can be seen that both policies
@@ -361,7 +361,7 @@ minor; it's still hungry and needs to `EAT`, assuming that other attributes aren
     value with its fuzzy counterpart. The fuzzy policy also required significantly less storage space, but I believe that
     there is still room for improvement in terms of both storage and accuracy -- particularly with more complex entities.
 
-    <LightboxImage src="/src/assets/images/blog/ml/ex1/fuzzy_raw_policy.png"
+    <LightboxImage src="/src/assets/images/hiivelabs.com/blog/ml/ex1/fuzzy_raw_policy.png"
                    alt="Fuzzy Policy overlaid on Raw Policy" />
 
 </div>

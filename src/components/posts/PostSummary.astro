@@ -13,7 +13,7 @@ const siteConfig = await getSiteConfig();
 const post = Astro.props.post;
 
 const { path } = getPostData(post);
-const href = `/${siteConfig.blog_prefix}${path}/`;
+const href = `/${siteConfig.blog.prefix}${path}/`;
 
 const { frontmatter } = post;
 const { title, publishDate, description} = frontmatter;
