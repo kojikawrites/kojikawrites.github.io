@@ -3,6 +3,5 @@ module.exports = {
         // require('postcss-lighten-darken'),
         require('autoprefixer'),
         require('cssnano'),
-
     ],
 };

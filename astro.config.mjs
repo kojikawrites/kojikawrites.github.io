@@ -27,7 +27,7 @@ export default defineConfig({
     },
     plugins: [yaml()]
   },
-  site: 'https://hiivelabs.com',
+  site: 'https://thewriteplace.rocks',
   integrations: [mdx(), svelte(), tailwind(), solidJs()],
   markdown: {
     shikiConfig: {
