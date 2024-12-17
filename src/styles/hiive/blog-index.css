@@ -30,7 +30,6 @@
 
                 }
 
-
                 .post-item-date {
                     --date-text-color: gray;
                     @apply py-0 my-0;
@@ -59,11 +58,12 @@
             }
 
             .post-thumbnail-wrapper {
-                @apply w-fit h-fit max-w-32 max-h-32;
-                @apply mr-2 mt-6;
+                @apply w-fit h-fit; /* max-w-32 max-h-32 */
+                @apply mr-2;
                 .post-thumbnail {
-                    @apply max-w-32 max-h-32;
-                    @apply border border-gray-500;
+                    /*@apply max-w-32 max-h-32;*/
+                    @apply h-full w-auto;
+                    @apply border-2 border-gray-500;
                 }
             }
         }
