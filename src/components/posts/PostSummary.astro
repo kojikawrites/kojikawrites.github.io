@@ -62,14 +62,7 @@ const imgId = `${id}-img`;
             clearTimeout(timeout);
             timeout = window.setTimeout(function () {
                 const summary = document.getElementById(id);
-                const imgHeight = `${summary.offsetHeight}px`;
-
-                //const whRatio = img.height / img.width;
-                //const imgWidth = `${summary.offsetHeight * whRatio}px`;
-                img.parentElement.style.minHeight = imgHeight;
-//                img.parentElement.style.minWidth = imgWidth;
-
-
+                img.parentElement.style.minHeight = `${summary.offsetHeight}px`;
                 img.classList.remove('hidden');
             }, 100);
         }
