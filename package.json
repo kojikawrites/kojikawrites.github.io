@@ -1,5 +1,5 @@
 {
-  "name": "hiivelabs.com",
+  "name": "hiivelabs-blog-template",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
