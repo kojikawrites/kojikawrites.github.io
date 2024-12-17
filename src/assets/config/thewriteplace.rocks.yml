@@ -52,7 +52,7 @@ footer:
 
 # include bluesky
 bluesky:
-    include: false
+    include: true
 
 # tag/category information
 tags_and_categories:
