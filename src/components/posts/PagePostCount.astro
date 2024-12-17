@@ -9,11 +9,11 @@ interface Props {
 const { postCount,
     postsPerPage=Number.MAX_VALUE,
     class:className="post-count",
-    archiveHref = "blog/archive"} = Astro.props;
+    archiveHref = "/blog/archive"} = Astro.props;
 
 ---
 <div class={className}>
-    {!postCount <= postsPerPage &&
+    {postCount <= postsPerPage &&
         <div>
             All {postCount} posts are listed below.
         </div>
