@@ -7,21 +7,21 @@ const paginationList = Array.from({length: `${length}`}, (_, i) => i + 1);
 <nav aria-label="Blog pages" class="pagination pagination-default">
     { firstUrl == currentUrl ? (
             <div class="pagination-link disabled">
-                <div>⟨⟨</div>
+                <div>❮❮</div>
             </div>
     ) : (
             <div class="pagination-link">
-                <a href={firstUrl}>⟨⟨</a>
+                <a href={firstUrl}>❮❮</a>
             </div>
     )}
 
     { prevUrl ? (
             <div class="pagination-link">
-                <a href={prevUrl}>⟨</a>
+                <a href={prevUrl}>❮</a>
             </div>
     ) : (
             <div class="pagination-link disabled">
-                <div>⟨</div>
+                <div>❮</div>
             </div>
     )}
 
@@ -37,21 +37,21 @@ const paginationList = Array.from({length: `${length}`}, (_, i) => i + 1);
 
     { !nextUrl ? (
             <div class="pagination-link disabled">
-                <div>⟩</div>
+                <div>❯</div>
             </div>
     ) : (
             <div class="pagination-link">
-                <a href={nextUrl}>⟩</a>
+                <a href={nextUrl}>❯</a>
             </div>
     )}
 
     { lastUrl == currentUrl ? (
             <div class="pagination-link disabled">
-                <div>⟩⟩</div>
+                <div>❯❯</div>
             </div>
     ) : (
             <div class="pagination-link">
-                <a href={lastUrl}>⟩⟩</a>
+                <a href={lastUrl}>❯❯</a>
             </div>
     )}
 
