@@ -4,6 +4,7 @@ import type {
   NotFoundPost,
   ThreadViewPost,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import {getSiteConfig} from "../../utils/getSiteConfig";
 
 export interface ThreadViewPostUI extends ThreadViewPost {
   showParentReplyLine: boolean;
@@ -20,6 +21,8 @@ function isKnownType(
     AppBskyFeedDefs.isThreadViewPost(post),
   ].some(Boolean);
 }
+
+
 
 /**
  * Given a thread yield all posts in the thread as a flat list.
@@ -110,4 +113,25 @@ export function enrichThreadWithUIData(
     true,
     true,
   );
+}
+
+
+const siteConfig = await getSiteConfig();
+/**
+ * Replaces hashtags in a string with a custom <a> tag linking to the tag page.
+ *
+ * @param inputText - The text containing hashtags (e.g., "#example").
+ * @returns A string where hashtags are replaced with <a> tags.
+ */
+export function replaceHashtags(inputText: string): string {
+    if (!siteConfig.bluesky.hashtag_link)
+    {
+        return inputText;
+    }
+
+    return inputText.replace(/#([\w-]+)/g, (_, tag) => {
+
+        const categoryLink = siteConfig.bluesky.hashtag_link.replace("[HASHTAG]", tag); // // /category/#[HASHTAG]
+        return `<a href="${categoryLink}#${tag}">#${tag}</a>`;
+    });
 }
