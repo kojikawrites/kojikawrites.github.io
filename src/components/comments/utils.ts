@@ -1,10 +1,8 @@
-import { AppBskyFeedDefs } from "@atproto/api";
-import type {
-  BlockedPost,
-  NotFoundPost,
-  ThreadViewPost,
-} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import {AppBskyFeedDefs} from "@atproto/api";
+import type {BlockedPost, NotFoundPost, ThreadViewPost,} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import {getSiteConfig} from "../../utils/getSiteConfig";
+import {getAllKeys} from "../../utils/keyUtils";
+import {KeyType} from "../../utils/enums";
 
 export interface ThreadViewPostUI extends ThreadViewPost {
   showParentReplyLine: boolean;
@@ -129,9 +127,14 @@ export function replaceHashtags(inputText: string): string {
         return inputText;
     }
 
-    return inputText.replace(/#([\w-]+)/g, (_, tag) => {
+    return inputText.replace(/#([\w-]+)/g, (_, category) => {
 
-        const categoryLink = siteConfig.bluesky.hashtag_link.replace("[HASHTAG]", tag?.toLowerCase()); // // /category/#[HASHTAG]
-        return `<a href="${categoryLink}">#${tag}</a>`;
+        const categoryLink = siteConfig.bluesky.hashtag_link.replace("[HASHTAG]", category?.toLowerCase()); // /category/#[HASHTAG]
+        const allCategories = getAllKeys(KeyType.Categories);
+
+        // this works but needs fixing so we aren't calling getAllKeys on the client!
+        return allCategories.includes(category)
+            ? `<a href="${categoryLink}">#${category}</a>`
+            : '';
     });
 }
