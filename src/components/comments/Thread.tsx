@@ -21,9 +21,10 @@ interface ThreadProps {
   agent: Accessor<AtpAgent | undefined>;
   atprotoURI: string;
   handle: string;
+  categories: string[];
 }
 
-export const Thread: Component<ThreadProps> = ({ atprotoURI, agent }) => {
+export const Thread: Component<ThreadProps> = ({ atprotoURI, agent, categories }) => {
   const [showEditor, setShowEditor] = createSignal<ThreadViewPostUI>();
   const [highlightedPost, setHighlightedPost] =
     createSignal<string>(atprotoURI);
@@ -64,6 +65,7 @@ export const Thread: Component<ThreadProps> = ({ atprotoURI, agent }) => {
               <Post
                 agent={agent}
                 post={post}
+                categories={categories}
                 refetch={() => refetch()}
                 setShowEditor={setShowEditor}
                 setHighlightedPost={setHighlightedPost}
@@ -89,12 +91,14 @@ function getPostId(uri: string) {
 const Post = ({
   agent,
   post,
+  categories,
   refetch,
   setShowEditor,
   setHighlightedPost,
 }: {
   agent: Accessor<AtpAgent | undefined>;
   post: ThreadViewPostUI;
+  categories: string[];
   refetch: () => void;
   setShowEditor: Setter<ThreadViewPostUI | undefined>;
   setHighlightedPost: Setter<string>;
@@ -152,7 +156,7 @@ const Post = ({
           ${post.showChildReplyLine ? "border-l-2" : ""}
           border-stone-400 dark:border-stone-600 ml-6 pl-6`}
         >
-          <p class="mt-0" innerHTML={replaceHashtags(text)}></p>
+          <p class="mt-0" innerHTML={replaceHashtags(text, categories)}></p>
           <div class="flex flex-row gap-4 text-stone-600 dark:text-stone-400">
             <button
               type="button"

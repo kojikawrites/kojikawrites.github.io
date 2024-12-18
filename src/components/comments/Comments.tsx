@@ -2,8 +2,6 @@ import { render } from 'solid-js/web';
 import { type Component, createEffect, createSignal, onMount } from "solid-js";
 import { type AtpSessionData, AtpAgent } from "@atproto/api";
 
-
-
 // import "solid-devtools";
 
 import { Header } from "./Header";
@@ -13,9 +11,10 @@ import { Thread } from "./Thread";
 interface CommentsProps {
   atprotoURI: string;
   handle: string;
+  categories: string[];
 }
 
-export const Comments: Component<CommentsProps> = ({ atprotoURI, handle }) => {
+export const Comments: Component<CommentsProps> = ({ atprotoURI, handle, categories }) => {
   const [session, setSession] = createSignal<AtpSessionData>();
   const [agent, setAgent] = createSignal<AtpAgent>();
 
@@ -61,7 +60,7 @@ export const Comments: Component<CommentsProps> = ({ atprotoURI, handle }) => {
           <LoginForm agent={agent} handle={handle} atprotoURI={atprotoURI} />
         ) : null}
         {session() ? (
-          <Thread agent={agent} atprotoURI={atprotoURI} handle={handle} />
+          <Thread agent={agent} atprotoURI={atprotoURI} handle={handle} categories={categories} />
         ) : null}
       </main>
     </div>

@@ -18,6 +18,6 @@ export function getAllKeys(keyType:KeyType) : string[] {
     const allPosts = getPosts();
     const allKeys = allPosts.map(p => (
         extractKeyList(p.frontmatter[keyType])
-    ));
+    )).filter(p => p);
     return Array.from(new Set(allKeys.flat()));
 }

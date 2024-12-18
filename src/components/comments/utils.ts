@@ -1,8 +1,6 @@
 import {AppBskyFeedDefs} from "@atproto/api";
 import type {BlockedPost, NotFoundPost, ThreadViewPost,} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import {getSiteConfig} from "../../utils/getSiteConfig";
-import {getAllKeys} from "../../utils/keyUtils";
-import {KeyType} from "../../utils/enums";
 
 export interface ThreadViewPostUI extends ThreadViewPost {
   showParentReplyLine: boolean;
@@ -119,9 +117,10 @@ const siteConfig = await getSiteConfig();
  * Replaces hashtags in a string with a custom <a> tag linking to the tag page.
  *
  * @param inputText - The text containing hashtags (e.g., "#example").
+ * @param allCategories - list of all categories from site posts.
  * @returns A string where hashtags are replaced with <a> tags.
  */
-export function replaceHashtags(inputText: string): string {
+export function replaceHashtags(inputText: string, allCategories:string[]): string {
     if (!siteConfig.bluesky.hashtag_link)
     {
         return inputText;
@@ -130,7 +129,6 @@ export function replaceHashtags(inputText: string): string {
     return inputText.replace(/#([\w-]+)/g, (_, category) => {
 
         const categoryLink = siteConfig.bluesky.hashtag_link.replace("[HASHTAG]", category?.toLowerCase()); // /category/#[HASHTAG]
-        const allCategories = getAllKeys(KeyType.Categories);
 
         // this works but needs fixing so we aren't calling getAllKeys on the client!
         return allCategories.includes(category)
