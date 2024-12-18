@@ -1,16 +1,16 @@
 # main page logo
 main:
   logo:
-    dark: "/src/assets/images/thewriteplace.rocks/logos/main.png"
-    light: "/src/assets/images/thewriteplace.rocks/logos/main.png"
+    dark: "/src/assets/images/thewriteplace.rocks/logos/logo2-dark.png"
+    light: "/src/assets/images/thewriteplace.rocks/logos/logo2-light.png"
     alt: "thewriteplace.rocks"
 
 # navbar setup
 navbar:
     # navbar logo setup
     logo:
-      dark: "/src/assets/images/thewriteplace.rocks/logos/menu.png"
-      light: "/src/assets/images/thewriteplace.rocks/logos/menu.png"
+      dark: "/src/assets/images/thewriteplace.rocks/logos/menu-dark.png"
+      light: "/src/assets/images/thewriteplace.rocks/logos/menu-light.png"
       alt: "thewriteplace.rocks"
 
     left:
