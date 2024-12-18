@@ -66,3 +66,8 @@ tags_and_categories:
             - llm
         reinforcement-learning:
             - rl
+
+# git fetch source
+# git merge source/astro --allow-unrelated-histories
+
+# for file in *.md; do mv "$file" "${file%.md}.mdx"; done
