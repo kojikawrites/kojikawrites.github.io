@@ -34,6 +34,7 @@ export async function getSiteConfig() {
         };
         bluesky: {
             include: boolean;
+            hashtag_link: string;
         }
         tags_and_categories : {
             aliases: any;

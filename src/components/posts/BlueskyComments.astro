@@ -43,7 +43,7 @@ function getBlueskyPostId(originalFilename: string) : string {
         return null;
     }
     const thisId = trimPathToBlog(originalFilename);
-    console.log('bluesky-id', thisId);
+    // console.log('bluesky-id', thisId);
     // Convert the array to a dictionary mapping post_id to post_uri
     const postIdToUriMap: Record<string, string> = blueskyJson.reduce(
         (accumulator: Record<string, string>, entry: BlueskyPostEntry) => {

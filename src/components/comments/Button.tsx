@@ -16,8 +16,7 @@ export const Button: Component<ButtonProps> = (props) => {
         focus-visible:outline-offset-4
         focus-visible:outline-stone-800 dark:focus-visible:outline-stone-100
         text-stone-800 dark:text-stone-100 rounded-drawn
-      `}
-    >
+      `} >
       {props.children}
     </button>
   );
