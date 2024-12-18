@@ -131,7 +131,7 @@ export function replaceHashtags(inputText: string): string {
 
     return inputText.replace(/#([\w-]+)/g, (_, tag) => {
 
-        const categoryLink = siteConfig.bluesky.hashtag_link.replace("[HASHTAG]", tag); // // /category/#[HASHTAG]
+        const categoryLink = siteConfig.bluesky.hashtag_link.replace("[HASHTAG]", tag?.toLowerCase()); // // /category/#[HASHTAG]
         return `<a href="${categoryLink}">#${tag}</a>`;
     });
 }
