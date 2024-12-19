@@ -16,7 +16,7 @@ export function extractKeyList(keys: string | string[]) : string[] {
     } else if (Array.isArray(keys)) {
         keyArray = keys;
     }
-    return keyArray.map(k => k?.toLowerCase());
+    return keyArray?.map(k => k?.toLowerCase());
 }
 
 export function getKeyId(keyType: KeyType, key:string) : string {
