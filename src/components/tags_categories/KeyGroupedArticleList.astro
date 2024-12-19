@@ -8,10 +8,9 @@ interface Props {
 
 import PostSummary from "../../components/posts/PostSummary.astro";
 
-import { extractKeyList } from "../../utils/getPostData";
 import getPosts from "../../utils/getPosts";
 import toSafeId from "../../utils/toSafeId";
-import { getKeyId, toSafeKey } from "../../utils/keyUtils";
+import { getKeyId, toSafeKey, extractKeyList } from "../../utils/keyUtils";
 
 const keyType = Astro.props.keyType;
 const ungroupedKey = keyType == KeyType.Tags ? "~untagged~" : "~uncategorized~";

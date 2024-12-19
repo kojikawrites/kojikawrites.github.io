@@ -6,7 +6,7 @@ description: |
 author: ellafae
 categories: gamedev
 tags: roguelikes musings
-thumbnail: /src/assets/images/hiivelabs.com/blog/game-screenshots/thumbnails/rogue_tn2.jpg
+#thumbnail: /src/assets/images/hiivelabs.com/blog/game-screenshots/thumbnails/rogue_tn2.jpg
 ---
 
 Since its advent, gaming has made a profound impact on the lives of those who’ve enjoyed it.  As the technology improved 
