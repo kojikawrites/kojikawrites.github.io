@@ -3,11 +3,17 @@ interface Props {
     filename: string;
 }
 
-import blueskyJson from "../../assets/_private/state/bluesky_posted.json"
+// import blueskyJson from "../../assets/_private/state/hiivelabs.com/bluesky_posted.json"
+//console.log('BLUESKYTYPE',typeof blueskyJson);
+
 import { getSiteConfig } from "../../utils/getSiteConfig";
 import {getAllKeys} from "../../utils/keyUtils";
 import {KeyType} from "../../utils/enums";
 import { Comments } from "../comments/Comments";
+import { getBlueskyPostedJson} from "../../utils/getBlueskyPostedJson";
+
+const blueskyJson = await getBlueskyPostedJson();
+console.log('blueskyJson', blueskyJson);
 
 const { filename } = Astro.props;
 const siteConfig = await getSiteConfig();
