@@ -9,7 +9,7 @@ export const Input: Component<InputProps> = (props) => {
     return (
     <input
       {...rest}
-      class='comments-input'
+      class='comments-login-input'
     />
   );
 };

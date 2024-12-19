@@ -1,6 +1,6 @@
 import type { AtpSessionData, AtpAgent } from "@atproto/api";
 import type { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
-import { Popover } from "@kobalte/core";
+import { Popover } from "@kobalte/core/popover";
 import {
   createSignal,
   type Accessor,
@@ -32,22 +32,27 @@ export const Header: Component<HeaderProps> = ({ agent, session, signOut }) => {
     <header class="comments-header">
       <h2>Comments</h2>
       <div>
-        <Popover.Root>
-          <Popover.Trigger class="comments-popover-trigger">
-            <img
-              class="w-16 rounded-full"
-              src={profile()?.avatar}
-              alt="avatar"
-            />
-          </Popover.Trigger>
+        {profile()?.avatar ?
+        <Popover>
+          <Popover.Anchor>
+            <Popover.Trigger class="comments-popover-trigger">
+                  <img
+                    class="comments-popover-avatar"
+                    src={profile()?.avatar}
+                    alt="avatar"
+                  />
+            </Popover.Trigger>
+          </Popover.Anchor>
           <Popover.Content
             class='comments-popover-content'>
             <span class="comments-popover-display-name">{profile()?.displayName}</span>
-            <button type="button" onClick={signOut}>
+            <button type="button" onClick={signOut} class="comments-popover-button">
               Sign out
             </button>
           </Popover.Content>
-        </Popover.Root>
+        </Popover>
+            : ''
+        }
       </div>
     </header>
   );

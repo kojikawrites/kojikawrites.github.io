@@ -7,8 +7,7 @@ export const Button: Component<ButtonProps> = (props) => {
   const [, rest] = splitProps(props, ["children"]);
   return (
     <button
-      {...rest}
-      class='comments-button'>
+      {...rest}>
       {props.children}
     </button>
   );
