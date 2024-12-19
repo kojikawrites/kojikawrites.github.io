@@ -134,8 +134,8 @@
         @apply flex flex-col;
     }
     .comments-thread-list-highlighted-post {
-        @apply border-t border-b pt-4 my-8;
-        @apply border-gray-500 mt-8;
+        @apply border-t border-b pt-2 my-2;
+        @apply border-gray-500;
     }
     .comments-thread-avatar {
         @apply rounded-full w-12;
