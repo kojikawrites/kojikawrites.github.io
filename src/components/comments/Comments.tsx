@@ -43,7 +43,7 @@ export const Comments: Component<CommentsProps> = ({ atprotoURI, handle, categor
   });
 
   return (
-    <div class="w-full text-stone-900 dark:text-stone-100 flex flex-col gap-8">
+    <div class="comments">
       <Header
         agent={agent}
         session={session}

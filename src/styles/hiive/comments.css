@@ -1,0 +1,57 @@
+@layer components {
+
+    .comments {
+        @apply w-full flex flex-col gap-8;
+        @apply text-stone-900 dark:text-stone-100;
+
+    }
+
+    .comments-header {
+        @apply w-full flex flex-row justify-between;
+
+        h2 {
+            @apply pb-4 text-3xl font-family-serif;
+        }
+
+        .comments-popover-trigger {
+            /*@apply ui-disabled:bg-slate-100;*/
+        }
+
+        .comments-popover-content {
+            @apply flex flex-col gap-2;
+            /*@apply ui-expanded:shadow-lg;*/
+            @apply bg-stone-200 dark:bg-stone-700;
+            @apply shadow dark:shadow-stone-100;
+            @apply mt-4 p-4;
+            /*@apply rounded-drawn-sm;*/
+        }
+        .comments-popover-display-name {
+            @apply font-family-serif;
+        }
+    }
+
+    .comments-button {
+        @apply flex flex-row items-center gap-2;
+        @apply font-family-serif text-sm;
+        @apply border border-stone-500 dark:border-stone-500 p-2;
+        @apply outline-none;
+        @apply focus-visible:outline-offset-4;
+        @apply focus-visible:outline-stone-800 dark:focus-visible:outline-stone-100;
+        @apply text-stone-800 dark:text-stone-100 ;
+        /*@apply rounded-drawn;*/
+    }
+
+    .comments-input {
+        @apply flex flex-row items-center gap-2;
+        @apply p-2 m-2;
+        @apply font-family-serif text-sm;
+        @apply bg-stone-100 dark:bg-stone-900 autofill:bg-transparent;
+        /*@apply rounded-drawn;*/
+        @apply outline-none;
+        @apply focus-visible:outline-offset-4;
+        @apply focus-visible:outline-stone-800 dark:focus-visible:outline-stone-100;
+        @apply text-stone-800 dark:text-stone-100;
+    }
+
+
+}

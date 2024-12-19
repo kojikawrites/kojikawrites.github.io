@@ -14,6 +14,7 @@
 @import "hiive/blog-page.css";
 @import "hiive/404.css";
 @import "hiive/tags-and-categories.css";
+@import "hiive/comments.css";
 
 @layer base {
     :root {
