@@ -2,7 +2,6 @@ import type { AtpAgent } from "@atproto/api";
 import {Accessor, Component, createSignal} from "solid-js";
 import { Button } from "./Button";
 import { Input } from "./Input";
-import type {ProfileViewDetailed} from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 
 interface LoginFormProps {
   agent: Accessor<AtpAgent | undefined>;
@@ -95,7 +94,7 @@ export const LoginForm: Component<LoginFormProps> = ({
               <div class="comments-login-error">{error()}</div>
           </label>
 
-          <Button type="submit" class="comments-button comments-login-button"
+          <Button type="submit" class="comments-login-button"
                   disabled={!(loginProvided() && passwordProvided())}
                   >Login</Button>
       </form>

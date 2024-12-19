@@ -51,7 +51,7 @@ export const Header: Component<HeaderProps> = ({ agent, session, signOut }) => {
             </button>
           </Popover.Content>
         </Popover>
-            : ''
+            : null
         }
       </div>
     </header>

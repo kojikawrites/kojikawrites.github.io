@@ -61,7 +61,6 @@ export const Comments: Component<CommentsProps> = ({ atprotoURI, handle, categor
             }
             catch (e) {
             }
-            // element.hidePopover();
           }
         }}
       />
