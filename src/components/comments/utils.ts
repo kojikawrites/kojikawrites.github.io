@@ -1,9 +1,6 @@
-import { AppBskyFeedDefs } from "@atproto/api";
-import type {
-  BlockedPost,
-  NotFoundPost,
-  ThreadViewPost,
-} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import {AppBskyFeedDefs} from "@atproto/api";
+import type {BlockedPost, NotFoundPost, ThreadViewPost,} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import {getSiteConfig} from "../../utils/getSiteConfig";
 
 export interface ThreadViewPostUI extends ThreadViewPost {
   showParentReplyLine: boolean;
@@ -20,6 +17,8 @@ function isKnownType(
     AppBskyFeedDefs.isThreadViewPost(post),
   ].some(Boolean);
 }
+
+
 
 /**
  * Given a thread yield all posts in the thread as a flat list.
@@ -110,4 +109,30 @@ export function enrichThreadWithUIData(
     true,
     true,
   );
+}
+
+
+const siteConfig = await getSiteConfig();
+/**
+ * Replaces hashtags in a string with a custom <a> tag linking to the tag page.
+ *
+ * @param inputText - The text containing hashtags (e.g., "#example").
+ * @param allCategories - list of all categories from site posts.
+ * @returns A string where hashtags are replaced with <a> tags.
+ */
+export function replaceHashtags(inputText: string, allCategories:string[]): string {
+    if (!siteConfig.bluesky.hashtag_link)
+    {
+        return inputText;
+    }
+
+    return inputText.replace(/#([\w-]+)/g, (_, category) => {
+
+        const categoryLink = siteConfig.bluesky.hashtag_link.replace("[HASHTAG]", category?.toLowerCase()); // /category/#[HASHTAG]
+
+        // this works but needs fixing so we aren't calling getAllKeys on the client!
+        return allCategories.includes(category)
+            ? `<a href="${categoryLink}">#${category}</a>`
+            : '';
+    });
 }

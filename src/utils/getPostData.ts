@@ -1,19 +1,11 @@
+import {extractKeyList} from "./keyUtils";
+
 type Post = {
   title: string
   file: string
   frontmatter: any
 }
 
-export function extractKeyList(keys: string | string[]) : string[] {
-  let categoryArray: string[];
-  if (typeof keys === 'string') {
-    // Split the string by whitespace into an array
-    categoryArray = keys.trim().split(/\s+/);
-  } else if (Array.isArray(keys)) {
-    categoryArray = keys;
-  }
-  return categoryArray;
-}
 
 function categoriesToPath(categories: string | string[]): string {
 

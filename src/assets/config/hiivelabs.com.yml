@@ -57,6 +57,7 @@ footer:
 # include bluesky
 bluesky:
     include: false
+    hashtag_link: /categories/#[HASHTAG]
 
 # tag/category information
 tags_and_categories:

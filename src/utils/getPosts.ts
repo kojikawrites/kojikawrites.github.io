@@ -1,21 +1,17 @@
-import { getSiteConfig, getSiteCode } from "./getSiteConfig";
+import {getSiteCode, getSiteConfig} from "./getSiteConfig";
 
 const siteConfig = await getSiteConfig();
 const site = getSiteCode();
 const blog_path = siteConfig.blog.path;
 
-export default function getPosts(paginationSize: number | undefined) {
+export default function getPosts() {
     const posts = () => {
-        const allPosts = import.meta.glob(
+        return import.meta.glob(
             [`../assets/**/posts/**/*.{md,mdx}`,
-             '../assets/**/blog/**/*.{md,mdx}',
-             '!../assets/**/posts/**/_drafts/**',
-             '!../**/assets/blog/**/_drafts/**'],
+                '../assets/**/blog/**/*.{md,mdx}',
+                '!../assets/**/posts/**/_drafts/**',
+                '!../**/assets/blog/**/_drafts/**'],
             {eager: true});
-        if (paginationSize) {
-            // paginate
-        }
-        return allPosts;
     };
 
     const pathFilter = `${blog_path}/${site}/`;

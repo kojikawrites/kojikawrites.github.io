@@ -4,11 +4,15 @@ interface Props {
 }
 
 import blueskyJson from "../../assets/_private/state/bluesky_posted.json"
-import {getSiteConfig} from "../../utils/getSiteConfig";
+import { getSiteConfig } from "../../utils/getSiteConfig";
+import {getAllKeys} from "../../utils/keyUtils";
+import {KeyType} from "../../utils/enums";
+import { Comments } from "../comments/Comments";
 
 const { filename } = Astro.props;
 const siteConfig = await getSiteConfig();
-
+const allCategories = getAllKeys(KeyType.Categories);
+console.log(allCategories);
 function trimPathToBlog(path: string): string {
     // Remove leading and trailing slashes for consistent splitting
     const trimmedPath = path.replace(/^\/+|\/+$/g, '');
@@ -42,6 +46,7 @@ function getBlueskyPostId(originalFilename: string) : string {
         return null;
     }
     const thisId = trimPathToBlog(originalFilename);
+    // console.log('bluesky-id', thisId);
     // Convert the array to a dictionary mapping post_id to post_uri
     const postIdToUriMap: Record<string, string> = blueskyJson.reduce(
         (accumulator: Record<string, string>, entry: BlueskyPostEntry) => {
@@ -57,7 +62,12 @@ const blueskyPostId = getBlueskyPostId(filename);
 {blueskyPostId != null &&
 <hr />
 <div>
-    { getBlueskyPostId(filename) }
+    <!--{ getBlueskyPostId(filename) }-->
+    <Comments
+            client:load
+            client:only="solid-js"
+            atprotoURI={ getBlueskyPostId(filename) }
+            handle="kojika.bsky.social"
+            categories={allCategories}
+    />
 </div>}
-
-
