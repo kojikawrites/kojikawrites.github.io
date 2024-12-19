@@ -12,7 +12,7 @@ import { Comments } from "../comments/Comments";
 const { filename } = Astro.props;
 const siteConfig = await getSiteConfig();
 const allCategories = getAllKeys(KeyType.Categories);
-console.log(allCategories);
+// console.log(allCategories);
 function trimPathToBlog(path: string): string {
     // Remove leading and trailing slashes for consistent splitting
     const trimmedPath = path.replace(/^\/+|\/+$/g, '');

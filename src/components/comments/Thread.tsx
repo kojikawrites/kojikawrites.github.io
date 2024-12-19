@@ -115,12 +115,10 @@ const Post = ({
 
   return (
     <li
-        class="flex flex-col"
+        class="comments-thread-list"
       classList={{
-        "border-t border-b pt-4 my-8 border-stone-400 dark:border-stone-600 mt-8":
-          post.isHighlightedPost,
-      }}
-    >
+        "comments-thread-list-highlighted-post":  post.isHighlightedPost,
+      }}>
       {post.showParentReplyLine ? (
         <div class="flex pt-8 ml-6 border-l-2 border-stone-400 dark:border-stone-600" />
       ) : null}
@@ -128,48 +126,43 @@ const Post = ({
         <button
           type="button"
           class="flex flex-row items-center justify-center gap-2"
-          onClick={() => setHighlightedPost(post.post.uri)}
-        >
-          <img
-              class="rounded-full w-12"
+          onClick={() => setHighlightedPost(post.post.uri)} >
+          <img class="comments-thread-avatar"
             src={post.post.author.avatar}
             alt="avatar"
           />
-          <span class="font-shortstack text-lg">
+          <span class="comments-thread-display-name">
             {post.post.author.displayName}
           </span>
-          <span class="text-xs text-stone-600 dark:text-stone-300">
+          <span class="comments-thread-handle">
             @{post.post.author.handle}
           </span>
           <time
-            class="text-xs text-stone-600 dark:text-stone-300"
-            dateTime={createdAt}
-          >
+            class="comments-thread-created-at"
+            dateTime={createdAt} >
             {formatDistance(new Date(createdAt), new Date())}
           </time>
         </button>
 
         <div
           class={`
-          flex flex-col gap-4 pb-4 w-full
-          ${post.showParentReplyLine ? "" : ""}
-          ${post.showChildReplyLine ? "border-l-2" : ""}
-          border-stone-400 dark:border-stone-600 ml-6 pl-6`}
-        >
-          <p class="mt-0" innerHTML={replaceHashtags(text, categories)}></p>
-          <div class="flex flex-row gap-4 text-stone-600 dark:text-stone-400">
+          comments-thread-post-wrapper
+          ${post.showParentReplyLine ? "comments-thread-parent-reply-line" : ""}
+          ${post.showChildReplyLine ? "comments-thread-child-reply-line" : ""}
+          `} >
+          <p class="comments-thread-post-body" innerHTML={replaceHashtags(text, categories)}></p>
+          <div class="comments-thread-post-controls">
             <button
               type="button"
-              class="flex flex-row items-center"
+              class="comments-thread-post-button"
               onClick={() => setShowEditor(post)}
-              aria-label={`Reply to ${post.post.author.displayName}`}
-            >
+              aria-label={`Reply to ${post.post.author.displayName}`} >
               <VsComment />
               <span class="ml-1 text-sm">{post.post.replyCount ?? 0}</span>
             </button>
             <button
               type="button"
-              class="flex flex-row items-center"
+              class="comments-thread-post-button"
               aria-label="Like"
               onClick={async () => {
                 if (post.post.viewer?.like) {
@@ -179,29 +172,27 @@ const Post = ({
                   await agent()?.like(post.post.uri, post.post.cid);
                   refetch();
                 }
-              }}
-            >
+              }} >
               {post.post.viewer?.like ? <VsHeartFilled /> : <VsHeart />}
               <span class="ml-1 text-sm">{post.post.likeCount}</span>
             </button>
             <a
-              class="flex flex-row items-center"
+              class="comments-thread-post-button"
               href={`https://bsky.app/profile/${
                 post.post.author.handle
               }/post/${getPostId(post.post.uri)}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="View on Bsky"
-            >
+              aria-label="View on Bsky" >
               <VsLink />{" "}
-              <span class="ml-1 font-shortstack text-sm">View on Bsky</span>
+              <span class="ml-1 text-xs">View on Bsky</span>
             </a>
           </div>
           {showContinueThread ? (
             <div>
               <button
                 type="button"
-                class="flex flex-row items-center justify-center gap-2 text-stone-600 dark:text-stone-400"
+                class="comments-thread-continue-thread-button"
                 onClick={() => setHighlightedPost(post.post.uri)}
                 aria-label={`Reply to ${post.post.author.displayName}`}
               >
