@@ -1,24 +1,31 @@
 ---
 import { ClientRouter } from 'astro:transitions'
 
-// import { getSiteCode } from '../utils/getSiteConfig'
+import { getSiteCode } from '../utils/getSiteConfig'
 //
 // import (`../styles/${getSiteCode()}.css`);
 import "../styles/custom.css";
 
 export interface Props {
-  title: string
-  description: string
-  permalink: string
+    title: string
+    description: string
+    permalink: string
 }
 
 const { title, description, permalink } = Astro.props
+const siteCode = getSiteCode();
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
-<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+
+<link rel="icon" type="image/x-icon" href=`/public/favicons/${siteCode}/favicon.ico` />
+<link rel="apple-touch-icon" sizes="180x180" href=`/public/favicons/${siteCode}/apple-touch-icon.png`>
+<link rel="icon" type="image/png" sizes="32x32" href=`/public/favicons/${siteCode}/favicon-32x32.png`>
+<link rel="icon" type="image/png" sizes="16x16" href=`/public/favicons/${siteCode}/favicon-16x16.png`>
+<link rel="manifest" href=`/public/favicons/${siteCode}/site.webmanifest`>
 
 <!-- viewport setting -->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
