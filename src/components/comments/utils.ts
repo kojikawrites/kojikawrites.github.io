@@ -3,19 +3,19 @@ import type {BlockedPost, NotFoundPost, ThreadViewPost,} from "@atproto/api/dist
 import {getSiteConfig} from "../../utils/getSiteConfig";
 
 export interface ThreadViewPostUI extends ThreadViewPost {
-  showParentReplyLine: boolean;
-  showChildReplyLine: boolean;
-  isHighlightedPost: boolean;
+    showParentReplyLine: boolean;
+    showChildReplyLine: boolean;
+    isHighlightedPost: boolean;
 }
 
 function isKnownType(
-  post: unknown,
+    post: unknown,
 ): post is BlockedPost | NotFoundPost | ThreadViewPost {
-  return [
-    AppBskyFeedDefs.isBlockedPost(post),
-    AppBskyFeedDefs.isNotFoundPost(post),
-    AppBskyFeedDefs.isThreadViewPost(post),
-  ].some(Boolean);
+    return [
+        AppBskyFeedDefs.isBlockedPost(post),
+        AppBskyFeedDefs.isNotFoundPost(post),
+        AppBskyFeedDefs.isThreadViewPost(post),
+    ].some(Boolean);
 }
 
 
@@ -29,86 +29,86 @@ function isKnownType(
  * @returns A generator that yields all posts in the thread including blocked and not found posts
  */
 export function* flatten(
-  thread: ThreadViewPostUI,
+    thread: ThreadViewPostUI,
 ): Generator<ThreadViewPostUI, void> {
-  if (thread.parent) {
-    if (isKnownType(thread.parent)) {
-      if (AppBskyFeedDefs.isThreadViewPost(thread.parent)) {
-        yield* flatten(thread.parent as ThreadViewPostUI);
-      }
-    }
-  }
-
-  yield thread;
-
-  if (thread.replies && thread.replies.length > 0) {
-    for (const reply of thread.replies) {
-      if (isKnownType(reply)) {
-        if (AppBskyFeedDefs.isThreadViewPost(reply)) {
-          yield* flatten(reply as ThreadViewPostUI);
+    if (thread.parent) {
+        if (isKnownType(thread.parent)) {
+            if (AppBskyFeedDefs.isThreadViewPost(thread.parent)) {
+                yield* flatten(thread.parent as ThreadViewPostUI);
+            }
         }
-      }
     }
-  }
+
+    yield thread;
+
+    if (thread.replies && thread.replies.length > 0) {
+        for (const reply of thread.replies) {
+            if (isKnownType(reply)) {
+                if (AppBskyFeedDefs.isThreadViewPost(reply)) {
+                    yield* flatten(reply as ThreadViewPostUI);
+                }
+            }
+        }
+    }
 }
 
 function addThreadUIData(
-  threadViewPost: ThreadViewPostUI,
-  walkChildren = true,
-  walkParent = true,
+    threadViewPost: ThreadViewPostUI,
+    walkChildren = true,
+    walkParent = true,
 ): ThreadViewPostUI {
-  let parent: ThreadViewPostUI | undefined = undefined;
-  if (walkParent && AppBskyFeedDefs.isThreadViewPost(threadViewPost.parent)) {
-    // Recursively add UI data to parent
-    parent = addThreadUIData(
-      {
-        ...threadViewPost.parent,
-        showParentReplyLine: !!threadViewPost.parent?.parent,
-        showChildReplyLine: true,
-        isHighlightedPost: false,
-      },
-      false,
-      true,
-    );
-  }
-
-  let replies: ThreadViewPostUI[] = [];
-  if (walkChildren && (threadViewPost.replies?.length ?? 0) > 0) {
-    replies = (threadViewPost.replies ?? [])
-      .map((reply) => {
-        if (AppBskyFeedDefs.isThreadViewPost(reply)) {
-          // Recursively add UI data to children
-          return addThreadUIData(
+    let parent: ThreadViewPostUI | undefined = undefined;
+    if (walkParent && AppBskyFeedDefs.isThreadViewPost(threadViewPost.parent)) {
+        // Recursively add UI data to parent
+        parent = addThreadUIData(
             {
-              ...reply,
-              showParentReplyLine: !threadViewPost?.isHighlightedPost,
-              showChildReplyLine: (reply?.replies?.length ?? 0) > 0,
-              isHighlightedPost: false,
-            } satisfies ThreadViewPostUI,
-            true,
+                ...threadViewPost.parent,
+                showParentReplyLine: !!threadViewPost.parent?.parent,
+                showChildReplyLine: true,
+                isHighlightedPost: false,
+            },
             false,
-          );
-        }
-      })
-      .filter((x): x is ThreadViewPostUI => x !== undefined);
-  }
+            true,
+        );
+    }
 
-  return { ...threadViewPost, parent, replies };
+    let replies: ThreadViewPostUI[] = [];
+    if (walkChildren && (threadViewPost.replies?.length ?? 0) > 0) {
+        replies = (threadViewPost.replies ?? [])
+            .map((reply) => {
+                if (AppBskyFeedDefs.isThreadViewPost(reply)) {
+                    // Recursively add UI data to children
+                    return addThreadUIData(
+                        {
+                            ...reply,
+                            showParentReplyLine: !threadViewPost?.isHighlightedPost,
+                            showChildReplyLine: (reply?.replies?.length ?? 0) > 0,
+                            isHighlightedPost: false,
+                        } satisfies ThreadViewPostUI,
+                        true,
+                        false,
+                    );
+                }
+            })
+            .filter((x): x is ThreadViewPostUI => x !== undefined);
+    }
+
+    return { ...threadViewPost, parent, replies };
 }
 
 export function enrichThreadWithUIData(
-  threadViewPost: ThreadViewPost,
+    threadViewPost: ThreadViewPost,
 ): ThreadViewPostUI {
-  return addThreadUIData(
-    {
-      ...threadViewPost,
-      showParentReplyLine: false,
-      showChildReplyLine: false,
-      isHighlightedPost: true,
-    } satisfies ThreadViewPostUI,
-    true,
-    true,
-  );
+    return addThreadUIData(
+        {
+            ...threadViewPost,
+            showParentReplyLine: false,
+            showChildReplyLine: false,
+            isHighlightedPost: true,
+        } satisfies ThreadViewPostUI,
+        true,
+        true,
+    );
 }
 
 
@@ -130,8 +130,7 @@ export function replaceHashtags(inputText: string, allCategories:string[]): stri
 
         const categoryLink = siteConfig.bluesky.hashtag_link.replace("[HASHTAG]", category?.toLowerCase()); // /category/#[HASHTAG]
 
-        // this works but needs fixing so we aren't calling getAllKeys on the client!
-        return allCategories.includes(category)
+        return allCategories.includes(category.toLowerCase())
             ? `<a href="${categoryLink}">#${category}</a>`
             : '';
     });
