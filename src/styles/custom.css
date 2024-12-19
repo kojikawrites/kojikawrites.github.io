@@ -14,6 +14,7 @@
 @import "thewriteplace.rocks/blog-page.css";
 @import "thewriteplace.rocks/404.css";
 @import "thewriteplace.rocks/tags-and-categories.css";
+@import "thewriteplace.rocks/comments.css";
 
 @layer base {
     :root {

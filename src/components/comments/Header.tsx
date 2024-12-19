@@ -1,6 +1,6 @@
 import type { AtpSessionData, AtpAgent } from "@atproto/api";
 import type { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
-import { Popover } from "@kobalte/core";
+import { Popover } from "@kobalte/core/popover";
 import {
   createSignal,
   type Accessor,
@@ -29,35 +29,30 @@ export const Header: Component<HeaderProps> = ({ agent, session, signOut }) => {
 
   // @ts-ignore
   return (
-    <header class="w-full flex flex-row justify-between">
-      <h2 class="pb-4 text-3xl font-shortstack">Comments</h2>
+    <header class="comments-header">
+      <h2>Comments</h2>
       <div>
-        <Popover.Root>
-          <Popover.Trigger class="ui-disabled:bg-slate-100">
-            <img
-              class="w-16 rounded-full"
-              src={profile()?.avatar}
-              alt="avatar"
-            />
-          </Popover.Trigger>
+        {profile()?.avatar ?
+        <Popover>
+          <Popover.Anchor>
+            <Popover.Trigger class="comments-popover-trigger">
+                  <img
+                    class="comments-popover-avatar"
+                    src={profile()?.avatar}
+                    alt="avatar"
+                  />
+            </Popover.Trigger>
+          </Popover.Anchor>
           <Popover.Content
-            class={`
-            ui-expanded:shadow-lg
-            bg-stone-200
-            dark:bg-stone-700
-            shadow
-            dark:shadow-stone-100
-            mt-4 p-4
-            rounded-drawn-sm
-            flex flex-col gap-2
-            `}
-          >
-            <span class="font-shortstack">{profile()?.displayName}</span>
-            <button type="button" onClick={signOut}>
+            class='comments-popover-content'>
+            <span class="comments-popover-display-name">{profile()?.displayName}</span>
+            <button type="button" onClick={signOut} class="comments-popover-button">
               Sign out
             </button>
           </Popover.Content>
-        </Popover.Root>
+        </Popover>
+            : null
+        }
       </div>
     </header>
   );

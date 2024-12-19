@@ -18,9 +18,8 @@ export const Comments: Component<CommentsProps> = ({ atprotoURI, handle, categor
   const [session, setSession] = createSignal<AtpSessionData>();
   const [agent, setAgent] = createSignal<AtpAgent>();
 
-  onMount(() => {
-    const session = localStorage.getItem("atpSession");
-    const agent = new AtpAgent({
+  function newAgent(): AtpAgent {
+    return new AtpAgent({
       service: "https://bsky.social",
       persistSession: (_, session) => {
         if (session) {
@@ -29,6 +28,11 @@ export const Comments: Component<CommentsProps> = ({ atprotoURI, handle, categor
         setSession(session);
       },
     });
+  }
+
+  onMount(() => {
+    const session = localStorage.getItem("atpSession");
+    const agent = newAgent();
     setAgent(agent);
 
     if (session) {
@@ -43,14 +47,20 @@ export const Comments: Component<CommentsProps> = ({ atprotoURI, handle, categor
   });
 
   return (
-    <div class="w-full text-stone-900 dark:text-stone-100 flex flex-col gap-8">
+    <div class="comments">
       <Header
         agent={agent}
         session={session}
-        signOut={() => {
+        signOut={async () => {
           if (agent()) {
-            setSession(undefined);
-            setAgent(undefined);
+            try {
+              await agent()?.logout();
+              setSession(undefined);
+              localStorage.removeItem("atpSession");
+              setAgent(newAgent());
+            }
+            catch (e) {
+            }
           }
         }}
       />
