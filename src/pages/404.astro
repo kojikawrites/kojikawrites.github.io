@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+import getPosts from "../utils/getPosts";
+import getPostData from "../utils/getPostData";
+
+import {getSiteConfig} from "../utils/getSiteConfig";
+const siteConfig = await getSiteConfig();
+
+const title = '404';
+const description = '404.';
+// const url = Astro.url.pathname;
+
+const allPostPaths = getPosts().map((p: any) => siteConfig.blog.prefix + getPostData(p).path); // DO NOT DELETE
+
+---
+<BaseLayout title={title} description={description} permalink="">
+    <div class="c404">
+        <h1>404 - File Not Found</h1>
+        <h2 class="redirect hidden">(maybe)</h2>
+        <hr/>
+        <p class="shrug">¯\_(ツ)_/¯</p>
+
+        <!-- redirect block -->
+        <div class="redirect hidden">
+            <div class="redirect-info">
+                The page you are looking for:
+            </div>
+            <div class="redirect-from-url">
+                <!--{Astro.site.href}{url.substring(1)}-->
+            </div>
+            <div class="redirect-info">
+                may have been moved to:
+            </div>
+            <div class="redirect-to-url cursor-pointer">
+                <a class="redirect-to-url-link" href="/">
+                </a>
+            </div>
+            <div class="redirect-info">
+                Please update your bookmarks.
+            </div>
+            <br/>
+            <div class="redirect-instruction">
+                Redirecting in
+                <span id="redirect-countdown"
+                      class="redirect-countdown">
+                </span>
+                seconds...
+            </div>
+            <div class="redirect-instruction">
+                (Or you can click the new link above.)
+            </div>
+
+        </div>
+        <!-- no redirect block -->
+        <p class="no-redirect">Sorry. This page does not exist.</p>
+        <hr/>
+
+    </div>
+</BaseLayout>
+
+<script is:inline define:vars={{ allPostPaths }} data-astro-rerun >
+    function checkForRedirect(paths) {
+        const url = window.location.href.replace(/^.*?:\/\/[^/]+/, '');
+
+        const parts = url.split('/').filter(Boolean);
+        const dateIndex = parts.findIndex((part, i, arr) =>
+            /^\d{4}$/.test(part) &&        // year: 4 digits
+            arr[i + 1] && /^\d{2}$/.test(arr[i + 1]) &&  // month: 2 digits
+            arr[i + 2] && /^\d{2}$/.test(arr[i + 2])     // day: 2 digits
+        );
+        // If a date sequence is found, slice from there
+        const result = (dateIndex !== -1 ? parts.slice(dateIndex) : parts);
+
+        if (result.length > 0 && result[result.length - 1].includes('.')) {
+            result.pop();
+        }
+
+        const searchPath = result.join('/');
+        // console.log('searchPath', searchPath);
+
+        const trimmedSearch = searchPath.trim();
+        const matchedPath = trimmedSearch.length > 0
+            ? paths.find(path => path.includes(trimmedSearch))
+            : undefined;
+
+        const redirectPath = matchedPath ? `/${matchedPath}` : null;
+
+        return redirectPath ? {
+            fromUrl: url,
+            toUrl: redirectPath,
+            timing: 30
+        } : null;
+    }
+
+    const redirect = checkForRedirect(allPostPaths);
+    // console.warn('redirect', redirect);
+
+    if (redirect) {
+        // show and hide the right things...
+        document.querySelectorAll('.redirect').forEach((el) => {
+            el.classList.remove('hidden');
+        })
+        document.querySelectorAll('.no-redirect').forEach((el) => {el.classList.add('hidden'); } );
+        // update the redirect-from-url
+        document.querySelectorAll('.redirect-from-url')[0].innerText = redirect.fromUrl;
+        const toLink = document.querySelectorAll('.redirect-to-url-link')[0];
+        toLink.innerText = redirect.toUrl;
+        toLink.href = redirect.toUrl;
+
+        // set up redirect
+        const meta = document.createElement('meta');
+        meta.setAttribute('http-equiv', 'refresh');
+        meta.setAttribute('content', `${redirect.timing ? redirect.timing : '0'}; url=${redirect.toUrl}`);
+        document.head.appendChild(meta);
+    }
+
+    let countdownValue = redirect?.timing;
+    if (countdownValue) {
+        // Update the display initially
+        document.getElementById('redirect-countdown').textContent = countdownValue;
+
+        // Set an interval that updates every second
+        const interval = setInterval(() => {
+            countdownValue--;
+
+            // Update the displayed value
+            document.getElementById('redirect-countdown').textContent = countdownValue;
+
+            // If it hits zero, clear the interval and optionally do something else
+            if (countdownValue <= 0) {
+                clearInterval(interval);
+                // Perform your redirect or other action here
+            }
+        }, 1000);
+    }
+</script>
+

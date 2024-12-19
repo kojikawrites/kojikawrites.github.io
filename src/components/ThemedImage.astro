@@ -1,0 +1,129 @@
+---
+interface Props {
+    alt: string;
+    srcList?: Record<string, string>;
+    src?: string;
+    class?: string;
+    id?: string;
+}
+
+import getSafeId from '../utils/toSafeId';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+const {
+    alt = "",
+    srcList= {},
+    src: srcString = "",
+    class:className = "",
+    id= null,
+    ...rest
+} = Astro.props;
+
+function buildSrcList(
+    srcList: Record<string, string> | undefined,
+    src: string | undefined,
+    imageGlobs: Record<string, () => Promise<{ default: ImageMetadata }>>,
+    availableThemes: string[]
+): { [theme: string]: Promise<{ default: ImageMetadata }> } {
+
+    let finalSrcList = {}
+
+    if (src && (!srcList || Object.keys(srcList).length == 0)) {
+        // Step 1: We have a src string, but no srcList.
+        // We need to construct a srcList by replacing [THEME] with each available theme.
+        // console.log("buildSrcList: src", src);
+        finalSrcList = availableThemes.reduce((acc, theme: string) => {
+            const filename = src.includes('[THEME]')
+                ? src.replace('[THEME]', theme)
+                : src;
+            acc[theme] = filename;
+            // console.log('buildSrcList: theme:filename', `${theme}:${filename}`);
+            return acc;
+        }, {});
+    } else if (srcList && !src) {
+        // We already have a srcList
+        // console.log("buildSrcList: srcList", srcList);
+        finalSrcList = srcList;
+    } else {
+        // Invalid scenario: both or neither provided
+        return null;
+    }
+
+    // Step 2: Build a new dictionary where each theme is the key, and the value is taken from imageGlobs.
+    // finalSrcList keys: theme names, finalSrcList values: filenames
+    return Object.fromEntries(
+        Object.entries(finalSrcList).map(([theme, filename]) => {
+            // Look up the glob from imageGlobs using the filename
+            const value = imageGlobs[`${filename}`];
+            if (!value) {
+                console.warn(`No image glob found for ${filename}`);
+            }
+            return [theme, value()];
+        })
+    );
+}
+
+function getValueOrFirst<T>(dict: Record<string, Promise<{default: ImageMetadata}>>, key: string): Promise<{default: ImageMetadata}> {
+    if (key in dict) {
+        return dict[key];
+    } else {
+        const values = Object.values(dict);
+        return values.length > 0 ? values[0] : undefined;
+    }
+}
+
+const themedImgId = id ?? getSafeId(`themed-image-${className}-${alt}`);
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,svg,webp}');
+const themedImageGlobs = buildSrcList(srcList, srcString, images, ['dark', 'light'])
+
+
+---
+
+<!--<img id={themedImgId} alt={alt} title={alt} src={defaultSrc} class={className} {...rest} />-->
+{Object.keys(themedImageGlobs).map((theme, ix) => (
+    <Image id={themedImgId}
+           src={getValueOrFirst(themedImageGlobs, theme)}
+           alt={alt}
+           title={alt}
+           class=`${className} hidden`
+           data-theme={theme}
+           {...rest} />
+    ))}
+
+<script is:inline src="/scripts/client/getActiveTheme.js" data-astro-rerun />
+<script type="module" define:vars={{ srcList, themedImgId, srcString }} data-astro-rerun>
+    function setThemedImage()  {
+        var themedImgs = document.querySelectorAll(`[id='${themedImgId}']`);
+        const theme = getActiveTheme();
+        themedImgs.forEach((img) => {
+
+            if (theme === img.dataset.theme) {
+                img.classList.remove('hidden');
+            }
+            else {
+                img.classList.add('hidden');
+            }
+            //img.style.display = theme === img.dataset.theme ? 'block': 'none';
+        });
+        return true;
+    }
+
+    // initial set.
+    setThemedImage();
+
+    // this should catch theme changes
+    window.addEventListener('storage', (_) => {
+        setThemedImage();
+    });
+
+    // Re-initialize after page load and swapping pages
+    // document.addEventListener("astro:page-load", (_) => {
+    //     setThemedImage();
+    // });
+    //
+    // document.addEventListener("astro:after-swap", (_) => {
+    //     setThemedImage();
+    // });
+
+</script>

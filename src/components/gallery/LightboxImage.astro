@@ -1,0 +1,77 @@
+---
+interface Props {
+    alt: string;
+    src: string;
+    class?: string;
+    id?: string;
+    description?: string;
+}
+
+import { Image } from 'astro:assets';
+import toSafeId from '../../utils/toSafeId';
+import getImageMetadata from "../../utils/getImageMetadata";
+
+const {
+    alt,
+    src,
+    description = '',
+    class:className = '',
+    id: rawId = '',
+    ...next
+} = Astro.props;
+
+const id = (!rawId || rawId.trim().length ==0)
+    ? toSafeId(rawId)
+    : rawId;
+const imgId = `${id}-img`;
+---
+
+<style is:inline>
+    #spotlight { /* main font styles, background */ }
+    .spl-page { /* current page (toolbar) */ }
+    .spl-fullscreen { /* button fullscreen (toolbar) */ }
+    .spl-autofit { /* button autofit (toolbar) */ }
+    .spl-zoom-out { /* button zoom out (toolbar) */ }
+    .spl-zoom-in { /* button zoom in (toolbar) */ }
+    .spl-theme { /* button theme (toolbar) */ }
+    .spl-play { /* button autoplay (toolbar) */ }
+    .spl-download { /* button download (toolbar) */ }
+    .spl-close { /* button close (toolbar) */ }
+    .spl-prev { /* button page prev */ }
+    .spl-next { /* button page next */ }
+    .spl-spinner { /* preloading spinner */ }
+    .spl-spinner.spin { /* show spinner */ }
+    .spl-spinner.error { /* show loading error */ }
+    .spl-title {
+        /* image title */
+        width: 100%;
+        text-align: center;
+    }
+    .spl-description { /* image description */ }
+    .spl-button { /* button footer */ }
+    .spl-header { /* the header wrapping element */ }
+    .spl-footer { /* the footer wrapping element */ }
+
+</style>
+
+<div id={id} class="flex cursor-pointer">
+    <Image src={getImageMetadata(src)} alt={alt} class=`lightbox-image  ${className}` id={imgId} title={alt} {...next} />
+</div>
+
+<script is:inline define:vars={{id, imgId, alt, description}} data-astro-rerun>
+    function addClickListener() {
+        const div = document.getElementById(id);
+        const img = document.getElementById(imgId);
+        console.warn(div, img);
+        div.addEventListener("click", _ => {
+            const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
+            Spotlight.show([{
+                src: img.src,
+                title: alt,
+                description: description,
+                theme: theme,
+            }]);
+        });
+    }
+    addClickListener();
+</script>

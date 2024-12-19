@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PagePostCount from '../../components/posts/PagePostCount.astro';
+import PostSummary from "../../components/posts/PostSummary.astro";
+
+import getPosts from "../../utils/getPosts";
+
+const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
+
+const title = 'Blog Archive';
+const description = 'Article archive.';
+const permalink = `${Astro.site.href}blog/archive`;
+
+---
+
+<BaseLayout title={title} description={description} permalink={permalink} current="blog">
+  <div class="container post-list">
+    <h1>Post Archive</h1>
+    <PagePostCount postCount={allPosts.length} class="post-count" />
+    <ul>
+    {allPosts.map((post, _) => (
+        <PostSummary post={post} />
+    ))}
+    </ul>
+  </div>
+</BaseLayout>

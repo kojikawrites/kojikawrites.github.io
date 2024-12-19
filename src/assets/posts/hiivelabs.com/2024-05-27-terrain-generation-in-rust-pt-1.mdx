@@ -1,0 +1,157 @@
+---
+title:  "Terrain Generation in Rust, Part 1"
+description: |
+  This post explores the process of landscape generation using Rust, focusing on a seeded expansion algorithm to ensure
+  consistent chunk generation. It provides a detailed look into the methods employed for procedural terrain creation.
+author: hiive
+categories: gamedev
+tags: world-building terrain-generation procedural-generation rust roguelikes
+---
+
+Following on from my last entry, let’s go into a little more detail about how the landscape generation was done.
+I mentioned briefly that I used a seeded expansion algorithm to ensure that landscape chunks were expanded
+consistently.
+
+To recap, the problem was that the initial map size was too small for it to be interesting for the kind of gameplay I
+want, but generating a map of an *interesting* size would be slow and memory intensive. The solution for this was to
+use the top level map as a source for an expanded map using procedural generation techniques, where each iteration
+would double the size of the map. So, if we start with a map size of (e.g.) **100x100**, then one iteration would make
+it **200x200**, two would make it **400x400**, three would make it **800x800**, and so on. With a source map size
+of **1024x768**, four or five iterations would make the map large enough to be interesting.
+
+However, in order to make this process memory and time efficient, we do not want to expand the entire map per
+iteration. Instead, we divide the map into chunks. As mentioned previously, the original 1024x768 map
+(denoted *layer 0*) is, by definition, fully realized and doesn’t need chunking. Therefore it is a single chunk of
+**1024x768**. However, subsequent layers (each representing a doubling of size of the previous layer) need to be
+chunked in order to not result in a exponential explosion of required memory and processing time.
+
+I fairly arbitrarily chose of chunk size of **128x64**, and therefore layers beyond zero are conceptually built from
+these chunks. During rendering, the render engine requests tile information from the chunk manager. The chunk manager
+checks its in-memory cache to see if the chunk is available. If not, it checks the disk cache. If it’s not there
+either, the chunk is created on the fly.
+
+The following code excerpt shows a simple algorithm that simply doubles up the previous layer. That is, each tile
+in *layer n-1* is reproduced as four tiles in *layer n*. This is the simplest possible scheme, and is ideal for
+testing the generation mechanism, as it produces easily predictable and hence testable output.
+
+Although the method implementation is relatively straightforward, there are some complexities due to my coding it
+to potentially support multithreaded generation. The parameters are `child_chunk_bounds`, which - fairly obviously -
+contain the coordinate bounds of the chunk to populate, `child_layer`, which is the layer that contains the child
+chunk, and `parent_tiles`, an indexed hash map of the tiles that will be used as the generator source. This last
+parameter is created before it’s passed into the method rather than giving the method access to the parent layer
+directly, as that caused issues with multithreading. (Whether I end up using multithreaded generation or not is still
+up in the air, but it doesn’t hurt to code for the possibility in this instance). It’s not the cleanest implementation
+possible, because I’m still passing in the child layer as a mutable parameter, but it’s at least 90% of the way to
+being multithreading friendly.
+
+```rust
+    fn generate_chunk_from_parent(
+        &self,
+        child_chunk_bounds: Bounds,
+        child_layer: &mut ChunkLayer,
+        parent_tiles: IndexMap<(IDim, IDim), TIndex, BuildHasherDefault<FxHasher>>,
+    ) {
+        let (this_layer_x0, this_layer_y0, this_layer_x1, this_layer_y1) =
+            child_chunk_bounds.get_bound_coords(true);
+
+        let w = 2 + this_layer_x1 - this_layer_x0;
+        let h = 2 + this_layer_y1 - this_layer_y0;
+        let s = (w * h) as usize;
+        let mut child_tiles: IndexMap<(IDim, IDim), Option<TIndex>, BuildHasherDefault<FxHasher>> =
+            IndexMap::with_capacity_and_hasher(s, BuildHasherDefault::default());
+
+        // build the child tile map
+        for this_layer_y in this_layer_y0..this_layer_y1 {
+            for this_layer_x in this_layer_x0..this_layer_x1 {
+                // check existing tile
+                let tile_value = child_layer.get_at(this_layer_x, this_layer_y);
+                child_tiles.insert((this_layer_x, this_layer_y), tile_value);
+            }
+        }
+
+        child_tiles = self.generate_chunk_work_from_parent(
+            parent_tiles,
+            child_layer.manager_guid_bytes,
+            child_layer.layer_guid_bytes,
+            child_chunk_bounds,
+            child_tiles,
+        );
+
+        assert!(child_tiles.len() <= s);
+
+        // now fill the chunk from the tiles
+        for ((tx, ty), tile_value) in child_tiles.drain(..) {
+            let _ = child_layer.set_at(tx, ty, tile_value.expect("tile value not set"));
+        }
+    }
+```
+I believe that most of the method is self-explanatory (although please let me know if I’m wrong). The first thing the
+method does is iterate over the internal chunk coordinates, building the list of tiles to be written to the chunk to
+generate. The method `generate_chunk_work_from_parent` simply creates four tiles for every parent tile, doubling up the
+parent. In short, for every coordinate **(x<sub>c</sub>, y<sub>c</sub>)** in the child, it construct parent coordinates
+**(x<sub>p</sub>, y<sub>p</sub>) = (x<sub>c</sub>/2, y<sub>c</sub>/2)** and sets the child tile, **t<sub>c</sub>** at
+**(x<sub>c</sub>, y<sub>c</sub>)**, to the value of the parent tile **t<sub>p</sub>** at
+**(x<sub>p</sub>, y<sub>p</sub>)**. In other words, it doubles the parent layer. As I already stated, this makes for
+a boring but easily testable chunk expansion process.
+
+Where it gets fun is when we try to make the generation more interesting. I do this by introducing randomness into
+the selection of parent tile to duplicate for the child.
+This is done by reimplementing the `generate_chunk_work_from_parent` to select different tiles. That part is fairly
+straightforward, so I’ll show only the meat of the selection process.
+
+```rust
+    #[inline(always)]
+    fn choose_child_tile(
+        child_tiles: &mut IndexMap<(IDim, IDim), Option<TIndex>, BuildHasherDefault<FxHasher>>,
+        hasher: &mut FxHasher,
+        seed: &[u8; 32],
+        this_layer_y: IDim,
+        this_layer_x: IDim,
+    ) {
+        let dx = Self::get_coord_offset(hasher, seed, this_layer_x);
+        let dy = Self::get_coord_offset(hasher, seed, this_layer_y);
+        if let Some(Some(tile_value)) = child_tiles.get(&(this_layer_x + dx, this_layer_y + dy)) {
+            child_tiles.insert((this_layer_x, this_layer_y), Some(*tile_value));
+        }
+    }
+
+    #[inline(always)]
+    fn get_coord_offset(hasher: &mut FxHasher, seed: &[u8; 32], coord: IDim) -> IDim {
+        hasher.write(seed);
+        hasher.write_isize(coord as isize);
+        (hasher.finish() % 3) as IDim - 1
+    }
+```
+
+Initially, the process works as described for the doubler, and the first pass simply doubles the parent tiles.
+Then it performs a second pass, during which the generation process, the `generate_chunk_work_from_parent` method
+calls `choose_child_tile` to select the tile to mutate. It does this by using the seed (derived from the chunk
+coordinates) to generate an offset in the range of (&plusmn;1, &plusmn;1), as performed by `get_coord_offset`. Because we
+are using a seed based on the coordinates, this will always be the same for a specific coordinate set, irrespective of
+generation order.
+
+In order to visualize what this looks like, consider the following sequence of images generated by a unit test,
+showing the results of a two layer generation sequence. As can be seen, the original test *layer 0* is an **8x8**
+array of random byte values. *Layer 1* doubles in size to **16x16,** and *layer 2* again doubles to **32x32**.
+
+
+<LightboxGallery>
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/layer0.png"
+                  alt="Layer 0 (8x8)" />
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/layer1.png"
+                  alt="Layer 1 (16x16) (excl. out-of-bounds border)" />
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/layer2.png"
+                  alt="Layer 2 (32x32) (excl. out-of-bounds border)" />
+</LightboxGallery>
+
+
+The astute observer will notice that *layer 1* is actually displayed at **18x18,** and *layer 2* at **34x34**.
+This is because I arbitrarily chose **`FF`** as the out-of-bounds value returned when the generation process requested
+a tile coordinate outside the map. This is shown as a border on layers *1* and *2* to illustrate where the otherwise
+inexplicable **`FF`** values are coming from in those layers. For use in game, I would ensure that the borders of the
+map were all sea, which would also be the out-of-bounds value. This would ensure that there wasn’t any “edge of the
+map” weirdness and allow the player to wrap around the map if necessary in the standard “fake globe but is actually
+a toroid” fashion.
+
+In the second part of this devlog post, I will talk about the caching and storage mechanisms, as well as some differences between the
+Rust and C# implementations that were necessitated by Rust's borrow checker.

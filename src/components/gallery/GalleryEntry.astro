@@ -1,0 +1,21 @@
+---
+interface Props {
+    src: string;
+    alt: string;
+    description: string;
+    class?: string;
+}
+
+import {Image} from "astro:assets";
+import getImageMetadata from "../../utils/getImageMetadata";
+
+
+const { src, alt, description, class:className, ...rest } = Astro.props;
+---
+<div class="cursor-pointer" data-src={src} data-alt={alt} data-description={description} data-gallery-entry>
+    <Image src={getImageMetadata(src)}
+           alt={alt}
+           title={alt}
+           class=`lightbox-image ${className}`
+           {...rest} />
+</div>

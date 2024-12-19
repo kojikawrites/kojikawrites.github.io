@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .equation {
+        @apply bg-color-background-feature color-text-highlight-color;
+        @apply w-fit ml-0.5 lg:p-3 lg:ml-6 lg:self-center text-sm lg:text-base;
+        @apply rounded border-gray-500;
+    }
+
+    .equation-note {
+        @apply ml-4;
+    }
+
+    .equation-snippet {
+        @apply inline-flex flex-row;
+        @apply color-text-highlight-color;
+    }
+}

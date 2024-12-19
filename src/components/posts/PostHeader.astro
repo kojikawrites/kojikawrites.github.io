@@ -1,0 +1,62 @@
+---
+import {extractKeyList} from "../../utils/keyUtils";
+interface Props {
+    post: any
+}
+import KeyList from "../tags_categories/KeyList.astro";
+import FormattedDate from "../FormattedDate.astro";
+import {KeyType} from "../../utils/enums";
+
+const { frontmatter } = Astro.props.post;
+const {
+    title,
+    publishDate,
+    author,
+    tags: rawTags,
+    categories: rawCategories,
+    readingTime
+} = frontmatter;
+
+const categories = extractKeyList(rawCategories);
+const tags = extractKeyList(rawTags);
+---
+
+<header>
+    <!-- title -->
+    <h1>{title}</h1>
+    <!-- post date, author, categories (if present) -->
+    <div class="flex flex-row preamble">
+        <div class="pr-2">
+            <span class="min-w-fit">
+              <!-- post date -->
+              <span>Posted on &nbsp;</span>
+              <FormattedDate date={publishDate}></FormattedDate>
+            </span>
+            <span class="min-w-fit">
+              <!-- author -->
+                {author && author.length > 0 &&
+                    <span>&nbsp;by {author}, </span>
+                }
+                {categories && categories.length > 0 &&
+                    <span class="pr-1">about:</span>
+                }
+            </span>
+        </div>
+        <!-- categories -->
+        {categories && categories.length > 0 &&
+                <KeyList keys={categories} keyType={KeyType.Categories} />
+        }
+    </div>
+    <!-- tags -->
+    {tags && tags.length > 0 &&
+            <div class="flex flex-row preamble">
+                <div class="pr-2">Tags:</div>
+                <KeyList keys={tags} keyType={KeyType.Tags}/>
+            </div>
+    }
+    <!-- reading time -->
+    <div class="flex flex-row space-x-1 preamble">
+        <span>Reading Time: ~ {readingTime}</span>
+    </div>
+    <hr />
+</header>

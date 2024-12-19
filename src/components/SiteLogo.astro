@@ -1,0 +1,24 @@
+---
+interface Props {
+    alt: string;
+    dark: string;
+    light: string;
+    class?: string;
+    id?: string;
+}
+
+import ThemedImage from './ThemedImage.astro';
+import getSafeId from '../utils/toSafeId';
+import {getSiteConfig} from "../utils/getSiteConfig";
+const siteConfig = await getSiteConfig();
+
+const id = getSafeId(Astro.props.id ?? Astro.props.alt, false);
+const { class: logoClass, dark, light } = Astro.props;
+const logoSrc: Record<string, string> = {
+    'dark': dark,
+    'light': light,
+};
+
+---
+<ThemedImage id={id} alt={Astro.props.alt} srcList={logoSrc} class={logoClass}/>
+
