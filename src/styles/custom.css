@@ -5,6 +5,7 @@
 @import "shiki.css";
 
 /* site specific */
+@import "thewriteplace.rocks/colors.css";
 @import "thewriteplace.rocks/navbar.css";
 @import "thewriteplace.rocks/index.css";
 @import "thewriteplace.rocks/about.css";
@@ -17,41 +18,6 @@
 @import "thewriteplace.rocks/comments.css";
 
 @layer base {
-    :root {
-        --background-image: url('/src/assets/images/thewriteplace.rocks/kojika-background-light.png');
-        --background-body: #ddd;
-        --background-feature: #eee;
-        --text-main: #36393b;
-        --text-secondary: #6b6f72;
-        --primary-color: #2E8B57; /* Primary Green (SeaGreen) */
-        --primary-color-alt: #66CDAA; /* Light Green */
-        --primary-color-contrast: #fff;
-        --secondary-color: #228B22; /* Forest Green */
-        --heading-color: #006400; /* Dark Green */
-        --text-highlight-color: #001B84;
-        --text-code-color: #001B84;
-        --font-family-serif: Merriweather, serif;
-        --font-family-sans: 'Fira Sans', sans-serif;
-        --font-family-sans-alt: "Roboto", sans-serif;
-        --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-        --bg-quote-block: #00000020;
-    }
-
-    :root.theme-dark {
-        --background-image: url('/src/assets/images/thewriteplace.rocks/kojika-background-dark.png');
-        --background-body: #202122;
-        --background-feature: #28292A;
-        --text-main: #fff;
-        --text-secondary: #ccc;
-        --text-highlight-color: #FFE38D;
-        --text-code-color: #FFE38D;
-        --primary-color: #2ECC57; /* SeaGreen */
-        --primary-color-alt: #22CC22; /* Forest Green */
-        --secondary-color: #66FF20; /* Medium Aquamarine */
-        --heading-color: #00CC00; /* Light Green */
-        --bg-quote-block: #CCCCCC20;
-    }
-
 
     /* custom classes to make colors friendlier with tailwind */
     .color-primary-color {
