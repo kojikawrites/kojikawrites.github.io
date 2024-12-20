@@ -13,7 +13,6 @@ export async function getSiteConfig() {
         alt: string;
     }
     interface NavbarEntry {
-        code: string;
         href: string;
         label: string;
     }
@@ -28,6 +27,10 @@ export async function getSiteConfig() {
             logo: ThemedImage,
             left: NavbarEntry[];
             right: NavbarEntry[];
+            breadcrumbs: {
+                include: boolean
+                valid_breadcrumbs: string[];
+            };
         };
         footer: {
             content: string[];

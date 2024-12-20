@@ -10,15 +10,17 @@ export interface Props {
   current?: string;
 }
 const { title, description, permalink, current } = Astro.props;
+
+
 ---
 <html lang="en">
 <head>
+  <title>{title}</title>
   <BaseHead title={title} description={description} permalink={permalink} />
 </head>
 <body>
   <div class="layout min-h-full">
     <Header current={current} />
-
     <main>
       <slot />
     </main>
