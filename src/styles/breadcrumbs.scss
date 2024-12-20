@@ -1,0 +1,33 @@
+@use "astro-breadcrumbs/breadcrumbs.scss" with (
+  /// Your config goes here
+  /// $size-font: 12px;
+  /// $color-link: rebeccapurple;
+
+  $overflow-behavior: "ellipsis",
+  $color-link: red,
+  $color-hover-link: blue,
+  $color-separator: green,
+  $color-is-current: white,
+  $color-is-index: cornflowerblue,
+  $size-font: 12px,
+  $overflow-wrap-horizontal-spacing: 10px,
+  $spacing-vertical-separator: 12px,
+  $icons-not-bigger-than-font-size: true,
+  $transition-link-breadcrumbs: all 0.3s ease,
+  $truncated: true,
+);
+
+
+
+/* breadcrumb */
+.c-breadcrumbs {
+  @apply w-full pt-0 max-h-4;
+  @apply bg-[var(--background-feature)];
+
+
+  .c-breadcrumbs__crumbs {
+    @apply relative -top-3 pt-2 pl-6 ;
+    @apply border-t-[2px] border-gray-500 border-opacity-20;
+  }
+}
+

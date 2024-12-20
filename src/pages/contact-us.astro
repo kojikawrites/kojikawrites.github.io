@@ -4,7 +4,8 @@ import ThemedImage from "../components/ThemedImage.astro";
 
 const title = 'Contact Us';
 const description = 'Contact Details.';
-const permalink = `${Astro.site.href}contact-us`;
+const permalink = `${Astro.site.href}${Astro.url.pathname}`;
+
 ---
 
 <style is:inline>
@@ -14,7 +15,7 @@ const permalink = `${Astro.site.href}contact-us`;
         color:var(--secondary-color);
     }
 </style>
-<BaseLayout title={title} description={description} permalink={permalink} current="contact">
+<BaseLayout title={title} description={description} permalink={permalink} current={Astro.url.pathname}>
     <div class="container contact">
         <!--<br/>-->
         <h2 class="flex justify-center text-center">We can be reached at:</h2>
