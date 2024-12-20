@@ -3,6 +3,7 @@ import { Breadcrumbs } from "astro-breadcrumbs";
 import "../styles/breadcrumbs.scss";
 import {matchUrlToPattern} from "../utils/matchUrlToPattern";
 import {getSiteConfig} from "../utils/getSiteConfig";
+import { reference } from "astro:content";
 
 const siteConfig = await getSiteConfig();
 
@@ -15,7 +16,10 @@ function buildCustomCrumbs(
     reference: Record<string, any>
 ): { text: string; href: string }[] {
     const crumbs: { text: string; href: string }[] = [];
-
+    if (!reference.breadcrumbs.include)
+    {
+        return crumbs
+    }
     // Helper to find a nav item by code in left/right
     const findNavItem = (code: string): Record<string, string> | undefined => {
         return [...reference.left, ...reference.right].find(item => item.code === code);
@@ -35,7 +39,7 @@ function buildCustomCrumbs(
         }
 
         // Check if key is in valid_breadcrumbs
-        if (reference.valid_breadcrumbs.includes(key) && matchedDict[key].length > 0) {
+        if (reference.breadcrumbs.valid_breadcrumbs.includes(key) && matchedDict[key].length > 0) {
             crumbs.push({
                 text: matchedDict[key],
                 href: '#'
@@ -69,11 +73,29 @@ function buildCustomCrumbs(
 
 
 ---
-<Breadcrumbs truncated={true} crumbs={customCrumbs}>
-    <!-- home page -->
-    <div slot="index" class="flex flex-row flex-nowrap">
+{siteConfig.navbar.breadcrumbs.include &&
+    <Breadcrumbs truncated={true} crumbs={customCrumbs}>
+        <!-- home page -->
+        <div slot="index" class="flex flex-row flex-nowrap">
+            <svg
+                    aria-label="Home Page"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+            ><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"> </path><polyline
+                    points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span class="pl-1">HOME</span>
+        </div>
+        <!-- separator -->
         <svg
-                aria-label="Home Page"
+                slot="separator"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -83,23 +105,7 @@ function buildCustomCrumbs(
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-        ><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"> </path><polyline
-                points="9 22 9 12 15 12 15 22"></polyline>
+        ><polyline points="9 18 15 12 9 6"></polyline>
         </svg>
-        <span class="pl-1">HOME</span>
-    </div>
-    <!-- separator -->
-    <svg
-            slot="separator"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-    ><polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-</Breadcrumbs>
+    </Breadcrumbs>
+}

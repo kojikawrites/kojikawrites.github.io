@@ -39,10 +39,12 @@ navbar:
         code: contact
         href: "/contact-us"
         label: "contact us"
-    valid_breadcrumbs:
-      - "[slug]"
-#      - "[...page]"
-      - "archive"
+    breadcrumbs:
+      include: true
+      valid_breadcrumbs:
+        - "[slug]"
+  #      - "[...page]"
+        - "archive"
 
 # blog path (can be posts or blog)
 # posts = src/assets/posts/...
