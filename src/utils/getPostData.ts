@@ -45,6 +45,7 @@ export default function getPostData(post: Post) {
     month: pubMonth,
     day: pubDay,
     categories: categories,
+    title: post.frontmatter.title,
     originalFilename,
     path,
     slug,
