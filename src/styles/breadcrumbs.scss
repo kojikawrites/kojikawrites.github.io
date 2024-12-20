@@ -24,8 +24,9 @@
   @apply pt-0 max-h-4 w-full;
   @apply bg-[var(--background-feature)];
 
+
   .c-breadcrumbs__crumbs {
-    @apply relative -top-3 pt-2 pl-2 lg:pl-6 w-fit max-w-full;
+    @apply relative -top-3 pt-2 pl-2 lg:pl-6 w-full max-w-full;
     @apply border-t-[2px] border-gray-500 border-opacity-20;
   }
 
