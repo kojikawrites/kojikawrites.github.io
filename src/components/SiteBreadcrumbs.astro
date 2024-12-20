@@ -16,8 +16,8 @@ const slugsToTitles = allPosts.reduce((acc: Record<string, string>, post: { slug
 
 const matchedSlugs = matchUrlToPattern(Astro.routePattern, Astro.url.pathname);
 const customCrumbs = buildCustomCrumbs(matchedSlugs, siteConfig.navbar, slugsToTitles);
-console.log('Astro.routePattern, Astro.url.pathname', Astro.routePattern, Astro.url.pathname);
-console.log('customCrumbs', customCrumbs);
+// console.log('Astro.routePattern, Astro.url.pathname', Astro.routePattern, Astro.url.pathname);
+// console.log('customCrumbs', customCrumbs);
 
 // Function to build custom crumbs
 function buildCustomCrumbs(
@@ -89,7 +89,7 @@ function buildCustomCrumbs(
 <Breadcrumbs truncated={true} crumbs={customCrumbs}>
     <!-- home page -->
     <div slot="index" class="crumb-index flex flex-row flex-nowrap">
-        <svg class="crumb-index-img relative -top-[1px] -left-[1px]"
+        <svg class="crumb-index-img"
              aria-label="Home Page"
              xmlns="http://www.w3.org/2000/svg"
              width="24"
