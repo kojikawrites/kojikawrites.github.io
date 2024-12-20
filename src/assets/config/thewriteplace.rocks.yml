@@ -15,27 +15,27 @@ navbar:
 
     left:
       -
-        code: blog
         href: "/blog"
         label: "blog"
       -
-        code: categories
         href: "/categories"
         label: "categories"
       -
-        code: tags
         href: "/tags"
         label: "tags"
     right:
       -
-        code: 'about'
         href: '/about'
         label: 'About'
       -
-        code: contact
         href: "/contact-us"
         label: "contact us"
-
+    breadcrumbs:
+      include: true
+      valid_breadcrumbs:
+        - "[slug]"
+        #      - "[...page]"
+        - "archive"
 # blog path (can be posts or blog)
 # posts = src/assets/posts/...
 # blog = src/assets/blog/...
