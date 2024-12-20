@@ -4,14 +4,14 @@
   /// $color-link: rebeccapurple;
 
   $overflow-behavior: "ellipsis",
-  $color-link: red,
-  $color-hover-link: blue,
-  $color-separator: green,
-  $color-is-current: white,
-  $color-is-index: cornflowerblue,
-  $size-font: 12px,
+  $color-link: var(--primary-color),
+  $color-hover-link: var(--text-main),
+  $color-separator: var(--text-secondary),
+  $color-is-current: var(--secondary-color),
+  $color-is-index: var(--primary-color-alt),
+  $size-font: 14px,
   $overflow-wrap-horizontal-spacing: 10px,
-  $spacing-vertical-separator: 12px,
+  $spacing-vertical-separator: 8px,
   $icons-not-bigger-than-font-size: true,
   $transition-link-breadcrumbs: all 0.3s ease,
   $truncated: true,
@@ -21,13 +21,21 @@
 
 /* breadcrumb */
 .c-breadcrumbs {
-  @apply w-full pt-0 max-h-4;
+  @apply pt-0 max-h-4 w-full;
   @apply bg-[var(--background-feature)];
 
-
   .c-breadcrumbs__crumbs {
-    @apply relative -top-3 pt-2 pl-6 ;
+    @apply relative -top-3 pt-2 pl-2 lg:pl-6 w-fit max-w-full;
     @apply border-t-[2px] border-gray-500 border-opacity-20;
+  }
+
+  .c-breadcrumbs__crumb {
+    @apply mb-0 text-ellipsis overflow-hidden whitespace-nowrap;
+  }
+
+  .c-breadcrumbs__link {
+    @apply text-ellipsis overflow-hidden whitespace-nowrap;
+
   }
 }
 
