@@ -1,0 +1,105 @@
+---
+import { Breadcrumbs } from "astro-breadcrumbs";
+import "../styles/breadcrumbs.scss";
+import {matchUrlToPattern} from "../utils/matchUrlToPattern";
+import {getSiteConfig} from "../utils/getSiteConfig";
+
+const siteConfig = await getSiteConfig();
+
+const matchedSlugs = matchUrlToPattern(Astro.routePattern, Astro.url.pathname);
+const customCrumbs = buildCustomCrumbs(matchedSlugs, siteConfig.navbar);
+console.log(customCrumbs);
+// Function to build custom crumbs
+function buildCustomCrumbs(
+    matchedDict: Record<string, string>,
+    reference: Record<string, any>
+): { text: string; href: string }[] {
+    const crumbs: { text: string; href: string }[] = [];
+
+    // Helper to find a nav item by code in left/right
+    const findNavItem = (code: string): Record<string, string> | undefined => {
+        return [...reference.left, ...reference.right].find(item => item.code === code);
+    };
+
+    // Iterate in original pattern order
+    const patternOrder = Object.keys(matchedDict);
+    for (const key of patternOrder) {
+        // Check if key exists in left/right
+        const navItem = findNavItem(key);
+        if (navItem) {
+            crumbs.push({
+                text: navItem.label,
+                href: navItem.href
+            });
+            continue;
+        }
+
+        // Check if key is in valid_breadcrumbs
+        if (reference.valid_breadcrumbs.includes(key) && matchedDict[key].length > 0) {
+            crumbs.push({
+                text: matchedDict[key],
+                href: '#'
+            });
+            continue;
+        }
+
+        // If key is a splat or something else that isn't in left/right or valid_breadcrumbs,
+        // we can split it and check if any part is valid. For the example, let's break down splats:
+        if (key.startsWith('[...') && key.endsWith(']')) {
+            const segments = matchedDict[key].split('/');
+            for (const seg of segments) {
+                // Check if segment matches something in left/right
+                const navSeg = findNavItem(seg);
+                if (navSeg) {
+                    crumbs.push({
+                        text: navSeg.label,
+                        href: navSeg.href
+                    });
+                } else {
+                    // If segment isn't in left/right, check valid_breadcrumbs for any generic rule
+                    // Here, if none match, we skip. Or you could add a generic crumb.
+                }
+            }
+        }
+    }
+    // Prepend the HOME crumb
+    crumbs.unshift({ text: 'HOME', href: '/' });
+    return crumbs;
+}
+
+
+---
+<Breadcrumbs truncated={true} crumbs={customCrumbs}>
+    <!-- home page -->
+    <div slot="index" class="flex flex-row flex-nowrap">
+        <svg
+                aria-label="Home Page"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+        ><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"> </path><polyline
+                points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span class="pl-1">HOME</span>
+    </div>
+    <!-- separator -->
+    <svg
+            slot="separator"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+    ><polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+</Breadcrumbs>

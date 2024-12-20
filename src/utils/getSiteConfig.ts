@@ -28,6 +28,7 @@ export async function getSiteConfig() {
             logo: ThemedImage,
             left: NavbarEntry[];
             right: NavbarEntry[];
+            valid_breadcrumbs: string[];
         };
         footer: {
             content: string[];

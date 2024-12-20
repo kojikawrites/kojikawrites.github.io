@@ -39,12 +39,16 @@ navbar:
         code: contact
         href: "/contact-us"
         label: "contact us"
+    valid_breadcrumbs:
+      - "[slug]"
+#      - "[...page]"
+      - "archive"
 
 # blog path (can be posts or blog)
 # posts = src/assets/posts/...
 # blog = src/assets/blog/...
 blog:
-  pagination_size: 10
+  pagination_size: 5
   path: posts
   prefix: blog/
 

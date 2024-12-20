@@ -1,6 +1,7 @@
 ---
 // import Logo from './Logo.astro'
 import Nav from './Nav.astro'
+import SiteBreadcrumbs from "./SiteBreadcrumbs.astro";
 
 const { current = '' } = Astro.props;
 ---
@@ -23,5 +24,8 @@ const { current = '' } = Astro.props;
 
 <header>
   <!--<Logo />-->
-  <Nav current={current} />
+  <Nav current={current}>
+    <SiteBreadcrumbs />
+  </Nav>
+
 </header>

@@ -26,7 +26,7 @@ export async function getStaticPaths({ paginate }) {
     pageSize: paginationSize,
   })
 }
-const { page } = Astro.props;
+const { page } : any = Astro.props;
 
 const pathname = new URL(Astro.request.url).pathname.split('/');
 const firstPath = pathname[1];
