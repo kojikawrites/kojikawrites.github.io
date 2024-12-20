@@ -36,7 +36,12 @@
 
   .c-breadcrumbs__link {
     @apply text-ellipsis overflow-hidden whitespace-nowrap;
-
+  }
+  .c-breadcrumbs__link:where(.is-index) {
+    @apply min-w-4 min-h-4;
+  }
+  .crumb-index-img {
+    @apply min-w-3.5 min-h-3.5;
   }
 }
 
