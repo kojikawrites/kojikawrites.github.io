@@ -13,7 +13,6 @@ export async function getSiteConfig() {
         alt: string;
     }
     interface NavbarEntry {
-        code: string;
         href: string;
         label: string;
     }

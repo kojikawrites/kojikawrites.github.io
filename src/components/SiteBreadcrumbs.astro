@@ -1,19 +1,29 @@
 ---
 import { Breadcrumbs } from "astro-breadcrumbs";
 import "../styles/breadcrumbs.scss";
+
 import {matchUrlToPattern} from "../utils/matchUrlToPattern";
 import {getSiteConfig} from "../utils/getSiteConfig";
-import { reference } from "astro:content";
+import getPosts from "../utils/getPosts";
+import getPostData from "../utils/getPostData";
 
 const siteConfig = await getSiteConfig();
+const allPosts = getPosts().map((p: any) => getPostData(p));
+const slugsToTitles = allPosts.reduce((acc: Record<string, string>, post: { slug: string; title: string }) => {
+    acc[post.slug] = post.title;
+    return acc;
+}, {});
 
 const matchedSlugs = matchUrlToPattern(Astro.routePattern, Astro.url.pathname);
-const customCrumbs = buildCustomCrumbs(matchedSlugs, siteConfig.navbar);
-console.log(customCrumbs);
+const customCrumbs = buildCustomCrumbs(matchedSlugs, siteConfig.navbar, slugsToTitles);
+console.log('Astro.routePattern, Astro.url.pathname', Astro.routePattern, Astro.url.pathname);
+console.log('customCrumbs', customCrumbs);
+
 // Function to build custom crumbs
 function buildCustomCrumbs(
     matchedDict: Record<string, string>,
-    reference: Record<string, any>
+    reference: Record<string, any>,
+    slugsToTitles: Record<string, string>,
 ): { text: string; href: string }[] {
     const crumbs: { text: string; href: string }[] = [];
     if (!reference.breadcrumbs.include)
@@ -21,15 +31,15 @@ function buildCustomCrumbs(
         return crumbs
     }
     // Helper to find a nav item by code in left/right
-    const findNavItem = (code: string): Record<string, string> | undefined => {
-        return [...reference.left, ...reference.right].find(item => item.code === code);
+    const findNavItem = (href: string): Record<string, string> | undefined => {
+        return [...reference.left, ...reference.right].find(item => item.href === href);
     };
 
     // Iterate in original pattern order
     const patternOrder = Object.keys(matchedDict);
     for (const key of patternOrder) {
         // Check if key exists in left/right
-        const navItem = findNavItem(key);
+        const navItem = findNavItem(`/${key}`);
         if (navItem) {
             crumbs.push({
                 text: navItem.label,
@@ -40,8 +50,10 @@ function buildCustomCrumbs(
 
         // Check if key is in valid_breadcrumbs
         if (reference.breadcrumbs.valid_breadcrumbs.includes(key) && matchedDict[key].length > 0) {
+            const rawText = matchedDict[key];
+            const text = (rawText in slugsToTitles) ? slugsToTitles[rawText] : rawText;
             crumbs.push({
-                text: matchedDict[key],
+                text: text,
                 href: '#'
             });
             continue;

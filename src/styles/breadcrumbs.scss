@@ -18,14 +18,16 @@
 );
 
 
+
 /* breadcrumb */
 .c-breadcrumbs {
   @apply w-full pt-0 max-h-4;
-  @apply bg-color-background-feature;
+  @apply bg-[var(--background-feature)];
 
+
+  .c-breadcrumbs__crumbs {
+    @apply relative -top-3 pt-2 pl-6 ;
+    @apply border-t-[2px] border-gray-500 border-opacity-20;
+  }
 }
 
-.c-breadcrumbs__crumbs {
-  @apply relative -top-3 pt-2 pl-6 ;
-  @apply border-t-[2px] border-gray-500 border-opacity-20;
-}

@@ -14,7 +14,8 @@ const paginationSize = siteConfig.blog.pagination_size;
 
 const title = 'Blog';
 const description = 'Latest articles.';
-const permalink = `${Astro.site.href}blog`;
+const permalink = `${Astro.site.href}${Astro.url.pathname}`;
+
 
 export async function getStaticPaths({ paginate }) {
   const siteConfig = await getSiteConfig();

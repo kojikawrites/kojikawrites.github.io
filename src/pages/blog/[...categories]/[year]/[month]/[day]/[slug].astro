@@ -28,12 +28,12 @@ export async function getStaticPaths() {
 const post = Astro.props.post;
 
 const permalink = `${buildPostHref(post, Astro.site.href)}`;
-console.log('permalink', permalink);
+// console.log('permalink', permalink);
 const { title, description} = post.frontmatter;
 
 ---
 
-<BaseLayout title={title} description={description} permalink={permalink} current="blog">
+<BaseLayout title={title} description={description} permalink={permalink} current="/blog">
   <div class="post-content">
     <div class="container">
       <PostHeader post={post}/>

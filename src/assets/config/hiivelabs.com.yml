@@ -15,28 +15,22 @@ navbar:
 
     left:
       -
-        code: blog
         href: "/blog"
         label: "blog"
       -
-        code: categories
         href: "/categories"
         label: "categories"
       -
-        code: tags
         href: "/tags"
         label: "tags"
     right:
       -
-        code: mission
         href: "/mission"
         label: "mission statement"
       -
-        code: 'about'
         href: '/about'
         label: 'About'
       -
-        code: contact
         href: "/contact-us"
         label: "contact us"
     breadcrumbs:

@@ -49,7 +49,7 @@ const {dark, light, alt} = siteConfig.navbar.logo;
       <nav class="flex flex-col items-start lg:flex-row">
         <div class="navmenu-toggle hidden lg:flex">
           {leftNav.map((item, _) => (
-              <a href={item.href} class={current === item.code ? selected : notSelected}>
+              <a href={item.href} class={current === item.href ? selected : notSelected}>
                 {item.label}
               </a>
           ))}
@@ -59,7 +59,7 @@ const {dark, light, alt} = siteConfig.navbar.logo;
       <nav class="flex flex-col lg:items-end lg:flex-row lg:justify-end" >
         <div class="navmenu-toggle hidden lg:flex">
         {rightNav.map((item, _) => (
-            <a href={item.href} class={current === item.code ? selected : notSelected}>
+            <a href={item.href} class={current === item.href ? selected : notSelected}>
               {item.label}
             </a>
         ))}
