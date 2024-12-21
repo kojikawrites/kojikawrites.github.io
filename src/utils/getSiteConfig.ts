@@ -53,7 +53,7 @@ export async function getSiteConfig() {
     if (!matchingKey) {
         console.warn(`No yaml found for ${site}`);
     }
-    console.log(`Reading ${site} yaml config...`);
+    // console.log(`Reading ${site} yaml config...`);
     return await yamlGlobs[matchingKey]().then(y => {
             return y;
         }

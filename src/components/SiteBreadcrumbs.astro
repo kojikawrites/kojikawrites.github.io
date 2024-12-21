@@ -16,8 +16,8 @@ const slugsToTitles = allPosts.reduce((acc: Record<string, string>, post: { slug
 
 const matchedSlugs = matchUrlToPattern(Astro.routePattern, Astro.url.pathname);
 const customCrumbs = buildCustomCrumbs(matchedSlugs, siteConfig.navbar, slugsToTitles);
-console.log('Astro.routePattern, Astro.url.pathname', Astro.routePattern, Astro.url);
-console.log('customCrumbs', customCrumbs);
+// console.log('Astro.routePattern, Astro.url.pathname', Astro.routePattern, Astro.url);
+// console.log('customCrumbs', customCrumbs);
 
 // Function to build custom crumbs
 function buildCustomCrumbs(
@@ -49,7 +49,8 @@ function buildCustomCrumbs(
         }
 
         // Check if key is in valid_breadcrumbs
-        console.log('matchedDict', matchedDict);
+        // console.log('matchedDict', matchedDict);
+
         if (reference.breadcrumbs.valid_breadcrumbs.includes(key) && matchedDict[key].length > 0) {
             const rawText = matchedDict[key];
             const text = (rawText in slugsToTitles) ? slugsToTitles[rawText] : rawText;

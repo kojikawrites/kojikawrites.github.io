@@ -7,7 +7,7 @@
         }
 
         h1 {
-            @apply color-secondary-color pb-2;
+            @apply color-secondary-color pb-2 pt-6 lg:pt-2;
         }
 
         h2 {
@@ -91,7 +91,7 @@
         }
 
         li {
-            @apply mb-0;
+            @apply mb-2;
             p {
                 @apply py-0.5;
             }
