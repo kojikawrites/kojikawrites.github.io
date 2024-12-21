@@ -1,6 +1,6 @@
 ---
 import KeyList from "./KeyList.astro";
-import { KeyType } from "../../utils/enums";
+import { KeyType } from "../../scripts/enums";
 
 interface Props {
     keyType: KeyType,
@@ -8,9 +8,9 @@ interface Props {
 
 import PostSummary from "../../components/posts/PostSummary.astro";
 
-import getPosts from "../../utils/getPosts";
-import toSafeId from "../../utils/toSafeId";
-import { getKeyId, toSafeKey, extractKeyList } from "../../utils/keyUtils";
+import getPosts from "../../scripts/getPosts";
+import toSafeId from "../../scripts/toSafeId";
+import { getKeyId, toSafeKey, extractKeyList } from "../../scripts/keyUtils";
 
 const keyType = Astro.props.keyType;
 const ungroupedKey = keyType == KeyType.Tags ? "~untagged~" : "~uncategorized~";

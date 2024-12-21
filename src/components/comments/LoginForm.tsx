@@ -1,5 +1,5 @@
 import type { AtpAgent } from "@atproto/api";
-import {Accessor, Component, createSignal} from "solid-js";
+import {type Accessor, type Component, createSignal} from "solid-js";
 import { Button } from "./Button";
 import { Input } from "./Input";
 
@@ -39,7 +39,7 @@ export const LoginForm: Component<LoginFormProps> = ({
           if (handle && password) {
               // console.warn('here', agent);
               try {
-                  const response = await agent()?.login({
+                  const _ = await agent()?.login({
                       identifier: handle.toString(),
                       password: password.toString(),
                   });
