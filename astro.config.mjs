@@ -34,6 +34,7 @@ export default defineConfig({
       format: "file",
   },
   site: 'https://hiivelabs.com',
+  trailingSlash: 'ignore',
   integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind()],
   markdown: {
     shikiConfig: {
