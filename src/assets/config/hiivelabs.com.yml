@@ -44,7 +44,7 @@ navbar:
 # posts = src/assets/posts/...
 # blog = src/assets/blog/...
 blog:
-  pagination_size: 2
+  pagination_size: 10
   path: posts
   prefix: blog/
 
