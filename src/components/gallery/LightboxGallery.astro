@@ -5,7 +5,7 @@ interface Props {
 }
 
 
-import toSafeId from '../../utils/toSafeId';
+import toSafeId from '../../scripts/toSafeId';
 
 const { id:rawId } = Astro.props;
 
@@ -25,8 +25,8 @@ console.warn('id', id);
         });
     }
 
-    function initGallery() {
-        const galleryDiv = document.getElementById(id);
+    function initGallery(galleryId) {
+        const galleryDiv = document.getElementById(galleryId);
         if (!galleryDiv) {
             return [];
         }
@@ -37,7 +37,7 @@ console.warn('id', id);
         return Array.from(galleryEntries).map(div => {
             const img = div.querySelector('img');
             idx += 1;
-            img.id = `${id}_${idx}`;
+            img.id = `${galleryId}_${idx}`;
             addImageEventHandler(img, idx);
             return {
                 src: img.src || '', //div.getAttribute('data-src') || '',

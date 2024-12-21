@@ -2,7 +2,7 @@
 import ThemeToggleButton from './ThemeToggleButton.svelte';
 import SiteLogo from './SiteLogo.astro';
 
-import {getSiteConfig} from "../utils/getSiteConfig";
+import {getSiteConfig} from "../scripts/getSiteConfig";
 const siteConfig = await getSiteConfig();
 const { current = '', showTheme = false } = Astro.props;
 const selected = "selected max-w-fit text-nowrap text-left lg:text-center lg:px-2 py-1";
