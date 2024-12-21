@@ -9,6 +9,6 @@ const permalink = `${Astro.site.href}${Astro.url.pathname}`;
 
 ---
 
-<BaseLayout title={title} description={description} permalink={permalink} current={Astro.url.pathname}>
+<BaseLayout title={title} description={description} permalink={permalink} current="/tags">
     <KeyGroupedArticleList keyType={KeyType.Tags} />
 </BaseLayout>
