@@ -6,7 +6,8 @@ import Pagination from "../../components/Pagination.astro";
 
 import getPosts from "../../utils/getPosts";
 import {getSiteConfig} from "../../utils/getSiteConfig";
-import getPostData from "../../utils/getPostData";
+import {buildPermalink} from "../../utils/urlUtils";
+// import getPostData from "../../utils/getPostData";
 
 const allPostsCount = getPosts().length;
 const siteConfig = await getSiteConfig();
@@ -14,8 +15,7 @@ const paginationSize = siteConfig.blog.pagination_size;
 
 const title = 'Blog';
 const description = 'Latest articles.';
-const permalink = `${Astro.site.href}${Astro.url.pathname}`;
-
+const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
 
 export async function getStaticPaths({ paginate }) {
   const siteConfig = await getSiteConfig();
