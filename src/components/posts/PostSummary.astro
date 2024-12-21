@@ -15,7 +15,7 @@ const siteConfig = await getSiteConfig();
 const post = Astro.props.post;
 
 const { path } = getPostData(post);
-const href = `/${siteConfig.blog.prefix}${path}/`;
+const href = `/${siteConfig.blog.prefix}${path}`;
 
 const { frontmatter } = post;
 // console.log("post", frontmatter);
@@ -62,14 +62,7 @@ const imgId = `${id}-img`;
             clearTimeout(timeout);
             timeout = window.setTimeout(function () {
                 const summary = document.getElementById(id);
-                const imgHeight = `${summary.offsetHeight}px`;
-
-                //const whRatio = img.height / img.width;
-                //const imgWidth = `${summary.offsetHeight * whRatio}px`;
-                img.parentElement.style.minHeight = imgHeight;
-//                img.parentElement.style.minWidth = imgWidth;
-
-
+                img.parentElement.style.minHeight = `${summary.offsetHeight}px`;
                 img.classList.remove('hidden');
             }, 100);
         }
