@@ -72,21 +72,23 @@ const {dark, light, alt} = siteConfig.navbar.logo;
     </div>
     <!-- } -->
   </div>
-  <slot />
+  <div id="more-controls">
+    <slot />
+  </div>
 </div>
 
 <script is:inline data-astro-rerun>
   function initButton() {
     const menuButton = document.getElementById("menu");
     menuButton.addEventListener("click", () => {
-      [...document.querySelectorAll(".navmenu-toggle")].forEach((Element) => {
-        Element.classList.toggle("hidden");
+      [...document.querySelectorAll(".navmenu-toggle")].forEach((el) => {
+        el.classList.toggle("hidden");
       });
+      // show/hide the 'more controls'
+      const moreControls = document.getElementById("more-controls");
+      moreControls.classList.toggle("hidden");
     });
   }
 
   initButton();
-
-  // Re-initialize after swapping pages
-  // document.addEventListener("astro:after-swap", initButton);
 </script>

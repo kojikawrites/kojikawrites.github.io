@@ -27,49 +27,19 @@ const siteConfig = await getSiteConfig();
         </svg>
     </button>
     <script is:inline data-astro-rerun define:vars={{searchBarId, searchButtonId}}>
-        // let observerAdded = false;
-        // const observer = new MutationObserver((mutationsList) => {
-        //     for (const mutation of mutationsList) {
-        //         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-        //             if (!mutation.target.classList.contains('pagefind-ui__hidden')) {
-        //                 console.log('search results are shown');
-        //                 // const searchResults = document.getElementsByClassName('pagefind-ui__drawer')[0];
-        //                 // console.log(searchResults.classList);
-        //                 //console.log(mutation.target.offsetTop);
-        //                 const maxHeight = `${Math.floor(window.innerHeight - mutation.target.getBoundingClientRect().top)} px`;
-        //
-        //                 console.warn(maxHeight);
-        //                 // mutation.target.style.maxHeight = maxHeight;
-        //
-        //
-        //                 setTimeout(() => {
-        //                     const searchResults = document.getElementsByClassName('pagefind-ui__drawer')[0];
-        //                     console.warn('fuck you', searchResults);
-        //                     searchResults.style.height = '100 px';
-        //                     console.warn('fuck you2', searchResults.getBoundingClientRect());
-        //                 }, 250);
-        //                 // alert('max height is ', maxHeight);
-        //             }
-        //         }
-        //     }
-        // });
-
         function searchBarToggle() {
             const searchBar = document.getElementById(searchBarId);
             if (searchBar) {
-                // if (!observerAdded) {
-                //     const searchResults = document.getElementsByClassName('pagefind-ui__drawer')[0];
-                //     console.warn('adding observer', searchResults);
-                //     observer.observe(searchResults, { attributes: true, attributeFilter: ['class'] });
-                // }
-
                 if (searchBar.classList.contains('hidden')) {
                     searchBar.classList.remove('hidden');
-                    console.warn('showing searchbar');
+                    // set focus to search input
+                    const searchInput = document.getElementsByClassName('pagefind-ui__search-input')[0];
+                    searchInput.focus();
+                    // console.warn('showing searchbar');
                 }
                 else {
                     searchBar.classList.add('hidden');
-                    console.warn('hiding searchbar')
+                    // console.warn('hiding searchbar')
                 }
             }
         }
