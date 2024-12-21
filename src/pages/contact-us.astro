@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ThemedImage from "../components/ThemedImage.astro";
+import {buildPermalink} from "../utils/urlUtils";
 
 const title = 'Contact Us';
 const description = 'Contact Details.';
-const permalink = `${Astro.site.href}${Astro.url.pathname}`;
+//const permalink = `${Astro.site.href}${Astro.url.pathname}`;
+const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
 
 ---
 

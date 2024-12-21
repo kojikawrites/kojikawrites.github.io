@@ -4,14 +4,15 @@ import PagePostCount from '../../components/posts/PagePostCount.astro';
 import PostSummary from "../../components/posts/PostSummary.astro";
 
 import getPosts from "../../utils/getPosts";
+import {buildPermalink} from "../../utils/urlUtils";
 
 const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
 
 const title = 'Blog Archive';
 const description = 'Article archive.';
 // const permalink = `${Astro.site.href}blog/archive`;
-const permalink = `${Astro.site.href}${Astro.url.pathname}`;
-console.log('permalink', permalink);
+//const permalink = `${Astro.site.href}${Astro.url.pathname}`;
+const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
 ---
 
 <BaseLayout title={title} description={description} permalink={permalink} current="/blog">

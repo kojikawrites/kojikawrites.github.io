@@ -2,10 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import KeyGroupedArticleList  from "../components/tags_categories/KeyGroupedArticleList.astro";
 import {KeyType} from "../utils/enums";
+import {buildPermalink} from "../utils/urlUtils";
 
 const title = 'Categories';
 const description = 'Posts grouped by Category.';
-const permalink = `${Astro.site.href}${Astro.url.pathname}`;
+// const permalink = `${Astro.site.href}${Astro.url.pathname}`;
+const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
 
 ---
 <BaseLayout title={title} description={description} permalink={permalink} current={Astro.url.pathname}>
