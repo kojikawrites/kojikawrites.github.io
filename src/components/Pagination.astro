@@ -1,4 +1,5 @@
 ---
+import {cleanUrl} from "../utils/urlUtils";
 const { length, currentUrl, currentPage, firstUrl, prevUrl, nextUrl, lastUrl } = Astro.props;
 const paginationList = Array.from({length: `${length}`}, (_, i) => i + 1);
 ---
@@ -11,13 +12,13 @@ const paginationList = Array.from({length: `${length}`}, (_, i) => i + 1);
             </div>
     ) : (
             <div class="pagination-link">
-                <a href={firstUrl}>❮❮</a>
+                <a href={cleanUrl(firstUrl)}>❮❮</a>
             </div>
     )}
 
     { prevUrl ? (
             <div class="pagination-link">
-                <a href={prevUrl}>❮</a>
+                <a href={cleanUrl(prevUrl)}>❮</a>
             </div>
     ) : (
             <div class="pagination-link disabled">
@@ -28,7 +29,7 @@ const paginationList = Array.from({length: `${length}`}, (_, i) => i + 1);
     {
         paginationList.map((num) => (
                 <div class={`pagination-link ${currentPage == num ? "disabled active" : ""}`}>
-                    <a href={`${firstUrl}${num == 1 ? "" : '/'+(num)}`}>
+                    <a href={`${cleanUrl(firstUrl)}${num == 1 ? "" : '/'+(num)}`}>
                         {num}
                     </a>
                 </div>
@@ -41,7 +42,7 @@ const paginationList = Array.from({length: `${length}`}, (_, i) => i + 1);
             </div>
     ) : (
             <div class="pagination-link">
-                <a href={nextUrl}>❯</a>
+                <a href={cleanUrl(nextUrl)}>❯</a>
             </div>
     )}
 
@@ -51,7 +52,7 @@ const paginationList = Array.from({length: `${length}`}, (_, i) => i + 1);
             </div>
     ) : (
             <div class="pagination-link">
-                <a href={lastUrl}>❯❯</a>
+                <a href={cleanUrl(lastUrl)}>❯❯</a>
             </div>
     )}
 

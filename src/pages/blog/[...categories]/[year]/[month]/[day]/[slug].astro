@@ -43,4 +43,32 @@ const { title, description} = post.frontmatter;
   </div>
 </BaseLayout>
 
+<script is:inline data-astro-rerun>
+  (function() {
+    // Create a URL object from the current window location
+    const currentUrl = new URL(window.location.href);
+
+    // Get the pathname (e.g., '/about.html')
+    const pathname = currentUrl.pathname;
+
+    // Regular expression to match '.html' at the end of the pathname (case-insensitive)
+    const htmlExtensionRegex = /\.html$/i;
+
+    // Check if the pathname ends with '.html'
+    if (htmlExtensionRegex.test(pathname)) {
+      // Remove the '.html' extension
+      const newPathname = pathname.replace(htmlExtensionRegex, '');
+
+      // Construct the new URL with the modified pathname
+      const newUrl = currentUrl.origin + newPathname + currentUrl.search + currentUrl.hash;
+
+      // Update the address bar without reloading the page
+      history.replaceState(null, '', newUrl);
+
+      //console.log(`URL updated to: ${newUrl}`);
+    } else {
+      //console.log('URL does not end with .html. No changes made.');
+    }
+  })();
+</script>
 
