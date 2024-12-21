@@ -1,6 +1,6 @@
 export function matchUrlToPattern(pattern: string, url: string): Record<string, string> {
     const patternParts = pattern.split('/').filter(Boolean);
-    const urlParts = url.split('/').filter(Boolean);
+    const urlParts = url.replace(/\.html$/i, '').split('/').filter(Boolean);
 
     const result: Record<string, string> = {};
     let urlIndex = 0;

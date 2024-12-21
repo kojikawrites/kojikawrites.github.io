@@ -1,6 +1,6 @@
 ---
 
-import buildPostHref  from '../../utils/buildPostHref';
+import buildPostHref  from '../../utils/urlUtils';
 import getPosts from "../../utils/getPosts";
 
 const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
