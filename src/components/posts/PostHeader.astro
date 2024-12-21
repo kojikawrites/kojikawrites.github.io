@@ -44,14 +44,14 @@ const tags = extractKeyList(rawTags);
         </div>
         <!-- categories -->
         {categories && categories.length > 0 &&
-                <KeyList keys={categories} keyType={KeyType.Categories} />
+                <KeyList keys={categories} keyType={KeyType.Categories} data-pagefind-body/>
         }
     </div>
     <!-- tags -->
     {tags && tags.length > 0 &&
             <div class="flex flex-row preamble">
                 <div class="pr-2">Tags:</div>
-                <KeyList keys={tags} keyType={KeyType.Tags}/>
+                <KeyList keys={tags} keyType={KeyType.Tags} data-pagefind-body/>
             </div>
     }
     <!-- reading time -->

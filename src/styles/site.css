@@ -9,6 +9,15 @@
         @apply overflow-y-scroll;
     }
 
+    .disable-input {
+        @apply pointer-events-none overflow-hidden;
+    }
+
+    .enable-input {
+        @apply pointer-events-auto;
+    }
+
+
     @supports (scrollbar-gutter: stable) {
         html {
             @apply overflow-y-auto;
