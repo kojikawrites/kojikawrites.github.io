@@ -15,7 +15,7 @@ const siteConfig = await getSiteConfig();
 const post = Astro.props.post;
 
 const { path } = getPostData(post);
-const href = `/${siteConfig.blog.prefix}${path}/`;
+const href = `/${siteConfig.blog.prefix}${path}`;
 
 const { frontmatter } = post;
 // console.log("post", frontmatter);
