@@ -13,7 +13,7 @@ export async function getBlueskyPostedJson(): Promise<Record<string, any>> {
         console.warn(`No bluesky json found for ${site}`);
         return null;
     }
-    console.log(`Reading ${site} bluesky json...`);
+    // console.log(`Reading ${site} bluesky json...`);
     const jsonValue = await jsonGlobs[matchingKey]();
     // console.log('jsonValue', jsonValue.default);
     return jsonValue.default;
