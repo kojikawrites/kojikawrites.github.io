@@ -193,6 +193,10 @@
 }
 
 @layer components {
+    div.container {
+        @apply pt-4;
+    }
+
     .underline-link-hover {
         @apply content-[''] absolute
         scale-x-0
