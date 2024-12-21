@@ -29,10 +29,7 @@ export default defineConfig({
     },
     plugins: [yaml()]
   },
-  build: {
-      format: "file",
-  },
-  site: 'https://thewriteplace.rocks',
+  site: 'https://hiivelabs.com',
   trailingSlash: 'ignore',
   integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind()],
   markdown: {

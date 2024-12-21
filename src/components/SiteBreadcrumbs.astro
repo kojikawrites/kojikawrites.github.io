@@ -16,6 +16,7 @@ const slugsToTitles = allPosts.reduce((acc: Record<string, string>, post: { slug
 
 const matchedSlugs = matchUrlToPattern(Astro.routePattern, Astro.url.pathname);
 const customCrumbs = buildCustomCrumbs(matchedSlugs, siteConfig.navbar, slugsToTitles);
+
 // console.log('Astro.routePattern, Astro.url.pathname', Astro.routePattern, Astro.url);
 // console.log('customCrumbs', customCrumbs);
 
