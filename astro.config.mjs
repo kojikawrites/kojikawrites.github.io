@@ -30,14 +30,10 @@ export default defineConfig({
     },
     plugins: [yaml()]
   },
-  build: {
-      format: "file",
-  },
+
   site: 'https://hiivelabs.com',
   trailingSlash: 'ignore',
-  redirects: {
-    '/blog/[...categories]/[year]/[month]/[day]/[...slug]/': '/blog/[...categories]/[year]/[month]/[day]/[...slug]',
-  },
+
   integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind()],
   markdown: {
     shikiConfig: {
