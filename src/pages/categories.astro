@@ -10,6 +10,6 @@ const description = 'Posts grouped by Category.';
 const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
 
 ---
-<BaseLayout title={title} description={description} permalink={permalink} current={Astro.url.pathname}>
+<BaseLayout title={title} description={description} permalink={permalink} current="/categories">
     <KeyGroupedArticleList keyType={KeyType.Categories} />
 </BaseLayout>
