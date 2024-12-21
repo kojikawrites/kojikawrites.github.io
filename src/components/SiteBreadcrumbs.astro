@@ -83,10 +83,10 @@ function buildCustomCrumbs(
     return crumbs;
 }
 
-
+const {...rest} = Astro.props;
 ---
 {siteConfig.navbar.breadcrumbs.include &&
-<Breadcrumbs truncated={true} crumbs={customCrumbs}>
+<Breadcrumbs truncated={true} crumbs={customCrumbs} {...rest}>
     <!-- home page -->
     <div slot="index" class="crumb-index flex flex-row flex-nowrap">
         <svg class="crumb-index-img"

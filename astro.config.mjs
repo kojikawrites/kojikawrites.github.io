@@ -11,6 +11,8 @@ import {remarkPublishDateFromFilename} from "./remark-publish-date-from-filename
 import tailwind from '@astrojs/tailwind';
 import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
+import pagefind from "astro-pagefind";
+
 import {
     transformerNotationDiff,
     transformerNotationFocus,
@@ -27,8 +29,11 @@ export default defineConfig({
     },
     plugins: [yaml()]
   },
-  site: 'https://thewriteplace.rocks',
-  integrations: [mdx(), svelte(), tailwind(), solidJs()],
+  build: {
+      format: "file",
+  },
+    site: 'https://thewriteplace.rocks',
+  integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind()],
   markdown: {
     shikiConfig: {
       themes: {

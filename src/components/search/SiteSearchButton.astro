@@ -1,0 +1,83 @@
+---
+import toSafeId from "../../utils/toSafeId";
+import {getSiteConfig} from "../../utils/getSiteConfig";
+
+interface Props {
+    searchBarId: string;
+
+}
+
+const {searchBarId, ...rest} = Astro.props; // DO NOT DELETE
+const searchButtonId = toSafeId('search-button')
+const siteConfig = await getSiteConfig();
+---
+{siteConfig.search.include &&
+    (
+    <button id={searchButtonId} class="search-button flex flex-row flex-nowrap">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"
+             width="16px"
+             height="16px"
+             viewBox="0 0 24 24"
+             fill="var(--text-main)" stroke="var(--text-main)"
+             style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
+             {...rest}>
+            <g transform="matrix(0.328273,0,0,0.328273,-4.99795,-5.02257)">
+                <path d="M87,81.3L69.1,63.4C78.1,51.7 77.2,34.8 66.4,24.1C60.5,18.2 52.9,15.3 45.2,15.3C37.5,15.3 29.9,18.2 24,24.1C12.3,35.8 12.3,54.8 24,66.5C29.9,72.4 37.5,75.3 45.2,75.3C51.6,75.3 58,73.3 63.3,69.2L81.3,87C82.1,87.8 83.1,88.2 84.2,88.2C85.2,88.2 86.3,87.8 87.1,87C88.6,85.5 88.6,82.9 87,81.3ZM45.3,67.2C39.4,67.2 34,64.9 29.8,60.8C21.3,52.3 21.3,38.4 29.8,29.8C33.9,25.7 39.4,23.4 45.3,23.4C51.2,23.4 56.6,25.7 60.8,29.8C65,33.9 67.2,39.4 67.2,45.3C67.2,51.2 64.9,56.6 60.8,60.8C56.7,65 51.1,67.2 45.3,67.2Z" style="fill-rule:nonzero;"/>
+            </g>
+        </svg>
+    </button>
+    <script is:inline data-astro-rerun define:vars={{searchBarId, searchButtonId}}>
+        // let observerAdded = false;
+        // const observer = new MutationObserver((mutationsList) => {
+        //     for (const mutation of mutationsList) {
+        //         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+        //             if (!mutation.target.classList.contains('pagefind-ui__hidden')) {
+        //                 console.log('search results are shown');
+        //                 // const searchResults = document.getElementsByClassName('pagefind-ui__drawer')[0];
+        //                 // console.log(searchResults.classList);
+        //                 //console.log(mutation.target.offsetTop);
+        //                 const maxHeight = `${Math.floor(window.innerHeight - mutation.target.getBoundingClientRect().top)} px`;
+        //
+        //                 console.warn(maxHeight);
+        //                 // mutation.target.style.maxHeight = maxHeight;
+        //
+        //
+        //                 setTimeout(() => {
+        //                     const searchResults = document.getElementsByClassName('pagefind-ui__drawer')[0];
+        //                     console.warn('fuck you', searchResults);
+        //                     searchResults.style.height = '100 px';
+        //                     console.warn('fuck you2', searchResults.getBoundingClientRect());
+        //                 }, 250);
+        //                 // alert('max height is ', maxHeight);
+        //             }
+        //         }
+        //     }
+        // });
+
+        function searchBarToggle() {
+            const searchBar = document.getElementById(searchBarId);
+            if (searchBar) {
+                // if (!observerAdded) {
+                //     const searchResults = document.getElementsByClassName('pagefind-ui__drawer')[0];
+                //     console.warn('adding observer', searchResults);
+                //     observer.observe(searchResults, { attributes: true, attributeFilter: ['class'] });
+                // }
+
+                if (searchBar.classList.contains('hidden')) {
+                    searchBar.classList.remove('hidden');
+                    console.warn('showing searchbar');
+                }
+                else {
+                    searchBar.classList.add('hidden');
+                    console.warn('hiding searchbar')
+                }
+            }
+        }
+
+        const searchButton = document.getElementById(searchButtonId);
+        searchButton.addEventListener("click", searchBarToggle);
+
+    </script>
+)}
+
+
