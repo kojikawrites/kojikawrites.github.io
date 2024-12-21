@@ -50,6 +50,7 @@ function buildCustomCrumbs(
 
         // Check if key is in valid_breadcrumbs
         // console.log('matchedDict', matchedDict);
+
         if (reference.breadcrumbs.valid_breadcrumbs.includes(key) && matchedDict[key].length > 0) {
             const rawText = matchedDict[key];
             const text = (rawText in slugsToTitles) ? slugsToTitles[rawText] : rawText;
