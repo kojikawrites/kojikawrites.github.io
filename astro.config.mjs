@@ -11,12 +11,15 @@ import {remarkPublishDateFromFilename} from "./remark-publish-date-from-filename
 import tailwind from '@astrojs/tailwind';
 import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
+import pagefind from "astro-pagefind";
+
 import {
     transformerNotationDiff,
     transformerNotationFocus,
     transformerMetaHighlight,
     transformerNotationHighlight
 } from '@shikijs/transformers';
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -27,8 +30,11 @@ export default defineConfig({
     },
     plugins: [yaml()]
   },
+  build: {
+      format: "file",
+  },
   site: 'https://hiivelabs.com',
-  integrations: [mdx(), svelte(), tailwind(), solidJs()],
+  integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind()],
   markdown: {
     shikiConfig: {
       themes: {

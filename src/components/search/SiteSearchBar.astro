@@ -1,0 +1,14 @@
+---
+import {getSiteConfig} from "../../utils/getSiteConfig";
+interface Props {
+    id: string;
+}
+import Search from 'astro-pagefind/components/Search';
+const {id} = Astro.props;
+const siteConfig = await getSiteConfig();
+---
+{siteConfig.search.include &&
+    <div class="flex w-full flex-nowrap">
+        <Search id={id} className="pagefind-ui hidden" uiOptions={{ showImages: false }} />
+    </div>
+}
