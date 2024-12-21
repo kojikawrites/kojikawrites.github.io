@@ -32,21 +32,21 @@ export const LoginForm: Component<LoginFormProps> = ({
         class="flex flex-col items-center justify-center w-full gap-2"
         onSubmit={async (e) => {
           e.preventDefault();
-          console.log("Logging in");
+          // console.log("Logging in");
           const formData = new FormData(e.currentTarget);
           const handle = formData.get("handle");
           const password = formData.get("password");
           if (handle && password) {
-              console.warn('here', agent);
+              // console.warn('here', agent);
               try {
                   const response = await agent()?.login({
                       identifier: handle.toString(),
                       password: password.toString(),
                   });
-                  console.warn('response', response);
+                  // console.warn('response', response);
               }
               catch(err) {
-                  console.warn(err);
+                  // console.warn(err);
                   setError(err.toString());
               }
           }

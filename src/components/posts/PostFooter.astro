@@ -15,7 +15,7 @@ const nextPost = postIndex > 0 ? allPosts[postIndex - 1] : null;
 ---
 
 
-<div class="flex flex-row pb-6">
+<div class="flex flex-row pb-6 space-x-10">
     <div class="w-1/2">
         {prevPost &&
                 <a href={buildPostHref(prevPost)} class="post-navigation text-left ">« {prevPost.frontmatter.title}</a>
