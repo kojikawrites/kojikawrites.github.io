@@ -32,7 +32,8 @@ export default defineConfig({
   build: {
       format: "file",
   },
-    site: 'https://thewriteplace.rocks',
+  site: 'https://thewriteplace.rocks',
+  trailingSlash: 'ignore',
   integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind()],
   markdown: {
     shikiConfig: {
