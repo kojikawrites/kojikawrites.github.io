@@ -12,7 +12,6 @@ navbar:
       dark: "/src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-dark.svg"
       light: "/src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-light.svg"
       alt: "hiivelabs.com"
-
     left:
       -
         href: "/blog"
