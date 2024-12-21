@@ -38,9 +38,12 @@ export async function getSiteConfig() {
         bluesky: {
             include: boolean;
             hashtag_link: string;
-        }
+        };
         tags_and_categories : {
             aliases: any;
+        };
+        search : {
+           include: boolean;
         }
 
         default: any

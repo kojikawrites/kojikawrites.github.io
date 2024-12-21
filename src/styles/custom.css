@@ -3,6 +3,7 @@
 @import "site.css";
 @import "equations.css";
 @import "shiki.css";
+@import "search.css";
 
 /* site specific */
 @import "thewriteplace.rocks/colors.css";
