@@ -1,6 +1,6 @@
 import {AppBskyFeedDefs} from "@atproto/api";
 import type {BlockedPost, NotFoundPost, ThreadViewPost,} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import {getSiteConfig} from "../../utils/getSiteConfig";
+import {getSiteConfig} from "../../scripts/getSiteConfig";
 
 export interface ThreadViewPostUI extends ThreadViewPost {
     showParentReplyLine: boolean;

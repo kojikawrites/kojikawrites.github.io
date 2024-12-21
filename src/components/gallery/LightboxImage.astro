@@ -8,8 +8,8 @@ interface Props {
 }
 
 import { Image } from 'astro:assets';
-import toSafeId from '../../utils/toSafeId';
-import getImageMetadata from "../../utils/getImageMetadata";
+import toSafeId from '../../scripts/toSafeId';
+import getImageMetadata from "../../scripts/getImageMetadata";
 
 const {
     alt,
@@ -62,7 +62,7 @@ const imgId = `${id}-img`;
     function addClickListener() {
         const div = document.getElementById(id);
         const img = document.getElementById(imgId);
-        console.warn(div, img);
+        // console.warn(div, img);
         div.addEventListener("click", _ => {
             const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
             Spotlight.show([{

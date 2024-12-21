@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-import getPosts from "../utils/getPosts";
-import getPostData from "../utils/getPostData";
+import getPosts from "../scripts/getPosts";
+import getPostData from "../scripts/getPostData";
 
-import {getSiteConfig} from "../utils/getSiteConfig";
+import {getSiteConfig} from "../scripts/getSiteConfig";
 const siteConfig = await getSiteConfig();
 
 const title = '404';
@@ -14,6 +14,7 @@ const description = '404.';
 const allPostPaths = getPosts().map((p: any) => siteConfig.blog.prefix + getPostData(p).path); // DO NOT DELETE
 
 ---
+
 <BaseLayout title={title} description={description} permalink="">
     <div class="c404">
         <h1>404 - File Not Found</h1>
@@ -59,7 +60,17 @@ const allPostPaths = getPosts().map((p: any) => siteConfig.blog.prefix + getPost
     </div>
 </BaseLayout>
 
-<script is:inline define:vars={{ allPostPaths }} data-astro-rerun >
+<div id = "all-post-paths" data-post-paths={ allPostPaths } />
+<script>
+
+    import { addTimedRedirect, removeTimedRedirect } from '../scripts/client/redirection';
+
+    // get data
+    const dataEl = document.getElementById('all-post-paths');
+
+    const allPostPaths:string[] = dataEl.dataset.postPaths.split(',');
+    console.log(allPostPaths);
+
     function checkForRedirect(paths) {
         const url = window.location.href.replace(/^.*?:\/\/[^/]+/, '');
 
@@ -77,7 +88,7 @@ const allPostPaths = getPosts().map((p: any) => siteConfig.blog.prefix + getPost
         }
 
         const searchPath = result.join('/');
-        // console.log('searchPath', searchPath);
+        // console.warn('searchPath', searchPath);
 
         const trimmedSearch = searchPath.trim();
         const matchedPath = trimmedSearch.length > 0
@@ -98,34 +109,35 @@ const allPostPaths = getPosts().map((p: any) => siteConfig.blog.prefix + getPost
 
     if (redirect) {
         // show and hide the right things...
-        document.querySelectorAll('.redirect').forEach((el) => {
+        document.querySelectorAll('.redirect').forEach((el: HTMLElement) => {
             el.classList.remove('hidden');
         })
-        document.querySelectorAll('.no-redirect').forEach((el) => {el.classList.add('hidden'); } );
+        document.querySelectorAll('.no-redirect').forEach((el: HTMLElement) => {el.classList.add('hidden'); } );
         // update the redirect-from-url
-        document.querySelectorAll('.redirect-from-url')[0].innerText = redirect.fromUrl;
-        const toLink = document.querySelectorAll('.redirect-to-url-link')[0];
+        (document.querySelectorAll('.redirect-from-url')[0] as HTMLElement).innerText = redirect.fromUrl;
+        const toLink = document.querySelectorAll('.redirect-to-url-link')[0] as HTMLLinkElement;
         toLink.innerText = redirect.toUrl;
         toLink.href = redirect.toUrl;
-
-        // set up redirect
-        const meta = document.createElement('meta');
-        meta.setAttribute('http-equiv', 'refresh');
-        meta.setAttribute('content', `${redirect.timing ? redirect.timing : '0'}; url=${redirect.toUrl}`);
-        document.head.appendChild(meta);
+        addTimedRedirect(redirect);
     }
+    // add handler for clearing redirect on navigation
+    document.addEventListener('astro:before-swap', () =>
+    {
+        removeTimedRedirect();
+    })
 
+    // set up countdown timer
     let countdownValue = redirect?.timing;
     if (countdownValue) {
         // Update the display initially
-        document.getElementById('redirect-countdown').textContent = countdownValue;
+        (document.getElementById('redirect-countdown') as HTMLElement).textContent = `${countdownValue}`;
 
         // Set an interval that updates every second
         const interval = setInterval(() => {
             countdownValue--;
 
             // Update the displayed value
-            document.getElementById('redirect-countdown').textContent = countdownValue;
+            (document.getElementById('redirect-countdown') as HTMLElement).textContent = `${countdownValue}`;
 
             // If it hits zero, clear the interval and optionally do something else
             if (countdownValue <= 0) {

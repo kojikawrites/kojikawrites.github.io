@@ -8,8 +8,8 @@ interface Props {
 }
 
 import ThemedImage from './ThemedImage.astro';
-import getSafeId from '../utils/toSafeId';
-import {getSiteConfig} from "../utils/getSiteConfig";
+import getSafeId from '../scripts/toSafeId';
+import {getSiteConfig} from "../scripts/getSiteConfig";
 const siteConfig = await getSiteConfig();
 
 const id = getSafeId(Astro.props.id ?? Astro.props.alt, false);

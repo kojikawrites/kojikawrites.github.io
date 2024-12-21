@@ -5,10 +5,10 @@ interface Props {
 
 import FormattedDate from "../FormattedDate.astro";
 import { Image } from 'astro:assets';
-import getPostData from "../../utils/getPostData";
-import getImageMetadata from "../../utils/getImageMetadata";
-import {getSiteConfig} from "../../utils/getSiteConfig";
-import toSafeId from '../../utils/toSafeId';
+import getPostData from "../../scripts/getPostData";
+import getImageMetadata from "../../scripts/getImageMetadata";
+import {getSiteConfig} from "../../scripts/getSiteConfig";
+import toSafeId from '../../scripts/toSafeId';
 
 const siteConfig = await getSiteConfig();
 
