@@ -3,12 +3,12 @@ interface Props {
 	post: any,
 }
 
-import { components } from '../../utils/mixins/autoImportComponents';
+import { components } from '../../scripts/mixins/autoImportComponents';
 
 import BlueskyComments from "./BlueskyComments.astro";
 import Signature from "../Signature.astro";
 
-import getPostData from "../../utils/getPostData";
+import getPostData from "../../scripts/getPostData";
 
 
 const post = Astro.props.post;

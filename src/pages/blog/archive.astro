@@ -3,8 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PagePostCount from '../../components/posts/PagePostCount.astro';
 import PostSummary from "../../components/posts/PostSummary.astro";
 
-import getPosts from "../../utils/getPosts";
-import {buildPermalink} from "../../utils/urlUtils";
+import getPosts from "../../scripts/getPosts";
+import {buildPermalink} from "../../scripts/urlUtils";
 
 const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
 

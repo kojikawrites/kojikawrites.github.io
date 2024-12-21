@@ -2,10 +2,10 @@
 import { Breadcrumbs } from "astro-breadcrumbs";
 import "../styles/breadcrumbs.scss";
 
-import {matchUrlToPattern} from "../utils/matchUrlToPattern";
-import {getSiteConfig} from "../utils/getSiteConfig";
-import getPosts from "../utils/getPosts";
-import getPostData from "../utils/getPostData";
+import {matchUrlToPattern} from "../scripts/matchUrlToPattern";
+import {getSiteConfig} from "../scripts/getSiteConfig";
+import getPosts from "../scripts/getPosts";
+import getPostData from "../scripts/getPostData";
 
 const siteConfig = await getSiteConfig();
 const allPosts = getPosts().map((p: any) => getPostData(p));

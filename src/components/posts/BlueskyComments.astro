@@ -6,11 +6,11 @@ interface Props {
 // import blueskyJson from "../../assets/_private/state/hiivelabs.com/bluesky_posted.json"
 //console.log('BLUESKYTYPE',typeof blueskyJson);
 
-import { getSiteConfig } from "../../utils/getSiteConfig";
-import {getAllKeys} from "../../utils/keyUtils";
-import {KeyType} from "../../utils/enums";
+import { getSiteConfig } from "../../scripts/getSiteConfig";
+import {getAllKeys} from "../../scripts/keyUtils";
+import {KeyType} from "../../scripts/enums";
 import { Comments } from "../comments/Comments";
-import { getBlueskyPostedJson} from "../../utils/getBlueskyPostedJson";
+import { getBlueskyPostedJson} from "../../scripts/getBlueskyPostedJson";
 
 const blueskyJson = await getBlueskyPostedJson();
 // console.log('blueskyJson', blueskyJson);

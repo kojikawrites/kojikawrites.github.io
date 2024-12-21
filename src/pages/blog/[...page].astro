@@ -4,10 +4,10 @@ import PagePostCount from '../../components/posts/PagePostCount.astro';
 import PostSummary from "../../components/posts/PostSummary.astro";
 import Pagination from "../../components/Pagination.astro";
 
-import getPosts from "../../utils/getPosts";
-import {getSiteConfig} from "../../utils/getSiteConfig";
-import {buildPermalink} from "../../utils/urlUtils";
-// import getPostData from "../../utils/getPostData";
+import getPosts from "../../scripts/getPosts";
+import {getSiteConfig} from "../../scripts/getSiteConfig";
+import {buildPermalink} from "../../scripts/urlUtils";
+// import getPostData from "../../scripts/getPostData";
 
 const allPostsCount = getPosts().length;
 const siteConfig = await getSiteConfig();

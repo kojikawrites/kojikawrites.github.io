@@ -1,7 +1,7 @@
 ---
 
-import buildPostHref  from '../../utils/urlUtils';
-import getPosts from "../../utils/getPosts";
+import buildPostHref  from '../../scripts/urlUtils';
+import getPosts from "../../scripts/getPosts";
 
 const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
 // Find the index of the current post in the sorted array
