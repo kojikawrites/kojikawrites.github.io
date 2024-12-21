@@ -3,11 +3,11 @@
     .post-content {
 
         h1, h2, h3, h4, h5, h6 {
-            @apply normal-case mt-3 pt-6 lg:pt-2;
+            @apply normal-case mt-3 pt-2;
         }
 
         h1 {
-            @apply color-secondary-color pb-2 pt-6 lg:pt-2;
+            @apply color-secondary-color pb-2 pt-2;
         }
 
         h2 {

@@ -67,7 +67,7 @@ tags_and_categories:
         reinforcement-learning:
             - rl
 search:
-  include: false
+  include: true
 # git fetch source
 # git merge source/astro --allow-unrelated-histories
 
