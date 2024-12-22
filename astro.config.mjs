@@ -15,24 +15,9 @@ import pagefind from "astro-pagefind";
 
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
 
-const siteNameGetter = async () => {
-    // get the site name from ./site.txt
-    const siteText = import.meta.glob("./site.txt", {query: '?raw', import: 'default'});
-    const paths = Object.keys(siteText);
-        if(paths.length === 0
-    )
-    {
-        console.error('No site.txt file found.');
-        return null;
-    }
-    else
-    {
-        return await siteText[paths[0]]();
-    }
-};
 
-const siteName = await siteNameGetter()
-console.log('siteName:', siteName.trimEnd());
+const siteName = import.meta.env.VITE_SITE_NAME;
+console.log('siteName:', siteName);
 
 // https://astro.build/config
 export default defineConfig({
