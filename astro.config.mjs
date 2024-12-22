@@ -16,8 +16,15 @@ import pagefind from "astro-pagefind";
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
 
 
-const siteName = import.meta.env.VITE_SITE_NAME;
-console.log('siteName:', siteName);
+const siteName = () => {
+    try {
+        return import.meta.env.VITE_SITE_NAME ?? process.env.VITE_SITE_NAME;
+    }
+    catch (e) {
+        return undefined;
+    }
+};
+console.log('siteName:', siteName());
 
 // https://astro.build/config
 export default defineConfig({
@@ -30,7 +37,7 @@ export default defineConfig({
   },
 
   // site: 'https://hiivelabs.com', //`${siteName}`,//'https://hiivelabs.com',
-  site: `${siteName}`,//'https://hiivelabs.com',
+  site: siteName(),//'https://hiivelabs.com',
   trailingSlash: 'ignore',
 
   integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind()],
