@@ -13,12 +13,8 @@ import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
 import pagefind from "astro-pagefind";
 
-import {
-    transformerNotationDiff,
-    transformerNotationFocus,
-    transformerMetaHighlight,
-    transformerNotationHighlight
-} from '@shikijs/transformers';
+import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
+
 
 const siteName = import.meta.env.VITE_SITE_NAME;
 console.log('siteName:', siteName);
