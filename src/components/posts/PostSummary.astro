@@ -10,10 +10,10 @@ import getImageMetadata from "../../scripts/getImageMetadata";
 import {getSiteConfig} from "../../scripts/getSiteConfig";
 import toSafeId from '../../scripts/toSafeId';
 
-const siteConfig = await getSiteConfig();
 
 const post = Astro.props.post;
 
+const siteConfig = await getSiteConfig();
 const { path } = getPostData(post);
 const href = `/${siteConfig.blog.prefix}${path}`;
 
