@@ -68,6 +68,12 @@ tags_and_categories:
             - rl
 search:
   include: true
+rss:
+  include: false
+  site:
+    name: TheWritePlace.rocks
+    description: A blog about writing.
+
 # git fetch source
 # git merge source/astro --allow-unrelated-histories
 
