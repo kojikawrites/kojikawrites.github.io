@@ -22,3 +22,4 @@ pnpm-debug.log*
 .idea/
 .astro/
 .venv/
+/site.txt
