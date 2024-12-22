@@ -44,6 +44,13 @@ export async function getSiteConfig() {
         };
         search : {
            include: boolean;
+        };
+        rss: {
+            include: boolean;
+            site: {
+                name: string;
+                description: string;
+            }
         }
 
         default: any
