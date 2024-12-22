@@ -10,13 +10,13 @@ export async function GET(context) {
     const siteConfig = await getSiteConfig();
 
     if (!siteConfig.rss.include) {
-        return Response.redirect(`${context.site}not-found`);
-        // return rss({
-        //     title: "RSS is disabled on this site",
-        //     description: "",
-        //     site: context.site,
-        //     items: [],
-        // });
+        // return Response.redirect(`${context.site}not-found`);
+        return rss({
+            title: "RSS is disabled on this site",
+            description: "",
+            site: context.site,
+            items: [],
+        });
     }
 
     const posts = getPosts();
