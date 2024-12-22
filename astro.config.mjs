@@ -13,7 +13,12 @@ import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
 import pagefind from "astro-pagefind";
 
-import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
+import {
+    transformerNotationDiff,
+    transformerNotationFocus,
+    transformerMetaHighlight,
+    transformerNotationHighlight
+} from '@shikijs/transformers';
 
 const siteNameGetter = async () => {
     // get the site name from ./site.txt
