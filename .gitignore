@@ -14,12 +14,11 @@ pnpm-debug.log*
 
 
 # environment variables
-.env
-.env.*
+**/.env
+**/.env.*
 
 # macOS-specific files
 **/.DS_Store
 .idea/
 .astro/
 .venv/
-/site.txt
