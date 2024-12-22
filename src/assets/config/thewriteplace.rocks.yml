@@ -69,7 +69,7 @@ tags_and_categories:
 search:
   include: true
 rss:
-  include: false
+  include: true
   site:
     name: TheWritePlace.rocks
     description: A blog about writing.
