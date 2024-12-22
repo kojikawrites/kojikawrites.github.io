@@ -71,3 +71,9 @@ tags_and_categories:
             - rl
 search:
   include: true
+
+rss:
+  include: false
+  site:
+    name: hiivelabs Blog
+    description: A blog about ML, AI, Gamedev and other random stuff that crosses my mind.
