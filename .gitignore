@@ -18,8 +18,8 @@ docs/.bundle
 docs/vendor
 docs/content
 # environment variables
-.env
-.env.*
+**/.env
+**/.env.*
 
 # macOS-specific files
 **/.DS_Store
