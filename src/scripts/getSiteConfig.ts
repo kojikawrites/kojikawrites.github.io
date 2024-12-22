@@ -1,12 +1,14 @@
 // import { parse, stringify } from 'yaml'
 
 export function getSiteCode(): string {
-    return import.meta.env.SITE.replace(/^.*?\/\//, '').split('/')[0];
+    return import.meta.env.SITE
+        .replace(/^.*?\/\//, '') // Remove the protocol
+        .split('/')[0]            // Extract the domain name
+        .replace(/\s/g, '');      // Remove all whitespace characters;
 }
 
 export async function getSiteConfig() {
     const site = getSiteCode();
-
     interface ThemedImage {
         dark: string;
         light: string;
@@ -57,8 +59,9 @@ export async function getSiteConfig() {
     }>('/src/assets/config/*.yml');
     const yamlKeys = Object.keys(yamlGlobs);
     const matchingKey = yamlKeys.find(key => key.includes(site));
+
     if (!matchingKey) {
-        console.warn(`No yaml found for ${site}`);
+        console.warn(`No yaml found for ${site}...`);
     }
     // console.log(`Reading ${site} yaml config...`);
     return await yamlGlobs[matchingKey]().then(y => {
