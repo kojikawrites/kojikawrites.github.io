@@ -1,14 +1,4 @@
 @layer components {
-    /* navbar site logo */
-    .site-logo {
-        width: 128px;
-        min-width: 128px;
-        position: relative;
-        top: -2px;
-        padding-bottom: 5px;
-        @apply w-32;
-    }
-
     /* navbar container */
     .navbar {
         @apply bg-color-background-feature;
@@ -31,7 +21,8 @@
         }
 
         .site-logo {
-            @apply w-32 min-w-32 relative -top-0.5 pb-[5px];
+            /*@apply w-32 min-w-32 relative -top-0.5 pb-[5px];*/
+            @apply h-[21px] min-h-[21px] relative -top-0.5 pb-[5px] w-fit max-w-fit min-w-fit;
         }
     }
 }
