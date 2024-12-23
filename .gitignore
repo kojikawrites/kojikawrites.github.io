@@ -27,3 +27,4 @@ docs/content
 .astro/
 .venv/
 /site.txt
+/src/assets/_private/state/**/published_posts*.json

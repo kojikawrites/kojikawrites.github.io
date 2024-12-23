@@ -12,6 +12,12 @@ import markdown
 import random
 from bs4 import BeautifulSoup
 from PIL import Image
+from dotenv import load_dotenv
+import pprint
+
+load_dotenv()
+site_code = os.environ["SITE_CODE"]
+
 
 def process_thumbnail(image_path, testrun = False):
     """
@@ -63,7 +69,7 @@ def process_thumbnail(image_path, testrun = False):
     return thumbnail_path
 
 def parse_date_from_filename(filename):
-    match = re.match(r'(\d{4})-(\d{2})-(\d{2})-(.*)\.md$', filename)
+    match = re.match(r'(\d{4})-(\d{2})-(\d{2})-(.*)\.mdx?$', filename)
     if match:
         year, month, day, slug = match.groups()
         return datetime(int(year), int(month), int(day), tzinfo=timezone.utc), slug
@@ -196,7 +202,7 @@ def extract_metadata_from_file(file_path, slug, root_dir):
 
     return title, categories, description, full_image_path
 
-def post_to_bluesky(title, description, image_path, url, categories, category_aliases, client, testrun=False):
+def post_to_bluesky(title, post_date, description, image_path, url, categories, category_aliases, client, testrun=False):
     # Process the thumbnail
     image_path_thumbnail = None
     if image_path:
@@ -238,7 +244,8 @@ def post_to_bluesky(title, description, image_path, url, categories, category_al
     if testrun:
         if image_path_thumbnail:
             os.remove(image_path_thumbnail)
-        print(f"[Test Run] Would post to Bluesky: {tb.build_text()}\n{embed}")
+        embed_str = ''# f'{embed}'
+        print(f"[Test Run] Would post to Bluesky: {post_date.strftime("%m/%d/%Y")} - {tb.build_text()[:80].replace('\n', ' ')}...") # "\n{embed_str[:80]}...")
         return True, None
 
     # Post the message
@@ -324,10 +331,9 @@ def main():
     parser.add_argument('--root-url', type=str, help='Root URL of the website')
     parser.add_argument('--announce-start-date', type=str, help='Start date for announcements (YYYY-MM-DD)')
     parser.add_argument('--testrun', action='store_true', help='Perform a test run without posting or updating the tracking list')
-    parser.add_argument('--root-dir', type=str, default='docs', help='Root directory to start searching from')
-    parser.add_argument('--data-dir', type=str, default='docs/_data', help='Output directory for json')
+#     parser.add_argument('--root-dir', type=str, default=f'src/assets/posts/{site_code}/', help='Root directory to start searching from')
+#     parser.add_argument('--data-dir', type=str, default=f'src/assets/_private/state/', help='Output directory for json')
     args = parser.parse_args()
-
     # Retrieve or set ROOT_URL
     root_url = args.root_url or os.environ.get('ROOT_URL')
     if not root_url:
@@ -335,6 +341,10 @@ def main():
         sys.exit(1)
     if not root_url.endswith('/'):
         root_url += '/'
+
+    # update root_dir and data-dir
+    args.root_dir = f'src/assets/posts/{site_code}/'
+    args.data_dir = f'src/assets/_private/state/{site_code}/'
 
     # Retrieve or set ANNOUNCE_START_DATE
     announce_start_date_str = args.announce_start_date or os.environ.get('ANNOUNCE_START_DATE')
@@ -350,6 +360,7 @@ def main():
     # Load the tracking list
 
     tracking_file = os.path.join(args.data_dir, 'bluesky_posted.json')
+    print('tracking_file', tracking_file)
     if os.path.exists(tracking_file):
         with open(tracking_file, 'r', encoding='utf-8') as f:
             posted_posts = json.load(f)
@@ -357,34 +368,46 @@ def main():
         posted_posts = []
 
     posted_ids = set([p["post_id"] for p in posted_posts])
+    # pprint.pprint(posted_ids)
+#     for post_id in posted_ids:
+#         print(f'POSTED: {post_id}')
     # Get current date and time in UTC
     current_datetime = datetime.now(timezone.utc)
 
     # Find all posts in the _posts directories
     posts_to_announce = []
+    processed_post_ids = set()
     for root, dirs, files in os.walk(args.root_dir):
         # Skip _drafts directories
+
         dirs[:] = [d for d in dirs if d != '_drafts']
-        if '_posts' in dirs:
-            posts_dir = os.path.join(root, '_posts')
+
+        if True:  # '_posts' in dirs:
+            posts_dir = root  #os.path.join(root, '_posts')
+            # print(root)
             for post_root, post_dirs, post_files in os.walk(posts_dir):
                 for file in post_files:
-                    if file.endswith('.md'):
+                    if file.endswith('.md') or file.endswith('.mdx'):
                         file_path = os.path.join(post_root, file)
                         # print(f"FILE: {post_dirs}, {file}")
                         relative_path = os.path.relpath(file_path, args.root_dir)
                         post_id = relative_path.replace('\\', '/')
+                        post_id = f'posts/{site_code}/{post_id}'
 
                         file_date, slug = parse_date_from_filename(file)
+
                         if not file_date:
                             continue
                         if file_date < announce_start_date:
                             continue
                         if file_date > current_datetime:
                             continue  # Skip future-dated posts
+                        print('post_id: ', post_id)
                         if post_id in posted_ids:
                             continue
-
+                        if post_id in processed_post_ids:
+                            continue
+                        processed_post_ids.add(post_id)
                         title, categories, description, image_path = extract_metadata_from_file(file_path, slug, args.root_dir)
                         url = construct_post_url(file_date, slug, root_url, categories)
 
@@ -436,7 +459,8 @@ def main():
         categories = post['categories']
         description = post['description']
         image_path = post['image_path']
-        success, response = post_to_bluesky(title, description, image_path, url, categories, category_aliases, client, testrun=args.testrun)
+        post_date = post['date']
+        success, response = post_to_bluesky(title, post_date, description, image_path, url, categories, category_aliases, client, testrun=args.testrun)
         if success:
             if not args.testrun:
                 # Extract embedding info
