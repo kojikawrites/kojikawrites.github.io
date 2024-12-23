@@ -1,28 +1,37 @@
 @layer components {
+    /* navbar site logo */
+
+
     /* navbar container */
     .navbar {
         @apply bg-color-background-feature;
-
+        --logo-height: 32px;
         a {
-            @apply text-inherit text-lg block relative ml-2;
+            @apply text-inherit text-lg block relative ml-2 bottom-0;
+            /*@apply relative top-[calc(var(--logo-height)-36px)];*/
+            @apply h-[var(--logo-height)] ;
         }
 
         a:not(.selected) {
-            @apply opacity-70;
+            @apply lg:opacity-70;
         }
 
         a::before {
             @apply underline-link-hover;
             @apply bg-color-text-secondary bottom-1 w-full h-0.5;
+            @apply align-bottom
         }
 
         .selected::before {
             @apply scale-x-100 bg-color-primary-color;
         }
 
+
         .site-logo {
-            /*@apply w-32 min-w-32 relative -top-0.5 pb-[5px];*/
-            @apply h-[21px] min-h-[21px] relative -top-0.5 pb-[5px] w-fit max-w-fit min-w-fit;
+            @apply h-[var(--logo-height)] min-h-[var(--logo-height)];
+            /*@apply relative top-[calc(var(--logo-height)-48px)];*/
+            @apply relative top-[calc(var(--logo-height)-44px)];
+            @apply w-fit max-w-fit min-w-fit;
         }
     }
 }
