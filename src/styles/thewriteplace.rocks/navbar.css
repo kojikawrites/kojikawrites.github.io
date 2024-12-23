@@ -30,7 +30,7 @@
         .site-logo {
             @apply h-[var(--logo-height)] min-h-[var(--logo-height)];
             /*@apply relative top-[calc(var(--logo-height)-48px)];*/
-            @apply relative top-[calc(var(--logo-height)-44px)];
+            @apply relative top-[calc(var(--logo-height)-38px)] lg:top-[calc(var(--logo-height)-44px)];
             @apply w-fit max-w-fit min-w-fit;
         }
     }
