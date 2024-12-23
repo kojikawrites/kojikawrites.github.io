@@ -7,6 +7,7 @@
         --text-secondary: #6b6f72;
         --primary-color: #2E8B57; /* Primary Green (SeaGreen) */
         --primary-color-alt: #66CDAA; /* Light Green */
+        --green-menu-bar-text: #2E8B57;
         --primary-color-contrast: #fff;
         --secondary-color: #228B22; /* Forest Green */
         --heading-color: #006400; /* Dark Green */
@@ -29,6 +30,7 @@
         --text-code-color: #FFE38D;
         --primary-color: #2ECC57; /* SeaGreen */
         --primary-color-alt: #22CC22; /* Forest Green */
+        --green-menu-bar-text: #66CDAA;
         --secondary-color: #66FF20; /* Medium Aquamarine */
         --heading-color: #00CC00; /* Light Green */
         --bg-quote-block: #CCCCCC20;
