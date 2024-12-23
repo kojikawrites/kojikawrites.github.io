@@ -73,7 +73,7 @@ search:
   include: true
 
 rss:
-  include: false
+  include: true
   site:
     name: hiivelabs Blog
     description: A blog about ML, AI, Gamedev and other random stuff that crosses my mind.
