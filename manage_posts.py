@@ -3,6 +3,9 @@ import shutil
 from datetime import datetime, timezone
 import re
 import json
+from dotenv import load_dotenv
+load_dotenv()
+site_code = os.environ["SITE_CODE"]
 
 def parse_date_from_filename(filename):
     match = re.match(r'(\d{4})-(\d{2})-(\d{2})-(.*)\.md$', filename)
@@ -11,22 +14,23 @@ def parse_date_from_filename(filename):
         return datetime(int(year), int(month), int(day), tzinfo=timezone.utc), slug
     return None, None
 
-def find_posts_directories(directory):
+def find_posts_directories():
+    directory = f'./src/assets/posts'
     for root, dirs, files in os.walk(directory):
         for dirname in dirs:
-            if dirname == '_posts':
+            if dirname == site_code:
                 yield os.path.join(root, dirname)
 
 def move_future_posts_to_drafts():
     today = datetime.now(timezone.utc)
-    for posts_dir in find_posts_directories('.'):
+    for posts_dir in set(find_posts_directories()):
         drafts_dir = os.path.join(posts_dir, '_drafts')
         os.makedirs(drafts_dir, exist_ok=True)
         for root, dirs, files in os.walk(posts_dir):
             # Skip any _drafts directories in the walk
             dirs[:] = [d for d in dirs if d != '_drafts']
             for file in files:
-                if file.endswith('.md'):
+                if file.endswith('.md') or file.endswith('.mdx'):
                     file_path = os.path.join(root, file)
                     file_date, _ = parse_date_from_filename(file)
                     if file_date and file_date > today:
@@ -43,13 +47,13 @@ def publish_due_drafts():
     today = datetime.now(timezone.utc)
     published_posts = []
 
-    for posts_dir in find_posts_directories('.'):
+    for posts_dir in find_posts_directories():
         drafts_dir = os.path.join(posts_dir, '_drafts')
         if not os.path.exists(drafts_dir):
             continue
         for root, dirs, files in os.walk(drafts_dir):
             for file in files:
-                if file.endswith('.md'):
+                if file.endswith('.md') or file.endswith('.mdx'):
                     file_path = os.path.join(root, file)
                     file_date, slug = parse_date_from_filename(file)
                     if file_date and file_date <= today:
@@ -97,7 +101,9 @@ def publish_due_drafts():
 
     # Save the published posts to a JSON file
     if published_posts:
-        with open('published_posts.json', 'w', encoding='utf-8') as f:
+        date_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+        pp_path = f'./src/assets/_private/state/{site_code}/published_posts-{date_str}.json'
+        with open(pp_path, 'w', encoding='utf-8') as f:
             json.dump(published_posts, f, ensure_ascii=False, indent=2)
         print("Saved published posts information to published_posts.json")
 
