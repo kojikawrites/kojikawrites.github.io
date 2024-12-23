@@ -5,13 +5,13 @@ on:
   #    branches:
   #      - main  # Change this to your default branch if different
   # schedule:
-    # - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  # - cron: '0 0 * * *'  # Runs daily at midnight UTC
   workflow_dispatch:  # Allows manual triggering with inputs
 env:
   # Setting environment variables with the value of a configuration variable
   ROOT_URL: ${{ vars.ROOT_URL }}
   ANNOUNCE_START_DATE: ${{ vars.ANNOUNCE_START_DATE }}
-
+  SITE_CODE: ${{ vars.SITE_CODE }}
 jobs:
   manage_posts:
     runs-on: ubuntu-latest
