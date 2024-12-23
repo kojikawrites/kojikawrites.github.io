@@ -5,7 +5,8 @@
     /* navbar container */
     .navbar {
         @apply bg-color-background-feature;
-        --logo-height: 32px;
+        --logo-height-large: 24px;
+        --logo-height-small: 30px;
         a {
             @apply text-inherit text-lg block relative ml-2 bottom-0;
             /*@apply relative top-[calc(var(--logo-height)-36px)];*/
@@ -28,9 +29,10 @@
 
 
         .site-logo {
-            @apply h-[var(--logo-height)] min-h-[var(--logo-height)];
+            @apply h-[var(--logo-height-small)] min-h-[var(--logo-height-small)];
+            @apply lg:h-[var(--logo-height-large)] lg:min-h-[var(--logo-height-large)];
             /*@apply relative top-[calc(var(--logo-height)-48px)];*/
-            @apply relative top-[calc(var(--logo-height)-44px)];
+            @apply relative top-[calc(var(--logo-height-small)-36px)] lg:top-[calc(var(--logo-height-large)-26px)];
             @apply w-fit max-w-fit min-w-fit;
         }
     }
