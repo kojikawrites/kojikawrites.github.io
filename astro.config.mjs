@@ -16,6 +16,9 @@ import pagefind from "astro-pagefind";
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
 
 
+import sitemap from '@astrojs/sitemap';
+
+
 const siteName = () => {
     try {
         return import.meta.env.VITE_SITE_NAME ?? process.env.VITE_SITE_NAME;
@@ -40,7 +43,7 @@ export default defineConfig({
   site: siteName(),//'https://hiivelabs.com',
   trailingSlash: 'ignore',
 
-  integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind()],
+  integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind(), sitemap()],
   markdown: {
     shikiConfig: {
       themes: {
