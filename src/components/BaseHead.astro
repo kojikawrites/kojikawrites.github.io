@@ -25,6 +25,7 @@ const siteCode = getSiteCode();
       title={title}
       href={new URL("rss.xml", Astro.site)}
 />
+<link rel="sitemap" href=`/sitemap-index.xml` />
 <link rel="icon" type="image/x-icon" href=`/favicons/${siteCode}/favicon.ico` />
 <link rel="apple-touch-icon" sizes="180x180" href=`/favicons/${siteCode}/apple-touch-icon.png`>
 <link rel="icon" type="image/png" sizes="32x32" href=`/favicons/${siteCode}/favicon-32x32.png`>
