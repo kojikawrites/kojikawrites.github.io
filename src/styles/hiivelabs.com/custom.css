@@ -1,25 +1,24 @@
 /* default */
-@import "fonts.css";
-@import "site.css";
-@import "equations.css";
-@import "shiki.css";
-@import "search.css";
+@import "../fonts.css";
+@import "../site.css";
+@import "../equations.css";
+@import "../shiki.css";
+@import "../search.css";
 
 /* site specific */
-@import "thewriteplace.rocks/colors.css";
-@import "thewriteplace.rocks/navbar.css";
-@import "thewriteplace.rocks/index.css";
-@import "thewriteplace.rocks/about.css";
-@import "thewriteplace.rocks/mission.css";
-@import "thewriteplace.rocks/contact.css";
-@import "thewriteplace.rocks/blog-index.css";
-@import "thewriteplace.rocks/blog-page.css";
-@import "thewriteplace.rocks/404.css";
-@import "thewriteplace.rocks/tags-and-categories.css";
-@import "thewriteplace.rocks/comments.css";
+@import "colors.css";
+@import "navbar.css";
+@import "index.css";
+@import "about.css";
+@import "mission.css";
+@import "contact.css";
+@import "blog-index.css";
+@import "blog-page.css";
+@import "404.css";
+@import "tags-and-categories.css";
+@import "comments.css";
 
 @layer base {
-
     /* custom classes to make colors friendlier with tailwind */
     .color-primary-color {
         color: var(--primary-color);
