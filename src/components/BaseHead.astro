@@ -1,10 +1,12 @@
 ---
 import { ClientRouter } from 'astro:transitions'
 
-import { getSiteCode } from '../scripts/getSiteConfig'
+import {getSiteCode} from '../scripts/getSiteConfig'
+import {getSiteStyle} from "../scripts/getSiteStyle";
+import StyleHelper from "./StyleHelper.astro";
 //
 // import (`../styles/${getSiteCode()}.css`);
-import "../styles/custom.css";
+//import "../styles/custom.css";
 
 export interface Props {
     title: string
@@ -14,7 +16,6 @@ export interface Props {
 
 const { title, description, permalink } = Astro.props
 const siteCode = getSiteCode();
-
 ---
 
 <!-- Global Metadata -->
@@ -39,7 +40,6 @@ const siteCode = getSiteCode();
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
-
 <!-- lightbox -->
 <script is:inline src="/scripts/prebuilt/spotlight.bundle.js" data-astro-rerun />
 
@@ -51,6 +51,7 @@ const siteCode = getSiteCode();
 <!--<meta property="twitter:image" content={socialUrl} />-->
 
 <ClientRouter />
+<StyleHelper/>
 
 <!-- This is intentionally inlined to avoid FOUC -->
 <script is:inline>
@@ -63,3 +64,4 @@ const siteCode = getSiteCode();
         root.classList.remove('theme-dark');
     }
 </script>
+

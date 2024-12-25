@@ -10,12 +10,12 @@ export function cleanUrl(url: string) {
 export default function buildPostHref(post, prefix='/') : string {
     const {  path } = getPostData(post);
     const permalink = cleanUrl(`${prefix}${siteConfig.blog.prefix}${path}`);
-    console.log('buildPostHref: permalink', permalink);
+    // console.log('buildPostHref: permalink', permalink);
     return permalink;
 }
 
 export function buildPermalink(siteRoot: string, urlPathname:string) {
     const permalink = cleanUrl(`${siteRoot}${urlPathname}`);
-    console.log('buildPermalink: permalink', permalink);
+    // console.log('buildPermalink: permalink', permalink);
     return permalink;
 }

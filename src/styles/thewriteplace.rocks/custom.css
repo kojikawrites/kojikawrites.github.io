@@ -1,0 +1,208 @@
+/* default */
+@import "../fonts.css";
+@import "../site.css";
+@import "../equations.css";
+@import "../shiki.css";
+@import "../search.css";
+
+/* site specific */
+@import "colors.css";
+@import "navbar.css";
+@import "index.css";
+@import "about.css";
+@import "mission.css";
+@import "contact.css";
+@import "blog-index.css";
+@import "blog-page.css";
+@import "404.css";
+@import "tags-and-categories.css";
+@import "comments.css";
+
+@layer base {
+    /* custom classes to make colors friendlier with tailwind */
+    .color-primary-color {
+        color: var(--primary-color);
+    }
+
+    .color-primary-color-alt {
+        color: var(--primary-color-alt);
+    }
+
+    .color-secondary-color {
+        color: var(--secondary-color);
+    }
+    .color-primary-color-contrast {
+        color: var(--primary-color-contrast);
+    }
+
+    .color-text-main {
+        color: var(--text-main);
+    }
+
+    .color-text-secondary {
+        color: var(--text-secondary)
+    }
+
+    .color-text-highlight-color {
+        color: var(--text-highlight-color);
+    }
+
+    .color-heading-color {
+        color: var(--heading-color);
+    }
+
+    .bg-color-background-feature {
+        background-color: var(--background-feature);
+    }
+
+    .bg-color-background-body {
+        background-color: var(--background-body)
+    }
+
+    .bg-color-primary-color {
+        background-color: var(--primary-color);
+    }
+
+    .bg-color-primary-color-contrast {
+        background-color: var(--primary-color-contrast);
+    }
+
+    .bg-color-secondary-color {
+        background-color: var(--secondary-color);
+    }
+
+    .bg-color-text-main {
+        background: var(--text-main);
+    }
+
+    .bg-color-text-secondary {
+        background: var(--text-secondary)
+    }
+
+    .border-text-secondary {
+        border-color: var(--text-secondary)
+    }
+
+    .highlight {
+        @apply color-secondary-color;
+    }
+
+    .font-family-serif {
+        /*noinspection CssNoGenericFontName*/
+        font-family: var(--font-family-serif);
+    }
+
+    .font-family-sans {
+        /*noinspection CssNoGenericFontName*/
+        font-family: var(--font-family-sans);
+    }
+
+    .font-family-sans-alt {
+        /*noinspection CssNoGenericFontName*/
+        font-family: var(--font-family-sans-alt);
+    }
+    .font-family-monospace {
+        /*noinspection CssNoGenericFontName*/
+        font-family: var(--font-family-monospace);
+    }
+
+    /* HTML tag overrides */
+    body {
+        @apply text-xs leading-normal;
+        @apply bg-color-background-body color-text-main;
+        @apply bg-repeat bg-[url:var(--background-image)];
+        @apply font-family-serif;
+    }
+
+    /* common header */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-bold uppercase leading-tight m-0 mt-5 mb-1;
+        @apply color-heading-color;
+        @apply font-family-sans;
+    }
+
+    /* specific header overrides */
+    h1 {
+        @apply text-5xl font-extrabold pt-2;
+    }
+
+    h1 small {
+        @apply text-[0.8rem] font-normal pt-2;
+    }
+
+    h2 {
+        @apply m-0 text-[1.8rem] py-2; /*ml-6 */
+    }
+
+    h3 {
+        @apply text-[1.6rem] pt-2;
+    }
+
+    h4 {
+        @apply text-[1.4rem];
+    }
+
+    h5 {
+        @apply text-[1.3rem];
+    }
+
+    h6 {
+        @apply text-[1.2rem];
+    }
+
+    p a, article a {
+        @apply transition-shadow ease-linear delay-150
+               shadow-[inset_0_-0.12em_0_var(--primary-color-alt)]
+               hover:shadow-[inset_0_-1.5em_0_var(--primary-color-alt)]
+    }
+
+    p,
+    ul,
+    ol {
+        @apply text-base leading-7;
+    }
+
+    p {
+        @apply pb-2;
+    }
+
+    hr {
+        @apply bg-color-background-feature;
+    }
+
+    nav {
+        @apply uppercase font-bold w-1/2;
+        @apply font-family-sans;
+    }
+
+    footer {
+        --footer-text-color: gray;
+        @apply text-[var(--footer-text-color)];
+    }
+
+    pre, code {
+        @apply text-xs p-1;
+    }
+
+}
+
+@layer components {
+    div.container {
+        @apply pt-4;
+    }
+
+    .underline-link-hover {
+        @apply content-[''] absolute
+        scale-x-0
+        transition-transform ease-linear delay-150
+        bg-color-secondary-color
+        left-0
+        hover:scale-x-100;
+    }
+
+}
