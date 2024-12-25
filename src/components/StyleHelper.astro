@@ -1,0 +1,17 @@
+---
+import {getSiteStyle} from "../scripts/getSiteStyle";
+const styleCss = await getSiteStyle();
+---
+
+<style is:global set:text={styleCss}/>
+<!--<div id="-css-helper" />-->
+<script is:inline data-astro-rerun>
+    // force a refresh of the css to pick up dynamic stuff.
+    const root = document.documentElement;
+    // const element = document.getElementById("-css-helper");
+    root.classList.add("css-dummy");
+    setTimeout(() => {
+        root.classList.remove("css-dummy");
+    }, 0);
+</script>
+
