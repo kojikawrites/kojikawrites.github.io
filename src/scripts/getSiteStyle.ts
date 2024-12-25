@@ -15,7 +15,7 @@ export async function getSiteStyle(): Promise<string> {
     if (!matchingKey) {
         console.warn(`No css found for ${site}...`);
     }
-    console.log('matchingKey', matchingKey);
+    // console.log('matchingKey', matchingKey);
     // console.log(`Reading ${site} yaml config...`);
     return await cssGlobs[matchingKey]().then(css => {
         // manually process the tailwind
