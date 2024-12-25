@@ -1,4 +1,3 @@
-// import { parse, stringify } from 'yaml'
 
 export function getSiteCode(): string {
     return import.meta.env.SITE
@@ -6,6 +5,8 @@ export function getSiteCode(): string {
         .split('/')[0]            // Extract the domain name
         .replace(/\s/g, '');      // Remove all whitespace characters;
 }
+
+
 
 export async function getSiteConfig() {
     const site = getSiteCode();
