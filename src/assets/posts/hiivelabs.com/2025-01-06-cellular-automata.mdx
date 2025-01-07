@@ -1,0 +1,229 @@
+---
+title: 'Cellular Automata'
+description: 'A deep dive into using cellular automata for procedural content generation, exploring discrete and continuous CA frameworks, custom scripting language features, visual examples, and post-processing techniques for game development.'
+categories: [gamedev, cellular-automata]
+tags: [procedural-generation, terrain-generation, domain-specific-language, c-sharp, rust]
+---
+
+## Cellular Automata
+
+Back when I was working on some of the concepts and tooling in C#, there was a need to explore a wide range of
+techniques for procedurally generating various aspects of a game. One of the most fascinating methods (and one that
+grabbed my attention after seeing [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) running
+in 32×22 resolution on the ZX81) is Cellular Automata (CA).
+
+In other words, Cellular Automata are a class of algorithms that generate complex, emergent phenomena by applying simple
+rules repeatedly to a (usually) 2D grid. For example, the rules for Conway's Game of Life are as follows:
+
+1. All live cells not affected by subsequent rules die in the next generation. Similarly, all other dead cells stay dead.
+2. Any live cell with two or three live neighbours lives on to the next generation.
+3. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+
+Conway's Life is probably the most famous CA. Among Roguelike developers, however, the use of CAs for generating maps
+of [cave layouts](https://www.roguebasin.com/index.php/Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels)
+is well known. Similarly, the original [SimCity](https://en.wikipedia.org/wiki/SimCity_(1989_video_game)) relied on
+CA-like rules to govern city growth.
+
+### Custom DSL for CAs
+
+Given the usefulness of CAs in procedural generation, there was an interest in a straightforward way to experiment with
+different rules without writing disposable code each time. With that in mind, a custom scripting language was created to
+handle common operations for running CAs.
+
+Obviously, the first test was Conway’s Game of Life. Here is the script written in that custom DSL:
+
+
+```c
+// Space Definition.
+SPACE:
+{
+	// need to define space, connectivity, dimensions.
+	Size: (128, 128);
+	Wrap: True;
+	Neighbors:
+	{
+		N:	( 0, -1);
+		S:	( 0,  1);
+		W:	(-1,  0);
+		E:	(+1,  0);
+		NE: (+1, -1);
+		SE: (+1, +1);
+		NW: (-1, -1);
+		SW: (-1, +1);
+	};
+	States:
+	{
+		off; // default OOB state always comes first.
+		on;
+	}
+};
+
+// random init
+INIT(on,0.45|off, (*,*))
+
+// 1. All live cells not affected by subsequent rules die in the next generation.
+// Similarly, all other dead cells stay dead.
+//
+// 2. Any live cell with two or three live neighbours lives on to the next generation.
+//
+// 3. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+
+// These three rules can be condensed into the slightly more efficient:
+// (a) Set all next generation cells to dead.
+DEFAULT(off);
+
+// (b) If a cell has three live neighbors, set it live, and move on to the next cell.
+IF (NEIGHBORS(on) == 3)
+{
+	SET (on);
+	BREAK;
+}
+
+// (c) If a cell is live and it has two neighbors, set it live and move to the next cell
+IF (CELL(on) AND NEIGHBORS(on) == 2)
+{
+	SET (on);
+}
+```
+
+### Explanation of the DSL
+The `SPACE` section defines parameters such as the size of the grid, whether it wraps around at the edges, neighbor
+coordinates, and the states each cell can take. Following that is the `INIT` statement, which randomizes the grid to a
+specified ratio of `on` (45%) and `off` (55%).
+
+The CA rules run once per step across each cell in the grid:
+
+- `DEFAULT(off)` sets all cells not modified by subsequent rules to the `off` state.
+- The first `IF` condition sets the state of a cell to `on` if it has exactly three neighbors, and then stops processing.
+- The final `IF` ensures that cells remain in the `on` state if they had exactly two neighbors in the previous time-step.
+
+These checks rely on the previous time-step's state of the grid rather than any updates already made in the current iteration.
+In practice, this is done using front-buffer and back-buffer flipping: values are read from the current front buffer and
+written to the back buffer. After processing each cell, the buffers are flipped so the new state becomes visible.
+
+Even though this script looks more verbose than a [rulestrings](https://conwaylife.com/wiki/Rulestring) approach, it is
+more flexible and extensible while still handling the key details. The typical Game of Life rulestring, `B3/S23`, can be
+translated directly into the script above (`B3` = a dead cell becomes alive with exactly 3 neighbors, `S23` = a living
+cell remains alive with 2 or 3 neighbors).
+
+### Visualizing the CA
+
+I also wrote a quick-and-dirty visualizer tool, that looked like this:
+
+<LightboxGallery>
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/ca/ca-editor.png"
+                  alt="Script editor on the left with CA simulation output on the right."
+                  description="A screenshot demonstrating a custom DSL script for Conway’s Game of Life on the left,
+                  with a black-and-white real-time visualization of the evolving pattern on the right. A console panel
+                  displays 'No errors,' confirming the simulation has run successfully."/>
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/ca/ca-editor-glider.png"
+                  alt="Script editor on the left, simulation output on the right, highlighting a glider with a red circle."
+                  description="A code editor on the left features a DSL for Conway’s Game of Life. On the right, white cells evolve
+                  against a dark background over multiple generations. The cluster of five cells circled in red forms a
+                  glider, a pattern that moves diagonally across the grid." />
+</LightboxGallery>
+
+The following zoomed-in image shows a generated glider.
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/glider.png"
+              alt="Close-up of a glider in Conway's Game of Life."
+               description="A zoomed-in look at a small, self-propagating cluster of cells known as a glider,
+               traveling diagonally through the grid in a repeating cycle."/>
+
+### Other Popular CA Rules
+Two well-known variations for generating pseudo-mazes are Maze (`B3/S12345`) and Mazectric (`B3/S1234`). The main
+distinction between the two is that Mazectric tends to produce longer corridors.
+Only the relevant script excerpts are shown here.
+
+### Maze (B3/S12345)
+This is the output from the Maze rulestring after 10 generations.
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/ca-maze.png"
+              alt="Maze-like structure generated by the B3/S12345 rules"
+              description="A ten-generation snapshot of a Maze CA, showcasing winding corridors and branching pathways
+              formed using the B3/S12345 ruleset."/>
+
+### Mazeectric (B3/S1234)
+Mazectric, shown below, similarly generates maze-like structures but emphasizes elongated corridors:
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/ca-mazectric.png"
+               alt="Mazectric pattern emphasizing elongated corridors"
+               description="A ten-generation snapshot of the Mazectric CA, generated by the B3/S1234 ruleset.
+               It highlights longer, more winding passages than the standard Maze variant."/>
+
+
+### Cave Network (B5678/S45678)
+The following example is `B5678/S45678`, which produces decent cave layouts, especially if the initial distribution of
+live and dead cells is near 50/50. Further post-processing -- like flood-filling disconnected regions and connecting
+them -- creates more polished results.
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/ca-cave.png"
+               alt="Cave-like terrain produced by the B5678/S45678 rules."
+               description="A 10-generation view illustrating how the B5678/S45678 CA ruleset creates sprawling caves.
+               Although this ruleset unecessarily references the maximum number of neighbors (mirroring the rulestring’s format),
+               it still yields a substantial cave network suitable for further post-processing"/>
+
+For example, the following mock-up shows large regions colored via flood fill, roughened edges, elimination of interior
+pockets, and potential connections between cave sections (shown in red). This particular post-processing was done
+manually, but could be automated in many cases.
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/ca-cave-postprocess.png"
+               alt="Post-processed cave map with flood-filled regions and roughened edges."
+               description="A cave layout with color-coded regions and eliminated interior pockets. Red lines
+               indicate suggested connections between separate areas, creating a more cohesive overall map."/>
+
+
+### Converting the Scripting Language
+The current version of this CA scripting language is written in C#. A primary coding theme in my posts has been
+converting existing code to Rust. The language already supports multiple dimensions, arbitrary neighborhood definitions,
+and various states (including preliminary support for continuous states).
+
+
+Recently, an indie game developer, [Loren Schmidt](https://bsky.app/profile/lorenschmidt.bsky.social), has been doing
+impressive work using CAs to generate landscapes and cityscapes for a roguelike. Following their progress on Bluesky
+reignited an interest in revisiting the existing CA codebase to see if it could support more advanced CAs. As of now,
+it cannot, so there is room for improvements during the Rust conversion.
+
+In particular, Loren’s work (they also have a [Patreon](https://www.patreon.com/vacuumflowers) that is well worth supporting
+if you're interested in CAs), got me thinking about how far CA research has come from 2D discrete grids.
+There has been significant development around continuous-space CAs, such as [Lenia](https://en.wikipedia.org/wiki/Lenia).
+Lenia implements multichannel, multidimensional continuous space and time CAs, using techniques like convolution
+kernels to define neighbor relationships.
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/ca-lenia.png"
+               alt="Lenia CA visualization with smoothly evolving patterns."
+               description="An example of Lenia, a continuous-space cellular automaton framework. It demonstrates
+               how multichannel, multidimensional CAs can produce fluid and organic behaviors over time."/>
+
+### Toward More Flexible Kernels
+
+Adopting convolution kernels could make the scripting language more modular. It means there should be a straightforward
+but versatile way to define these kernels. A good approach might be to include a few commonly used kernels that can be
+parameterized to suit different needs, while still allowing extensibility for new kernels.
+
+Support for the succinct “rulestring” style could also be retained, but it remains highly specific to discrete CAs.
+Any extension into continuous domains would require a careful approach so as not to become overly complex.
+
+### Next Steps
+Large codebases can make it easy to lose focus, especially when switching languages. While writing usually reflects
+highlights, there is significant “drudge work” involved behind the scenes. This post is different in that most of the
+planned work is still underway, so it is more speculative.
+
+As of yesterday, the parser part of the scripting language has been more or less converted to Rust, building an abstract
+syntax tree (AST). Implementation is about one-third done, focusing first on the `SPACE` section. Instead of Antlr
+(used in the C# version), this Rust version uses Pest, which behaves differently enough to require careful rethinking
+of the parser.
+
+To avoid going off on tangents, contact has been made with Loren Schmidt for insights into the CA features they need.
+Ideally, if the scripting language can comfortably support both of our use cases, it should handle in-game needs and
+more. Loren has offered to share some of their work for testing, which will likely guide further improvements.
+
+Another area of interest is how to run different generation scripts on different areas of the same space while handling
+boundary interactions. For instance, one might want a procedurally generated cave to merge into a procedurally generated
+dungeon or cellar. This blending of techniques (CAs or otherwise) is crucial for expansive procedural worlds.
+Addressing it will require careful planning in the CA scripting language conversion and enhancement process.
+
+
+
+
+
