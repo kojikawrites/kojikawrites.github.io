@@ -126,19 +126,22 @@ def extract_random_image_path(content_body):
     if len(image_paths) <= 1:
         return None
     image_paths = image_paths[:-1]
-    return random.choice(image_paths)
+    selected_image_path = random.choice(image_paths)
+    if selected_image_path.startswith('/'):
+        selected_image_path = selected_image_path[1:]
+    return selected_image_path.replace('/', os.sep)
 
-def get_working_path_to_file(root_dir, file_path):
-    working_directory = os.path.dirname(os.path.realpath(__file__)) # + '/docs'
-    if not working_directory.endswith(os.sep) and not root_dir.startswith(os.sep):
-        working_directory += os.sep
-    working_directory += root_dir
-    if not file_path.startswith(os.sep) and not working_directory.endswith(os.sep):
-        working_directory += os.sep
-    full_file_path = working_directory + file_path
-    return full_file_path
+# def get_working_path_to_file(base_dir, file_path):
+#     working_directory = os.path.dirname(os.path.realpath(__file__)) # + '/docs'
+#     if not working_directory.endswith(os.sep) and not base_dir.startswith(os.sep):
+#         working_directory += os.sep
+#     working_directory += base_dir
+#     if not file_path.startswith(os.sep) and not working_directory.endswith(os.sep):
+#         working_directory += os.sep
+#     full_file_path = working_directory + file_path
+#     return full_file_path
 
-def extract_metadata_from_file(file_path, slug, root_dir):
+def extract_metadata_from_file(file_path, slug, assets_dir):
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
@@ -193,8 +196,8 @@ def extract_metadata_from_file(file_path, slug, root_dir):
     if image_path is None:
         full_image_path = None
     else:
-        # Construct the full path relative to the root directory
-        full_image_path = get_working_path_to_file(root_dir, image_path)
+        # Construct the full path relative to the assets directory
+        full_image_path = image_path  # get_working_path_to_file(assets_dir, image_path)
         print(f"***FULL IMAGE PATH: {full_image_path}, {image_path}")
         if not os.path.exists(full_image_path):
             print("image not found")
@@ -257,14 +260,14 @@ def post_to_bluesky(title, post_date, description, image_path, url, categories, 
         print(f"Error posting to Bluesky: {e}")
         return False, None
 
-def load_aliases_from_config(root_dir):
+def load_aliases_from_config():
     try:
         import yaml
-        full_file_path = get_working_path_to_file(root_dir, '_jekyllfaces/config.md')
+        full_file_path = config_file  # get_working_path_to_file(config_file)
         with open(full_file_path, 'r') as file:
             docs = yaml.safe_load_all(file)
             config = next(docs)
-            aliases = config["metadata"]["aliases"]
+            aliases = config["tags_and_categories"]["aliases"]
             return aliases
     except:
         print(f"Error loading config: {full_file_path}")
@@ -342,10 +345,11 @@ def main():
     if not root_url.endswith('/'):
         root_url += '/'
 
-    # update root_dir and data-dir
-    args.root_dir = f'src/assets/posts/{site_code}/'
-    args.data_dir = f'src/assets/_private/state/{site_code}/'
-
+    # update assets_dir etc.
+    args.assets_dir = 'src/assets'
+    args.post_dir = f'{args.assets_dir}/posts/{site_code}/'
+    args.state_dir = f'{args.assets_dir}/_private/state/{site_code}/'
+    args.config_file = f'{args.assets_dir}/config/{site_code}.yml'
     # Retrieve or set ANNOUNCE_START_DATE
     announce_start_date_str = args.announce_start_date or os.environ.get('ANNOUNCE_START_DATE')
     if not announce_start_date_str:
@@ -359,7 +363,7 @@ def main():
 
     # Load the tracking list
 
-    tracking_file = os.path.join(args.data_dir, 'bluesky_posted.json')
+    tracking_file = os.path.join(args.state_dir, 'bluesky_posted.json')
     print('tracking_file', tracking_file)
     if os.path.exists(tracking_file):
         with open(tracking_file, 'r', encoding='utf-8') as f:
@@ -377,7 +381,7 @@ def main():
     # Find all posts in the _posts directories
     posts_to_announce = []
     processed_post_ids = set()
-    for root, dirs, files in os.walk(args.root_dir):
+    for root, dirs, files in os.walk(args.post_dir):
         # Skip _drafts directories
 
         dirs[:] = [d for d in dirs if d != '_drafts']
@@ -390,7 +394,7 @@ def main():
                     if file.endswith('.md') or file.endswith('.mdx'):
                         file_path = os.path.join(post_root, file)
                         # print(f"FILE: {post_dirs}, {file}")
-                        relative_path = os.path.relpath(file_path, args.root_dir)
+                        relative_path = os.path.relpath(file_path, args.post_dir)
                         post_id = relative_path.replace('\\', '/')
                         post_id = f'posts/{site_code}/{post_id}'
 
@@ -408,7 +412,7 @@ def main():
                         if post_id in processed_post_ids:
                             continue
                         processed_post_ids.add(post_id)
-                        title, categories, description, image_path = extract_metadata_from_file(file_path, slug, args.root_dir)
+                        title, categories, description, image_path = extract_metadata_from_file(file_path, slug, args.post_dir)
                         url = construct_post_url(file_date, slug, root_url, categories)
 
                         posts_to_announce.append({
@@ -451,7 +455,7 @@ def main():
         print("[Test Run] Skipping Bluesky login.")
 
     # Post to Bluesky and update the tracking list
-    category_aliases = load_aliases_from_config(args.root_dir)
+    category_aliases = load_aliases_from_config()
     for post in posts_to_announce:
         title = post['title']
         url = post['url']
@@ -475,7 +479,7 @@ def main():
                     "post_cid": post_cid,
                 })
 
-                file_path = os.path.join(args.root_dir, post_id)
+                file_path = os.path.join(args.assets_dir, post_id)
                 replace_in_file(file_path, post_uri)
                 # embed_code = generate_embed_code(post_uri)
                 # update_blog_post_with_embed(file_path, embed_code)

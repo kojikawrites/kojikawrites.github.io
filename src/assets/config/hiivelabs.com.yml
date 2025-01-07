@@ -7,37 +7,31 @@ main:
 
 # navbar setup
 navbar:
-    # navbar logo setup
-    logo:
-      dark: "/src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-dark.svg"
-      light: "/src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-light.svg"
-      alt: "hiivelabs.com"
-    left:
-      -
-        href: "/blog"
-        label: "blog"
-      -
-        href: "/categories"
-        label: "categories"
-      -
-        href: "/tags"
-        label: "tags"
-    right:
-      -
-        href: "/mission"
-        label: "mission statement"
-      -
-        href: '/about'
-        label: 'About'
-      -
-        href: "/contact-us"
-        label: "contact us"
-    breadcrumbs:
-      include: true
-      valid_breadcrumbs:
-        - "[slug]"
-  #      - "[...page]"
-        - "archive"
+  # navbar logo setup
+  logo:
+    dark: "/src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-dark.svg"
+    light: "/src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-light.svg"
+    alt: "hiivelabs.com"
+  left:
+    - href: "/blog"
+      label: "blog"
+    - href: "/categories"
+      label: "categories"
+    - href: "/tags"
+      label: "tags"
+  right:
+    - href: "/mission"
+      label: "mission statement"
+    - href: '/about'
+      label: 'About'
+    - href: "/contact-us"
+      label: "contact us"
+  breadcrumbs:
+    include: true
+    valid_breadcrumbs:
+      - "[slug]"
+      #      - "[...page]"
+      - "archive"
 
 # blog path (can be posts or blog)
 # posts = src/assets/posts/...
@@ -49,26 +43,28 @@ blog:
 
 # footer setup
 footer:
-    content:
-        - "hiivelabs and its logo are registered trademarks of hiive."
-        - "All content © 2005-[CURRENT_YEAR] by hiive."
+  content:
+    - "hiivelabs and its logo are registered trademarks of hiive."
+    - "All content © 2005-[CURRENT_YEAR] by hiive."
 
 # include bluesky
 bluesky:
-    include: false
-    hashtag_link: /categories/#[HASHTAG]
+  include: false
+  hashtag_link: /categories/#[HASHTAG]
 
 # tag/category information
 tags_and_categories:
-    aliases:
-        machine-learning:
-            - ml
-        artificial-intelligence:
-            - ai
-        large-language-model:
-            - llm
-        reinforcement-learning:
-            - rl
+  aliases:
+    machine-learning:
+      - ml
+    artificial-intelligence:
+      - ai
+    large-language-model:
+      - llm
+    reinforcement-learning:
+      - rl
+    cellular-automata:
+      - ca
 search:
   include: true
 
