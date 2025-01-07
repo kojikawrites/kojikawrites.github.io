@@ -89,7 +89,7 @@ IF (CELL(on) AND NEIGHBORS(on) == 2)
 ### Explanation of the DSL
 The `SPACE` section defines parameters such as the size of the grid, whether it wraps around at the edges, neighbor
 coordinates, and the states each cell can take. Following that is the `INIT` statement, which randomizes the grid to a
-specified ratio of on (45%) and off (55%).
+specified ratio of `on` (45%) and `off` (55%).
 
 The CA rules run once per step across each cell in the grid:
 
