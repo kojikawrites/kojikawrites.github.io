@@ -1,0 +1,266 @@
+---
+title: 'Cellular Automata'
+description: 'Lorem ipsum dolor sit amet'
+categories: [gamedev, cellular-automata]
+tags: [procedural-generation, terrain-generation, domain-specific-language, c-sharp, rust]
+---
+
+## Cellular Automata
+
+Back when I was working on some of the concepts and tooling in C#, I was investigating a lot of different techniques for
+procedurally generating various aspects of the game. One of the techniques that interested me (and in fact, has
+interested me since I first witnessed [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
+running in 32×22 resolution on the ZX81) is Cellular Automata.
+
+In case you're not familiar, Cellular Automata (CA) are a class of algorithm that generates complex emergent phenomena
+by running a number of simple rules repeatedly for many steps on a (usually) 2D grid.
+
+For example, the rules for Conway's Life are as follows:
+
+1. All live cells not affected by subsequent rules die in the next generation. Similarly, all other dead cells stay dead.
+2. Any live cell with two or three live neighbours lives on to the next generation.
+3. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+
+I won't go into the fascinating history of Conway's Life any further, but I do recommend reading the Wikipedia page linked
+above. Conway's Life is probably the most famous CA in existence, but among Roguelike developers, the use of CAs to
+generate maps of [cave layouts](https://www.roguebasin.com/index.php/Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels)
+is well known. Similarly, the original [SimCity](https://en.wikipedia.org/wiki/SimCity_(1989_video_game)) game used
+CA-like rules to govern city growth.
+
+So, with this in mind, I figured that I was likely to make fairly heavy use of CAs in my game -- or at least, I wanted
+an easy way to investigate them without having to write a lot of throwaway code, so I decided to write a scripting
+language specifically for the purpose.
+
+Obviously, the first test case had to be Conway's Life. Here is my script to run Conway's Life, using my custom DSL
+(Domain Specific Language).
+
+```c
+// Space Definition.
+SPACE:
+{
+	// need to define space, connectivity, dimensions.
+	Size: (128, 128);
+	Wrap: True;
+	Neighbors:
+	{
+		N:	( 0, -1);
+		S:	( 0,  1);
+		W:	(-1,  0);
+		E:	(+1,  0);
+		NE: (+1, -1);
+		SE: (+1, +1);
+		NW: (-1, -1);
+		SW: (-1, +1);
+	};
+	States:
+	{
+		off; // default OOB state always comes first.
+		on;
+	}
+};
+
+// random init
+INIT(on,0.45|off, (*,*))
+
+// 1. All live cells not affected by subsequent rules die in the next generation.
+// Similarly, all other dead cells stay dead.
+//
+// 2. Any live cell with two or three live neighbours lives on to the next generation.
+//
+// 3. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+
+// These three rules can be condensed into the slightly more efficient:
+// (a) Set all next generation cells to dead.
+DEFAULT(off);
+
+// (b) If a cell has three live neighbors, set it live, and move on to the next cell.
+IF (NEIGHBORS(on) == 3)
+{
+	SET (on);
+	BREAK;
+}
+
+// (c) If a cell is live and it has two neighbors, set it live and move to the next cell
+IF (CELL(on) AND NEIGHBORS(on) == 2)
+{
+	SET (on);
+}
+```
+I think this script is fairly straightforward to understand. The `SPACE` section defines the size of the space, whether
+it wraps around at the edges, the definitions for neighbors (in terms of offset coordinates), and the state that each
+cell can be in.
+
+Following that is the `INIT` statement. In the script above, this sets up the entire space (indicated by the `(*,*)`)
+to a random distribution of 45% `on` and 55% `off`.
+
+Then we move onto the actual CA rules that execute per step.
+
+- The `DEFAULT` statement sets the default state of cells not affected by any subsequent rules to `off`.
+- The first `IF` condition sets the state of a cell to `on` if it has exactly three neighbors, and then stops processing.
+- The final `IF` statement sets the state of a cell to `off` if it's currently `on` and it has exactly two neighbors.
+
+These rules are then run for each cell in the grid once per step. It's important to note when checking neighbors, it
+only looks at the state of cells in the *previous* step, rather than any changes that have been made in the current step.
+In practice this is achieved using a standard front-buffer/back-buffer flipping technique; values are read from the current
+front buffer, and then written to the back buffer. Once the step is complete, the buffers are flipped, so the back-buffer
+becomes the new front-buffer, and vice versa. The front-buffer is then displayed.
+
+This may seem a bit verbose compared to standard [rulestrings](https://conwaylife.com/wiki/Rulestring), but I believe it
+will allow me more flexibility and extensibility while still being specific enough for my needs.
+
+For example, the above script could be written as follows using a rulestring:
+
+```rulestring
+B3/S23
+```
+The `B3` signifies that a dead cell becomes alive in the next generation if it has exactly 3 live neighbors in the current
+generation, and the `S23` signifies that a living cell remains alive in the next generation if it has 2 or 3 live
+neighbors in the current generation. All other cells are implicitly dead in the next generation.
+
+I also wrote a quick-and-dirty visualizer tool, that looked like this:
+
+<LightboxGallery>
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/ca/ca-editor.png"
+                  alt="Script editor with output in the right window."
+                  description="This image shows an editor on the left with code implementing Conway’s Game of Life,
+                  specifying grid dimensions, neighbor positions, and rules that determine when a cell becomes alive or
+                  dies based on the number of neighboring cells. On the right, a black-and-white visualization of the
+                  evolving cell patterns appears in real-time. A lower console panel displays the message “No errors,”
+                  indicating successful execution of the simulation."/>
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/ca/ca-editor-glider.png"
+                  alt="Script editor with output in the right window, highlighting a glider in the red circle."
+                  description="This image shows a code editor on the left running Conway’s Game of Life, with the
+                  classic rules specifying birth and survival based on neighbor counts. On the right, cells are
+                  displayed in white against a dark background as they evolve over multiple generations. The cluster of
+                  five cells circled in red forms a glider, a well-known self-propagating pattern that moves diagonally
+                  across the grid in a repeating four-phase cycle." />
+</LightboxGallery>
+
+The script generates the expected output, as can be shown by the following image showing a generated glider (zoomed in
+from the previous screenshot).
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/glider.png"
+              alt="Close up of glider generated by the script." />
+
+
+So, as fascinating as the Game of Life is (at least to me), there's not much application for it in my Roguelike that I
+can think of. However, by tweaking the rules we can generate many other structures, such as mazes, caves and even cities
+(with some significant post-processing).
+
+For example, two well known rules that generate mazes are as Maze (`B3/S12345`) and Mazectric (`B3/S1234`), the scripts
+and sample outputs from which are shown below. The main difference between the two rulestrings is that Mazectric tends
+to produce longer corridors. Note that only the changed excerpts of the script from the previous images are shown in
+the images below.
+
+### Maze (B3/S12345)
+This is the output from the Maze rulestring after 10 generations.
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/ca-maze.png"
+              alt="CA Maze"
+              description="Description"/>
+
+### Mazeectric (B3/S1234)
+This is the output from the Mazectric rulestring after 10 generations. Note the longer corridors.
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/ca-mazectric.png"
+              alt="CA Mazectric" />
+
+
+### Cave Network (B5678/S45678)
+The following example shows the rulestring `B5678/S45678`, which generates pretty good caves, although they'd need a
+little post-processing to add polish. For example, a flood fill to identify disconnected regions, followed by some
+targeted erosion to connect them, as well as filling in any isolated internal or edge pockets. Note that this CA seems
+to produce the best results when the initial mix of live/dead cells is close to 50/50.
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/ca-cave.png"
+               alt="CA Cave"
+               description="Yes, I know that there can't be more than 8 neighbors, so the right have part of each IF
+               statement is unecessary. I just left it in there so that it could be related directly to the rulestring"/>
+
+As an example of the kind of post-processing I'm talking about, the following mock-up shows the different large regions
+flood-filled, cave wall roughening around the edge of the image, and elimination of internal and edge pockets.
+Additionally the red lines show potential connections between cave sections. In this case, I did the post-processing
+manually, but it's not hard to see how it could be done using region size checking, masked erosion around the image edges,
+and random connection between nearest regions to fully connect the cave sections.
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/ca-cave-postprocess.png"
+               alt="CA Cave" />
+
+
+So, to cut a long story short, the current version of the scripting language is written in C# and, if you've followed
+any of this blog so far, you'll have seen that a general theme is converting a lot of my existing code base into Rust.
+
+As it stands, it supports arbitrary dimensions and neighborhood definitions, as well as arbitrary states (including
+basic support for continuous states).
+Most of this can be seen in the original script in the Space Definition section that defines the size, dimensions and
+neighborhood properties for the script.
+
+Recently, on Bluesky, I've been following a lot of the work that an indie game developer,
+[Loren Schmidt](https://bsky.app/profile/lorenschmidt.bsky.social), who has been doing with CAs to generate landscapes and
+cityscapes for a roguelike game that they are working on. This got me thinking I should take a another look at my existing
+CA codebase to see if it would support the kinds of CAs that they have been producing. As it stands, the answer is
+currently no, so there is an opportunity for some improvements when I convert it to Rust.
+
+Loren's work (and by the way, they have a [Patreon](https://www.patreon.com/vacuumflowers) that is well worth supporting
+if you're interested in CAs at all), got me thinking. And as art of that process, I did a bit of a dig into the current
+state of CA research, and I found that it has come a long way since 2D discrete grids. There's been a lot of work that I
+was previously unaware of to make CAs work in a continuous space. Currently, the most prominent (and in my opinion
+impressive) example is the [Lenia](https://en.wikipedia.org/wiki/Lenia) framework that implements multichannel,
+multidimensional continuous space and time CAs.
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/ca/ca-lenia.png"
+               alt="CA Lenia" />
+
+Now, I don't think that my scripting language upgrade needs to go as far as reimplementing Lenia, but some of the
+techniques used may well make the implementation more flexible. In particular, rather than explicitly code the neighborhood
+regions, Lenia (and other more basic systems such as SmoothLife - a continuous version of Conway's Life), the neighbors
+can be determined via convolution kernels. This means I would need a clean and concise way to define these kernels as
+part of the language, with enough flexibility to define a wide range of kernels without bogging the user down in
+advanced mathematics. I would imagine the simplest way to do this would be to take a set of the most commonly used
+kernels and parameterize them where appropriate to increase their flexibility. This should cover most of my expected
+use cases, and would easily be extensible in the rare cases where I needed new kernels.
+
+It's also possible that I could support the rulestring format for brevity in addition to the more traditional `IF`
+statements from the current scripting syntax. However, they're pretty specific to discrete CAs, and any extensions I've
+seen tend to make them seem overly complex. I'll have to give it some thought and see if I can figure out a way to make
+it work nicely continuous domains without turning into an indecipherable mess.
+
+## Next Steps
+The problem with having a large body of existing code that I am converting from one language to another is that it's
+easy to lose focus and switch from one project to another willy-nilly. And it probably looks worse from the reader's
+point of view because usually there is some lag time between working on a project and writing about it here. On top of
+that, the actual writing is only a small snapshot of the work that has been done - focusing on the interesting (at least
+to me) bits, and glossing over the mountain of drudge-work that also had to be done in order to get to the point where I
+could write the post.
+
+This post is a little different, as I've not done much of the work yet. So rather a post reporting on what I've already
+done, this one is more speculative -- focussing on what I should do in order to have a powerful enough scripting
+language to support any possible use-case I can come up with, but without going overboard and implementing something way
+more complicated than I will even need. And believe me, the temptation to go down that rabbit hole is strong...
+
+So far, I've done a more or less straight conversion of the parser part of the scripting language as of yesterday.
+That is, I can build an abstract syntax tree of the script, and I'm about one third of the way through the actual
+implementation. Currently I have completed the AST and Rust representations for the `SPACE` section of the script. And
+this is purely just to get the script into memory in a format that the computer can understand.
+I've not even got to the executable part yet. One of the reasons for this is that I'm switching parser engines. For the
+C# version, I used Antlr version 4. For the Rust version I'm using the Pest library. Both of these libraries are similar
+in what they do (build parsers), but their implementation is different enough to make conversion a pain, especially
+given my unfamiliarity with building Pest parsers.
+
+However, in order to attempt an avoidance of the rabbit hole temptation, I've reached out to the aforementioned
+Loren Schmidt in order to get their input on what kind of features they are using for their procedural generation.
+I figure that if I can get the scripting language to comfortably meet both of our use cases (whether they end up using
+it or not), then I'm likely to have more than enough to cover all of my possible in-game needs, and some more besides.
+And fortunately for me, they have agreed to share some of their CAs with me so I can make it work.
+
+At least, that's the plan. Let's see how it plays out over the next few weeks.
+
+One area of particular interest that I'm not quite sure how to deal with yet is the possibility of running different
+generation scripts in different areas of the same space, as well as how to handle interactions at boundaries. This
+will be necessary because I know that a portion of Loren's work deals with exactly that, and I know that I will need
+to be able to do a similar thing. For example, we can imagine a situation where we would want a procedurally generated
+cave to blend seamlessly into a procedurally generated dungeon or castle cellar. There are likely to be many other such
+cases where we want to be able to blend techniques, whether they are CAs or not, so it's definitely something that will
+need to be considered at some point soon, and it certainly needs to be borne in mind during the CA scripting language
+conversion/enhancement process.
+
+
+
+
