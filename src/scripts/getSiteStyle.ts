@@ -19,6 +19,7 @@ export async function getSiteStyle(): Promise<string> {
     // else {
     //     console.log(`css found for ${site}...: ${matchingKey}`);
     // }
+
     // console.log('matchingKey', matchingKey);
     // console.log(`Reading ${site} yaml config...`);
     return await cssGlobs[matchingKey]().then(css => {
