@@ -347,9 +347,9 @@ def main():
 
     # update assets_dir etc.
     args.assets_dir = 'src/assets'
-    args.post_dir = f'{args.src_dir}/posts/{site_code}/'
-    args.state_dir = f'{args.src_dir}/_private/state/{site_code}/'
-    args.config_file = f'{args.src_dir}/config/{site_code}.yml'
+    args.post_dir = f'{args.assets_dir}/posts/{site_code}/'
+    args.state_dir = f'{args.assets_dir}/_private/state/{site_code}/'
+    args.config_file = f'{args.assets_dir}/config/{site_code}.yml'
     # Retrieve or set ANNOUNCE_START_DATE
     announce_start_date_str = args.announce_start_date or os.environ.get('ANNOUNCE_START_DATE')
     if not announce_start_date_str:
