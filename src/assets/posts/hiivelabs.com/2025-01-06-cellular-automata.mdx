@@ -95,9 +95,9 @@ The CA rules run once per step across each cell in the grid:
 
 - `DEFAULT(off)` sets all cells not modified by subsequent rules to the `off` state.
 - The first `IF` condition sets the state of a cell to `on` if it has exactly three neighbors, and then stops processing.
-- The final `IF` ensures that cells remain in the `on` state if they had exactly two neighbors in the previous step.
+- The final `IF` ensures that cells remain in the `on` state if they had exactly two neighbors in the previous time-step.
 
-These checks rely on the previous state of the grid rather than any updates already made in the current iteration.
+These checks rely on the previous time-step's state of the grid rather than any updates already made in the current iteration.
 In practice, this is done using front-buffer and back-buffer flipping: values are read from the current front buffer and
 written to the back buffer. After processing each cell, the buffers are flipped so the new state becomes visible.
 
@@ -131,8 +131,9 @@ The following zoomed-in image shows a generated glider.
                traveling diagonally through the grid in a repeating cycle."/>
 
 ### Other Popular CA Rules
-Two well-known variations for generating mazes are Maze (`B3/S12345`) and Mazectric (`B3/S1234`). The main distinction
-is that Mazectric tends to produce longer corridors. Only the relevant script excerpts are shown here.
+Two well-known variations for generating pseudo-mazes are Maze (`B3/S12345`) and Mazectric (`B3/S1234`). The main
+distinction between the two is that Mazectric tends to produce longer corridors.
+Only the relevant script excerpts are shown here.
 
 ### Maze (B3/S12345)
 This is the output from the Maze rulestring after 10 generations.
