@@ -260,7 +260,7 @@ def post_to_bluesky(title, post_date, description, image_path, url, categories, 
         print(f"Error posting to Bluesky: {e}")
         return False, None
 
-def load_aliases_from_config():
+def load_aliases_from_config(config_file):
     try:
         import yaml
         full_file_path = config_file  # get_working_path_to_file(config_file)
@@ -455,7 +455,7 @@ def main():
         print("[Test Run] Skipping Bluesky login.")
 
     # Post to Bluesky and update the tracking list
-    category_aliases = load_aliases_from_config()
+    category_aliases = load_aliases_from_config(args.config_file)
     for post in posts_to_announce:
         title = post['title']
         url = post['url']
