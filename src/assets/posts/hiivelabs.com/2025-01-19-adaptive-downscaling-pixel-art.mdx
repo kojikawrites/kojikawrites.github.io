@@ -244,54 +244,51 @@ more effectively.
 
 <LightboxGallery>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_orig.png"
-                  alt="The input image"
-                  description="Step 0: The input image"/>
+                  description="The input image"
+                  alt="Step 0: The input image"/>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_naive_scale.png"
-                  alt="Naively downsampled original image"
-                  description="Step 1: A naively downsampled version of the original image.
+                  description="Naively downsampled original image"
+                  alt="Step 1: A naively downsampled version of the original image.
                   The loss of detail due to downsampling is evident."/>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_mcbs.png"
-                  alt="Majority color block downsampling of the original image"
-                  description="Step 2a: Majority color block downsampling of the original image.
+                  description="Majority color block downsampling of the original image"
+                  alt="Step 2a: Majority color block downsampling of the original image.
                   Detail is preserved, but some pixel transitions are quite jarring."/>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_epd.png"
-                  alt="Edge preserving downscale of the image from step 2(a)"
-                  description="Step 2b: Edge preserving downscale of the image from step 2(a).
+                  description="Edge preserving downscale of the image from step 2(a)"
+                  alt="Step 2b: Edge preserving downscale of the image from step 2(a).
                    Edge detail is preserved. Everything else is left transparent."/>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_mask.png"
-                  alt="The transparency mask for the downsampled image."
-                  description="Step 3: The downsampled image mask"/>
+                  description="The transparency mask for the downsampled image."
+                  alt="Step 3: The downsampled image mask"/>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_final.png"
-                  alt="This image is the result of the original naive downsampled image
+                  description="This image is the result of the original naive downsampled image
                   overlaid with the results of step 2(b), giving us a nicely downsampled image
                   while still preserving edge details."
-                  description="Step 4: The final output image"/>
+                  alt="Step 4: The final output image"/>
 
 </LightboxGallery>
 
 The original input image.
 <LightboxImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_orig.png"
-              alt="The input image"
-              description="Step 0: The input image"/>
+               description="The input image"
+               alt="Step 0: The input image"/>
 In the final image, scaled by 3×, minor tweaks to the edge detection threshold could yield further improvements,
 but it already represents a promising first iteration.
 <LightboxImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_final.png"
-              alt="The input image"
-              description="Step 4: The final output image"/>
+               description="The output image"
+               alt="Step 4: The final output image"/>
 
 The following gallery compares downscales at 2×, 3×, and 4× using nearest-neighbor, bilinear, and this detail-aware
 adaptive technique. The adaptive version generally preserves shapes and edges more clearly than the others.
  d
 <LightboxGallery>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-nearest-neighbor.png"
-                  alt="The input image"
-                  description="Step 0: The input image"/>
+                  alt="Nearest Neighbor downsampling examples." />
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-bilinear.png"
-                  alt="The input image"
-                  description="Step 0: The input image"/>
+                  alt="Bilinear downsampling examples." />
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-detail-aware.png"
-                  alt="The input image"
-                  description="Step 0: The input image"/>
+                  alt="Detail aware downsampling examples." />
 </LightboxGallery>
 
 
@@ -303,27 +300,27 @@ you can get while keeping enough visible detail for practical use for this examp
 
 <LightboxGallery>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_orig.png"
-                  alt="The input image"
-                  description="Step 0: The input image"/>
+                  description="The input image."
+                  alt="Step 0: The input image."/>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_naive_scale.png"
-                  alt="Naively downsampled original image"
-                  description="Step 1: A naively downsampled version of the original image.
+                  description="Naively downsampled original image."
+                  alt="Step 1: A naively downsampled version of the original image.
                   The loss of detail due to downsampling is evident."/>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_mcbs.png"
-                  alt="Majority color block downsampling of the original image"
-                  description="Step 2: Majority color block downsampling of the original image."/>
+                  description="Majority color block downsampling of the original image."
+                  alt="Step 2: Majority color block downsampling of the original image."/>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_mask.png"
-                  alt="The transparency mask for the downsampled image."
-                  description="Step 3: The downsampled image mask"/>
+                  description="The transparency mask for the downsampled image."
+                  alt="Step 3: The downsampled image mask."/>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_final.png"
-                  alt="This image is the result of the original naive downsampled image
+                  description="This image is the result of the original naive downsampled image
                   overlaid with the results of step 2, giving us a nicely downsampled image
                   while still preserving most details."
-                  description="Step 4: The final output image (2× reduction)"/>
+                  alt="Step 4: The final output image (2× reduction)."/>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_final_x3.png"
-                  alt="Bonus image. This is reduced by a factor 3×, and is about as small
+                  description="Bonus image. This is reduced by a factor 3×, and is about as small
                   as it can get while still retaining enough detail to be usable."
-                  description="Step 4: The final output image (3× reduction)"/>
+                  alt="Step 4: The final output image (3× reduction)."/>
 </LightboxGallery>
 
 A final comparison of a single character frame at original size, reduced 2×, and reduced 3× highlights the difference
