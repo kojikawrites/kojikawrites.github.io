@@ -348,12 +348,12 @@ PRs for corrections or improvements are always welcome.
 
 ## Postscript
 
-Update <FormattedDate date="1/21/2025" />: I did a few more tests of the algorithm after I posted the above to see how
-well it handled an "extreme" case. The chosen subject was the well known Yoshi sprite from Super Mario World on the SNES.
-It's a difficult case because it contains a lot of detail packed into its 32×32 pixel grid.
+Update <FormattedDate date="1/21/2025" />: I conducted additional tests of the algorithm after posting the above to
+assess how well it handles an “extreme” case. I chose the well-known Yoshi sprite from Super Mario World on the SNES.
+This was a challenging test because the sprite contains a lot of detail packed into its 32×32 pixel grid.
 
-The following images show, in order, the input 32×32 Yoshi sprite, 16×16 nearest neighbor downscaled sprite,
-16×16 bilinear downscaled sprite, and finally the 16×16 adaptive detail downscaled sprite.
+The following images display, in order, the input 32×32 Yoshi sprite, the 16×16 nearest neighbor downscaled sprite,
+the 16×16 bilinear downscaled sprite, and finally the 16×16 adaptive detail downscaled sprite.
 
 <LightboxGallery>
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_original.png"
@@ -372,5 +372,10 @@ The following images show, in order, the input 32×32 Yoshi sprite, 16×16 neare
                    alt="16×16 Adaptive detail downscaled Yoshi sprite."
     />
 </LightboxGallery>
-Even though (in my opinion) the adaptive downscaling still produces the best results, the output is still not great,
-and shows that with high detail source images, the algorithm is limited in what it can pack into the smaller space.
+
+Although, in my opinion, adaptive downscaling still produces the best results, the output isn’t as good as what a
+skilled pixel artist could achieve. This demonstrates that with highly detailed source images, the algorithm is limited
+in what it can compress into a smaller space.
+
+However, if we use the adaptive downscaling output for heavily outlined sprites as a time-saving step that can be
+manually tweaked during post-processing, the algorithm appears to be up to the challenge.
