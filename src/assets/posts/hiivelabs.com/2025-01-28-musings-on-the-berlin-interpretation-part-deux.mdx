@@ -1,0 +1,1008 @@
+---
+title:  "Musings on the Berlin Interpretation, Part Deux"
+description: This article introduces “The Hiive Interpretation,” a modern framework for defining roguelikes inspired by the original Berlin Interpretation. It reexamines core principles to accommodate contemporary game designs, distinguishing between traditional roguelikes, roguelites, and hybrids. Through detailed analysis and case studies of notable games, the post aims to foster clearer discussions and understanding within the roguelike community. The goal is to provide a flexible, insightful tool that respects the genre’s legacy while embracing its evolution.
+author: hiive
+categories: gamedev
+tags: roguelikes musings berlin-interpretation
+---
+## Revisiting Berlin...
+About six months ago, I wrote a [post](/blog/gamedev/2024/07/11/musings-on-the-berlin-interpretation)
+critiquing the original Berlin Interpretation of roguelike games, That piece generated some thoughtful discussion, which
+led me to reflect further on how I might improve and refine the interpretation to account for all the developments and
+advances in the genre since 2008.
+
+## A Modest Proposal...
+At its core, this post proposes a modernized definition: a roguelike is a *“procedurally generated high-stakes tactical
+adventure simulator”*.
+
+The goal is to preserve the genre’s roots while providing a framework that accommodates the
+creativity and diversity seen in today’s designs. So here, for your edification, delight and/or scorn is...
+
+# *"The Hiive Interpretation"*
+
+## I. Introduction
+The roguelike genre has a rich history, evolving from humble beginnings into a diverse and innovative space. As games
+continue to push the boundaries of design, revisiting the foundational ideas behind roguelikes can provide clarity and
+inspiration for future projects.
+
+### Context and Purpose
+The Berlin Interpretation, established in 2008, was a milestone for defining roguelikes, but the genre has evolved
+dramatically since then. Popular games like *Hades*, *Binding of Isaac*, and *Dead Cells* highlight the growing influence of
+roguelites, while titles such as *Slay the Spire* and *Balatro* demonstrate new mechanics (in this case, deck building)
+that blur the lines between categories. These shifts in the gaming landscape call for a more nuanced understanding of
+what defines a roguelike today.
+
+This article builds on my earlier critique of the Berlin Interpretation, offering a revised framework that reflects
+modern approaches while maintaining the genre’s core identity.
+
+### A Personal Lens
+While this piece represents my own perspective on the topic, I see it as more than just a theoretical exercise.
+
+It’s an opportunity to clarify my own understanding of the genre and the kind of game I want to create. I welcome debate
+and discussion, knowing full well that agreement isn’t guaranteed -- it’s through these conversations that the genre
+continues to evolve. Besides -- pretty much every other developer has an opinion on this, so here's mine...
+
+### Objective
+Roguelikes are, to me, about thriving in relentless, unpredictable environments that challenge players to adapt and
+overcome. They reward tactical decision-making, resource management, and improvisation, creating high-stakes gameplay
+where every choice matters. While roguelites emphasize action and meta-progression, roguelikes remain intimate,
+strategy-driven experiences defined by their emergent stories and systemic complexity.
+
+This exploration reflects the kind of roguelike I want to create: one that balances tradition with innovation, honoring
+the genre’s legacy while embracing modern possibilities.
+
+### Legacy and Evolution
+The roguelike genre has its roots in early classics like *Rogue*, *NetHack*, and *Ancient Domains of Mystery (ADOM)*.
+These games laid the groundwork for procedural exploration, tense encounters, and meaningful consequences, which remain
+essential to the genre’s appeal.
+
+In my view, there’s plenty of room for the genre to evolve without losing its identity. Modern tools like AI-driven
+procedural generation and dynamic narrative systems offer exciting opportunities to build on these foundations.
+The challenge lies in balancing tactical depth and improvisation with innovations that add to, rather than detract
+from, what makes roguelikes distinctive.
+
+## II. Core Tenets   *(Non-Negotiable)*
+Roguelikes are built around a set of fundamental principles that define the genre. While individual games may experiment
+and innovate, these core tenets provide the foundation for what makes a roguelike unique.
+
+### Procedural Generation
+Procedural generation lies at the heart of roguelikes, ensuring that every run is unpredictable and distinct.
+This randomness fuels emergent gameplay, where systems interact in surprising ways to create unique challenges.
+
+#### Emergent Worlds
+Each new playthrough begins in an uncharted world, with layouts, creatures, and loot shuffled to keep players on their
+toes. This unpredictability forces players to adapt, as they can’t rely on memorized maps or patterns. Even after
+repeated attempts, there’s always the chance of discovering an unexpected encounter or hidden feature that prompts a
+new mode of tactical play.
+
+#### Balanced Unpredictability
+While randomness is essential, it’s most compelling when paired with thoughtful design. Games like *Caves of Qud* achieve
+this by anchoring their worlds with consistent faction ecosystems, ensuring that even unpredictable events feel grounded
+in logic. Similarly, *Dungeon Crawl Stone Soup (DCSS)* balances procedural generation with carefully tuned systems,
+creating a sense of coherence without sacrificing variety.
+
+By blending chaos with structure, roguelikes ensure that every playthrough is dynamic yet strategic, rewarding players
+who adapt to changing circumstances.
+
+### Tactical Pacing
+Tactical pacing is a defining feature of roguelikes, emphasizing deliberate, methodical decision-making over quick
+reflexes. Whether players are managing movement, attacks, or abilities, the focus is on careful planning, where each
+action can carry significant consequences.
+
+#### Turn-Based or Pauseable Real-Time
+Roguelikes prioritize tactical thinking by offering turn-based gameplay or real-time systems with the option to pause.
+These mechanics allow players to assess their situation and make informed decisions before committing to their next
+action.
+
+Turn-based roguelikes, such as *NetHack*, or *Zorbus*, give players the space to carefully weigh their
+moves, while games like *FTL* use a pauseable real-time system to achieve a similar level of tactical control. Both
+approaches reward foresight and encourage players to think critically about positioning, timing, and resource use.
+
+
+#### Exclusion of Pure Reflex Combat
+In contrast to roguelites like *Hades*, *Returnal*, or the *Risk of Rain* series, roguelikes avoid reflex-driven gameplay.
+These games emphasize thoughtful choices and improvisation over quick reactions. While roguelites offer fast-paced
+excitement, roguelikes shine by creating tension through strategic pacing, where each move feels intentional and impactful.
+
+By focusing on deliberate decision-making, roguelikes ensure that every action matters, fostering a unique blend of
+challenge and engagement.
+
+<LightboxGallery>
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/risk_of_rain.jpg"
+        alt="Risk of Rain"
+        description="Screenshot of Risk of Rain, a roguelite that features real-time combat, procedural level
+        generation, and unlockable items that persist across runs."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/risk_of_rain_returns.jpg"
+        alt="Risk of Rain Returns"
+        description="Screenshot of Risk of Rain Returns, the enhanced edition of Risk of Rain, maintaining roguelite
+        elements like real-time action and persistent unlocks while introducing new content and improvements."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/risk_of_rain_2.jpg"
+        alt="Risk of Rain 2"
+        description="Screenshot of Risk of Rain 2, a sequel to Risk of Rain, expanding the roguelite formula with 3D
+        environments, cooperative multiplayer, and a wider variety of characters and items that carry over between runs."
+    />
+</LightboxGallery>
+
+### Character-Focused Gameplay
+Roguelikes often place a strong emphasis on individual characters or small parties, where every decision feels personal.
+This focus heightens the stakes, as the survival of the player’s character -- or group -- determines the outcome of the run.
+
+#### Individual or Small-Party Emphasis
+Focusing on a single character -- or a small, tightly-knit group -- naturally heightens the stakes. Unlike larger-scale
+strategy games like *XCOM*, roguelikes often revolve around a single hero whose survival is paramount.
+Every injury or setback feels personal, amplifying the tension of every turn or encounter.
+
+As new abilities, equipment, and challenges arise, this narrow focus encourages players to think carefully about how
+best to develop and protect their characters. The result is a dynamic experience where even minor decisions can have
+long-term consequences.
+
+<LightboxGallery>
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/xcom_original_geoscape.png"
+        alt="XCOM: UFO Defense (Geoscape), Microprose"
+        description="Screenshot of XCOM's Geoscape, the mission planning and prioritization overview, illustrating the
+        game's emphasis on large-scale strategy and team management rather than single-character survival typical of
+        roguelikes."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/xcom_original.png"
+        alt="XCOM: UFO Defense (Tactical Battle View), Microprose"
+        description="Screenshot of XCOM's tactical battle view, showcasing turn-based combat with a squad of soldiers,
+        highlighting its focus on managing multiple units and strategic planning instead of the single-hero focus found
+        in traditional roguelikes."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/xcom_original_base_layout.png"
+        alt="XCOM: UFO Defense (Base Layout ), Microprose"
+        description="Screenshot of XCOM's base layout, showcasing strategic resource management and
+        facility upgrades that emphasize team-wide planning and support, differentiating it from the single-character
+        focus typical of traditional roguelikes."
+    />
+
+</LightboxGallery>
+#### High-Stakes Development
+Permadeath traditionally accompanies character-focused gameplay, raising the stakes by attaching permanent consequences
+to failure. Losing a character often means starting over, forcing players to approach challenges with caution and intent.
+
+For longer campaigns, however, some games adapt this approach to reduce frustration. Features like segmented runs,
+temporary penalties, or limited revival opportunities can preserve the tension of permadeath while softening its
+harshest effects. While permadeath can be softened in longer campaigns, consequences must remain impactful to preserve
+tension.
+These mechanics reward thoughtful play while accommodating modern preferences for accessibility and
+pacing.
+
+### Meaningful Consequences
+One of the defining features of roguelikes is the importance of consequences. Whether through the threat of permadeath,
+major penalties, or other setbacks, these games challenge players to approach every decision with caution and purpose.
+The stakes are always high, ensuring that every run feels significant.
+
+#### Permadeath or Major Penalties
+Permadeath is perhaps the most iconic mechanic in roguelikes, representing the ultimate form of consequence. A single
+mistake can end a run, forcing players to start over from scratch. This high-risk dynamic adds a unique layer of tension
+to every decision, as players must balance their desire to explore or push forward with the need to survive.
+
+In shorter roguelikes, this all-or-nothing approach can create a satisfying rhythm of trial and error. Starting fresh
+becomes part of the game’s appeal, encouraging players to adapt and refine their strategies with each attempt. For
+example, in *NetHack* or *ADOM*, losing a high-level character can be devastating, but the lessons learned along the way
+prepare players for future runs.
+
+However, in longer campaigns or more expansive roguelikes, permadeath can become overly punishing. Imagine losing dozens
+of hours of progress in a sprawling, story-driven roguelike -- a frustration that could turn away even dedicated
+players. To address this, many modern games implement alternatives such as:
+
+- **Partial resets**, where players retain some progress or resources between runs.
+- **Intermittent checkpoints**, offering a chance to recover from defeat without completely starting over.
+- **Recoverable conditions**, such as penalties that can be offset through in-game actions.
+
+These systems allow for a more forgiving experience while preserving the tension and challenge that make roguelikes
+unique.
+
+#### Permissible Meta-Progression
+While roguelikes traditionally emphasize self-contained runs, some meta-progression can add depth and replayability
+without undermining the genre’s core principles. Persistent elements such as unlockable character classes, subtle
+upgrades, or narrative expansions reward long-term engagement while leaving the core challenge intact.
+
+For instance, games like *FTL* allow players to unlock new ships or layouts after achieving specific milestones, providing
+variety without diminishing the tension of individual runs. Similarly, lore-based progression, as seen in *ADOM*,
+enhances the world’s richness while keeping each playthrough unpredictable.
+
+In my view, the best meta-progression systems enhance the roguelike experience by encouraging exploration and
+experimentation, rather than just making the game easier. They offer players something to work toward over time,
+but they never overshadow the immediacy and high stakes of each individual run.
+
+### Emergent Complexity
+Roguelikes stand out for their ability to create systems that interact in surprising and meaningful ways. Instead of
+relying on pre-scripted scenarios, these games thrive on emergent gameplay, where a combination of mechanics and
+player choices results in unique, often unexpected outcomes. This complexity keeps players engaged by encouraging
+experimentation and rewarding creative problem-solving.
+
+#### Interlocking Systems
+The best roguelikes create a web of interconnected systems that constantly interact. Environmental hazards, enemy
+behaviors, and player abilities are designed to influence one another, often in ways that feel organic rather than
+scripted. For instance, a fireball spell might ignite flammable terrain, setting off a chain reaction that alters the
+course of an encounter.
+
+This interactivity drives engagement by encouraging players to think beyond immediate problems and consider the broader
+implications of their actions. Games like *Dwarf Fortress (in Adventure Mode)* exemplify this, offering systems so deeply
+interconnected that even small changes ripple outward in unpredictable ways.
+
+
+#### Living, Reactive Worlds
+A reactive game world amplifies the sense of agency and immersion. In my opinion, the most engaging roguelikes feature
+environments that respond dynamically to player decisions, creating opportunities for both success and failure.
+Factions might shift their alliances, creatures could adapt to repeated strategies, or the world itself might evolve
+based on the player’s impact.
+
+For example, *Cataclysm: Dark Days Ahead (CDDA)* offers the option of keeping the same persistent world across multiple
+runs. When a character dies, everything that occurred in that playthrough -- destroyed buildings, altered vehicles, dropped
+items -- remains for the next survivor to discover or reclaim. It’s possible to encounter your previous corpse or salvage
+your former equipment, lending a tangible feeling that the world remembers and reflects the consequences of each run.
+This continuity shifts the perspective from a lone survivor’s story to an ongoing, emergent narrative in a single,
+evolving environment.
+
+By weaving reactivity into their systems, roguelikes encourage players to consider the broader impact of every choice,
+strengthening both the challenge and the sense of immersion.
+
+## III. Movement, Positioning, and Interface
+Tactical movement and positioning lie at the core of roguelike gameplay. The ability to assess the battlefield and make
+purposeful choices about where to move -- or when to hold position -- can mean the difference between survival and defeat.
+A clear and intuitive interface is essential to support these decisions, ensuring players have the information they
+need to play the game effectively.
+
+### Tactical Spatial Clarity
+Roguelikes thrive on providing players with clear spatial mechanics that allow for meaningful positional decisions.
+Whether the design uses grids, hexes, or discrete zones, the key is ensuring that each movement feels deliberate.
+For instance, *Into the Breach* uses a tile-based system to highlight every action’s consequences, giving players complete
+visibility into potential outcomes.
+
+<LightboxImage
+    src="/src/assets/images/hiivelabs.com/blog/bi2/into_the_breach.jpg"
+    alt="Into the Breach, Subset Games"
+    description="Screenshot of Into the Breach, a turn-based hybrid roguelike, demonstrating its tile-based system that
+    emphasizes strategic positional decisions and action consequences."
+/>
+
+*Terminus: Zombie Survivors* offers an alternative approach by combining a graph-based overworld map with grid-based nodes
+for each specific building or structure. On the overworld, players choose their next destination node from a web of
+interconnected points. Once inside a node, movement and combat occur on a grid, governed by action points that determine
+how many moves or actions can be taken before ending the turn. After the player uses these points, zombies move in
+response, reinforcing the importance of thoughtful positioning and resourceful tactics.
+
+By blending a broad, node-based travel map with localized grid-based environments, the game ensures that every
+decision -- from where to go next to how to maneuver through a cramped building -- carries significant tactical weight.
+
+<LightboxGallery>
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/terminus_overworld.jpg"
+        alt="Terminus: Zombie Survivors overworld view, Longplay Studios"
+        description="Screenshot of Terminus: Zombie Survivors' overworld graph view, where players navigate a node-based
+            map to choose interconnected destinations, diverging from traditional grid-based roguelike exploration."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/terminus_grid.jpg"
+        alt="Terminus: Zombie Survivors grid view, Longplay Studios"
+        description="Screenshot of Terminus: Zombie Survivors' grid-based node view, showcasing tactical movement
+            governed by action points, blending roguelike procedural elements with strategic grid mechanics."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/terminus_battle_screen.png"
+        alt="Terminus: Zombie Survivors modal battle screen, Longplay Studios"
+        description="Screenshot of Terminus: Zombie Survivors' battle screen, illustrating how action points determine
+            player actions and zombie responses."
+    />
+</LightboxGallery>
+
+### Aesthetic Freedom
+While roguelikes have traditionally embraced ASCII or tile-based visuals, the genre has grown to accommodate a wide
+variety of art styles. Whether a game uses pixel art, 3D models, a hybrid aesthetic, or even ASCII(!), the visual design
+should prioritize readability above all else.
+
+For example, a game might use color coding or subtle animations to differentiate terrain types or enemy behaviors.
+The focus should remain on ensuring that players can parse the environment at a glance, allowing for quick and informed
+decision-making without sacrificing immersion.
+
+### Seamless Flow
+Many classic roguelikes integrate exploration and combat seamlessly, with both occurring in the same continuous space.
+This approach often enhances immersion, as players transition fluidly between tactical planning and action. However,
+segmented systems -- such as card-based mechanics in *Slay the Spire* -- or modal systems, like those used in
+*Terminus: Zombie Survivors*, can also work effectively if they maintain the game’s emphasis on thoughtful
+decision-making.
+
+*Terminus: Zombie Survivors* exemplifies this by balancing its modal combat with a dynamic overworld exploration system,
+ensuring that the flow of the game remains consistent and engaging. While the combat is distinct from the movement
+phase, the design preserves the tension and stakes of every decision, a hallmark of the roguelike experience.
+
+## IV. Resource Management and Exploration
+Roguelikes challenge players to make the most of limited resources while navigating unpredictable environments.
+The scarcity of supplies creates a constant tension, forcing players to weigh risks and rewards as they explore.
+Every decision -- from using a health potion to venturing into an unknown area -- can have significant consequences, making
+resource management and exploration central to the roguelike experience.
+
+### Scarcity and Allocation
+Effective resource management lies at the heart of roguelike gameplay. Players are often faced with difficult choices,
+such as whether to use a health potion now or save it for a potentially more dangerous encounter later. This
+scarcity heightens the stakes, turning even routine encounters into moments of strategic planning.
+
+In games like *FTL*, players must carefully allocate limited resources, knowing that overspending
+on one resource could leave them vulnerable later. Similarly, in *Brogue* and others, food management adds another
+layer of tension, as prolonged exploration risks starvation. This constant pressure encourages players to think ahead,
+prioritize their needs, and adapt their strategies on the fly.
+
+### Secrets and Risk-Reward Discovery
+
+Exploration in roguelikes is often about more than simply grabbing an amulet and then finding the exit -- it’s about
+uncovering hidden opportunities and navigating the dangers that come with them. Many games hide rare loot, secret
+passageways, or powerful artifacts in hard-to-reach or hazardous areas, tempting players to take risks for potential
+rewards.
+
+For instance, in *DCSS*, players often encounter treasure vaults or heavily guarded chambers containing
+valuable equipment or consumables. Accessing these rewards usually requires defeating powerful enemies or navigating
+environmental hazards, forcing players to weigh the potential gain against the risks to their survival. These mechanics
+reward players who carefully assess their surroundings and take calculated risks.
+
+### Adaptive Tactics
+
+Procedural generation ensures that no two runs are the same, requiring players to continuously adapt their tactics to
+new challenges. Each map layout, enemy spawn, or resource placement demands fresh strategies, preventing players from
+relying solely on memorization.
+
+In games like *FTL* or *Jupiter Hell*, players often face situations where their initial plans must evolve based on the
+resources available or the threats encountered. This adaptability keeps gameplay dynamic and ensures that players are
+always engaged, responding to the unique challenges of each run.
+
+## V. Reduced Emphasis on Grand Strategy
+Roguelikes tend to focus on immediate, tactical decisions rather than long-term strategic planning. While some games
+incorporate higher-level systems, the heart of the roguelike experience lies in responding to challenges as they arise.
+This immediacy creates a sense of urgency and tension that defines the genre, ensuring that moment-to-moment gameplay
+remains engaging and impactful.
+
+### Immediate Stakes
+Unlike strategy games that emphasize overarching plans and resource management over extended timelines, roguelikes
+prioritize the here and now. Each decision -- whether it’s choosing when to heal, where to move, or how to engage an
+enemy -- has immediate consequences that shape the outcome of a run.
+
+For example, in *Jupiter Hell*, players must carefully balance their positioning and ability usage in every combat
+scenario, as a single misstep can result in swift death. This focus on short-term stakes keeps the player’s attention
+on the tactical layer, where split-second choices and improvisation determine survival.
+
+### Balancing Meta-Layers
+While some roguelikes integrate strategic elements, these systems are usually secondary to the immediate challenges of
+each run. Games like *Darkest Dungeon II* explore evolving relationships and larger-scale planning, but the roguelike core
+remains tied to tactical decision-making within individual encounters.
+
+In my view, roguelikes benefit most when these meta-layers enhance, rather than overshadow, the immediacy of
+moment-to-moment gameplay. For example, *FTL* incorporates strategic decisions about which sectors to explore, but the
+game’s focus remains on navigating encounters and managing resources in real-time (although the player can pause at any
+point). This balance ensures that players stay immersed in the high-stakes tension that defines the genre.
+
+## VI. Deprecated/Removed BI Elements
+As the roguelike genre evolves, certain elements from the original Berlin Interpretation (BI) are arguably no longer
+essential. While these features played a significant role in defining early roguelikes, modern interpretations have
+shown that their absence doesn’t detract from the genre’s core identity. Instead, the focus has shifted toward
+principles that better reflect the diversity of contemporary designs.
+
+### Weakened Permadeath
+Traditionally, permadeath was a cornerstone of roguelikes, ensuring that every run carried significant risk. However,
+in longer or more complex games, this all-or-nothing mechanic can alienate players by erasing hours of progress after a
+single mistake.
+
+Modern roguelikes often adapt permadeath to better suit their design. For example, *Caves of Qud* offers two optional
+non-permadeath difficulty mode with checkpoints, allowing players to recover from setbacks without starting over
+completely. This approach preserves the tension of permadeath while offering a less punishing experience for those who
+prefer it.
+
+By softening the consequences without eliminating them, these games maintain the stakes that define roguelikes while
+accommodating a broader range of players.
+
+### Grid-Based Mandate
+Grid-based movement has long been a hallmark of roguelikes, providing clarity and structure to tactical decisions.
+However, it is no longer an absolute requirement. Games like *Terminus: Zombie Survivors* demonstrate that alternative
+movement systems -- such as Action Points and graph-based overworld navigation -- can offer equally engaging spatial
+mechanics.
+
+The key lies in maintaining tactical clarity. Whether using a grid, hexes, or free-form movement, the design should
+provide players with enough information to make meaningful choices about positioning and movement. The format is less
+important than the system’s ability to support deliberate, strategic play.
+
+### ASCII Requirement
+ASCII graphics hold a special place in roguelike history, serving as both a visual style and a practical necessity for
+early games. While still beloved by some players, modern roguelikes have embraced a variety of aesthetics.
+Pixel art, 3D models, and even hybrid approaches can all work effectively, provided they prioritize readability and
+clarity.
+
+For instance, *Jupiter Hell* uses high-quality 3D visuals to represent its environments and characters while retaining
+the tactical clarity of its ASCII predecessors. By moving beyond ASCII without sacrificing usability, these games
+demonstrate that visual innovation can enhance a roguelike’s appeal.
+
+Other games, including *Brogue* and *Cogmind* provide the option of choosing ASCII or graphical tiles in-game.
+
+### Strict Non-Modality
+Classic roguelikes often integrated exploration and combat seamlessly within a single interface. While this approach
+remains effective, modern roguelikes have shown that modal systems can work just as well. Games like *FTL* segment
+different phases of gameplay -- such as exploration and ship combat -- but maintain a cohesive and strategic experience.
+
+The key is to preserve the player’s focus on tactical decision-making. If a modal system enhances clarity or adds depth
+to specific mechanics, it can be a worthwhile departure from the traditional roguelike formula. In fact, if I recall
+correctly, one of the unspoken reasons for specifying non-modality was to differentiated roguelikes from JRPGs.
+However, I think that they have sufficient other differentiating factors such that a roguelike with modality is unlikely
+to be confused for a JRPG.
+
+### Dungeon-Centric Settings
+While many roguelikes take place in sprawling dungeons, the genre’s defining principles -- emergent gameplay, resource
+management, and high-stakes exploration -- can be applied to a wide range of settings. Space stations, post-apocalyptic
+landscapes, and even abstract environments can serve as compelling backdrops for roguelike gameplay.
+
+For example, *Approaching Infinity* trades traditional dungeon crawling for starship exploration and planetary away
+missions, proving that a roguelike’s core identity transcends its setting. As long as the game fosters tension and
+unpredictability, the environment can be as varied as the designer’s imagination allows.
+
+## VII. Roguelike vs. Roguelite
+The terms “roguelike” and “roguelite” are often used interchangeably, but they represent distinct branches of the genre.
+While they share foundational elements like procedural generation and high replayability, their core design philosophies
+differ significantly. Understanding these distinctions helps clarify what sets traditional roguelikes apart from their
+more action-oriented counterparts.
+
+### Roguelikes
+Roguelikes emphasize methodical pacing, systemic depth, and high-stakes gameplay. These games challenge
+players to navigate procedurally generated environments while making deliberate, tactical decisions. Each run is largely
+self-contained, with minimal reliance on persistent upgrades or meta-progression.
+
+Examples of traditional roguelikes include:
+-	*Caves of Qud*: Known for its deep simulation, faction interactions, and unpredictable outcomes.
+-	*Jupiter Hell*: A sci-fi roguelike that combines turn-based tactics with fast-paced decision-making.
+-	*Brogue*: A grid-based, turn-based roguelike focusing on resource management and tactical combat.
+-   *Cogmind*: A traditional roguelike that deeply adheres to classic roguelike mechanics while
+        introducing innovative elements unique to its high-tech theme.
+-   *Rogue Fable IV*: A modern traditional roguelike that stays true to classic mechanics while adding features for
+        greater depth and accessibility.
+
+These games prioritize risk and adaptability, with the ever-present possibility of catastrophic failure keeping players
+engaged.
+
+
+### Roguelites
+Roguelites, by contrast, often incorporate elements of reflex-driven gameplay or extensive meta-progression. They appeal
+to a broader audience by softening the genre’s traditional difficulty curve and introducing systems that reward
+incremental progress across runs.
+
+Examples of roguelites include:
+-	*Hades*: Combines fast-paced combat with a deep narrative and persistent upgrades.
+-	*Dead Cells*: Fuses platforming and hack-and-slash combat with unlockable weapons and abilities.
+-	*Rogue Legacy*: Features generational meta-progression, where each new character inherits traits and upgrades from
+    previous runs.
+-	*Heroes of Hammerwatch 1 and 2*: Blends action RPG mechanics with procedural generation and persistent town upgrades.
+-	*Binding of Isaac*: Features fast-paced, reflex-heavy gameplay with incremental unlocks and item progression across
+    runs.
+
+While roguelites borrow mechanics from roguelikes, their focus on reflexes and progression systems places them in a
+separate category.
+
+#### Relationship
+Roguelikes and roguelites are not in competition -- they are complementary approaches to the same foundational ideas.
+Roguelites introduce the genre’s concepts to players who may be unfamiliar with its traditional structure, while
+roguelikes maintain the tactical depth and emergent complexity that define the genre’s roots. Together, they expand the
+roguelike family, offering something for every type of player.
+
+## VIII. Traditional Roguelikes
+
+Traditional roguelikes represent the direct descendants of early genre-defining titles like *Rogue* itself, *NetHack*, and *ADOM*.
+These games adhere closely to the foundational concepts that shaped the genre’s formative years, emphasizing discrete,
+turn-based movement, single-character progression, and harsh penalties for failure. In doing so, they uphold the genre’s
+heritage by focusing on methodical decision-making and survival-oriented play rather than reflex-based action or
+extensive meta-progression.
+
+### Core Qualities
+
+Though the roguelike genre has broadened substantially, traditional roguelikes remain bound by a few distinct features
+that set them apart:
+#### Strict Turn-Based Pacing
+- Every action -- movement, attacking, using an item -- advances time by a discrete step. This ensures that players can
+deliberate over each decision without facing the pressure of a ticking clock.
+#### Singular Character Focus
+- Many traditional roguelikes place the player in control of exactly one primary character. This intense focus on a
+single survivor or hero heightens tension because defeat spells the end of the entire run.
+#### Grid-Based Navigation
+- Movement typically unfolds on a square or (occasionally) a hex grid, simplifying the geometry of combat and exploration.
+This design grants clarity to tactical maneuvers, making precise positioning a critical element of success.
+#### Minimal to No Meta-Progression
+- In traditional roguelikes, each run stands on its own. Death means losing all progress and items. While some titles may
+include optional unlocks or class additions, the emphasis remains on learning the game’s systems rather than accruing
+permanent upgrades across multiple attempts.
+#### ASCII or Simple Tile Aesthetic
+- Many classic roguelikes rely on ASCII or basic tile sets, though visuals vary widely in modern counterparts. Regardless
+of style, readability and conveying vital information are always prioritized over pretty graphics.
+
+### Lasting Appeal
+For many players, the allure of traditional roguelikes lies in their uncompromising approach to challenge and
+consequence. Permadeath rewards patience and planning, pushing players to learn from mistakes and refine their
+strategies. By restricting meta-systems that carry over between runs, these games reinforce the importance of
+moment-to-moment decisions and the organic mastery of complex systems.
+
+### Contemporary Role
+
+Modern roguelikes and roguelites have introduced faster pacing, reflex elements, and persistent upgrades, but
+traditional roguelikes continue to thrive in both classic and newly developed titles. They provide a counterbalance to
+more action-focused designs, offering a pure, methodical experience that remains beloved by those who prefer careful
+deliberation, emergent complexity, and the high stakes of permanent failure.
+
+By acknowledging these roots, developers and players can appreciate the breadth of the genre -- from its hardcore,
+old-school constraints to the varied, innovative forms it takes today.
+
+## **IX. Case Studies**
+Examining specific games helps illustrate the diversity within the roguelike and roguelite genres, showcasing how
+different design choices align with -- or diverge from -- the core principles discussed. Below, I’ve selected a few
+examples that highlight these distinctions.
+
+### Included: Roguelikes (Traditional and Systemic)
+
+Roguelikes emphasize systemic depth, procedural generation, and high-stakes gameplay. While traditional roguelikes
+often feature turn-based mechanics and grid-based movement, the category has grown to include games that maintain the
+genre’s tactical focus and emergent complexity, even with alternative approaches to pacing and interface. These games
+challenge players to adapt to unpredictable environments, with each run offering unique challenges and opportunities.
+
+#### *Caves of Qud*
+- This modernized roguelike exemplifies emergent complexity and procedural depth. Its faction systems and richly simulated
+world allow for unpredictable, highly personalized experiences. Players might encounter a wandering merchant one run and
+find themselves on the wrong side of their faction the next. This variability reinforces the game’s tactical depth and
+replayability, firmly placing it within the traditional roguelike category.
+
+#### *Dungeon Crawl Stone Soup (DCSS)*
+- A quintessential example of a traditional roguelike, *DCSS* emphasizes grid-based movement, turn-based
+combat, and meaningful resource management. Its diverse character builds and procedurally generated dungeons challenge
+players to adapt their strategies on the fly, ensuring that no two runs feel the same.
+
+#### *Jupiter Hell*
+- Blending the sci-fi setting of Doom with traditional roguelike mechanics, *Jupiter Hell* delivers turn-based tactical
+gameplay with a modern twist. Its clear interface and tactical pacing make every decision impactful, while its procedural
+design ensures consistent replayability.
+
+#### *FTL: Faster Than Light*
+- While not a traditional roguelike, *FTL* embraces procedural generation, high-stakes decision-making, and resource
+management. Its real-time-with-pause mechanics balance tactical and strategic elements, offering a fresh interpretation
+of roguelike principles within a sci-fi framework.
+
+#### *Brogue*
+- Grid-based movement, turn-based combat, and procedurally generated dungeons. *Brogue* exemplifies classic roguelike
+design, with a heavy emphasis on environmental interactions, resource management, and emergent gameplay.
+Players must carefully navigate traps, utilize consumables strategically, and adapt to a variety of procedurally
+generated challenges.
+
+#### *Dwarf Fortress (Adventure Mode)*
+- Procedural complexity, emergent storytelling, and high-stakes tactical play. The Adventure Mode in *Dwarf Fortress* offers
+a highly simulated world where players control a single character navigating dynamic environments. Interactions with
+factions, creatures, and environments lead to unpredictable, story-driven gameplay.
+
+<LightboxGallery>
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/caves_of_qud.jpg"
+        alt="Caves of Qud, Freehold Games"
+        description="Screenshot of Caves of Qud, a traditional turn-based roguelike, featuring deep character
+        customization and a richly procedural science-fantasy world."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/dcss.png"
+        alt="Dungeon Crawl Stone Soup (DCSS)"
+        description="Screenshot of Dungeon Crawl Stone Soup (DCSS), a classic turn-based roguelike known for its
+        balanced gameplay, extensive customization options, and community-driven development."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/jupiter_hell.jpg"
+        alt="Jupiter Hell, ChaosForge"
+        description="Screenshot of Jupiter Hell, a turn-based tactical roguelike that blends roguelike
+        procedural generation with tactical combat inspired by Doom."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/ftl.jpg"
+        alt="FTL: Faster than Light, Subset Games"
+        description="Screenshot of FTL: Faster than Light, a real-time-with-pause roguelike spaceship simulator,
+        emphasizing strategic resource management and procedural challenges."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/brogue.png"
+        alt="Brogue"
+        description="Screenshot of Brogue, a minimalist turn-based roguelike celebrated for its elegant design,
+        challenging dungeon exploration, and intuitive mechanics."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/df_adv.jpg"
+        alt="Dwarf Fortress (Adventure Mode), Bay 12 Games"
+        description="Screenshot of Dwarf Fortress (Adventure Mode), a turn-based roguelike, renowned for its complex
+        simulation, procedural generation, and deep storytelling elements."
+    />
+</LightboxGallery>
+
+### Excluded: Roguelite
+Roguelites diverge from roguelikes by incorporating reflex-driven gameplay, extensive meta-progression, and
+often more accessible mechanics. These games broaden the audience for roguelike concepts while maintaining procedural
+elements and replayability.
+
+#### *Hades*
+- This critically acclaimed roguelite combines fast-paced combat with a rich narrative and persistent meta-progression.
+Its reflex-driven gameplay and extensive upgrades distinguish it from traditional roguelikes, appealing to players who
+prefer action-oriented mechanics.
+
+#### *Dead Cells*
+- Blending procedural generation with fluid platforming combat, *Dead Cells* exemplifies the roguelite approach. Unlockable
+weapons and abilities provide long-term progression, while its reflex-heavy gameplay moves away from the tactical pacing
+of roguelikes.
+
+#### *Rogue Legacy*
+- Well known for its generational progression system, *Rogue Legacy* allows players to invest in upgrades that persist across
+runs. While it retains a run-based structure, the focus on long-term character growth sets it firmly in the roguelite
+camp.
+
+#### *Binding of Isaac*
+- Reflex-based combat, procedural generation, and persistent upgrades. *Binding of Isaac* emphasizes fast-paced gameplay,
+with unlockable items and abilities that carry over between runs. While procedural elements align with roguelikes,
+the focus on reflexes and meta-progression differentiates it as a roguelite.
+
+<LightboxGallery>
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/hades.png"
+        alt="Hades, Supergiant Games"
+        description="Screenshot of Hades, a roguelite that features real-time combat and persistent progression,
+        distinguishing it from traditional turn-based roguelikes."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/dead_cells.png"
+        alt="Dead Cells, Motion Twin"
+        description="Screenshot of Dead Cells, a roguelite that combines fast-paced, real-time action
+        with procedural level generation and permanent upgrades, setting it apart from classic roguelikes."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/rogue_legacy.jpg"
+        alt="Rogue Legacy, Cellar Door Games"
+        description="Screenshot of Rogue Legacy, a roguelite that introduces persistent character upgrades and
+        hereditary traits, diverging from the single-run focus of traditional roguelikes."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/rogue_legacy_2.jpg"
+        alt="Rogue Legacy 2, Cellar Door Games"
+        description="Screenshot of Rogue Legacy 2, the sequel to Rogue Legacy, continuing the roguelite tradition with
+        enhanced real-time combat and persistent progression systems."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/binding_of_isaac.jpg"
+        alt="Binding of Isaac, Edmund McMillen"
+        description="Screenshot of The Binding of Isaac, a roguelite by Edmund McMillen that features real-time action,
+        extensive item customization, and persistent upgrades."
+    />
+</LightboxGallery>
+
+#### *Heroes of Hammerwatch 1 and 2*
+- Action RPG mechanics, procedural dungeons, and persistent town upgrades. *Heroes of Hammerwatch 1 and 2* integrate roguelite
+progression systems, where players improve their characters and town infrastructure across multiple runs. The emphasis
+on action-driven combat and carryover progression places them firmly in the roguelite category.
+
+#### *Spelunky 1 and 2*
+- Platforming, procedural generation, and reflex-heavy gameplay. *Spelunky 1 and 2* incorporate roguelike randomness
+but rely on player reflexes and precise timing to navigate their environments. The games lack traditional roguelike
+tactical pacing, making them the quintessential roguelites.
+
+#### *Diablo*
+- Procedural generation, loot-based progression, and persistent character development. While *Diablo* leans heavily on
+action RPG mechanics, along with a rigid story and set pieces, its use of randomization and high replayability align
+it with roguelite design principles. Unlike traditional roguelikes, it focuses on real-time combat and long-term
+character upgrades, making it more accessible to a broader audience.
+
+<LightboxGallery>
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/heroes_of_hammerwatch.jpg"
+        alt="Heroes of Hammerwatch, Crackshell"
+        description="Screenshot of Heroes of Hammerwatch, an action-oriented roguelite with procedural generation and
+        permadeath."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/heroes_of_hammerwatch_2.jpg"
+        alt="Heroes of Hammerwatch 2, Crackshell"
+        description="Screenshot of Heroes of Hammerwatch 2, continuing the action-focused roguelite experience with
+        procedural levels and permadeath."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/spelunky.jpg"
+        alt="Spelunky, Mossmouth"
+        description="Screenshot of Spelunky, a roguelite platformer incorporating roguelike elements like procedural generation
+        and permadeath, but utilizing real-time action gameplay instead of turn-based mechanics."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/spelunky_2.jpg"
+        alt="Spelunky 2, Mossmouth"
+        description="Screenshot of Spelunky 2, the roguelite sequel to Spelunky, retaining roguelike features such as procedurally
+        generated levels and permadeath, while continuing with real-time platformer action."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/diablo.jpg"
+        alt="Diablo, Blizzard North"
+        description="Screenshot of Diablo, an action RPG roguelite with some procedural elements and real-time combat, but
+        lacking core roguelike features like turn-based movement and permadeath."
+    />
+</LightboxGallery>
+
+### Hybrid Roguelike
+Hybrid roguelikes blend traditional roguelike mechanics with elements from other genres, creating unique gameplay
+experiences. These games often incorporate tactical decision-making while introducing innovations that set them apart
+from conventional roguelikes.
+
+#### *Dwarf Fortress (Fortress Mode)*
+- Combines traditional roguelike elements like procedural generation and emergent complexity with colony management and
+simulation mechanics. In Fortress Mode, players oversee the construction and operation of a sprawling settlement,
+managing resources, citizens, and external threats.
+The roguelike influence is evident in the unpredictability of events, the high stakes of decisions, and the emergent
+storytelling that arises from interactions between the environment, creatures, and dwarves. However, its focus on
+large-scale planning and indirect control over individual units places it firmly in the hybrid category, blending
+roguelike principles with a deep simulation experience.
+
+#### *KeeperRL*
+- Grid-based movement, turn-based mechanics, and a mix of roguelike and simulation elements. *KeeperRL* combines
+traditional dungeon-building mechanics with roguelike exploration and combat, allowing players to control both
+individual units and broader dungeon systems.
+
+#### *Balatro*
+- Combines roguelike principles with deck-building mechanics and a focus on improvisational gameplay. *Balatro* tasks
+players with building and managing a deck of cards as they navigate procedurally generated challenges. The game
+emphasizes adaptability, as the random nature of card draws and events requires players to adjust their strategies on
+the fly.
+Like traditional roguelikes, *Balatro* features high-stakes decision-making, where each play or resource expenditure can
+significantly impact the outcome of a run. However, its use of deck-building mechanics places it in the hybrid category,
+blending the emergent complexity of roguelikes with the planning and synergies typical of card-based games.
+
+#### *Slay the Spire*
+- Merges deck-building card game mechanics with roguelike progression. Players ascend a procedurally generated spire,
+battling enemies through turn-based card combat. Each run offers different cards and relics, encouraging players to
+adapt their strategies and build unique decks to overcome challenges
+
+#### *Darkest Dungeon II*
+- This sequel builds upon its predecessor’s focus on party-based tactics and resource management but introduces deeper
+narrative integration and persistent progression systems. While each combat encounter requires strategic, moment-to-moment
+decisions consistent with roguelike principles, the overarching story and legacy systems provide continuity and
+long-term objectives.
+
+#### *Invisible, Inc.*
+- This game merges traditional roguelike elements, such as procedurally generated missions and turn-based tactical
+decision-making, with strategic team management features commonly found in strategy games like *XCOM*. *Invisible, Inc.*
+focuses on controlling a small team of agents, requiring players to manage resources, plan coordinated actions, and
+make strategic decisions at both the mission and operational levels.
+
+<LightboxGallery>
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/keeperrl.jpg"
+        alt="KeeperRL, Electric Succubi"
+        description="Screenshot of KeeperRL, a hybrid roguelike that combines traditional dungeon crawling with
+        dungeon-building and management mechanics."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/balatro.jpg"
+        alt="Balatro, LocalThunk"
+        description="Screenshot of Balatro, a hybrid roguelike by LocalThunk that integrates strategic base management
+        and resource allocation with classic roguelike exploration."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/slay_the_spire.jpg"
+        alt="Slay the Spire, Mega Crit"
+        description="Screenshot of Slay the Spire, a deck-building hybrid roguelike that blends card strategy with
+        procedural dungeon exploration."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/darkest_dungeon_2.jpg"
+        alt="Darkest Dungeon II, Red Hook Studios"
+        description="Screenshot of Darkest Dungeon II, a hybrid roguelike that merges party-based tactics and resource
+         management with a deep narrative."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/invisible_inc.jpg"
+        alt="Invisible, Inc, Klei Entertainment"
+        description="Screenshot of Invisible, Inc., a tactical stealth hybrid roguelike that combines procedural
+        missions with strategic team management."
+    />
+</LightboxGallery>
+
+## X. Addressing Community Concerns
+The roguelike community is diverse, encompassing players, developers, and enthusiasts with varied perspectives on what
+defines the genre. As the genre evolves, certain concerns and debates have emerged, often centered around preserving
+tradition while embracing innovation. This section addresses some of the most common points of contention.
+
+### Legacy Respect
+
+Roguelikes trace their roots to foundational titles like *Rogue*, *NetHack*, *Moria* and *Angbad*.
+For many in the community, these early games represent the heart of the genre, establishing key principles such as
+procedural generation, high-stakes gameplay, and emergent complexity.
+
+While innovation is essential for keeping the genre alive, it’s important to respect these traditions. This doesn’t
+mean rigid adherence to past conventions but rather maintaining the core elements that made roguelikes distinctive.
+For example, modern games like *Caves of Qud* and *Jupiter Hell* have successfully built on traditional frameworks while
+introducing fresh ideas. By preserving the genre’s defining principles, developers can ensure its legacy remains intact.
+
+### Gatekeeping Guardrails
+
+Defining what constitutes a roguelike has always been a challenge, leading to heated debates within the community.
+Clear distinctions, such as those provided by frameworks like the Berlin Interpretation or this one, help clarify these
+boundaries.
+
+For instance, while games like *Hades* and *Dead Cells* share certain elements with roguelikes, they lack the tactical
+pacing and emergent complexity that define the core experience. These distinctions aren’t meant to gatekeep but to
+preserve the genre’s identity and guide players and developers in understanding what sets roguelikes apart. At the
+same time, the roguelike family has expanded to include hybrids and roguelites, offering room for innovation without
+diluting its core.
+
+
+### Cultural Conflation
+
+As “roguelike” has become an industry buzzword, its meaning has often been stretched to encompass games that share only
+superficial similarities with the genre. Marketing labels frequently misrepresent roguelikes, leading to confusion among
+players and developers alike.
+
+The term ‘roguelike’ is often misapplied to games with superficial similarities, diluting its meaning. For instance:
+
+- *Returnal* markets itself as a roguelike but emphasizes real-time combat and cinematic storytelling over tactical
+decision-making.
+
+- *Cult of the Lamb*, although often labeled otherwise, is not a roguelike because it features real-time action,
+incorporates persistent progression and base-building mechanics, focuses on managing a cult rather than a single
+character, and lacks traditional roguelike elements like turn-based, grid-based movement and permanent consequences.
+
+- *Vampire Survivors* is frequently mislabeled as a roguelike despite its arcade-style action and minimal consequence
+for failure.
+
+These examples highlight the need for precise terminology. Distinguishing roguelikes (tactical, systemic, high-stakes)
+from roguelites (action-oriented, meta-progression-heavy) preserves the genre’s identity and guides players to experiences
+aligned with their preferences.
+
+This mislabeling risks diminishing the value of the term, making it harder for genuine roguelikes to stand out.
+Encouraging thoughtful and accurate labeling -- such as distinguishing between roguelikes (and/or traditional roguelikes),
+roguelites, and hybrids -- helps preserve the genre’s integrity. By doing so, the community can ensure that roguelikes
+retain their distinct identity while allowing room for diverse interpretations and innovations.
+
+<LightboxGallery>
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/returnal.jpg"
+        alt="Returnal, Sony"
+        description="Screenshot of Returnal, a third-person shooter that incorporates roguelike elements like procedural
+        generation and permadeath, but lacks traditional turn-based, grid-based mechanics."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/cult_of_the_lamb.png"
+        alt="Cult of the Lamb, Massive Monster"
+        description="Screenshot of Cult of the Lamb, a game that blends roguelike features with real-time action,
+        persistent progression, and base-building, deviating from traditional roguelike mechanics."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/vampire_survivors.jpg"
+        alt="Vampire Survivors, poncle"
+        description="Screenshot of Vampire Survivors, an action game with roguelike-inspired wave-based gameplay, but it
+        operates in real-time without turn-based or grid-based systems."
+    />
+</LightboxGallery>
+
+## XI. Creative Freedom and Evolution
+
+The roguelike genre has always been a space for experimentation and innovation. Its core principles -- procedural
+generation, emergent complexity, and high-stakes decision-making -- serve as a foundation that developers can build upon,
+exploring new ideas and pushing the boundaries of what the genre can achieve.
+
+
+### Technology and Player Preferences
+Advances in technology have opened up new opportunities for roguelike design. Procedural generation has grown more
+sophisticated, allowing for dynamic narratives, evolving environments, and systems-driven gameplay that reacts to player
+choices. For example, AI-driven content creation could enable NPCs with unique goals and behaviors, adding depth to
+procedural worlds.
+
+Player preferences have also shifted, with many seeking more approachable or visually engaging experiences. Games like
+*Jupiter Hell* demonstrate that roguelikes can embrace modern visuals while retaining their tactical depth. Similarly,
+hybrids like *KeeperRL* show how blending genres can attract new audiences while preserving roguelike
+principles.
+
+### Adaptive Definition
+The roguelike genre’s ability to adapt has been key to its longevity. Rather than adhering to rigid checklists, modern
+interpretations embrace the genre’s spirit -- tactical pacing, emergent gameplay, and meaningful consequences -- while
+allowing for variation.
+
+This flexibility ensures that roguelikes remain relevant in an ever-changing gaming landscape. Developers are free to
+experiment with new mechanics, aesthetics, or narrative techniques, provided they enhance the genre’s core appeal.
+For example, games like *Loop Hero*, *Rift Wizard (1 and 2)* and *Slay the Spire* reimagine traditional roguelike elements in
+innovative ways, expanding the genre’s possibilities without losing its essence.
+
+<LightboxGallery>
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/loop_hero.jpg"
+        alt="Loop Hero, Four Quarters"
+        description="Screenshot of Loop Hero, a strategic hybrid roguelike where players use cards to shape the world and
+        influence gameplay."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/rift_wizard.jpg"
+        alt="Rift Wizard, Dylan White"
+        description="Screenshot of Rift Wizard, a spell-based tactical roguelike centered on strategic combat and
+        progression."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/rift_wizard_2.jpg"
+        alt="Rift Wizard 2, Dylan White"
+        description="Screenshot of Rift Wizard 2, the sequel to Rift Wizard, offering deep spell-based tactical
+        roguelike gameplay."
+    />
+</LightboxGallery>
+
+## XII. Conclusion
+The "hiive interpretation" framework is not meant to be a rigid set of rules but rather a tool for discussion and
+reflection. Just as the roguelike genre itself evolves, the hiive interpretation should adapt to accommodate new ideas,
+technologies, and player preferences. Its purpose is to preserve the genre’s core identity while encouraging innovation
+and diversity within its boundaries.
+
+### Living Document
+By design, the hiive interpretation is intended to grow and change. Developers, players, and enthusiasts are invited to
+critique, refine, and expand upon its guidelines. This collaborative approach ensures that the framework remains
+relevant, reflecting the evolving landscape of roguelikes while maintaining respect for their roots.
+
+For example, as hybrids and roguelites continue to emerge, this interpretation can help clarify how these variations
+relate to traditional roguelikes, providing useful distinctions without discouraging creative exploration. The goal is
+not to divide but to celebrate the genre’s diversity and richness.
+
+### Call to Action
+If this framework sparks new ideas -- or sparks debate -- it has succeeded in its purpose. The roguelike genre thrives
+on iteration, both in its gameplay and in how it’s understood. Developers are encouraged to experiment, players to
+engage, and communities to discuss and refine what makes roguelikes so compelling.
+
+### Final Pitch
+Roguelikes remain a unique and vibrant part of the gaming world, defined by their tactical depth, emergent storytelling,
+and unpredictable challenges. Roguelites, while distinct, offer complementary experiences that expand the genre’s reach.
+
+The hiive interpretation seeks to preserve the essential spirit of roguelikes while leaving room for growth,
+experimentation, and reinterpretation.
+
+By keeping these principles in mind, the roguelike community can continue to innovate and collaborate, ensuring that the
+genre remains as compelling and dynamic as ever.
+
+Finally, because I like pictures, here's a Rogues Gallery (see what I did there?) of other notable roguelikes.
+<LightboxGallery>
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/rogue.png"
+        alt="Rogue"
+        description="Screenshot of Rogue, the original game that established the genre."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/nethack.png"
+        alt="Nethack"
+        description="Screenshot of NetHack, a highly customizable and enduring roguelike classic."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/moria.png"
+        alt="Moria"
+        description="Screenshot of Moria, a foundational roguelike game known for its extensive dungeon exploration,
+        inspired by Tolkien's works."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/angbad.png"
+        alt="Angband"
+        description="Screenshot of Angband, a deep and complex roguelike inspired by Tolkien's works."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/adom.jpg"
+        alt="Ancient Domains of Mystery, Assemble Entertainment"
+        description="Screenshot of Ancient Domains of Mystery (ADOM), blending roguelike elements with rich storytelling."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/cdda.jpg"
+        alt="Cataclysm: Dark Days Ahead"
+        description="Screenshot of Cataclysm: Dark Days Ahead, a robust open-source roguelike focused on survival."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/zorbus.jpg"
+        alt="Zorbus"
+        description="Screenshot of Zorbus, a modern roguelike with unique mechanics and vibrant visuals."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/cogmind.png"
+        alt="Cogmind, Grid Sage Games"
+        description="Screenshot of Cogmind, a roguelike featuring extensive robot customization and tactical gameplay."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/approaching_infinity.jpg"
+        alt="Approaching Infinity, Bob Saunders"
+        description="Screenshot of Approaching Infinity, a roguelike focused on deep tactics and exploration."
+    />
+</LightboxGallery>
