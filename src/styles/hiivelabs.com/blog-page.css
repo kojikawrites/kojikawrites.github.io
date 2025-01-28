@@ -42,6 +42,12 @@
             @apply text-base;
             @apply py-2 leading-6;
         }
+        article
+        {
+            li > em, p > em {
+                @apply color-text-highlight-color;
+            }
+        }
         h2:has(code:first-of-type) {
             /* different for mobile */
             /*@apply text-base lg:text-lg normal-case my-0;*/
