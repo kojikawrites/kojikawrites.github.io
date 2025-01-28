@@ -1,23 +1,30 @@
 ---
 interface Props {
-
     id?: string;
+    caption?: string;
 }
 
 
 import toSafeId from '../../scripts/toSafeId';
 
-const { id:rawId } = Astro.props;
+const { id:rawId, caption = "Image Gallery" } = Astro.props;
 
 const id = rawId ?? toSafeId(rawId);
-console.warn('id', id);
+const captionId = `caption_${id}`;
+// console.warn('id', id);
 ---
-
-<div id={id} class="lightbox-gallery flex space-x-1 lg:space-x-4">
-    <slot />
+<div class="lg:left-4">
+    <div id={id} class="lightbox-gallery grid w-fit flex-1 place-items-stretch
+                        grid-cols-[repeat(auto-fit,_minmax(25%,_1fr))]
+                        lg:grid-cols-[repeat(auto-fit,_minmax(172px,_1fr))]
+                         space-x-1 lg:space-x-0">
+        <slot />
+    </div>
+    <div id={captionId} class="lightbox-gallery-caption">
+        {caption}
+    </div>
 </div>
-
-<script is:inline define:vars={{id}} data-astro-rerun>
+<script is:inline define:vars={{id, captionId}} data-astro-rerun>
 
     function addImageEventHandler(img, idx) {
         img.addEventListener("click", _ => {
@@ -45,8 +52,44 @@ console.warn('id', id);
                 description: div.getAttribute('data-description') || '',
                 theme: theme
             };
-
         });
     }
     const galleryList = initGallery(id);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const gallery = document.getElementById(id);
+        const caption = document.getElementById(captionId);
+        const images = gallery.querySelectorAll('img'); // Select all images in the gallery
+
+        const updateCaptionSpan = () => {
+            caption.style.maxWidth = `${gallery.clientWidth}px`
+            // console.warn(`setting ${captionId} to  ${caption.style.width}`);
+        };
+
+        // Function to check if all images have loaded
+        const checkAllImagesLoaded = () => {
+            const allLoaded = Array.from(images).every(img => img.complete && img.naturalWidth !== 0);
+            if (allLoaded) {
+                updateCaptionSpan();
+            }
+        };
+
+        // Attach load event listeners to all images
+        images.forEach(img => {
+            if (img.complete) {
+                // If the image is already loaded
+                checkAllImagesLoaded();
+            } else {
+                img.addEventListener('load', checkAllImagesLoaded);
+                img.addEventListener('error', checkAllImagesLoaded); // Handle error cases
+            }
+        });
+
+        // Initial update
+        updateCaptionSpan();
+
+        // Update on window resize
+        window.addEventListener('resize', updateCaptionSpan);
+    });
+
 </script>

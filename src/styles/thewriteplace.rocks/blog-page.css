@@ -42,6 +42,18 @@
             @apply text-base;
             @apply py-2 leading-6;
         }
+        article
+        {
+            li > em, p > em  {
+                @apply color-text-highlight-color;
+            }
+            .highlight-link {
+                @apply color-text-highlight-color;
+            }
+            .steam-link {
+                @apply color-text-highlight-color-alt;
+            }
+        }
         h2:has(code:first-of-type) {
             /* different for mobile */
             /*@apply text-base lg:text-lg normal-case my-0;*/
@@ -101,10 +113,34 @@
             @apply m-4 max-w-[80%] w-fit;
         }
         .lightbox-image {
-            @apply border border-gray-500 ;
+            @apply border border-gray-500 rounded-sm lg:rounded-lg;
         }
+        .lightbox-image-gallery-caption {
+            @apply max-sm:hidden;
+            @apply text-xs color-text-secondary opacity-80;
+            @apply text-nowrap text-left italic;
+            @apply ml-[18px] lg:ml-5;
+            /*@apply relative -top-3 */ /* if caption is below image */
+            @apply relative top-3; /* if caption is above image */
+        }
+
+        .lightbox-caption {
+            @apply text-xs color-text-secondary opacity-80;
+            @apply text-nowrap text-left italic;
+            @apply ml-[18px] lg:ml-5;
+            @apply relative -top-3; /* if caption is below image */
+        }
+
         .lightbox-gallery {
             @apply min-w-[50%];
+            /*@apply bg-red-600;*/
+        }
+        .lightbox-gallery-caption {
+            @apply text-xs lg:text-sm color-text-secondary opacity-70;
+            @apply text-nowrap text-left;
+            @apply ml-4 relative -top-6 left-4
+            /*@apply text-center lg:-left-4;*/
+            /*@apply bg-yellow-400;*/
         }
 
         /* quote blocks */
@@ -114,6 +150,32 @@
             @apply bg-[var(--bg-quote-block)];
             @apply color-text-highlight-color;
         }
+
+        /* checklist css */
+        div.checklist {
+            @apply border-gray-500 border-2;
+            @apply bg-gray-500 bg-opacity-15;
+            @apply px-8 my-4 pb-4;
+            p {
+                @apply font-family-monospace;
+                @apply text-xs lg:text-sm;
+            }
+            ul{
+                @apply text-xs lg:text-sm;
+                @apply font-family-monospace;
+            }
+            h4 {
+                @apply font-family-monospace;
+                @apply color-text-secondary;
+            }
+            li::marker {
+                content: "► ";
+            }
+            li li::marker {
+                content: "☐ ";
+            }
+        }
+
 
 
         /* BEGIN table styles */

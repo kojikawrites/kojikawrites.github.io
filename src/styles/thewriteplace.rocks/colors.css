@@ -3,8 +3,8 @@
         --background-image: url('/src/assets/images/thewriteplace.rocks/kojika-background-light.png');
         --background-body: #ddd;
         --background-feature: #eee;
-        --text-main: #36393b;
-        --text-secondary: #6b6f72;
+        --text-main: #16191b;
+        --text-secondary: #4b4f52;
         --primary-color: #2E8B57; /* Primary Green (SeaGreen) */
         --primary-color-alt: #66CDAA; /* Light Green */
         --green-menu-bar-text: #2E8B57;
@@ -12,6 +12,7 @@
         --secondary-color: #228B22; /* Forest Green */
         --heading-color: #006400; /* Dark Green */
         --text-highlight-color: #001B84;
+        --text-highlight-color-alt: #4a5a23;
         --text-code-color: #001B84;
         --font-family-serif: Merriweather, serif;
         --font-family-sans: 'Fira Sans', sans-serif;
@@ -27,6 +28,7 @@
         --text-main: #fff;
         --text-secondary: #ccc;
         --text-highlight-color: #FFE38D;
+        --text-highlight-color-alt: #d8e5b3;
         --text-code-color: #FFE38D;
         --primary-color: #2ECC57; /* SeaGreen */
         --primary-color-alt: #22CC22; /* Forest Green */

@@ -47,6 +47,10 @@
         color: var(--text-highlight-color);
     }
 
+    .color-text-highlight-color-alt {
+        color: var(--text-highlight-color-alt);
+    }
+
     .color-heading-color {
         color: var(--heading-color);
     }
@@ -124,6 +128,11 @@
         @apply font-bold uppercase leading-tight m-0 mt-5 mb-1;
         @apply color-heading-color;
         @apply font-family-sans;
+    }
+
+    li:has(> h1, > h2, > h3, > h4, > h5, > h6)::marker {
+        @apply color-heading-color text-2xl;
+        content: "▪ "; /* Optional: Custom marker content */
     }
 
     /* specific header overrides */

@@ -3,6 +3,7 @@ interface Props {
     src: string;
     alt: string;
     description: string;
+    caption?: string;
     class?: string;
 }
 
@@ -10,9 +11,20 @@ import {Image} from "astro:assets";
 import getImageMetadata from "../../scripts/getImageMetadata";
 
 
-const { src, alt, description, class:className, ...rest } = Astro.props;
+const { src, alt, description, caption = null, class:className, ...rest } = Astro.props;
+const resolvedCaption = caption;
 ---
-<div class="cursor-pointer" data-src={src} data-alt={alt} data-description={description} data-gallery-entry>
+<div class="cursor-pointer"
+     data-src={src}
+     data-alt={alt}
+     data-description={description}
+     data-caption={caption}
+     data-gallery-entry>
+    { resolvedCaption != null && resolvedCaption.length > 0 &&
+            <div class="lightbox-image-gallery-caption">
+                {resolvedCaption.trim()}
+            </div>
+    }
     <Image src={getImageMetadata(src)}
            alt={alt}
            title={alt}

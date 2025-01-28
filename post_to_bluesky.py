@@ -30,6 +30,9 @@ def process_thumbnail(image_path, testrun = False):
     Returns:
         str: Path to the processed thumbnail image, or the original image if no changes were necessary.
     """
+    if testrun:
+        return image_path
+
     max_size = 975 * 1024  # 975KB
     if not os.path.exists(image_path):
         print(f"Image not found: {image_path}")
@@ -118,11 +121,15 @@ def extract_random_image_path(content_body):
     Returns:
         list: A list of image paths found in the content.
     """
+
     # Regular expression to match the image declaration pattern
     # Matches strings like: "/path/filename.png" | relative_url
-    pattern = r'["\'](/[^"\']+\.png)["\']\s*\|\s*relative_url'
+    # pattern = r'["\'](/[^"\']+\.png)["\']\s*\|\s*relative_url'
+    pattern = r'(?:src\s*=\s*["\']([^"\']+\.(?:png|jpe?g|gif|webp))["\'])|\(([^)]+\.(?:png|jpe?g|gif|webp))\)'
+    matches = re.findall(pattern, content_body, flags=re.IGNORECASE)
+    image_paths = [path for tup in matches for path in tup if path]
+    print(f'extract_metadata_from_file: {image_paths}')
 
-    image_paths = re.findall(pattern, content_body, flags=re.IGNORECASE)
     if len(image_paths) <= 1:
         return None
     image_paths = image_paths[:-1]
@@ -208,7 +215,7 @@ def extract_metadata_from_file(file_path, slug, assets_dir):
 def post_to_bluesky(title, post_date, description, image_path, url, categories, category_aliases, client, testrun=False):
     # Process the thumbnail
     image_path_thumbnail = None
-    if image_path:
+    if image_path and not testrun:
         image_path_thumbnail = process_thumbnail(image_path, testrun)
         image_path = image_path_thumbnail
         # url = url.rsplit('/', 1)[0] + '/' + os.path.basename(image_path)
@@ -245,10 +252,12 @@ def post_to_bluesky(title, post_date, description, image_path, url, categories, 
     tb.text("\n\n(This is an automated post.)")
 
     if testrun:
-        if image_path_thumbnail:
-            os.remove(image_path_thumbnail)
         embed_str = ''# f'{embed}'
         print(f"[Test Run] Would post to Bluesky: {post_date.strftime("%m/%d/%Y")} - {tb.build_text()[:80].replace('\n', ' ')}...") # "\n{embed_str[:80]}...")
+        if image_path:
+            print(f"\twith image {image_path}")
+        else:
+            print("\twith no image")
         return True, None
 
     # Post the message
@@ -412,6 +421,7 @@ def main():
                         if post_id in processed_post_ids:
                             continue
                         processed_post_ids.add(post_id)
+
                         title, categories, description, image_path = extract_metadata_from_file(file_path, slug, args.post_dir)
                         url = construct_post_url(file_date, slug, root_url, categories)
 
