@@ -44,8 +44,14 @@
         }
         article
         {
-            li > em, p > em {
+            li > em, p > em  {
                 @apply color-text-highlight-color;
+            }
+            .highlight-link {
+                @apply color-text-highlight-color;
+            }
+            .steam-link {
+                @apply color-text-highlight-color-alt;
             }
         }
         h2:has(code:first-of-type) {
