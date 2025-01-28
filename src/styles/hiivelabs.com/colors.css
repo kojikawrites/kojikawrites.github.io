@@ -11,6 +11,7 @@
         --secondary-color: #ee4707;
         --heading-color: #dd4700;
         --text-highlight-color: #001B84;
+        --text-highlight-color-alt: #4a5a23;
         --text-code-color: #001B84;
         --font-family-serif: Merriweather, serif;
         --font-family-sans: 'Fira Sans', sans-serif;
@@ -26,6 +27,7 @@
         --text-main: #fff;
         --text-secondary: #ccc;
         --text-highlight-color: #FFE38D;
+        --text-highlight-color-alt: #d8e5b3;
         --text-code-color: #FFE38D;
         --primary-color: #ff6707;
         --primary-color-alt: #ee5700;

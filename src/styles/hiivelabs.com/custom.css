@@ -47,6 +47,10 @@
         color: var(--text-highlight-color);
     }
 
+    .color-text-highlight-color-alt {
+        color: var(--text-highlight-color-alt);
+    }
+
     .color-heading-color {
         color: var(--heading-color);
     }

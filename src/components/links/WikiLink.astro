@@ -1,0 +1,19 @@
+---
+interface Props {
+    wiki_id: string;
+    class?: string;
+}
+
+const {
+    wiki_id,
+    class:className = "",
+    ...rest
+} = Astro.props;
+
+---
+<a href=`https://en.wikipedia.org/wiki/${wiki_id}`
+   class=`highlight-link ${className}`
+   title="Link to Wikipedia page"
+   target="_blank"{...rest}>
+    <slot />
+</a>
