@@ -1,5 +1,5 @@
 ---
-title:  "Musings on the Berlin Interpretation, Part Deux"
+title:  "Musings on the Berlin Interpretation, Part Zwei"
 description: This article introduces “The Hiive Interpretation,” a modern framework for defining roguelikes inspired by the original Berlin Interpretation. It reexamines core principles to accommodate contemporary game designs, distinguishing between traditional roguelikes, roguelites, and hybrids. Through detailed analysis and case studies of notable games, the post aims to foster clearer discussions and understanding within the roguelike community. The goal is to provide a flexible, insightful tool that respects the genre’s legacy while embracing its evolution.
 author: hiive
 categories: gamedev
@@ -12,11 +12,16 @@ led me to reflect further on how I might improve and refine the interpretation t
 advances in the genre since 2008.
 
 ## A Modest Proposal...
-At its core, this post proposes a modernized definition: a roguelike is a *“procedurally generated high-stakes tactical
-adventure simulator”*.
+At its core, this post proposes a modernized definition. The goal is to preserve the genre’s roots while providing a
+framework that accommodates the creativity and diversity seen in today’s designs.
 
-The goal is to preserve the genre’s roots while providing a framework that accommodates the
-creativity and diversity seen in today’s designs. So here, for your edification, delight and/or scorn is...
+If you want a soundbite to take away, then it would be that a roguelike is a:
+
+*- “procedurally generated high-stakes tactical adventure simulator (or some qualified combination thereof)”*.
+
+For a game to considered be a roguelike, it doesn't have to check *all* of those boxes -- just most of them.
+
+So here, for your edification, delight and/or scorn is...
 
 # *"The Hiive Interpretation"*
 
@@ -26,23 +31,55 @@ continue to push the boundaries of design, revisiting the foundational ideas beh
 inspiration for future projects.
 
 ### Context and Purpose
-The Berlin Interpretation, established in 2008, was a milestone for defining roguelikes, but the genre has evolved
-dramatically since then.
-Popular games like <SteamLink steam_id="1145360">Hades</SteamLink>, <SteamLink steam_id="250900">Binding of Isaac</SteamLink>,
-and <SteamLink steam_id="588650">Dead Cells</SteamLink> highlight the growing influence of roguelites, while titles such
+The Berlin Interpretation, established in 2008, was a milestone for codifying key roguelike principles such as
+procedural generation, permadeath, and non-modality (although other attempted definitions of the genre existed long
+before 2008).
+
+Modern roguelike games seem to have evolved and reinterpreted these principles to create distinct emergent styles:
+
+- ***Tactical Depth***: Games like <WikiLink wiki_id="Dungeon_Crawl_Stone_Soup">*Dungeon Crawl Stone Soup (DCSS)*</WikiLink>
+    and <SteamLink steam_id="722730">*Cogmind*</SteamLink> use procedural generation to craft unpredictable,
+    high-stakes scenarios where every decision matters.
+- ***Adventure Simulation***: Titles like <SteamLink steam_id="333640">*Caves of Qud*</SteamLink> and
+    <SteamLink steam_id="975370">*Dwarf Fortress*</SteamLink> prioritize systemic reactivity, letting players shape
+    stories through interactions with a living world.
+
+Note that these styles aren’t mutually exclusive -- for example, <SteamLink steam_id="333640">*Caves of Qud*</SteamLink>
+blends tactical play with procedural storytelling and large scale world simulation.
+
+Often, but not always, these efforts are open source and free with many contributors, but many commercial roguelikes
+exist, written by small teams or solo developers. The nature of roguelike development is -- in many ways -- simpler than
+many other game genres, lowering the barrier for entry for nascent game programmers.
+
+Other modern games like <SteamLink steam_id="1145360">Hades</SteamLink>, <SteamLink steam_id="250900">Binding of Isaac</SteamLink>,
+and <SteamLink steam_id="588650">Dead Cells</SteamLink> exhibit the influence of roguelikes, while titles such
 as <SteamLink steam_id="646570">*Slay the Spire*</SteamLink> and <SteamLink steam_id="2379780">*Balatro*</SteamLink>
-demonstrate new mechanics (in this case, deck building) that blur the lines between categories. These shifts in the
+demonstrate new mechanics (in this case, deck building) that blur the lines between genres. These shifts in the
 gaming landscape call for a more nuanced understanding of what defines a roguelike today.
 
-This article builds on my earlier critique of the Berlin Interpretation, offering a revised framework that reflects
-modern approaches while maintaining the genre’s core identity.
+Note that some consider roguelite to be a derogatory term. I need to make it clear that is not how it's use is intended
+here. In this article, roguelite refers to a game that borrows some design principles from roguelike games (usually
+just the procedural generation or permadeath aspects, and melds them with another game genre). Because of this, roguelites
+are usually referred to by a genre portmanteau, such as "action-roguelite" or "deck-builder-roguelite".
+
+(Of course, they're sometimes also referred to as roguelikes -- but that's another issue, and one that only serves to
+unhelpfully muddy the definitions further. Personally, I refer to games such as
+<SteamLink steam_id="333640">*Caves of Qud*</SteamLink> as "traditional roguelikes", whereas a I would call a game like
+<SteamLink steam_id="677120">*Heroes of Hammerwatch*</SteamLink> a "roguelite" or "action roguelite". Part of
+the purpose of writing this definition is to clear up some of the confusion regarding genre classification of these
+types of game.)
+
+With that in mind, this article builds on my earlier critique of the Berlin Interpretation, offering a revised framework
+that reflects modern approaches while maintaining the genre’s core identity.
 
 ### A Personal Lens
 While this piece represents my own perspective on the topic, I see it as more than just a theoretical exercise.
 
 It’s an opportunity to clarify my own understanding of the genre and the kind of game I want to create. I welcome debate
 and discussion, knowing full well that agreement isn’t guaranteed -- it’s through these conversations that the genre
-continues to evolve. Besides -- pretty much every other developer has an opinion on this, so here's mine...
+continues to evolve.
+
+Besides, pretty much every other *rogueli\*e* developer has an opinion on this, so here's mine...
 
 ### Objective
 Roguelikes are, to me, about thriving in relentless, unpredictable environments that challenge players to adapt and
@@ -50,8 +87,11 @@ overcome. They reward tactical decision-making, resource management, and improvi
 where every choice matters. While roguelites emphasize action and meta-progression, roguelikes remain intimate,
 strategy-driven experiences defined by their emergent stories and systemic complexity.
 
-This exploration reflects the kind of roguelike I want to create: one that balances tradition with innovation, honoring
-the genre’s legacy while embracing modern possibilities.
+To me, roguelikes are defined by how they apply foundational principles, not rigid adherence to tradition. My goal is
+to create a game that embraces systemic complexity and player agency -- leveraging procedural generation for tactical
+depth, meaningful stakes (but not necessarily permadeath), and non-modality for immersion (where appropriate) --
+while welcoming innovations like dynamic storytelling, limited meta-progression and the graphical capabilities of
+modern computers.
 
 ### Legacy and Evolution
 The roguelike genre has its roots in early classics like <WikiLink wiki_id="Rogue_(video_game)">*Rogue*</WikiLink>,
@@ -83,7 +123,7 @@ new mode of tactical play.
 While randomness is essential, it’s most compelling when paired with thoughtful design. Games like
 <SteamLink steam_id="333640">*Caves of Qud*</SteamLink> achieve this by anchoring their worlds with consistent faction
 ecosystems, ensuring that even unpredictable events feel grounded in logic.
-Similarly, <WikiLink wiki_id="Dungeon_Crawl_Stone_Soup">*Dungeon Crawl Stone Soup (DCSS)*</WikiLink> balances procedural
+Similarly, <WikiLink wiki_id="Dungeon_Crawl_Stone_Soup">*DCSS*</WikiLink> balances procedural
 generation with carefully tuned systems, creating a sense of coherence without sacrificing variety.
 
 By blending chaos with structure, roguelikes ensure that every playthrough is dynamic yet strategic, rewarding players
@@ -106,48 +146,47 @@ similar level of tactical control. Both approaches reward foresight and encourag
 positioning, timing, and resource use.
 
 
-#### Exclusion of Pure Reflex Combat
-In contrast to roguelites like <SteamLink steam_id="1145360">Hades</SteamLink>,
+#### Exclusion of Reflex-Driven Gameplay
+In contrast to action roguelites like <SteamLink steam_id="1145360">Hades</SteamLink>,
 <SteamLink steam_id="1649240">*Returnal*</SteamLink>, or the *Risk of Rain* series
 <sup>(<SteamLink steam_id="248820">1</SteamLink>,
     <SteamLink steam_id="632360">2</SteamLink>,
     <SteamLink steam_id="1337520">3</SteamLink>)</sup>, roguelikes avoid reflex-driven gameplay.
-These games emphasize thoughtful choices and improvisation over quick reactions. While roguelites offer fast-paced
-excitement, roguelikes shine by creating tension through strategic pacing, where each move feels intentional and impactful.
-
-By focusing on deliberate decision-making, roguelikes ensure that every action matters, fostering a unique blend of
-challenge and engagement.
+These games emphasize thoughtful choices and improvisation over quick reactions. While action roguelites offer fast-paced
+excitement, roguelikes create engagement through intentional pacing, where each move can be considered carefully.
+There are no real-time limited decisions in a roguelike, other than those you set for yourself.
 
 <LightboxGallery>
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/risk_of_rain.jpg"
         alt="Risk of Rain"
-        description="Screenshot of Risk of Rain, a roguelite that features real-time combat, procedural level
+        description="Screenshot of Risk of Rain, an action roguelite that features real-time gameplay, procedural level
         generation, and unlockable items that persist across runs."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/risk_of_rain_returns.jpg"
         alt="Risk of Rain Returns"
-        description="Screenshot of Risk of Rain Returns, the enhanced edition of Risk of Rain, maintaining roguelite
-        elements like real-time action and persistent unlocks while introducing new content and improvements."
+        description="Screenshot of Risk of Rain Returns, the enhanced edition of Risk of Rain, maintaining action
+        roguelite elements like real-time gameplay and persistent unlocks while introducing new content and improvements."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/risk_of_rain_2.jpg"
         alt="Risk of Rain 2"
-        description="Screenshot of Risk of Rain 2, a sequel to Risk of Rain, expanding the roguelite formula with 3D
+        description="Screenshot of Risk of Rain 2, a sequel to Risk of Rain, expanding the action roguelite formula with 3D
         environments, cooperative multiplayer, and a wider variety of characters and items that carry over between runs."
     />
 </LightboxGallery>
 
 ### Character-Focused Gameplay
 Roguelikes often place a strong emphasis on individual characters or small parties, where every decision feels personal.
-This focus heightens the stakes, as the survival of the player’s character -- or group -- determines the outcome of the run.
+This focus heightens the stakes, as the survival of the player’s character -- or group -- determines the outcome of the
+run.
 
 #### Individual or Small-Party Emphasis
 Focusing on a single character -- or a small, tightly-knit group -- naturally heightens the stakes. Unlike larger-scale
-strategy games like <WikiLink wiki_id="X-COM:_UFO_Defense">*XCOM: UFO Defense*</WikiLink>, roguelikes often revolve around a single
-hero whose survival is paramount. Every injury or setback feels personal, amplifying the tension of every turn or
-encounter.
+strategy games like <WikiLink wiki_id="X-COM:_UFO_Defense">*XCOM: UFO Defense*</WikiLink>, roguelikes often revolve
+around a single hero whose survival is paramount. Every injury or setback feels personal, amplifying the tension of
+every turn or encounter.
 
 As new abilities, equipment, and challenges arise, this narrow focus encourages players to think carefully about how
 best to develop and protect their characters. The result is a dynamic experience where even minor decisions can have
@@ -175,18 +214,7 @@ long-term consequences.
         facility upgrades that emphasize team-wide planning and support, differentiating it from the single-character
         focus typical of traditional roguelikes."
     />
-
 </LightboxGallery>
-#### High-Stakes Development
-Permadeath traditionally accompanies character-focused gameplay, raising the stakes by attaching permanent consequences
-to failure. Losing a character often means starting over, forcing players to approach challenges with caution and intent.
-
-For longer campaigns, however, some games adapt this approach to reduce frustration. Features like segmented runs,
-temporary penalties, or limited revival opportunities can preserve the tension of permadeath while softening its
-harshest effects. While permadeath can be softened in longer campaigns, consequences must remain impactful to preserve
-tension.
-These mechanics reward thoughtful play while accommodating modern preferences for accessibility and
-pacing.
 
 ### Meaningful Consequences
 One of the defining features of roguelikes is the importance of consequences. Whether through the threat of permadeath,
@@ -205,7 +233,8 @@ losing a high-level character can be devastating, but the lessons learned along 
 
 However, in longer campaigns or more expansive roguelikes, permadeath can become overly punishing. Imagine losing dozens
 of hours of progress in a sprawling, story-driven roguelike -- a frustration that could turn away even dedicated
-players. To address this, many modern games implement alternatives such as:
+players. To address this, many modern games implement alternatives (often in addition to an option for permadeath-based
+play for hardcore players) such as:
 
 - **Partial resets**, where players retain some progress or resources between runs.
 - **Intermittent checkpoints**, offering a chance to recover from defeat without completely starting over.
@@ -416,7 +445,8 @@ checkpoints, allowing players to recover from setbacks without starting over com
 tension of permadeath while offering a less punishing experience for those who prefer it.
 
 By softening the consequences without eliminating them, these games maintain the stakes that define roguelikes while
-accommodating a broader range of players.
+accommodating a broader range of players. That's not to say that permadeath can't be there as an option for the hardcore
+player -- it can, and it should, for those who enjoy the extra challenge.
 
 ### Grid-Based Mandate
 Grid-based movement has long been a hallmark of roguelikes, providing clarity and structure to tactical decisions.
@@ -449,10 +479,7 @@ remains effective, modern roguelikes have shown that modal systems can work just
 combat -- but maintain a cohesive and strategic experience.
 
 The key is to preserve the player’s focus on tactical decision-making. If a modal system enhances clarity or adds depth
-to specific mechanics, it can be a worthwhile departure from the traditional roguelike formula. In fact, if I recall
-correctly, one of the unspoken reasons for specifying non-modality was to differentiated roguelikes from JRPGs.
-However, I think that they have sufficient other differentiating factors such that a roguelike with modality is unlikely
-to be confused for a JRPG.
+to specific mechanics, it can be a worthwhile departure from the traditional roguelike formula.
 
 ### Dungeon-Centric Settings
 While many roguelikes take place in sprawling dungeons, the genre’s defining principles -- emergent gameplay, resource
@@ -490,13 +517,14 @@ Examples of traditional roguelikes include:
 These games prioritize risk and adaptability, with the ever-present possibility of catastrophic failure keeping players
 engaged.
 
-
 ### Roguelites
-Roguelites, by contrast, often incorporate elements of reflex-driven gameplay or extensive meta-progression. They appeal
-to a broader audience by softening the genre’s traditional difficulty curve and introducing systems that reward
-incremental progress across runs.
+Roguelites, by contrast, often incorporate elements of reflex-driven gameplay and/or extensive meta-progression.
+They appeal to a broader audience by incorporating aspects of more popular genres and are often more approachable
+than traditional roguelikes for the casual player. Traditional roguelikes are (arguably correctly) viewed by
+non-aficionados as having a very steep learning curve and having ugly, primitive graphics, although this is changing
+with the advent of some of the more modern efforts.
 
-Examples of roguelites include:
+Examples of action roguelites include:
 -	<SteamLink steam_id="1145360">*Hades*</SteamLink>: Combines fast-paced combat with a deep narrative and persistent
         upgrades.
 -	<SteamLink steam_id="588650">*Dead Cells*</SteamLink>: Fuses platforming and hack-and-slash combat with unlockable
@@ -519,7 +547,7 @@ roguelike family, offering something for every type of player.
 
 ## VIII. Traditional Roguelikes
 
-Traditional roguelikes represent the direct descendants of early genre-defining titles like
+Traditional roguelikes represent the modern descendants most influenced by early genre-defining titles such as
 <WikiLink wiki_id="Rogue_(video_game)">*Rogue*</WikiLink> itself, <WikiLink wiki_id="NetHack">*NetHack*</WikiLink>, and
 <SteamLink steam_id="333300">*ADOM*</SteamLink>. These games adhere closely to the foundational concepts that shaped the
 genre’s formative years, emphasizing discrete, turn-based movement, single-character progression, and harsh penalties
@@ -868,7 +896,7 @@ tradition while embracing innovation. This section addresses some of the most co
 
 Roguelikes trace their roots to foundational titles like <WikiLink wiki_id="Rogue_(video_game)">*Rogue*</WikiLink>,
 <WikiLink wiki_id="NetHack">*NetHack*</WikiLink>, <WikiLink wiki_id="Moria_(1983_video_game)">*Moria*</WikiLink> and
-<WikiLink wiki_id="Angband_(video_game)">*Angbad*</WikiLink>.
+<WikiLink wiki_id="Angband_(video_game)">*Angband*</WikiLink>.
 For many in the community, these early games represent the heart of the genre, establishing key principles such as
 procedural generation, high-stakes gameplay, and emergent complexity.
 
@@ -881,8 +909,7 @@ introducing fresh ideas. By preserving the genre’s defining principles, develo
 ### Gatekeeping Guardrails
 
 Defining what constitutes a roguelike has always been a challenge, leading to heated debates within the community.
-Clear distinctions, such as those provided by frameworks like the Berlin Interpretation or this one, help clarify these
-boundaries.
+Clear distinctions (even if they're not fully agreed with) help clarify these boundaries.
 
 For instance, while games like <SteamLink steam_id="1145360">*Hades*</SteamLink> and
 <SteamLink steam_id="588650">*Dead Cells*</SteamLink> share certain elements with roguelikes, they lack the tactical
@@ -954,10 +981,11 @@ sophisticated, allowing for dynamic narratives, evolving environments, and syste
 choices. For example, AI-driven content creation could enable NPCs with unique goals and behaviors, adding depth to
 procedural worlds.
 
-Player preferences have also shifted, with many seeking more approachable or visually engaging experiences. Games like
-<SteamLink steam_id="811320">*Jupiter Hell*</SteamLink> demonstrate that roguelikes can embrace modern visuals while
-retaining their tactical depth. Similarly, hybrids like <SteamLink steam_id="329970">*KeeperRL*</SteamLink> show how
-blending genres can attract new audiences while preserving roguelike principles.
+In order to attract more players to the genre, more approachable and visually engaging experiences go a long way.
+Games like <SteamLink steam_id="811320">*Jupiter Hell*</SteamLink> demonstrate that roguelikes can embrace modern
+visuals while retaining their tactical depth.
+Similarly, hybrids like <SteamLink steam_id="329970">*KeeperRL*</SteamLink> show how blending genres can attract new
+audiences while preserving roguelike principles.
 
 ### Adaptive Definition
 The roguelike genre’s ability to adapt has been key to its longevity. Rather than adhering to rigid checklists, modern
@@ -966,18 +994,12 @@ allowing for variation.
 
 This flexibility ensures that roguelikes remain relevant in an ever-changing gaming landscape. Developers are free to
 experiment with new mechanics, aesthetics, or narrative techniques, provided they enhance the genre’s core appeal.
-For example, games like <SteamLink steam_id="1282730">*Loop Hero*</SteamLink>, *Rift Wizard*
+For example, games like *Rift Wizard*
 (<SteamLink steam_id="1271280">*1*</SteamLink> and <SteamLink steam_id="2058570">*2*</SteamLink>) and
 <SteamLink steam_id="646570">*Slay the Spire*</SteamLink> reimagine traditional roguelike elements in
 innovative ways, expanding the genre’s possibilities without losing its essence.
 
 <LightboxGallery>
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/loop_hero.jpg"
-        alt="Loop Hero, Four Quarters"
-        description="Screenshot of Loop Hero, a strategic hybrid roguelike where players use cards to shape the world and
-        influence gameplay."
-    />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/rift_wizard.jpg"
         alt="Rift Wizard, Dylan White"
@@ -1044,7 +1066,7 @@ roguelikes that I've been known to enjoy playing.
         inspired by Tolkien's works."
     />
     <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/angbad.png"
+        src="/src/assets/images/hiivelabs.com/blog/bi2/angband.png"
         alt="Angband"
         description="Screenshot of Angband, a deep and complex roguelike inspired by Tolkien's works."
     />
