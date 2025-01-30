@@ -5,6 +5,7 @@ interface Props {
     class?: string;
     id?: string;
     description?: string;
+    caption?: string;
 }
 
 import { Image } from 'astro:assets';
@@ -17,6 +18,7 @@ const {
     description = '',
     class:className = '',
     id: rawId = '',
+    caption = null,
     ...next
 } = Astro.props;
 
@@ -24,6 +26,8 @@ const id = (!rawId || rawId.trim().length ==0)
     ? toSafeId(rawId)
     : rawId;
 const imgId = `${id}-img`;
+
+const resolvedCaption = caption ?? alt;
 ---
 
 <style is:inline>
@@ -57,7 +61,11 @@ const imgId = `${id}-img`;
 <div id={id} class="flex cursor-pointer">
     <Image src={getImageMetadata(src)} alt={alt} class=`lightbox-image  ${className}` id={imgId} title={alt} {...next} />
 </div>
-
+{ resolvedCaption != null && resolvedCaption.length > 0 &&
+    <div class="lightbox-caption">
+        {resolvedCaption.trim()}
+    </div>
+}
 <script is:inline define:vars={{id, imgId, alt, description}} data-astro-rerun>
     function addClickListener() {
         const div = document.getElementById(id);
