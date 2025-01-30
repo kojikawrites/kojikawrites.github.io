@@ -113,10 +113,18 @@
             @apply m-4 max-w-[80%] w-fit;
         }
         .lightbox-image {
-            @apply border border-gray-500 ;
+            @apply border border-gray-500 rounded-sm lg:rounded-lg;
         }
         .lightbox-gallery {
             @apply min-w-[50%];
+            /*@apply bg-red-600;*/
+        }
+        .lightbox-gallery-caption {
+            @apply text-xs color-text-secondary opacity-75;
+            @apply text-nowrap text-left;
+            @apply ml-4 relative -top-6 left-4
+            /*@apply text-center lg:-left-4;*/
+            /*@apply bg-yellow-400;*/
         }
 
         /* quote blocks */
