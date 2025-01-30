@@ -115,19 +115,28 @@
         .lightbox-image {
             @apply border border-gray-500 rounded-sm lg:rounded-lg;
         }
+        .lightbox-image-gallery-caption {
+            @apply max-sm:hidden;
+            @apply text-xs color-text-secondary opacity-80;
+            @apply text-nowrap text-left italic;
+            @apply ml-[18px] lg:ml-5;
+            /*@apply relative -top-3 */ /* if caption is below image */
+            @apply relative top-3; /* if caption is above image */
+        }
+
         .lightbox-caption {
             @apply text-xs color-text-secondary opacity-80;
-            @apply text-nowrap text-left;
-            @apply ml-[18px] lg:ml-5 relative -top-3
-            /*@apply text-center lg:-left-4;*/
-            /*@apply bg-yellow-400;*/
+            @apply text-nowrap text-left italic;
+            @apply ml-[18px] lg:ml-5;
+            @apply relative -top-3; /* if caption is below image */
         }
+
         .lightbox-gallery {
             @apply min-w-[50%];
             /*@apply bg-red-600;*/
         }
         .lightbox-gallery-caption {
-            @apply text-xs color-text-secondary opacity-75;
+            @apply text-xs lg:text-sm color-text-secondary opacity-70;
             @apply text-nowrap text-left;
             @apply ml-4 relative -top-6 left-4
             /*@apply text-center lg:-left-4;*/
