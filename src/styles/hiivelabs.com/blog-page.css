@@ -118,7 +118,7 @@
         .lightbox-caption {
             @apply text-xs color-text-secondary opacity-80;
             @apply text-nowrap text-left;
-            @apply ml-4 relative -top-3 left-1
+            @apply ml-[18px] lg:ml-5 relative -top-3
             /*@apply text-center lg:-left-4;*/
             /*@apply bg-yellow-400;*/
         }
