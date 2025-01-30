@@ -115,6 +115,13 @@
         .lightbox-image {
             @apply border border-gray-500 rounded-sm lg:rounded-lg;
         }
+        .lightbox-caption {
+            @apply text-xs color-text-secondary opacity-80;
+            @apply text-nowrap text-left;
+            @apply ml-4 relative -top-3 left-1
+            /*@apply text-center lg:-left-4;*/
+            /*@apply bg-yellow-400;*/
+        }
         .lightbox-gallery {
             @apply min-w-[50%];
             /*@apply bg-red-600;*/
