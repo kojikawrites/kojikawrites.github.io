@@ -1,6 +1,5 @@
 ---
 interface Props {
-
     id?: string;
     caption?: string;
 }
@@ -12,7 +11,7 @@ const { id:rawId, caption = "Image Gallery" } = Astro.props;
 
 const id = rawId ?? toSafeId(rawId);
 const captionId = `caption_${id}`;
-console.warn('id', id);
+// console.warn('id', id);
 ---
 <div class="lg:left-4">
     <div id={id} class="lightbox-gallery grid w-fit flex-1 place-items-stretch
@@ -64,7 +63,7 @@ console.warn('id', id);
 
         const updateCaptionSpan = () => {
             caption.style.maxWidth = `${gallery.clientWidth}px`
-            console.warn(`setting ${captionId} to  ${caption.style.width}`);
+            // console.warn(`setting ${captionId} to  ${caption.style.width}`);
         };
 
         // Function to check if all images have loaded
