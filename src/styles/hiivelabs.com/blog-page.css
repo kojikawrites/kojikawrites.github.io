@@ -53,6 +53,11 @@
             .steam-link {
                 @apply color-text-highlight-color-alt;
             }
+            li:has(> h4)::marker {
+                @apply color-heading-color text-2xl ;
+                content: "▪ ";            /* Optional: Custom marker content */
+
+            }
         }
         h2:has(code:first-of-type) {
             /* different for mobile */
