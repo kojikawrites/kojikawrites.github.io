@@ -151,6 +151,32 @@
             @apply color-text-highlight-color;
         }
 
+        /* checklist css */
+        div.checklist {
+            @apply border-gray-500 border-2;
+            @apply bg-gray-500 bg-opacity-15;
+            @apply px-8 my-4 pb-4;
+            p {
+                @apply font-family-monospace;
+                @apply text-xs lg:text-sm;
+            }
+            ul{
+                @apply text-xs lg:text-sm;
+                @apply font-family-monospace;
+            }
+            h4 {
+                @apply font-family-monospace;
+                @apply color-text-secondary;
+            }
+            li::marker {
+                content: "► ";
+            }
+            li li::marker {
+                content: "☐ ";
+            }
+        }
+
+
 
         /* BEGIN table styles */
 
