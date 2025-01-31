@@ -130,6 +130,11 @@
         @apply font-family-sans;
     }
 
+    li:has(> h1, > h2, > h3, > h4, > h5, > h6)::marker {
+        @apply color-heading-color text-2xl;
+        content: "▪ "; /* Optional: Custom marker content */
+    }
+
     /* specific header overrides */
     h1 {
         @apply text-5xl font-extrabold pt-2;
