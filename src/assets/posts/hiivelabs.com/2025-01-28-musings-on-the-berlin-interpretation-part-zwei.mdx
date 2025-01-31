@@ -62,7 +62,7 @@ gaming landscape call for a more nuanced understanding of what defines a rogueli
 Note that some consider roguelite to be a derogatory term. I need to make it clear that is not how its use is intended
 here. In this article, roguelite refers to a game that borrows some design principles from roguelike games (commonly
 the procedural generation or permadeath aspects), and melds them with another game genre. Because of this, roguelites
-are often referred to by a genre portmanteau, such as "action-roguelite" or "deck-builder-roguelite".
+are often referred to by a genre portmanteau, such as "action-roguelite" or "deck-builder roguelite".
 
 (Of course, they're sometimes also referred to as roguelikes -- but that's another issue, and one that only serves to
 unhelpfully muddy the definitions further. Personally, I refer to games such as
@@ -179,10 +179,11 @@ long-term consequences.
 The gallery below contrasts XCOM’s squad-management interface and mechanics — such as permadeath spread across multiple
 units and a focus on macro-level strategy — with the intimate, singular focus of roguelike design.
 
-<LightboxGallery>
+<LightboxGallery caption="Image Gallery: XCOM: UFO Defense">
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/xcom_original_geoscape.png"
         alt="XCOM: UFO Defense (Geoscape), Microprose"
+        caption="Geoscape"
         description="Screenshot of XCOM's Geoscape, the mission planning and prioritization overview, illustrating the
         game's emphasis on large-scale strategy and team management rather than single-character survival typical of
         roguelikes. (This game was released as UFO: Enemy Unknown in Europe.)"
@@ -190,13 +191,15 @@ units and a focus on macro-level strategy — with the intimate, singular focus 
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/xcom_original.png"
         alt="XCOM: UFO Defense (Tactical Battle View), Microprose"
+        caption="Tactical Battle View"
         description="Screenshot of XCOM's tactical battle view, showcasing turn-based combat with a squad of soldiers,
         highlighting its focus on managing multiple units and strategic planning instead of the single-hero focus found
         in traditional roguelikes."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/xcom_original_base_layout.png"
-        alt="XCOM: UFO Defense (Base Layout ), Microprose"
+        alt="XCOM: UFO Defense (Base Layout), Microprose"
+        caption="Base Layout"
         description="Screenshot of XCOM's base layout, showcasing strategic resource management and
         facility upgrades that emphasize team-wide planning and support, differentiating it from the single-character
         focus typical of traditional roguelikes."
@@ -374,7 +377,7 @@ short-term stakes keeps the player’s attention on the tactical layer, where sp
 determine survival.
 
 ### Balancing Meta-Layers
-While some roguelikes integrate strategic elements, these systems are usually secondary to the immediate challenges of
+While some games integrate strategic elements, these systems are usually secondary to the immediate challenges of
 each run. Games like <SteamLink steam_id="1940340">*Darkest Dungeon II*</SteamLink> explore evolving relationships and
 larger-scale planning, but the roguelike core remains tied to tactical decision-making within individual encounters.
 
@@ -499,10 +502,11 @@ strategies. By restricting meta-systems that carry over between runs, these game
 moment-to-moment decisions and the organic mastery of complex systems.
 
 ### Contemporary Role
-Some modern roguelikes and roguelites have introduced faster pacing, reflex elements, and persistent upgrades, but
-traditional roguelikes continue to thrive in both classic and newly developed titles. They provide a counterbalance to
-more action-focused designs, offering a pure, methodical experience that remains beloved by those who prefer careful
-deliberation, emergent complexity, and the high stakes of permanent failure.
+Some modern roguelikes and roguelites such as <SteamLink steam_id="247080">*Crypt of the Necrodancer*</SteamLink>
+have introduced faster pacing, reflex elements, and persistent upgrades, but traditional roguelikes continue to thrive
+in both classic and newly developed titles.
+They provide a counterbalance to more action-focused designs, offering a pure, methodical experience that remains
+beloved by those who prefer careful deliberation, emergent complexity, and the high stakes of permanent failure.
 
 By acknowledging these roots, developers and players can appreciate the breadth of the genre -- from its hardcore,
 old-school constraints to the varied, innovative forms it takes today.
@@ -533,6 +537,13 @@ The following non-exhaustive list of examples demonstrate these principles:
     With a robust class system, item-based progression, and unpredictable challenges, the game demands adaptability and
     tactical thinking.
 
+- <SteamLink steam_id="1036640">*Zorbus*</SteamLink>: A D&D-inspired traditional roguelike where the player explores a
+    dynamic, sound-rich dungeon to reach the mythical Zorbus, recruiting allies and bypassing hunger/item-ID mechanics.
+    A classless progression system lets players buy skills and talents (spells, combat maneuvers) per level, while
+    creatures with d20-inspired AI loot items, rally allies, and react to light/sound.
+    Themed zones (prisons, throne rooms) comprise a “live” dungeon where factions clash, torches flicker, and speech
+    bubbles telegraph enemy intent.
+
 - <SteamLink steam_id="497800">Golden Krone Hotel</SteamLink>: A distinctive roguelike that innovates with its vampire-themed
     setting and dynamic mechanics.
     The game challenges players to navigate a procedurally generated hotel while managing the unique duality of human and
@@ -551,40 +562,95 @@ The following non-exhaustive list of examples demonstrate these principles:
     replayability.
 
 - <SteamLink steam_id="212680">*FTL: Faster Than Light*</SteamLink>: While not quite a traditional roguelike, this game
-    embraces procedural generation,
-    high-stakes decision-making, and resource management. Its real-time-with-pause mechanics balance tactical and strategic
-    elements, offering a fresh interpretation of roguelike principles within a sci-fi framework. The developers refer to
-    their game as a "roguelike-like", but in my opinion it qualifies as a modern roguelike.
+    embraces procedural generation, high-stakes decision-making, and resource management.
+    Its real-time-with-pause mechanics balance tactical and strategic elements, offering a fresh interpretation of
+    roguelike principles within a sci-fi framework. The developers refer to their game as a "roguelike-like", but in
+    my opinion it qualifies as a modern roguelike.
 
-- <WikiLink wiki_id="Brogue_(video_game)">*Brogue*</WikiLink>: Grid-based movement, turn-based combat, and procedurally
-    generated dungeons.
-    It exemplifies classic roguelike design, with a heavy emphasis
+- <WikiLink wiki_id="Brogue_(video_game)">*Brogue*</WikiLink>: With grid-based movement, turn-based combat, and
+    procedurally generated dungeons, this open source game exemplifies classic roguelike design, with a heavy emphasis
     on environmental interactions, resource management, and emergent gameplay.
     Players must carefully navigate traps, utilize consumables strategically, and adapt to a variety of procedurally
     generated challenges.
 
-- <SteamLink steam_id="975370">*Dwarf Fortress (Adventure Mode)*</SteamLink>: Procedural complexity, emergent
-    storytelling, and high-stakes tactical play. The Adventure Mode
-    offers a highly simulated world where players control a single
-    character navigating dynamic environments. Interactions with factions, creatures, and environments lead to unpredictable,
-    story-driven gameplay.
+- <SteamLink steam_id="975370">*Dwarf Fortress (Adventure Mode)*</SteamLink>: Featuring procedural complexity, emergent
+    storytelling, and high-stakes tactical play, the Adventure Mode offers a highly simulated world where players
+    control a single character navigating dynamic environments. Interactions with factions, creatures, and environments
+    lead to unpredictable, story-driven gameplay.
 
-<LightboxGallery>
+- *Rift Wizard* <SteamLink steam_id="1271280">*1*</SteamLink> and <SteamLink steam_id="2058570">*2*</SteamLink>:
+    A spell-casting roguelike where players craft builds from 100+ spells in short, tactical runs. No meta-progression;
+    victory hinges on perfecting synergies within a single attempt. The sequel increases the complexity, expanding the
+    formula with more dynamic spell-crafting, larger monsters, and a new equipment system. It retains the lack of
+    meta-progression but introduces adaptive challenges requiring reactive build pivots.
+
+- <SteamLink steam_id="2128270">*Path of Achra*</SteamLink>: A dark fantasy roguelike where players craft “broken builds”
+    through synergistic trait and skill combos, automating cascading ability chains in turn-based tactical combat.
+    As a deity-bound pilgrim, the player traverses the landscape of Achra -- stripped of exploration --to reach a
+    mysterious black obelisk, with combat-focused maps serving as backdrops for layered, puzzle-like skirmishes.
+    Experimentation defines progression, as builds trigger dynamic ability sequences under specific conditions,
+    rewarding strategic mastery over randomization.
+
+- <SteamLink steam_id="722730">*Cogmind*</SteamLink>: A salvage-driven customization roguelike where the player assembles
+    robots from scavenged parts—weapons, propulsion systems, stealth modules—to shift between roles like tank-like
+    brawlers, agile fliers, or stealth assassins. Combat employs a time-driven turn system: every action delays
+    subsequent moves, allowing faster robots to act repeatedly before slower opponents. Combat is optional via evasion
+    or hacking, with progression tied to area advancement rather than grinding. Between skirmishes, the player hacks
+    terminals, manipulates enemies, recruits allies, and pieces together lore while adapting to dynamic loadouts
+    (components break and require on-the-fly rebuilding).
+
+- <SteamLink steam_id="2720010">*Rogue Fable IV*</SteamLink>: A tactical roguelike where the player outmaneuvers enemies
+    through terrain, dodging attacks, and chaining abilities (spells, dashes, ranged strikes) in turn-based skirmishes.
+    Combat prioritizes skill as well as stats: with runs winnable via environmental mastery (cover, traps, clouds) and
+    emergent synergies. An optional ranked mode randomizes enemy-boosting modifiers (e.g., buffed factions,
+    new mechanics) for escalating challenges, while the base game balances accessibility with depth.
+
+    [//]: # (# Approaching Infinity)
+
+    [//]: # (# Rogue Fable IV)
+
+    [//]: # (# HyperRogue)
+
+    [//]: # (# Loop Hero)
+
+    [//]: # (# Nethack!)
+
+    [//]: # (# ADOM)
+
+    [//]: # (# ToME)
+
+    [//]: # (# Zorbus)
+
+    [//]: # (# CDDA)
+
+
+
+
+<LightboxGallery caption="Image Gallery: Roguelikes">
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/caves_of_qud.jpg"
         alt="Caves of Qud, Freehold Games"
+        caption="Caves of Qud"
         description="Screenshot of Caves of Qud, a traditional turn-based roguelike, featuring deep character
         customization and a richly procedural science-fantasy world."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/doors_of_trithius.jpg"
         alt="Doors of Trithius, Jake Donkersgoed"
+        caption="Doors of Trithius"
         description="Screenshot of Doors of Trithius, a traditional roguelike featuring procedurally generated dungeons,
             an overworld map, and a faction system that adds depth to exploration and player interactions."
     />
     <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/zorbus.jpg"
+        alt="Zorbus"
+        caption="Zorbus"
+        description="Screenshot of Zorbus, a modern roguelike with unique mechanics and vibrant visuals."
+    />
+    <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/golden_krone_hotel.jpg"
         alt="Golden Krone Hotel, Vulgat"
+        caption="Goldren Krone Hotel"
         description="Screenshot of Golden Krone Hotel, a unique roguelike with a vampire-themed setting, featuring
             dynamic lighting, potions, and tactical decisions that allow players to alternate between
             human and vampire forms."
@@ -592,102 +658,73 @@ The following non-exhaustive list of examples demonstrate these principles:
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/dcss.png"
         alt="Dungeon Crawl Stone Soup (DCSS)"
+        caption="DCSS"
         description="Screenshot of Dungeon Crawl Stone Soup (DCSS), a classic turn-based roguelike known for its
         balanced gameplay, extensive customization options, and community-driven development."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/jupiter_hell.jpg"
         alt="Jupiter Hell, ChaosForge"
+        caption="Jupiter Hell"
         description="Screenshot of Jupiter Hell, a turn-based tactical roguelike that blends roguelike
         procedural generation with tactical combat inspired by Doom."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/ftl.jpg"
         alt="FTL: Faster than Light, Subset Games"
+        caption="FTL"
         description="Screenshot of FTL: Faster than Light, a real-time-with-pause roguelike spaceship simulator,
         emphasizing strategic resource management and procedural challenges."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/brogue.png"
         alt="Brogue"
+        caption="Brogue"
         description="Screenshot of Brogue, a minimalist turn-based roguelike celebrated for its elegant design,
         challenging dungeon exploration, and intuitive mechanics."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/df_adv.jpg"
         alt="Dwarf Fortress (Adventure Mode), Bay 12 Games"
+        caption="Dwarf Fortress"
         description="Screenshot of Dwarf Fortress (Adventure Mode), a turn-based roguelike, renowned for its complex
         simulation, procedural generation, and deep storytelling elements."
     />
-</LightboxGallery>
-<LightboxGallery>
     <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/zorbus.jpg"
-        alt="Zorbus"
-        description="Screenshot of Zorbus, a modern roguelike with unique mechanics and vibrant visuals."
+        src="/src/assets/images/hiivelabs.com/blog/bi2/rift_wizard.jpg"
+        alt="Rift Wizard, Dylan White"
+        caption="Rift Wizard"
+        description="Screenshot of Rift Wizard, a spell-based tactical roguelike centered on strategic combat and
+        progression."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/rift_wizard_2.jpg"
+        alt="Rift Wizard 2, Dylan White"
+        caption="Rift Wizard 2"
+        description="Screenshot of Rift Wizard 2, the sequel to Rift Wizard, offering deep spell-based tactical
+        roguelike gameplay."
+    />
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/path_of_achra.jpg"
+        alt="Path of Achra, Slouching Beast LLC"
+        caption="Path of Achra"
+        description="Screenshot of Cogmind, a roguelike featuring extensive robot customization and tactical gameplay."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/cogmind.png"
         alt="Cogmind, Grid Sage Games"
+        caption="Cogmind"
         description="Screenshot of Cogmind, a roguelike featuring extensive robot customization and tactical gameplay."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/rogue_fable_iv.jpg"
         alt="Rogue Fable IV, PengWing"
+        caption="Rogue Fable IV"
         description="Screenshot of Rogue Fable IV: Modernized traditional roguelike featuring procedurally
             generated dungeons, class-based characters, and tactical turn-based combat. Known for its accessibility
             and streamlined mechanics."
     />
 </LightboxGallery>
-
-<LightboxGallery>
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/terminus_overworld.jpg"
-        alt="Terminus: Zombie Survivors overworld view, Longplay Studios"
-        description="Screenshot of Terminus: Zombie Survivors' overworld graph view, where players navigate a node-based
-            map to choose interconnected destinations, diverging from traditional grid-based roguelike exploration."
-    />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/terminus_grid.jpg"
-        alt="Terminus: Zombie Survivors grid view, Longplay Studios"
-        description="Screenshot of Terminus: Zombie Survivors' grid-based node view, showcasing tactical movement
-            governed by action points, blending roguelike procedural elements with strategic grid mechanics."
-    />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/terminus_battle_screen.png"
-        alt="Terminus: Zombie Survivors modal battle screen, Longplay Studios"
-        description="Screenshot of Terminus: Zombie Survivors' battle screen, illustrating how action points determine
-            player actions and zombie responses."
-    />
-</LightboxGallery>
-
-[//]: # (# Rift Wizard!!!)
-
-[//]: # (# Path of Achra!)
-
-[//]: # (# Terminus: Zombie Survivors!)
-
-[//]: # (# Nethack!)
-
-[//]: # (# ADOM)
-
-[//]: # (# ToME)
-
-[//]: # (# Zorbus)
-
-[//]: # (# CDDA)
-
-[//]: # (# Into The Breach)
-
-[//]: # (# Cogmind)
-
-[//]: # (# Approaching Infinity)
-
-[//]: # (# Rogue Fable IV)
-
-[//]: # (# HyperRogue)
-
-[//]: # (# Loop Hero)
 
 #### The Gray Area: Hybrid Roguelikes
 Hybrid roguelikes blend traditional roguelike mechanics with elements from other genres, creating unique gameplay
@@ -714,48 +751,49 @@ The following non-exhaustive list provides some examples of hybrid roguelikes.
     team of agents, requiring players to manage resources, plan coordinated actions, and make strategic decisions at both
     the mission and operational levels.
 
-<LightboxGallery>
+- <SteamLink steam_id="2692300">*Terminus: Zombie Survivors*</SteamLink>: Turn-based survival roguelike combining action
+    point-driven movement and a modal combat system, where every ability (scavenging, attacking, fortifying) consumes
+    shared AP. The player commands survivors through procedurally generated wastelands, balancing tactical skirmishes
+    against undead hordes with long-term base-building and faction diplomacy, and with victory conditions.
+    Meta-progression consists of as unlocking of new character classes.
+
+[//]: # (# Into The Breach)
+
+<LightboxGallery caption="Image Gallery: Hybrid Roguelikes">
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/df.jpg"
+        alt="Dwarf Fortress (Fortress Mode), Bay 12 Games"
+        caption="Dwarf Fortress"
+        description="Screenshot of Dwarf Fortress (Fortress Mode), a roguelike-ish fantasy simulation, renowned for its
+        complex simulation, procedural generation, and deep storytelling elements."
+    />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/keeperrl.jpg"
         alt="KeeperRL, Electric Succubi"
+        caption="KeeperRL"
         description="Screenshot of KeeperRL, a hybrid roguelike that combines traditional dungeon crawling with
         dungeon-building and management mechanics."
     />
     <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/balatro.jpg"
-        alt="Balatro, LocalThunk"
-        description="Screenshot of Balatro, a hybrid roguelike by LocalThunk that integrates strategic base management
-        and resource allocation with classic roguelike exploration."
+        src="/src/assets/images/hiivelabs.com/blog/bi2/terminus_overworld.jpg"
+        alt="Terminus: Zombie Survivors overworld view, Longplay Studios"
+        caption="T:ZS overworld"
+        description="Screenshot of Terminus: Zombie Survivors' overworld graph view, where players navigate a node-based
+            map to choose interconnected destinations, diverging from traditional grid-based roguelike exploration."
     />
     <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/slay_the_spire.jpg"
-        alt="Slay the Spire, Mega Crit"
-        description="Screenshot of Slay the Spire, a deck-building hybrid roguelike that blends card strategy with
-        procedural dungeon exploration."
+        src="/src/assets/images/hiivelabs.com/blog/bi2/terminus_grid.jpg"
+        alt="Terminus: Zombie Survivors grid view, Longplay Studios"
+        caption="T:ZS tactical view"
+        description="Screenshot of Terminus: Zombie Survivors' grid-based node view, showcasing tactical movement
+            governed by action points, blending roguelike procedural elements with strategic grid mechanics."
     />
     <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/darkest_dungeon_2.jpg"
-        alt="Darkest Dungeon II, Red Hook Studios"
-        description="Screenshot of Darkest Dungeon II, a hybrid roguelike that merges party-based tactics and resource
-         management with a deep narrative."
-    />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/invisible_inc.jpg"
-        alt="Invisible, Inc, Klei Entertainment"
-        description="Screenshot of Invisible, Inc., a tactical stealth hybrid roguelike that combines procedural
-        missions with strategic team management."
-    />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/rift_wizard.jpg"
-        alt="Rift Wizard, Dylan White"
-        description="Screenshot of Rift Wizard, a spell-based tactical roguelike centered on strategic combat and
-        progression."
-    />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/rift_wizard_2.jpg"
-        alt="Rift Wizard 2, Dylan White"
-        description="Screenshot of Rift Wizard 2, the sequel to Rift Wizard, offering deep spell-based tactical
-        roguelike gameplay."
+        src="/src/assets/images/hiivelabs.com/blog/bi2/terminus_battle_screen.png"
+        alt="Terminus: Zombie Survivors modal battle screen, Longplay Studios"
+        caption="T:ZS combat view"
+        description="Screenshot of Terminus: Zombie Survivors' battle screen, illustrating how action points determine
+            player actions and zombie responses."
     />
 </LightboxGallery>
 
@@ -815,59 +853,66 @@ To illustrate this, consider the following sets of non-exhaustive examples:
             rigid story and set pieces. Its use of randomization and high replayability align it with roguelite
             design principles.
 
-<LightboxGallery>
+<LightboxGallery caption="Image Gallery: Action Roguelites">
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/hades.png"
                   alt="Hades, Supergiant Games"
+                  caption="Hades"
                   description="Screenshot of Hades, a roguelite that features real-time combat and persistent
                   progression, distinguishing it from traditional turn-based roguelikes."
     />
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/dead_cells.png"
                   alt="Dead Cells, Motion Twin"
+                  caption="Dead Cells"
                   description="Screenshot of Dead Cells, a roguelite that combines fast-paced, real-time action with
                   procedural level generation and permanent upgrades, setting it apart from classic roguelikes."
     />
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/rogue_legacy.jpg"
                   alt="Rogue Legacy, Cellar Door Games"
+                  caption="Rogue Legacy"
                   description="Screenshot of Rogue Legacy, a roguelite that introduces persistent character upgrades and
                   hereditary traits, diverging from the single-run focus of traditional roguelikes."
     />
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/rogue_legacy_2.jpg"
                   alt="Rogue Legacy 2, Cellar Door Games"
+                  caption="Rogue Legacy 2"
                   description="Screenshot of Rogue Legacy 2, the sequel continues the roguelite
                   tradition with enhanced real-time combat and persistent progression systems."
     />
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/binding_of_isaac.jpg"
                   alt="The Binding of Isaac, Edmund McMillen"
+                  caption="The Binding of Isaac"
                   description="Screenshot of *The Binding of Isaac*: a roguelite where the player battles
                   grotesque foes with randomized item synergies, unlocking persistent upgrades across runs."
     />
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/heroes_of_hammerwatch.jpg"
                   alt="Heroes of Hammerwatch, Crackshell"
+                  caption="Heroes of Hammerwatch"
                   description="Screenshot of *Heroes of Hammerwatch*: a roguelite with procedurally
                   generated dungeons, class-based builds, and cooperative meta-progression tied to town rebuilding."
     />
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/heroes_of_hammerwatch_2.jpg"
                   alt="Heroes of Hammerwatch 2, Crackshell"
+                  caption="Heroes of Hammerwatch 2"
                   description="Screenshot of *Heroes of Hammerwatch 2*: Expands the action-RPG formula with new classes,
                   expanded biomes, and town-driven meta-progression across persistent campaigns."
     />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/spelunky.jpg"
-        alt="Spelunky, Mossmouth"
-        description="Screenshot of Spelunky, a roguelite platformer incorporating roguelike elements like procedural generation
-        and permadeath, but utilizing real-time action gameplay instead of turn-based mechanics."
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/spelunky.jpg"
+                  alt="Spelunky, Mossmouth"
+                  caption="Spelunky"
+                  description="Screenshot of Spelunky, a roguelite platformer incorporating roguelike elements like
+                  procedural generation and permadeath, but utilizing real-time action gameplay instead of turn-based mechanics."
     />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/spelunky_2.jpg"
-        alt="Spelunky 2, Mossmouth"
-        description="Screenshot of Spelunky 2, the roguelite sequel to Spelunky, retaining roguelike features such as procedurally
-        generated levels and permadeath, while continuing with real-time platformer action."
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/spelunky_2.jpg"
+                  alt="Spelunky 2, Mossmouth"
+                  caption="Spelunky 2"
+                  description="Screenshot of Spelunky 2, the roguelite sequel to Spelunky, retaining roguelike features
+                  such as procedurally generated levels and permadeath, while continuing with real-time platformer action."
     />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/diablo.jpg"
-        alt="Diablo, Blizzard North"
-        description="Screenshot of Diablo, an action RPG roguelite with some procedural elements and real-time combat, but
-        lacking core roguelike features like turn-based movement and permadeath."
+    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/diablo.jpg"
+                  alt="Diablo, Blizzard North"
+                  caption="Diablo"
+                  description="Screenshot of Diablo, an action RPG roguelite with some procedural elements and real-time
+                  combat, but lacking core roguelike features like turn-based movement and permadeath."
     />
 </LightboxGallery>
 
@@ -890,27 +935,31 @@ grid-based movement, and yet remain turn-based.
     - <SteamLink steam_id="1296610">*Peglin*</SteamLink>: Turn-based **Physics-based** roguelite in which the player
         ricochets orbs off pachinko boards to defeat foes, with upgrades altering orb physics and board layouts.
 
-<LightboxGallery>
+<LightboxGallery caption="Image Gallery: Non-Grid Based Roguelites">
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/balatro.jpg"
                   alt="Balatro, LocalThunk"
+                  caption="Balatro"
                   description="Screenshot of Balatro: Poker-inspired roguelite where the player builds combos with
                   joker modifiers, balancing risk and reward to defeat escalating challenges."
     />
 
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/slay_the_spire.jpg"
                   alt="Slay the Spire, Mega Crit"
+                  caption="Slay the Spire"
                   description="Screenshot of Slay the Spire: Deck-building roguelite where the player climbs a
                   branching spire via strategic card synergies and path choices."
     />
 
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/dicey_dungeons.jpg"
                   alt="Dicey Dungeons, Terry Cavanagh"
+                  caption="Dicey Dungeons"
                   description="Screenshot of Dicey Dungeons: Dice-placement roguelite where the player manipulates
                   rolls to activate attacks, blending luck with tactical planning."
     />
 
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/peglin.jpg"
                   alt="Peglin, Red Nexus Games"
+                  caption="Peglin"
                   description="Screenshot of Peglin: Physics-based roguelite where the player ricochets orbs off
                   pachinko boards, upgrading trajectories and layouts to defeat enemies."
     />
@@ -927,9 +976,10 @@ grid-based movement, and yet remain turn-based.
         combat, and survival. Players control a group of adventurers on a procedurally generated map, balancing risk
         and reward as they progress.
 
-<LightboxGallery>
+<LightboxGallery caption="Image Gallery: Squad-based Roguelites">
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/dungeon_of_the_endless.jpg"
                   alt="Dungeon of the Endless, Amplitude Studios"
+                  caption="Dungeon of the Endless"
                   description="Screenshot of Dungeon of the Endless: Tower-defense roguelite where the player
                   escorts a power core through procedurally generated floors, balancing squad tactics and turret
                   placement."
@@ -937,6 +987,7 @@ grid-based movement, and yet remain turn-based.
 
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/for_the_king.jpg"
                   alt="For The King, IronOak Games"
+                  caption="For the King"
                   description="Screenshot of For The King: Tabletop-inspired game where the player explores
                   a randomized overworld, tackling turn-based combat and permadeath-driven campaigns."
     />
@@ -952,9 +1003,10 @@ grid-based movement, and yet remain turn-based.
         arrangement of items in your backpack directly affects gameplay. Between runs, players unlock new characters
         and mechanics that expand strategic possibilities and enhance replayability.
 
-<LightboxGallery>
+<LightboxGallery caption="Image Gallery: Advancement Roguelites">
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/warm_snow.jpg"
                   alt="Warm Snow, BadMudStudio"
+                  caption="Warm Snow"
                   description="Screenshot of Warm Snow: Set in a dark fantasy world where
                   players slash through enemies with swords and supernatural abilities. Meta-progression includes
                   unlocking skill trees, weapons, and passive upgrades between runs."
@@ -962,6 +1014,7 @@ grid-based movement, and yet remain turn-based.
 
     <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/bi2/backpack_hero.jpg"
                   alt="Backpack Hero, Jaspel"
+                  caption="Backpack Hero"
                   description="Screenshot of Backpack Hero: Players arrange items in their backpack to optimize combat
                   effectiveness. New characters, items, and mechanics are unlocked across runs to expand strategic
                   options."
@@ -1013,9 +1066,13 @@ diluting its core.
 ### Cultural Conflation
 As “roguelike” has become an industry buzzword, its meaning has often been stretched to encompass games that share only
 superficial similarities with the genre. Marketing labels frequently misrepresent roguelikes, leading to confusion among
-players and developers alike.
+players and developers alike. The term is often misapplied to games with superficial similarities, diluting its meaning.
 
-The term ‘roguelike’ is often misapplied to games with superficial similarities, diluting its meaning. For instance:
+For instance:
+
+
+- <SteamLink steam_id="1794680">*Vampire Survivors*</SteamLink> is frequently mislabeled as a roguelike despite its
+arcade-style action and minimal consequence for failure.
 
 - <SteamLink steam_id="1649240">*Returnal*</SteamLink> markets itself as a roguelike but emphasizes real-time combat and cinematic storytelling over tactical
 decision-making.
@@ -1024,9 +1081,6 @@ decision-making.
 because it features real-time action, incorporates persistent progression and base-building mechanics, focuses on
 managing a cult rather than a single character, and lacks traditional roguelike elements like turn-based,
 grid-based movement and permanent consequences.
-
-- <SteamLink steam_id="1794680">*Vampire Survivors*</SteamLink> is frequently mislabeled as a roguelike despite its
-arcade-style action and minimal consequence for failure.
 
 [//]: # (# Don't Starve)
 
@@ -1039,24 +1093,27 @@ Encouraging thoughtful and accurate labeling -- such as distinguishing between r
 roguelites, and hybrids -- helps preserve the genre’s integrity. By doing so, the community can ensure that roguelikes
 retain their distinct identity while allowing room for diverse interpretations and innovations.
 
-<LightboxGallery>
+<LightboxGallery caption="Image Gallery: These are NOT roguelikes">
+    <GalleryEntry
+        src="/src/assets/images/hiivelabs.com/blog/bi2/vampire_survivors.jpg"
+        alt="Vampire Survivors, poncle"
+        caption="Vampire Survivors"
+        description="Screenshot of Vampire Survivors, an action game with roguelike-inspired wave-based gameplay, but it
+        operates in real-time without turn-based or grid-based systems."
+    />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/returnal.jpg"
         alt="Returnal, Housemarque/Climax Studios"
+        caption="Returnal"
         description="Screenshot of Returnal, a third-person shooter that incorporates roguelike elements like procedural
         generation and permadeath, but lacks traditional turn-based, grid-based mechanics."
     />
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/cult_of_the_lamb.png"
         alt="Cult of the Lamb, Massive Monster"
+        caption="Cult of the Lamb"
         description="Screenshot of Cult of the Lamb, a game that blends roguelike features with real-time action,
         persistent progression, and base-building, deviating from traditional roguelike mechanics."
-    />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/vampire_survivors.jpg"
-        alt="Vampire Survivors, poncle"
-        description="Screenshot of Vampire Survivors, an action game with roguelike-inspired wave-based gameplay, but it
-        operates in real-time without turn-based or grid-based systems."
     />
 </LightboxGallery>
 
@@ -1092,8 +1149,8 @@ For example, games like *Rift Wizard*
 innovative ways, expanding the genre’s possibilities without losing its essence.
 
 ## XI. Conclusion
-The "hiive interpretation" framework is not meant to be a rigid set of rules but rather a tool for discussion and
-reflection. Just as the roguelike genre itself evolves, the hiive interpretation should adapt to accommodate new ideas,
+This framework is not meant to be a rigid set of rules but rather a tool for discussion and reflection.
+Just as the roguelike genre itself evolves, the hiive interpretation should adapt to accommodate new ideas,
 technologies, and player preferences. Its purpose is to preserve the genre’s core identity while encouraging innovation
 and diversity within its boundaries.
 
@@ -1107,9 +1164,9 @@ relate to traditional roguelikes, providing useful distinctions without discoura
 not to divide but to celebrate the genre’s diversity and richness.
 
 ### Call to Action
-If this framework sparks new ideas -- or sparks debate -- it has succeeded in its purpose. The roguelike genre thrives
-on iteration, both in its gameplay and in how it’s understood. Developers are encouraged to experiment, players to
-engage, and communities to discuss and refine what makes roguelikes so compelling.
+If this framework inspires new ideas -- or sparks debate -- then it has succeeded in its purpose. The roguelike genre
+thrives on iteration, both in its gameplay and in how it’s understood. Developers are encouraged to experiment, players
+to engage, and communities to discuss and refine what makes roguelikes so compelling.
 
 ### Final Pitch
 Roguelikes remain a unique and vibrant part of the gaming world, defined by their tactical depth, emergent storytelling,
@@ -1164,29 +1221,7 @@ roguelikes that I've been known to enjoy playing.
         description="Screenshot of Tales of Maj'Eyal (formerly Tales of Middle Earth), a fantasy roguelike known for
         its expansive lore, diverse character classes, and tactical turn-based gameplay."
     />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/zorbus.jpg"
-        alt="Zorbus"
-        description="Screenshot of Zorbus, a modern roguelike with unique mechanics and vibrant visuals."
-    />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/doors_of_trithius.jpg"
-        alt="Doors of Trithius, Jake Donkersgoed"
-        description="Screenshot of Doors of Trithius, a traditional roguelike featuring procedurally generated dungeons,
-            an overworld map, and a faction system that adds depth to exploration and player interactions."
-    />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/golden_krone_hotel.jpg"
-        alt="Golden Krone Hotel, Vulgat"
-        description="Screenshot of Golden Krone Hotel, a unique roguelike with a vampire-themed setting, featuring
-            dynamic lighting, potions, and tactical decisions that allow players to alternate between
-            human and vampire forms."
-    />
-    <GalleryEntry
-        src="/src/assets/images/hiivelabs.com/blog/bi2/cogmind.png"
-        alt="Cogmind, Grid Sage Games"
-        description="Screenshot of Cogmind, a roguelike featuring extensive robot customization and tactical gameplay."
-    />
+
     <GalleryEntry
         src="/src/assets/images/hiivelabs.com/blog/bi2/approaching_infinity.jpg"
         alt="Approaching Infinity, Bob Saunders"
