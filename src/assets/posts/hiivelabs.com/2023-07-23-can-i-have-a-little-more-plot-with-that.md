@@ -4,8 +4,8 @@ description: |
   This inaugural guest post reflects on the evolution of gaming culture and the increasing integration of narrative elements 
   into Roguelike games. It examines the balance between procedural generation and storytelling in game design.
 author: ellafae
-categories: gamedev
-tags: roguelikes musings
+categories: gamedev roguelike
+tags: musings
 #thumbnail: /src/assets/images/hiivelabs.com/blog/game-screenshots/thumbnails/rogue_tn2.jpg
 ---
 

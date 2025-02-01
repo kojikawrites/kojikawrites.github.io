@@ -5,8 +5,8 @@ description: |
   functionality. It serves as a continuation of previous discussions, offering insights into the system’s design and 
   implementation.
 author: hiive
-categories: gamedev
-tags: world-building terrain-generation procedural-generation c-sharp roguelikes
+categories: gamedev roguelike
+tags: world-building terrain-generation procedural-generation c-sharp
 ---
 
 For today's devlog, I'll present a high level overview of the tile map management system, as I glossed over a large 
