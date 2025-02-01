@@ -44,17 +44,33 @@ before 2008).
 
 Modern roguelike games seem to have evolved and reinterpreted these principles to create distinct emergent styles:
 
-- ***Tactical Depth***: Games like <WikiLink wiki_id="Dungeon_Crawl_Stone_Soup">*Dungeon Crawl Stone Soup (DCSS)*</WikiLink>
+- *Tactical Depth*: Games like <WikiLink wiki_id="Dungeon_Crawl_Stone_Soup">*Dungeon Crawl Stone Soup (DCSS)*</WikiLink>
     and <SteamLink steam_id="722730">*Cogmind*</SteamLink> use procedural generation to craft unpredictable,
     high-stakes scenarios where every decision matters.
-- ***Adventure Simulation***: Titles like <SteamLink steam_id="333640">*Caves of Qud*</SteamLink> and
+- *Adventure Simulation*: Titles like <SteamLink steam_id="333640">*Caves of Qud*</SteamLink> and
     <SteamLink steam_id="975370">*Dwarf Fortress*</SteamLink> prioritize systemic reactivity, letting players shape
     stories through interactions with a living world.
 
 These styles aren’t mutually exclusive -- for example, <SteamLink steam_id="333640">*Caves of Qud*</SteamLink>
 blends tactical play with procedural storytelling and large scale world simulation.
 
-Often, but not always, these efforts are open source and free with many contributors, but many commercial roguelikes
+### Tactical vs. Simulationist Philosophies
+Modern roguelikes often prioritize one of two design pillars, though many blend elements of both:
+    - *Tactical Philosophy:* Emphasizes **fast-paced decision-making**, mechanical clarity, and immediate feedback.
+        Games like <WikiLink wiki_id="Dungeon_Crawl_Stone_Soup">*Dungeon Crawl Stone Soup (DCSS)*</WikiLink> and
+        <SteamLink steam_id="811320">*Jupiter Hell*</SteamLink> exemplify this approach, focusing on moment-to-moment
+        positioning and risk-reward optimization. Procedural generation here creates unpredictable *challenges*
+        (e.g., vault layouts, enemy spawns).
+    - *Simulationist Philosophy:* Prioritizes **systemic reactivity**, environmental storytelling, and player
+        imagination. Titles like <SteamLink steam_id="333640">*Caves of Qud*</SteamLink> and
+        <SteamLink steam_id="333300">*Ancient  Domains of Mystery (ADOM)*</SteamLink> use procedural generation to craft
+        *narrative possibilities* (e.g., faction conflicts, procedurally generated lore). These games trade tactical
+        immediacy for emergent storytelling.
+
+Hybrids like <SteamLink steam_id="975370">*Dwarf Fortress (Adventure Mode)*</SteamLink> blend these philosophies but
+often lean toward one pole.
+
+Frequently, but not always, these efforts are open source and free with many contributors, but many commercial roguelikes
 exist, written by small teams or solo developers. The nature of roguelike development is -- in many ways -- simpler than
 many other game genres, lowering the barrier for entry for nascent game programmers.
 
@@ -105,7 +121,7 @@ capabilities of modern computers.
 
 ### Legacy and Evolution
 The roguelike genre has its roots in early classics like <WikiLink wiki_id="Rogue_(video_game)">*Rogue*</WikiLink>,
-<WikiLink wiki_id="NetHack">*NetHack*</WikiLink>, <SteamLink steam_id="333300">*Ancient  Domains of Mystery (ADOM)*</SteamLink>
+<WikiLink wiki_id="NetHack">*NetHack*</WikiLink>, <SteamLink steam_id="333300">*ADOM*</SteamLink>
 and <SteamLink steam_id="259680">*Tales of Maj'Eyal (ToME)*</SteamLink>.
 These games laid the groundwork for procedural exploration, tense encounters, and meaningful consequences, which remain
 essential to the genre’s appeal.
@@ -123,23 +139,23 @@ Though the roguelike genre has broadened substantially, traditional roguelikes h
 few distinctive features. Let's start with what, prior to writing this article, were arguably considered to be the
 minimum set of core qualities for a traditional roguelike:
 
-- #### Procedural Generation
+- ### Procedural Generation
     The vast majority levels and layouts should be randomly generated via procedural generation. Certain fixed features
     are permissible (e.g. towns and shops), but these should be minimized.
-- #### Strict Turn-Based Pacing
+- ### Strict Turn-Based Pacing
     Every action -- movement, attacking, using an item -- advances time by a discrete step. This ensures that players can
     deliberate over each decision without facing the pressure of a ticking clock.
-- #### Singular Character Focus
+- ### Singular Character Focus
      Many traditional roguelikes place the player in control of exactly one primary character. This intense focus on a
     single survivor or hero heightens tension because defeat spells the end of the entire run.
-- #### Grid-Based Navigation
+- ### Grid-Based Navigation
     Movement typically unfolds on a square or (occasionally) a hex grid, simplifying the geometry of combat and exploration.
     This design grants clarity to tactical maneuvers, making precise positioning a critical element of success.
-- #### Minimal to No Meta-Progression
+- ### Minimal to No Meta-Progression
     In traditional roguelikes, each run stands on its own. Death means losing all progress and items. While some titles may
     include optional unlocks or class additions, the emphasis remains on learning the game’s systems rather than accruing
     permanent upgrades across multiple attempts.
-- #### ASCII or Simple Tile Aesthetic
+- ### ASCII or Simple Tile Aesthetic
     Many classic roguelikes rely on ASCII or basic tile sets, though visuals vary widely in modern counterparts. Regardless
     of style, readability and conveying vital information are always prioritized over pretty graphics.
 
@@ -242,8 +258,28 @@ plan each action carefully, and grid-based or alternative layouts keep positioni
 - #### (iii) Tactical Prioritization Over Strategic Planning
     Roguelikes tend to focus on immediate, tactical decisions rather than long-term strategic planning. While some games
     incorporate higher-level systems, the heart of the roguelike experience lies in responding to challenges as they arise.
-    This immediacy creates a sense of urgency and tension that defines the genre, ensuring that moment-to-moment gameplay
-    remains engaging and impactful.
+    This immediacy creates a sense of urgency and tension that defines the genre, ensuring that gameplay remains engaging
+    and impactful.
+
+    Tactical depth in roguelikes emphasizes moment-to-moment positioning, resource allocation, and improvisation within
+    individual encounters (e.g., a single room), whereas strategy games tend to focus on macro-level planning
+    (e.g., base-building and multi-mission campaigns).
+
+    ##### Pacing and Feedback
+    Speed is a hallmark of tactical roguelikes, ensuring players face a steady stream of meaningful decisions with
+    immediate consequences. This design philosophy traces back to <WikiLink wiki_id="Rogue_(video_game)">*Rogue*</WikiLink>
+    itself, whose manual emphasized “fast, tense gameplay” as a core innovation.
+
+    Modern implementations include:
+    - *Streamlined Interfaces*: Features like auto-explore and quick-action hotkeys minimize downtime between decisions.
+    - *Adaptive Animations*: Games like <SteamLink steam_id="811320">*Jupiter Hell*</SteamLink> use snappy animations
+        that don’t slow turn resolution, preserving momentum.
+    - *Concise Scope*: Smaller levels (<SteamLink steam_id="590380">*Into the Breach*</SteamLink>) or action-point
+        systems (<SteamLink steam_id="1534980">*Terminus: Zombie Survivors*</SteamLink>) minimize decision fatigue.
+
+    By contrast, simulationist roguelikes (<SteamLink steam_id="333640">*Caves of Qud*</SteamLink>,
+    <SteamLink steam_id="975370">*Dwarf Fortress*</SteamLink>) often embrace slower pacing to accommodate environmental
+    storytelling and systemic depth.
 
     ##### Immediate Stakes
     Unlike strategy games that emphasize overarching plans and resource management over extended timelines, roguelikes
@@ -432,6 +468,18 @@ need to play the game effectively.
     For example, a game might use color coding or subtle animations to differentiate terrain types or enemy behaviors.
     The focus should remain on ensuring that players can parse the environment at a glance, allowing for quick and informed
     decision-making without sacrificing immersion.
+
+    #### Aesthetic Roles in Tactical vs. Simulationist Design
+    Visuals serve distinct purposes depending on a game’s design priorities:
+    - *Tactical Clarity*: Games like <SteamLink steam_id="811320">*Jupiter Hell*</SteamLink> and
+        <WikiLink wiki_id="Brogue_(video_game)">*Brogue*</WikiLink> use clean, readable visuals (e.g., color-coded enemies,
+        terrain contrast) to optimize decision-making speed. Animations, when present, are minimal to avoid disrupting flow.
+    - *Simulationist Abstraction*: Titles like <SteamLink steam_id="333640">*Caves of Qud*</SteamLink> and
+        <WikiLink wiki_id="NetHack">*NetHack*</WikiLink> leverage minimalist aesthetics (ASCII or simple
+        tiles) to prompt player imagination, akin to reading a book. Abstract graphics allow developers to focus on
+        systemic depth without being constrained by art pipelines.
+    Both approaches prioritize function over form, but their goals differ: tactical clarity enables precision, while
+    abstraction fosters immersion.
 
 - ### Seamless Flow
     Many classic roguelikes integrate exploration and combat seamlessly, with both occurring in the same continuous space.
