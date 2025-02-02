@@ -7,11 +7,15 @@ const styleCss = await getSiteStyle();
 <style is:global set:text={styleCss}/>
 <div id="-css-helper" />
 <script is:inline data-astro-rerun>
-    // force a refresh of the css to pick up dynamic stuff.
-    const element = document.getElementById("-css-helper");
-    element.classList.add("css-dummy");
-    setTimeout(() => {
-        element.classList.remove("css-dummy");
-    }, 0);
+    function refreshCss() {
+        // force a refresh of the css to pick up dynamic stuff.
+        const element = document.getElementById("-css-helper");
+        element.classList.add("css-dummy");
+        setTimeout(() => {
+            element.classList.remove("css-dummy");
+            console.warn('css-dummy refresh')
+        }, 0);
+    }
+    refreshCss();
 </script>
 
