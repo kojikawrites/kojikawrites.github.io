@@ -22,7 +22,7 @@ const keyPrefix = keyType == KeyType.Tags ? "#" : "";
 function getKeyLink(keyType: KeyType, key:string) : string {
     const hash = `#${toSafeKey(key)}`
     const linkPrefix = samePageLink ? '' : `/${keyType}`;
-    return `${linkPrefix}${hash}`
+    return `${linkPrefix}/${hash}`
 }
 
 
