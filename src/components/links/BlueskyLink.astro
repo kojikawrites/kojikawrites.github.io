@@ -1,5 +1,4 @@
 ---
-import ThemedImage from "../ThemedImage.astro";
 interface Props {
     handle: string;
     class?: string;
@@ -15,9 +14,10 @@ const {
 
 ---
 <a href=`https://bsky.app/profile/${handle}`
-   class=`highlight-link ${className}`
+   class=`bluesky-link ${className}`
    title="Open Bluesky Profile..."
-   target="_blank"{...rest}>
+   target="_blank"
+   {...rest}>
     <slot/>
     {showIcon &&
     <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->

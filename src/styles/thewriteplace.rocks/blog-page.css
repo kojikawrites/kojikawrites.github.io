@@ -47,11 +47,20 @@
             li > em, p > em  {
                 @apply color-text-highlight-color;
             }
-            .highlight-link {
+            a, .highlight-link {
+                @apply color-text-highlight-color;
+            }
+            .bluesky-link {
+                @apply color-text-highlight-color-alt-blue;
+            }
+            .github-link {
+                @apply color-text-highlight-color-alt-purple;
+            }
+            .wiki-link {
                 @apply color-text-highlight-color;
             }
             .steam-link {
-                @apply color-text-highlight-color-alt;
+                @apply color-text-highlight-color-alt-green;
             }
         }
         h2:has(code:first-of-type) {

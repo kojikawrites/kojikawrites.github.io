@@ -47,8 +47,14 @@
         color: var(--text-highlight-color);
     }
 
-    .color-text-highlight-color-alt {
-        color: var(--text-highlight-color-alt);
+    .color-text-highlight-color-alt-green {
+        color: var(--text-highlight-color-alt-green);
+    }
+    .color-text-highlight-color-alt-blue {
+        color: var(--text-highlight-color-alt-blue);
+    }
+    .color-text-highlight-color-alt-purple {
+        color: var(--text-highlight-color-alt-purple);
     }
 
     .color-heading-color {

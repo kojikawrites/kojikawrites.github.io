@@ -12,7 +12,9 @@
         --secondary-color: #228B22; /* Forest Green */
         --heading-color: #006400; /* Dark Green */
         --text-highlight-color: #001B84;
-        --text-highlight-color-alt: #4a5a23;
+        --text-highlight-color-alt-green: #4a5a23;
+        --text-highlight-color-alt-blue: #234a5a;
+        --text-highlight-color-alt-purple: #3e235a;
         --text-code-color: #001B84;
         --font-family-serif: Merriweather, serif;
         --font-family-sans: 'Fira Sans', sans-serif;
@@ -28,7 +30,9 @@
         --text-main: #fff;
         --text-secondary: #ccc;
         --text-highlight-color: #FFE38D;
-        --text-highlight-color-alt: #d8e5b3;
+        --text-highlight-color-alt-green: #d8e5b3;
+        --text-highlight-color-alt-blue: #b3d8e5;
+        --text-highlight-color-alt-purple: #eed3e5;
         --text-code-color: #FFE38D;
         --primary-color: #2ECC57; /* SeaGreen */
         --primary-color-alt: #22CC22; /* Forest Green */
