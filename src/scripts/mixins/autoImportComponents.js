@@ -6,6 +6,8 @@ import FormattedDate from "../../components/FormattedDate.astro";
 import HiiveLabs from "../../components/custom/hiivelabs/HiiveLabs.astro";
 import SteamLink from "../../components/links/SteamLink.astro";
 import WikiLink from "../../components/links/WikiLink.astro";
+import BlueskyLink from "../../components/links/BlueskyLink.astro";
+
 export const components = {
     GalleryEntry,
     LightboxGallery,
@@ -14,5 +16,6 @@ export const components = {
     FormattedDate,
     SteamLink,
     WikiLink,
+    BlueskyLink,
     HiiveLabsText: HiiveLabs
 };
