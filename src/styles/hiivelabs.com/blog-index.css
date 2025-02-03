@@ -58,12 +58,12 @@
             }
 
             .post-thumbnail-wrapper {
-                @apply w-fit h-fit; /* max-w-32 max-h-32 */
-                @apply mr-2;
+                @apply box-content w-fit h-fit; /* max-w-32 max-h-32 */
+                @apply mr-4 mt-1;
                 .post-thumbnail {
                     /*@apply max-w-32 max-h-32;*/
-                    @apply h-auto w-auto;
-                    @apply border-2 border-gray-500;
+                    @apply box-content h-auto w-auto;
+                    @apply border-2 border-gray-500 rounded-lg;
                 }
             }
         }
