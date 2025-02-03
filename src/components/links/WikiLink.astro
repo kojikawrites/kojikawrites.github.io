@@ -14,9 +14,10 @@ const {
 
 ---
 <a href=`https://en.wikipedia.org/wiki/${wiki_id}`
-   class=`highlight-link ${className}`
+   class=`wiki-link ${className}`
    title="Open Wikipedia page..."
-   target="_blank"{...rest}>
+   target="_blank"
+   {...rest}>
     <slot />
     {showIcon &&
     <svg width="17" height="17" viewBox="0 0 16 16" version="1.1"
