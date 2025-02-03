@@ -103,7 +103,7 @@
         }
 
         li {
-            @apply mb-2;
+            @apply mb-0.5 lg:mb-2;
             p {
                 @apply py-0.5;
             }
