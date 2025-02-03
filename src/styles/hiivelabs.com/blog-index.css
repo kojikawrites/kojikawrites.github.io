@@ -63,7 +63,7 @@
                 .post-thumbnail {
                     /*@apply max-w-32 max-h-32;*/
                     @apply h-auto w-auto;
-                    @apply border-2 border-gray-500;
+                    @apply border-2 border-gray-500 rounded-lg;
                 }
             }
         }
