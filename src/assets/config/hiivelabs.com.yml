@@ -29,9 +29,11 @@ navbar:
   breadcrumbs:
     include: true
     valid_breadcrumbs:
-      - "[slug]"
+      - href: "[slug]"
+        label: "[slug]"
       #      - "[...page]"
-      - "archive"
+      - href: "archive"
+        label: "archive"
 
 # blog path (can be posts or blog)
 # posts = src/assets/posts/...
