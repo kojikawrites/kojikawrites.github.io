@@ -59,7 +59,7 @@
 
             .post-thumbnail-wrapper {
                 @apply box-content w-fit h-fit; /* max-w-32 max-h-32 */
-                @apply mr-4 mt-1;
+                @apply mr-2; /* mr-4 mt-1 */
                 .post-thumbnail {
                     /*@apply max-w-32 max-h-32;*/
                     @apply box-content h-auto w-auto;
