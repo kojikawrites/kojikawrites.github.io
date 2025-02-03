@@ -31,7 +31,7 @@ function buildCustomCrumbs(
     {
         return crumbs
     }
-    // Helper to find a nav item by code in left/right
+    // Helper to find a nav item by code in left/right/breadcrumbs
     const findNavItem = (href: string): Record<string, string> | undefined => {
         return [...reference.left, ...reference.right].find(item => item.href === href);
     };
@@ -50,11 +50,16 @@ function buildCustomCrumbs(
         }
 
         // Check if key is in valid_breadcrumbs
-        // console.log('matchedDict', matchedDict);
+        const findBreadcrumb = (href: string): Record<string, string> | undefined => {
+            return reference.breadcrumbs.valid_breadcrumbs.find(item => item.href === href);
+        };
 
-        if (reference.breadcrumbs.valid_breadcrumbs.includes(key) && matchedDict[key].length > 0) {
+        const validBreadcrumb = findBreadcrumb(key);
+        console.warn('findBreadcrumb', validBreadcrumb);
+        if (validBreadcrumb?.href && matchedDict[key].length > 0) {
             const rawText = matchedDict[key];
-            const text = (rawText in slugsToTitles) ? slugsToTitles[rawText] : rawText;
+            // console.warn(`Found breadcrumb for ${key}: ${key}, ${rawText}, ${validBreadcrumb.label}`);
+            const text = (rawText in slugsToTitles) ? slugsToTitles[rawText] : validBreadcrumb.label;
             crumbs.push({
                 text: text,
                 href: '#'

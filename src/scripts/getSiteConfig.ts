@@ -32,7 +32,7 @@ export async function getSiteConfig() {
             right: NavbarEntry[];
             breadcrumbs: {
                 include: boolean
-                valid_breadcrumbs: string[];
+                valid_breadcrumbs: NavbarEntry[];
             };
         };
         footer: {
