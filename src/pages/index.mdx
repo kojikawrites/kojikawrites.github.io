@@ -2,17 +2,11 @@
 layout: ../layouts/BaseLayout.astro
 title: Home
 ---
-import SiteLogo from '../components/SiteLogo.astro';
-import HiiveLabs from '../components/custom/hiivelabs/HiiveLabs.astro'
-import {getSiteConfig} from "../scripts/getSiteConfig";
+import MainLogo from '../components/MainLogo.astro';
 
 
 <div class="container">
-    <SiteLogo alt={(await getSiteConfig()).main.logo.alt}
-              dark={(await getSiteConfig()).main.logo.dark}
-              light={(await getSiteConfig()).main.logo.light}
-              id="main-page-logo"
-              class="main-page-logo"/>
+    <MainLogo/>
 
     <p class="text-center lg:text-left">
         My name is K°, and welcome to The Write Place, where I’m on a mission to make sense of this whole writing thing.
