@@ -111,7 +111,9 @@ const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
     const bios = document.querySelectorAll('div.bio'); // Select all bios
 
     bios.forEach(bio => {
-        bio.classList.remove('hidden');
-        console.warn('hidden class removed from bio');
+        if (bio.classList.contains('hidden')) {
+            bio.classList.remove('hidden');
+            console.warn('hidden class removed from bio');
+        }
     });
 </script>
