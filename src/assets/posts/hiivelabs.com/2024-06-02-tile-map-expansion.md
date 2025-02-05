@@ -4,9 +4,14 @@ description: |
   This development log provides an overview of a tile map management system, detailing its architecture and 
   functionality. It serves as a continuation of previous discussions, offering insights into the system’s design and 
   implementation.
+  The post explores how chunk-based procedural generation enables efficient scaling, ensuring large maps can be 
+  dynamically expanded while maintaining performance. It also delves into caching strategies, storage handling, and 
+  dependency resolution, illustrating how layers build upon one another to generate new terrain progressively. The 
+  discussion highlights how these optimizations contribute to a seamless and scalable world-generation framework.
 author: hiive
 categories: gamedev roguelike
 tags: world-building terrain-generation procedural-generation c-sharp
+thumbnail: /src/assets/images/hiivelabs.com/blog/tilemap.png
 ---
 
 For today's devlog, I'll present a high level overview of the tile map management system, as I glossed over a large 
