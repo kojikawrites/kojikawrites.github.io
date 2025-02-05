@@ -1,4 +1,4 @@
-import GalleryEntry from "../../components/gallery/GalleryEntry.astro";
+import GalleryImage from "../../components/gallery/GalleryImage.astro";
 import LightboxGallery from "../../components/gallery/LightboxGallery.astro";
 import LightboxImage from "../../components/gallery/LightboxImage.astro";
 import ContentWarning from "../../components/posts/ContentWarning.astro";
@@ -10,7 +10,7 @@ import BlueskyLink from "../../components/links/BlueskyLink.astro";
 import GithubLink from "../../components/links/GithubLink.astro";
 import EmbeddedYouTube from "../../components/EmbeddedYouTube.astro";
 export const components = {
-    GalleryEntry,
+    GalleryImage,
     LightboxGallery,
     LightboxImage,
     ContentWarning,

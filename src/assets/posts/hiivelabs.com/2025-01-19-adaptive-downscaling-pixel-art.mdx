@@ -247,30 +247,30 @@ The naive downscales lose significant detail, while the adaptive approach retain
 more effectively.
 
 <LightboxGallery caption="Image Gallery: Adaptive Downscale Sequence">
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_orig.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_orig.png"
                   description="The input image"
                   caption="Input Image"
                   alt="Step 0: The input image"/>
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_naive_scale.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_naive_scale.png"
                   description="Naively downscaled original image"
                   caption="Naive Downscale"
                   alt="Step 1: A naively downscaled version of the original image.
                   The loss of detail due to downscaling is evident."/>
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_mcbs.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_mcbs.png"
                   description="Majority color block downscaling of the original image"
                   caption="MCB Downscale"
                   alt="Step 2a: Majority color block downscaling of the original image.
                   Detail is preserved, but some pixel transitions are quite jarring."/>
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_epd.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_epd.png"
                   caption="Edge Downscale"
                   description="Edge preserving downscale of the image from step 2(a)"
                   alt="Step 2b: Edge preserving downscale of the image from step 2(a).
                    Edge detail is preserved. Everything else is left transparent."/>
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_mask.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_mask.png"
                   description="The transparency mask for the downscaled image."
                   caption="Transparency Mask"
                   alt="Step 3: The downscaled image mask"/>
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house_final.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_final.png"
                   caption="Final Output ↓3×"
                   description="This image is the result of the original naive downscaled image
                   overlaid with the results of step 2(b), giving us a nicely downscaled image
@@ -292,13 +292,13 @@ but it already represents a promising first iteration.
 The following gallery compares downscales at 2×, 3×, and 4× using nearest-neighbor, bilinear, and this detail-aware
 adaptive technique. The adaptive version generally preserves shapes and edges more clearly than the others.
 <LightboxGallery caption="Image Gallery: Downscale Examples">
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-nearest-neighbor.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-nearest-neighbor.png"
                   caption="Nearest Neighbor"
                   alt="Nearest Neighbor downscaling examples." />
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-bilinear.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-bilinear.png"
                   caption="Bilinear Sampling"
                   alt="Bilinear downscaling examples." />
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-detail-aware.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-detail-aware.png"
                   caption="Adaptive Detail Aware"
                   alt="Detail aware downscaling examples." />
 </LightboxGallery>
@@ -311,30 +311,30 @@ balancing smooth transitions with recognizable edges. A bonus image shows how go
 you can get while keeping enough visible detail for practical use for this example.
 
 <LightboxGallery caption="Image Gallery: Adaptive Downscale Sequence">
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_orig.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_orig.png"
                   description="The input image."
                   caption="Input Image"
                   alt="Step 0: The input image."/>
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_naive_scale.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_naive_scale.png"
                   description="Naively downscaled original image."
                   caption="Naive Downscale"
                   alt="Step 1: A naively downscaled version of the original image.
                   The loss of detail due to downscaling is evident."/>
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_mcbs.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_mcbs.png"
                   description="Majority color block downscaling of the original image."
                   caption="MCB Downscale"
                   alt="Step 2: Majority color block downscaling of the original image."/>
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_mask.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_mask.png"
                   description="The transparency mask for the downscaled image."
                   caption="Transparency Mask"
                   alt="Step 3: The downscaled image mask."/>
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_final.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_final.png"
                   description="This image is the result of the original naive downscaled image
                   overlaid with the results of step 2, giving us a nicely downscaled image
                   while still preserving most details."
                   caption="Final Output ↓2×"
                   alt="Step 4: The final output image (2× reduction)."/>
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/character_final_x3.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_final_x3.png"
                   caption="Final Output ↓3×"
                   description="Bonus image. This is reduced by a factor 3×, and is about as small
                   as it can get while still retaining enough detail to be usable."
@@ -373,22 +373,22 @@ The following images display, in order, the input 32×32 Yoshi sprite, the 16×1
 the 16×16 bilinear downscaled sprite, and finally the 16×16 adaptive detail downscaled sprite.
 
 <LightboxGallery caption="Image Gallery: Adaptive Downscaling Stress Test">
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_original.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_original.png"
                   caption="32×32 Yoshi"
                   alt="Original 32×32 Yoshi sprite."
     />
 
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_nn.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_nn.png"
                   caption="16×16 Nearest Neighbor"
                   alt="16×16 Nearest Neighbor downscaled Yoshi sprite."
     />
 
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_bilinear.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_bilinear.png"
                   caption="16×16 Bilinear Sample"
                   alt="16×16 bilinear downscaled Yoshi sprite."
     />
 
-    <GalleryEntry src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_adaptive.png"
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_adaptive.png"
                   caption="16×16 Adaptive Sample"
                   alt="16×16 Adaptive detail downscaled Yoshi sprite."
     />
