@@ -1,0 +1,29 @@
+---
+import {YouTube} from "@astro-community/astro-embed-youtube";
+interface Props {
+    youtubeId: string;
+    caption: string;
+}
+
+const {youtubeId, caption} = Astro.props;
+---
+<style>
+
+    @media print {
+        .youtube-link {
+            @apply block;
+        }
+
+        .youtube-embed {
+            @apply hidden;
+        }
+    }
+</style>
+
+<div class="youtube-embed">
+    <YouTube id={youtubeId} class="ml-4 mb-4" />
+    <div class="lightbox-caption">VIDEO: {caption}</div>
+</div>
+<div class="hidden youtube-link">
+    VIDEO: {caption}: <b>https://www.youtube.com/{youtubeId}</b>
+</div>

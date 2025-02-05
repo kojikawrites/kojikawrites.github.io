@@ -10,7 +10,7 @@ interface Props {
 
 import { Image } from 'astro:assets';
 import toSafeId from '../../scripts/toSafeId';
-import getImageMetadata from "../../scripts/getImageMetadata";
+import getMediaMetadata from "../../scripts/getMediaMetadata.ts";
 
 const {
     alt,
@@ -59,7 +59,7 @@ const resolvedCaption = caption ?? alt;
 </style>
 
 <div id={id} class="flex cursor-pointer">
-    <Image src={getImageMetadata(src)} alt={alt} class=`lightbox-image  ${className}` id={imgId} title={alt} {...next} />
+    <Image src={getMediaMetadata(src)} alt={alt} class=`lightbox-image  ${className}` id={imgId} title={alt} {...next} />
 </div>
 { resolvedCaption != null && resolvedCaption.length > 0 &&
     <div class="lightbox-caption">

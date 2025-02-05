@@ -8,7 +8,7 @@ interface Props {
 }
 
 import {Image} from "astro:assets";
-import getImageMetadata from "../../scripts/getImageMetadata";
+import getMediaMetadata from "../../scripts/getMediaMetadata.ts";
 
 
 const { src, alt, description, caption = null, class:className, ...rest } = Astro.props;
@@ -25,7 +25,7 @@ const resolvedCaption = caption;
                 {resolvedCaption.trim()}
             </div>
     }
-    <Image src={getImageMetadata(src)}
+    <Image src={getMediaMetadata(src)}
            alt={alt}
            title={alt}
            class=`lightbox-image ${className}`

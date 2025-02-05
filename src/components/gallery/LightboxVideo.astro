@@ -1,0 +1,153 @@
+---
+interface Props {
+    alt: string;
+    src: string;
+    inlineImgSrc: string;
+    previewImgSrc: string;
+    class?: string;
+    id?: string;
+    description?: string;
+    caption?: string;
+}
+
+import { Image } from 'astro:assets';
+import toSafeId from '../../scripts/toSafeId';
+import getMediaMetadata from "../../scripts/getMediaMetadata.ts";
+
+const {
+    alt,
+    inlineImgSrc,
+    previewImgSrc,
+    src,
+    description = '',
+    class:className = '',
+    id: rawId = '',
+    caption = null,
+    ...next
+} = Astro.props;
+
+const id = (!rawId || rawId.trim().length ==0)
+    ? toSafeId(rawId)
+    : rawId;
+const imgId = `${id}-img`;
+
+const resolvedCaption = caption ? 'VIDEO: ' + caption : '';
+const videoSrc = (await getMediaMetadata(src)).default;
+const previewSrc = (await getMediaMetadata(previewImgSrc)).default.src;
+console.log('videoSrc', videoSrc);
+console.log('previewSrc', previewSrc);
+---
+
+<style is:inline>
+    #spotlight { /* main font styles, background */ }
+    .spl-page { /* current page (toolbar) */ }
+    .spl-fullscreen { /* button fullscreen (toolbar) */ }
+    .spl-autofit { /* button autofit (toolbar) */ }
+    .spl-zoom-out { /* button zoom out (toolbar) */ }
+    .spl-zoom-in { /* button zoom in (toolbar) */ }
+    .spl-theme { /* button theme (toolbar) */ }
+    .spl-play { /* button autoplay (toolbar) */ }
+    .spl-download { /* button download (toolbar) */ }
+    .spl-close { /* button close (toolbar) */ }
+    .spl-prev { /* button page prev */ }
+    .spl-next { /* button page next */ }
+    .spl-spinner { /* preloading spinner */ }
+    .spl-spinner.spin { /* show spinner */ }
+    .spl-spinner.error { /* show loading error */ }
+    .spl-title {
+        /* image title */
+        width: 100%;
+        text-align: center;
+    }
+    .spl-description { /* image description */ }
+    .spl-button { /* button footer */ }
+    .spl-header { /* the header wrapping element */ }
+    .spl-footer { /* the footer wrapping element */ }
+
+    /* To ensure that the video is visible without being overlaid by controls*/
+    .spl-pane {
+        max-height: 85vh !important;
+        position: relative !important;
+        top: 7.5vh !important;
+    }
+
+</style>
+
+<div id={id} class="flex cursor-pointer">
+    <Image src={getMediaMetadata(inlineImgSrc)}
+           alt={alt} class=`lightbox-image ${className}`
+           id={imgId}
+           title={alt}
+           {...next} />
+</div>
+{ resolvedCaption != null && resolvedCaption.length > 0 &&
+<div class="lightbox-caption">
+    {resolvedCaption.trim()}
+</div>
+    }
+<script is:inline define:vars={{id, imgId, resolvedCaption, description, previewSrc, videoSrc}} data-astro-rerun>
+    // alert(previewSrc);
+    function addClickListener() {
+
+        const div = document.getElementById(id);
+        // console.warn('HERE!', videoSrc);
+        if (div.dataset.hasClickHandler === "true") {
+            console.warn('Already has click handler!');
+            return;
+        }
+
+
+        function findVideoAndAddCloseHandler() {
+            // this ugly workaround is required for the weird
+            // full-screen video behavior on iOS.
+            // This function finds the video element, and adds in
+            // a handler to close the gallery when the video exits full screen (closest to close that
+            // is doable).
+            function waitForVideoElement(count) {
+                if (count > 5)
+                {
+                    return null;
+                }
+                const videos = document.getElementsByTagName("video");
+                const videoArray = Array.from(videos);
+                const videoElement = videoArray.find(video => video.src.includes(videoSrc));
+                if (videoElement) {
+                    console.warn('Added webkitendfullscreen handler to video!');
+                    videoElement.addEventListener('webkitendfullscreen', function (e) {
+                        Spotlight.close();
+                    });
+                    return true;
+                }
+                else {
+                    setTimeout(() => waitForVideoElement(count + 1), 100);
+                }
+            }
+            setTimeout(() => {
+                waitForVideoElement(0);
+            }, 100);
+        }
+
+        div.dataset.hasClickHandler = "true";
+        div.addEventListener("click", _ => {
+            const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
+            // alert(videoSrc);
+            Spotlight.show([{
+                media: "video",
+                "src-mp4": videoSrc,
+                poster: previewSrc,
+                title: resolvedCaption,
+                description: description,
+                theme: theme,
+                autoplay: false,
+                muted: true,
+                preload: false,
+                controls: true,
+                inline: false,
+            }], {
+                onshow: findVideoAndAddCloseHandler
+            });
+        });
+
+    }
+    addClickListener();
+</script>

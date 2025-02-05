@@ -6,7 +6,7 @@ interface Props {
 import FormattedDate from "../FormattedDate.astro";
 import { Image } from 'astro:assets';
 import getPostData from "../../scripts/getPostData";
-import getImageMetadata from "../../scripts/getImageMetadata";
+import getMediaMetadata from "../../scripts/getMediaMetadata";
 import {getSiteConfig} from "../../scripts/getSiteConfig";
 import toSafeId from '../../scripts/toSafeId';
 
@@ -40,7 +40,7 @@ const imgId = `${id}-img`;
                 {thumbnailSrc && (
                     <div class="post-thumbnail-wrapper hidden lg:block">
                         <a href={href} class="post-thumbnail-link">
-                            <Image id={imgId} src={getImageMetadata(thumbnailSrc)} alt={title} class="post-thumbnail" />
+                            <Image id={imgId} src={getMediaMetadata(thumbnailSrc)} alt={title} class="post-thumbnail" />
                         </a>
                     </div>
                 )}
