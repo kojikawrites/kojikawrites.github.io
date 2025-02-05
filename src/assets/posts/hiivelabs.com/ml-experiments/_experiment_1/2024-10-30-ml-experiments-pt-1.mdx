@@ -111,7 +111,8 @@ The gridworld for this experiment is a simple 20×20 grid, identical to the imag
 (water), one <span style="color:red">red</span> square (refuge) and a black circle (entity) within the refuge.
 
 <LightboxImage src="/src/assets/images/hiivelabs.com/blog/ml/ex1/gridworld.png"
-               alt="Experiment 1 Gridworld" />
+               alt="Experiment 1 Gridworld"
+               class="max-h-[512px]"/>
 
 For the initial starting conditions, the entity starts out at the refuge with the attributes `100` energy `e`,
 `100` food `f` and `100` water `w`.
@@ -155,6 +156,10 @@ When `e` reaches `0`, the entity dies and the run is over.
 
 Note that these cost and effect values aren't exact, as I did a lot of tweaking during the experiment, and that included the costs and
 effects. However, these values are not far off the eventual final values.
+
+This video shows a visualization of the gridworld in action.
+
+<EmbeddedYouTube youtubeId="ypDRAv9NrBI" caption="Gridworld in action" />
 
 As the entity performs actions, these attributes are increased or decreased depending on the action and its results.
 After each run (i.e. when it dies) the entity is rewarded based on how long it managed to survive. This reward is then
