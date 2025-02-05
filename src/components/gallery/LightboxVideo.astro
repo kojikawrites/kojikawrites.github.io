@@ -2,6 +2,7 @@
 interface Props {
     alt: string;
     src: string;
+    inlineImgSrc: string;
     previewImgSrc: string;
     class?: string;
     id?: string;
@@ -15,6 +16,7 @@ import getMediaMetadata from "../../scripts/getMediaMetadata.ts";
 
 const {
     alt,
+    inlineImgSrc,
     previewImgSrc,
     src,
     description = '',
@@ -31,7 +33,9 @@ const imgId = `${id}-img`;
 
 const resolvedCaption = caption ? 'VIDEO: ' + caption : '';
 const videoSrc = (await getMediaMetadata(src)).default;
+const previewSrc = (await getMediaMetadata(previewImgSrc)).default.src;
 console.log('videoSrc', videoSrc);
+console.log('previewSrc', previewSrc);
 ---
 
 <style is:inline>
@@ -70,7 +74,7 @@ console.log('videoSrc', videoSrc);
 </style>
 
 <div id={id} class="flex cursor-pointer">
-    <Image src={getMediaMetadata(previewImgSrc)}
+    <Image src={getMediaMetadata(inlineImgSrc)}
            alt={alt} class=`lightbox-image ${className}`
            id={imgId}
            title={alt}
@@ -81,29 +85,67 @@ console.log('videoSrc', videoSrc);
     {resolvedCaption.trim()}
 </div>
     }
-<script is:inline define:vars={{id, imgId, resolvedCaption, description, videoSrc}} data-astro-rerun>
+<script is:inline define:vars={{id, imgId, resolvedCaption, description, previewSrc, videoSrc}} data-astro-rerun>
+    // alert(previewSrc);
     function addClickListener() {
 
         const div = document.getElementById(id);
-        // const img = document.getElementById(imgId);
         // console.warn('HERE!', videoSrc);
+        if (div.dataset.hasClickHandler === "true") {
+            console.warn('Already has click handler!');
+            return;
+        }
+
+
+        function findVideoAndAddCloseHandler() {
+            // this ugly workaround is required for the weird
+            // full-screen video behavior on iOS.
+            // This function finds the video element, and adds in
+            // a handler to close the gallery when the video exits full screen (closest to close that
+            // is doable).
+            function waitForVideoElement(count) {
+                if (count > 5)
+                {
+                    return null;
+                }
+                const videos = document.getElementsByTagName("video");
+                const videoArray = Array.from(videos);
+                const videoElement = videoArray.find(video => video.src.includes(videoSrc));
+                if (videoElement) {
+                    console.warn('Added webkitendfullscreen handler to video!');
+                    videoElement.addEventListener('webkitendfullscreen', function (e) {
+                        Spotlight.close();
+                    });
+                    return true;
+                }
+                else {
+                    setTimeout(() => waitForVideoElement(count + 1), 100);
+                }
+            }
+            setTimeout(() => {
+                waitForVideoElement(0);
+            }, 100);
+        }
+
+        div.dataset.hasClickHandler = "true";
         div.addEventListener("click", _ => {
             const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
             // alert(videoSrc);
             Spotlight.show([{
                 media: "video",
                 "src-mp4": videoSrc,
-                // poster: img.src,
+                poster: previewSrc,
                 title: resolvedCaption,
                 description: description,
                 theme: theme,
-                autoplay: true,
+                autoplay: false,
                 muted: true,
-                preload: true,
+                preload: false,
                 controls: true,
-                inline: false
-            }]);
-
+                inline: false,
+            }], {
+                onshow: findVideoAndAddCloseHandler
+            });
         });
 
     }
