@@ -2,6 +2,7 @@
 interface Props {
     alt: string;
     src: string;
+    previewImgSrc: string;
     class?: string;
     id?: string;
     description?: string;
@@ -14,6 +15,7 @@ import getMediaMetadata from "../../scripts/getMediaMetadata.ts";
 
 const {
     alt,
+    previewImgSrc,
     src,
     description = '',
     class:className = '',
@@ -27,7 +29,9 @@ const id = (!rawId || rawId.trim().length ==0)
     : rawId;
 const imgId = `${id}-img`;
 
-const resolvedCaption = caption ?? alt;
+const resolvedCaption = caption ? 'VIDEO: ' + caption : '';
+const videoSrc = (await getMediaMetadata(src)).default;
+console.log('videoSrc', videoSrc);
 ---
 
 <style is:inline>
@@ -56,30 +60,52 @@ const resolvedCaption = caption ?? alt;
     .spl-header { /* the header wrapping element */ }
     .spl-footer { /* the footer wrapping element */ }
 
+    /* To ensure that the video is visible without being overlaid by controls*/
+    .spl-pane {
+        max-height: 85vh !important;
+        position: relative !important;
+        top: 7.5vh !important;
+    }
+
 </style>
 
 <div id={id} class="flex cursor-pointer">
-    <Image src={getMediaMetadata(src)} alt={alt} class=`lightbox-image  ${className}` id={imgId} title={alt} {...next} />
+    <Image src={getMediaMetadata(previewImgSrc)}
+           alt={alt} class=`lightbox-image ${className}`
+           id={imgId}
+           title={alt}
+           {...next} />
 </div>
 { resolvedCaption != null && resolvedCaption.length > 0 &&
-    <div class="lightbox-caption">
-        {resolvedCaption.trim()}
-    </div>
-}
-<script is:inline define:vars={{id, imgId, alt, description}} data-astro-rerun>
+<div class="lightbox-caption">
+    {resolvedCaption.trim()}
+</div>
+    }
+<script is:inline define:vars={{id, imgId, resolvedCaption, description, videoSrc}} data-astro-rerun>
     function addClickListener() {
+
         const div = document.getElementById(id);
-        const img = document.getElementById(imgId);
-        // console.warn(div, img);
+        // const img = document.getElementById(imgId);
+        // console.warn('HERE!', videoSrc);
         div.addEventListener("click", _ => {
             const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
+            // alert(videoSrc);
             Spotlight.show([{
-                src: img.src,
-                title: alt,
+                media: "video",
+                "src-mp4": videoSrc,
+                // poster: img.src,
+                title: resolvedCaption,
                 description: description,
                 theme: theme,
+                autoplay: true,
+                muted: true,
+                preload: true,
+                controls: true,
+                inline: false
             }]);
+
         });
+
     }
     addClickListener();
 </script>
