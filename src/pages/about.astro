@@ -88,13 +88,15 @@ const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
     // this block of script is a workaround for a bizarre Astro quirk/bug that I haven't figured out
     // sometimes the first bio block is set as hidden, so I'm just making sure that any 'hidden' attributes
     // are removed from the relevant block.
-
-    const bios = document.querySelectorAll('div.bio'); // Select all bios
-
-    bios.forEach(bio => {
-        if (bio.classList.contains('hidden')) {
-            bio.classList.remove('hidden');
-            console.warn('hidden class removed from bio');
-        }
-    });
+    function checkHiddenBios() {
+        const bios = document.querySelectorAll('div.bio'); // Select all bios
+        console.warn('bio-refresh');
+        bios.forEach(bio => {
+            if (bio.classList.contains('hidden')) {
+                bio.classList.remove('hidden');
+                console.warn('hidden class removed from bio');
+            }
+        });
+    }
+    checkHiddenBios();
 </script>

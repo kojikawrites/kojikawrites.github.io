@@ -60,10 +60,18 @@
             .post-thumbnail-wrapper {
                 @apply box-content w-fit h-fit max-w-[8vw]; /* max-w-32 max-h-32 */
                 @apply mr-4 mt-1;
+
+                .post-thumbnail-link::before {
+                    @apply hidden;
+                }
+
                 .post-thumbnail {
                     /*@apply max-w-32 max-h-32;*/
-                    @apply box-content h-auto w-auto;
+                    @apply box-content h-auto w-auto py-[0.5px] px-[0.5px];
                     @apply border-2 border-gray-500 rounded-lg;
+                    @apply transition-none;
+                    @apply transition-colors duration-300 ease-linear ;
+                    @apply hover:border-[var(--primary-color)];
                 }
             }
         }
