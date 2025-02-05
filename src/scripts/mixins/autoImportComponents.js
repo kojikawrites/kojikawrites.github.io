@@ -8,7 +8,7 @@ import SteamLink from "../../components/links/SteamLink.astro";
 import WikiLink from "../../components/links/WikiLink.astro";
 import BlueskyLink from "../../components/links/BlueskyLink.astro";
 import GithubLink from "../../components/links/GithubLink.astro";
-
+import EmbeddedYouTube from "../../components/EmbeddedYouTube.astro";
 export const components = {
     GalleryEntry,
     LightboxGallery,
@@ -19,5 +19,6 @@ export const components = {
     WikiLink,
     BlueskyLink,
     GithubLink,
+    EmbeddedYouTube,
     HiiveLabsText: HiiveLabs
 };
