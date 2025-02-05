@@ -43,25 +43,33 @@ const hiddenId = `${contentWarningId}-hidden`;
 
 </div>
 <script type="module" define:vars={{ warningId, hiddenId }}>
-    const toggleDiv = document.getElementById(warningId);
-    const contentDiv = document.getElementById(hiddenId);
 
+    function refreshDivs() {
+        const toggleDiv = document.getElementById(warningId);
+        const contentDiv = document.getElementById(hiddenId);
 
-    // match fill to warning color
-    const warningStyle = window?.getComputedStyle(toggleDiv);
-    if (warningStyle?.color) {
-        toggleDiv.style.fill = warningStyle.color;
-    }
+        if (!toggleDiv || !contentDiv) {
+            console.warn("Can't find toggleDiv or contentDiv");
+            return;
+            }
 
-    toggleDiv.addEventListener('click', function() {
-        const isExpanded = toggleDiv.getAttribute('aria-expanded') === 'true';
-        if (!isExpanded) {
-            contentDiv.classList.remove('hidden');
-            toggleDiv.classList.add('hidden');
-            toggleDiv.setAttribute('aria-expanded', 'true');
-        } else {
-            // contentDiv.classList.add('hidden');
-            toggleDiv.setAttribute('aria-expanded', 'false');
+        // match fill to warning color
+        const warningStyle = window?.getComputedStyle(toggleDiv);
+        if (warningStyle?.color) {
+            toggleDiv.style.fill = warningStyle.color;
+            }
+
+        toggleDiv.addEventListener('click', function() {
+            const isExpanded = toggleDiv.getAttribute('aria-expanded') === 'true';
+            if (!isExpanded) {
+                contentDiv.classList.remove('hidden');
+                toggleDiv.classList.add('hidden');
+                toggleDiv.setAttribute('aria-expanded', 'true');
+                } else {
+                // contentDiv.classList.add('hidden');
+                toggleDiv.setAttribute('aria-expanded', 'false');
+                }
+            });
         }
-    });
+        refreshDivs();
 </script>
