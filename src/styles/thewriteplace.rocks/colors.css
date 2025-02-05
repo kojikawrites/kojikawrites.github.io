@@ -21,6 +21,7 @@
         --font-family-sans-alt: "Roboto", sans-serif;
         --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         --bg-quote-block: #00000020;
+        --hiive-green: #006400; /* Dark Green */
     }
 
     :root.theme-dark {
@@ -28,7 +29,7 @@
         --background-body: #202122;
         --background-feature: #28292A;
         --text-main: #fff;
-        --text-secondary: #ccc;
+        --text-secondary: #bbb;
         --text-highlight-color: #FFE38D;
         --text-highlight-color-alt-green: #d8e5b3;
         --text-highlight-color-alt-blue: #b3d8e5;
@@ -40,5 +41,6 @@
         --secondary-color: #66FF20; /* Medium Aquamarine */
         --heading-color: #00CC00; /* Light Green */
         --bg-quote-block: #CCCCCC20;
+        --hiive-green: #00CC00; /* Light Green */
     }
 }

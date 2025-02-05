@@ -28,6 +28,9 @@
         color: var(--primary-color-alt);
     }
 
+    .color-hiive-green {
+        color: var(--hiive-green);
+    }
     .color-secondary-color {
         color: var(--secondary-color);
     }
