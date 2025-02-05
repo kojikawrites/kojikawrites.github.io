@@ -1,12 +1,10 @@
 ---
 
-import getImageMetadata from "../../scripts/getImageMetadata";
+import getMediaMetadata from "../../scripts/getMediaMetadata";
 import {Image} from "astro:assets";
 
 interface Props {
-    webmSrc?: string;
-    ogvSrc?: string;
-    mp4Src?: string;
+    src?: string;
     previewImgSrc: string;
     alt: string;
     description: string;
@@ -14,9 +12,7 @@ interface Props {
     class?: string;
 }
 
-const { webmSrc,
-        ogvSrc,
-        mp4Src,
+const { src,
         previewImgSrc,
         alt,
         description,
@@ -24,29 +20,28 @@ const { webmSrc,
         class:className, ...rest } = Astro.props;
 
 const resolvedCaption = caption;
-
+console.warn("THIS DOESN'T WORK");
 ---
 <div>
-    <a class="spotlight cursor-pointer"
+    <a class="cursor-pointer"
        data-media="video"
-       data-src-webm={webmSrc}
-       data-src-ogg={ogvSrc}
-       data-src-mp4={mp4Src}
-       data-poster="preview.jpg"
+       data-src-mp4={src}
        data-autoplay="true"
        data-muted="true"
        data-preload="true"
        data-controls="true"
-       data-inline="false">
-        <Image src={getImageMetadata(previewImgSrc)}
+       data-inline="false"
+       data-gallery-entry>
+        {
+            resolvedCaption != null && resolvedCaption.length > 0 &&
+                <div class="lightbox-image-gallery-caption">
+                    {resolvedCaption.trim()}
+                </div>
+        }
+        <Image src={getMediaMetadata(previewImgSrc)}
                alt={alt}
                title={alt}
                class=`lightbox-image ${className}`
                {...rest} />
     </a>
-    { resolvedCaption != null && resolvedCaption.length > 0 &&
-            <div class="lightbox-image-gallery-caption">
-                {resolvedCaption.trim()}
-            </div>
-    }
 </div>
