@@ -1,0 +1,95 @@
+---
+interface Props {
+    href: string;
+    class?: string;
+    showIcon?: boolean;
+}
+
+const {
+    href:faviconHref,
+    class:className = "",
+    showIcon = true,
+    ...rest } = Astro.props;
+
+const faviconDomain = new URL(faviconHref).hostname;
+const faviconUrls = [
+    `https://${faviconDomain}/favicon.ico`,
+    `https://api.faviconkit.com/${faviconDomain}/16`,
+    `https://icons.duckduckgo.com/ip3/${faviconDomain}.ico`,
+    `https://www.google.com/s2/favicons?sz=16&domain=${faviconDomain}`
+];
+
+import toSafeId from "../../scripts/toSafeId.ts";
+import SvgLinkIcon from '../../assets/images/shared/external-link.svg'
+
+const faviconImgId = toSafeId('link-favicon-img');
+const placeholderId = toSafeId("svg-placeholder");
+
+console.log('faviconUrls', faviconUrls); // DO NOT REMOVE!
+console.log('faviconDomain', faviconDomain);
+
+---
+
+<a href={faviconHref}
+   class=`highlight-link ${className}`
+   target="_blank"
+   rel="noopener nofollow noreferrer"
+   {...rest}>
+    <slot/>
+    {showIcon &&
+        <img id={faviconImgId} src="" alt={faviconHref} width="16" height="16" class="w-4 h-4 inline relative -top-0.5" />
+    }
+    <span id={placeholderId} class="hidden" />
+</a>
+
+<script is:inline define:vars={{showIcon, faviconImgId, SvgLinkIcon, faviconHref, faviconDomain, faviconUrls, placeholderId}} data-astro-rerun>
+    function setFaviconImg() {
+        const img = document.getElementById(faviconImgId);
+        function tryNext(index) {
+            if (index >= faviconUrls.length) {
+                // No more fallbacks available
+                console.warn(`favicon (${faviconHref}) FAILED!`)
+                img.classList.remove('inline');
+                img.classList.add('hidden');
+
+                return;
+            }
+
+            const testImage = new Image();
+            testImage.src = faviconUrls[index];
+            console.warn(`Trying favicon (${faviconUrls[index]})`);
+            testImage.onload = () => {
+                // Use this favicon if it loads
+                console.warn(`Using favicon (${faviconUrls[index]})`);
+                img.src = faviconUrls[index];
+
+            }
+            testImage.onerror = () => {
+                // Try next option on error
+                tryNext(index + 1);
+            }
+        }
+
+        tryNext(0); // Start trying from the first favicon option
+    }
+    if (showIcon) {
+        console.warn(`Setting favicon (${faviconHref})`);
+        setFaviconImg();
+    }
+
+    function addExternalLinkIcon() {
+        import("/scripts/createSvgExternalLinkIcon.js")
+            .then(({createSvgExternalLinkIcon}) => {
+                async function addSvgExternalLinkIcon() {
+                    const span = document.getElementById(placeholderId);
+                    const svgElement = await createSvgExternalLinkIcon(SvgLinkIcon);
+                    if (span) {
+                        span.replaceWith(svgElement);
+                    }
+                }
+
+                addSvgExternalLinkIcon();
+            });
+    }
+    addExternalLinkIcon();
+</script>

@@ -4,7 +4,6 @@ interface Props {
     class?: string;
     showIcon?: boolean;
 }
-
 const {
     steam_id,
     class:className = "",
@@ -12,12 +11,17 @@ const {
     ...rest
 } = Astro.props;
 
+import toSafeId from "../../scripts/toSafeId.ts";
+import SvgLinkIcon from '../../assets/images/shared/external-link.svg'
+
+const placeholderId = toSafeId("svg-placeholder");
 ---
 
 <a href=`https://store.steampowered.com/app/${steam_id}`
    class=`steam-link ${className}`
    title="Open Steam page..."
    target="_blank"
+   rel="noopener nofollow noreferrer"
    {...rest}>
     <slot />
     {showIcon &&
@@ -26,4 +30,23 @@ const {
         <path d="M4.868 12.683a1.715 1.715 0 0 0 1.318-3.165 1.7 1.7 0 0 0-1.263-.02l1.023.424a1.261 1.261 0 1 1-.97 2.33l-.99-.41a1.7 1.7 0 0 0 .882.84Zm3.726-6.687a2.03 2.03 0 0 0 2.027 2.029 2.03 2.03 0 0 0 2.027-2.029 2.03 2.03 0 0 0-2.027-2.027 2.03 2.03 0 0 0-2.027 2.027m2.03-1.527a1.524 1.524 0 1 1-.002 3.048 1.524 1.524 0 0 1 .002-3.048"/>
     </svg>
     }
+    <span id={placeholderId} class="hidden" />
 </a>
+
+<script is:inline define:vars={{placeholderId, SvgLinkIcon}} data-astro-rerun>
+    function addExternalLinkIcon() {
+        import("/scripts/createSvgExternalLinkIcon.js")
+            .then(({createSvgExternalLinkIcon}) => {
+                async function addSvgExternalLinkIcon() {
+                    const span = document.getElementById(placeholderId);
+                    const svgElement = await createSvgExternalLinkIcon(SvgLinkIcon);
+                    if (span) {
+                        span.replaceWith(svgElement);
+                    }
+                }
+
+                addSvgExternalLinkIcon();
+            });
+    }
+    addExternalLinkIcon();
+</script>

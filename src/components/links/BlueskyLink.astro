@@ -12,11 +12,16 @@ const {
     ...rest
 } = Astro.props;
 
+import toSafeId from "../../scripts/toSafeId.ts";
+import SvgLinkIcon from '../../assets/images/shared/external-link.svg'
+
+const placeholderId = toSafeId("svg-placeholder");
 ---
 <a href=`https://bsky.app/profile/${handle}`
    class=`bluesky-link ${className}`
    title="Open Bluesky Profile..."
    target="_blank"
+   rel="noopener nofollow noreferrer"
    {...rest}>
     <slot/>
     {showIcon &&
@@ -30,5 +35,24 @@ const {
                         6.7 .9 10 1.3c64.1 7.1 133.6-15.1 153.2-80.7C566.9 194 576 75 576
                         58.4s-3.3-44.7-21.6-52.9c-15.8-7.1-40-14.9-103.2 29.8C385.1 81.9 314.1 176.4 288 227.1z"/>
     </svg>
+    <span id={placeholderId} class="hidden" />
     }
 </a>
+
+<script is:inline define:vars={{placeholderId, SvgLinkIcon}} data-astro-rerun>
+    function addExternalLinkIcon() {
+        import("/scripts/createSvgExternalLinkIcon.js")
+            .then(({createSvgExternalLinkIcon}) => {
+                async function addSvgExternalLinkIcon() {
+                    const span = document.getElementById(placeholderId);
+                    const svgElement = await createSvgExternalLinkIcon(SvgLinkIcon);
+                    if (span) {
+                        span.replaceWith(svgElement);
+                    }
+                }
+
+                addSvgExternalLinkIcon();
+            });
+    }
+    addExternalLinkIcon();
+</script>

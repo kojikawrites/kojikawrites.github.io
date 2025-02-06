@@ -12,11 +12,17 @@ const {
     ...rest
 } = Astro.props;
 
+import toSafeId from "../../scripts/toSafeId.ts";
+import SvgLinkIcon from '../../assets/images/shared/external-link.svg'
+
+const placeholderId = toSafeId("svg-placeholder");
+
 ---
 <a href=`https://en.wikipedia.org/wiki/${wiki_id}`
    class=`wiki-link ${className}`
    title="Open Wikipedia page..."
    target="_blank"
+   rel="noopener nofollow noreferrer"
    {...rest}>
     <slot />
     {showIcon &&
@@ -48,4 +54,23 @@ const {
         </defs>
     </svg>
     }
+    <span id={placeholderId} class="hidden" />
 </a>
+
+<script is:inline define:vars={{placeholderId, SvgLinkIcon}} data-astro-rerun>
+    function addExternalLinkIcon() {
+        import("/scripts/createSvgExternalLinkIcon.js")
+            .then(({createSvgExternalLinkIcon}) => {
+                async function addSvgExternalLinkIcon() {
+                    const span = document.getElementById(placeholderId);
+                    const svgElement = await createSvgExternalLinkIcon(SvgLinkIcon);
+                    if (span) {
+                        span.replaceWith(svgElement);
+                    }
+                }
+
+                addSvgExternalLinkIcon();
+            });
+    }
+    addExternalLinkIcon();
+</script>
