@@ -19,14 +19,16 @@ const { title, description, permalink, current } = Astro.props;
   <BaseHead title={title} description={description} permalink={permalink} />
 </head>
 <body lang="en-us">
-  <div class="layout min-h-full">
-    <Header current={current} />
-    <main>
+<div class="layout min-h-full">
+  <Header current={current} />
+  <main>
+    <div class="container mx-auto">
       <slot />
-    </main>
+    </div>
+  </main>
 
-    <Footer />
-  </div>
+  <Footer />
+</div>
 </body>
 </html>
 
@@ -34,7 +36,6 @@ const { title, description, permalink, current } = Astro.props;
   .layout {
     display: flex;
     flex-direction: column;
-    min-height: 100%;
     min-height: 100vh;
   }
 

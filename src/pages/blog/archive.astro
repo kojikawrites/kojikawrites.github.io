@@ -16,7 +16,7 @@ const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
 ---
 
 <BaseLayout title={title} description={description} permalink={permalink} current="/blog">
-  <div class="container post-list">
+  <div class="post-list">
     <h1>Post Archive</h1>
     <PagePostCount postCount={allPosts.length} class="post-count" />
     <ul>
