@@ -35,11 +35,9 @@ const { title, description} = post.frontmatter;
 
 <BaseLayout title={title} description={description} permalink={permalink} current="/blog">
   <div class="post-content">
-    <div class="container">
       <PostHeader post={post}/>
       <PostContent post={post}/>
       <PostFooter post={post}/>
-    </div>
   </div>
 </BaseLayout>
 
