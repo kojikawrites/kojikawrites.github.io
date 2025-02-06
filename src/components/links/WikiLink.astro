@@ -1,4 +1,5 @@
 ---
+import BaseIconLink from "./_BaseIconLink.astro";
 interface Props {
     wiki_id: string;
     class?: string;
@@ -12,15 +13,19 @@ const {
     ...rest
 } = Astro.props;
 
+import toSafeId from "../../scripts/toSafeId.ts";
+
 ---
-<a href=`https://en.wikipedia.org/wiki/${wiki_id}`
-   class=`wiki-link ${className}`
-   title="Open Wikipedia page..."
-   target="_blank"
-   {...rest}>
-    <slot />
-    {showIcon &&
-    <svg width="17" height="17" viewBox="0 0 16 16" version="1.1"
+
+<BaseIconLink href=`https://en.wikipedia.org/wiki/${wiki_id}`
+              class=`wiki-link ${className}`
+              title="Open Wikipedia page..."
+              showIcon={showIcon}
+              {...rest}>
+
+    <slot slot="link-content"/>
+
+    <svg slot="link-icon" width="17" height="17" viewBox="0 0 16 16" version="1.1"
          class="inline relative -top-0.5"
          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-miterlimit:10;">
             <g transform="matrix(1,0,0,1,0.477037,1.27704)">
@@ -41,11 +46,10 @@ const {
                     </g>
                 </g>
             </g>
-            <defs>
+        <defs>
             <radialGradient id="_Radial1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(40.9605,0,0,40.9605,24.4457,35.8782)">
                 <stop offset="0" style="stop-color:var(--background-feature);stop-opacity:1"/>
                 <stop offset="1" style="stop-color:var(--background-body);stop-opacity:1"/></radialGradient>
         </defs>
     </svg>
-    }
-</a>
+</BaseIconLink>
