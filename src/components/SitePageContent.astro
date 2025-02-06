@@ -1,0 +1,29 @@
+---
+interface Props {
+    file: string;
+    current?: string;
+}
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {buildPermalink} from "../scripts/urlUtils";
+
+import { getAstroFile } from "../scripts/getAstroFile";
+
+const {file, current} = Astro.props;
+const AstroContent = (await getAstroFile(file));
+
+const currentLink = current
+    ? current.startsWith('/')
+        ? current
+        : `/${current}`
+    : '';
+
+// console.log(AstroContent);
+const title = AstroContent.title;
+const description = AstroContent.description;
+const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
+---
+
+<BaseLayout title={title} description={description} permalink={permalink} current={currentLink} >
+    <AstroContent.Content />
+</BaseLayout>
