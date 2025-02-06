@@ -7,7 +7,6 @@ export function getSiteCode(): string {
 }
 
 
-
 export async function getSiteConfig() {
     const site = getSiteCode();
     interface ThemedImage {

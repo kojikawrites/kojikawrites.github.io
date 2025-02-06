@@ -1,0 +1,98 @@
+---
+import Biography from 'src/components/about/Biography.astro'
+import Thanks from 'src/components/about/Thanks.astro';
+
+export const frontmatter = {
+    title: 'About',
+    description: 'About thewriteplace.rocks'
+};
+
+---
+<div class="about">
+    <br/>
+    <Biography id="kojika"
+               alt="kojika"
+               class="bio"
+               src="/src/assets/images/thewriteplace.rocks/about/kojika.png">
+        <h2>Kojika</h2>
+        <p>
+            Kojika is an aspiring writer and game designer with a passion for creating inclusive and accessible
+            experiences.
+        </p>
+        <p>
+            Her keen interest in accessibility drives her to develop games and stories that are enjoyable and engaging
+            for all audiences, regardless of their abilities. She continually seeks to broaden her knowledge and skills
+            in the industry, staying updated on the latest accessibility practices and innovations.
+            Being that she is both blind and hard of hearing, Kojika's dedication to inclusivity not only enhances her
+            creative projects but also contributes to making the world of gaming and literature more welcoming and
+            accommodating for everyone.
+        </p>
+        <p>
+            Through her work, Kojika is on a journey to make storytelling and game design more inclusive for all.
+        </p>
+        <p>
+            Kojika is an obligate homebody who prefers spending time with her husband, her kids and their four cats.
+        </p>
+        <p>
+            Her favorite books include Stephen King's Needful Things and Mark Tufo's Zombie Fallout and Indian Hill
+            series. Her favorite television shows include The Walking Dead, Game of Thrones, GRIMM, and The 100.
+            Her favorite films inculde Battle Royale, Oldboy, Sympathy for Mr. Vengence, A Tale of Two Sisters and the
+            Death Note series.
+        </p>
+        <p>
+            Kojika is currently working on a children's book, a series of Middle Grade history books for Scholastic
+            and multiple mixed genre manuscripts. She hopes to publish something by Q3 of 2025.
+        </p>
+    </Biography>
+
+    <div class="special-thanks">
+        <h2>Special Thanks</h2>
+        <hr/>
+        <div class="grid grid-cols-1 lg:grid-cols-[min-content_1fr] gap-4">
+            <Thanks name="Noun Project" url="https://thenounproject.com/">
+                <p>
+                    Most of the icons on this site are works derived from assets found on The Noun Project. Their core
+                    belief is that visual language has the power to change the world. If you're looking for visual
+                    assets to represent the most generic or specific of concepts, visit their site. You'll find tons of
+                    high-quality icons and images for just about any topic.
+                </p>
+            </Thanks>
+            <Thanks name="Spotlight" url="https://github.com/nextapps-de/spotlight">
+                <p>
+                    The image lightbox and gallery functionality of this site are provided by the excellent Spotlight.js
+                    library, a javascript library that pretty much did exactly what I wanted straight out of the box.
+                </p>
+            </Thanks>
+            <Thanks name="Github Pages" url="https://pages.github.com/">
+                <p>
+                    This content is hosted on GitHub Pages. They make it easy to create and host websites for you and
+                    your projects. Your content is hosted directly from your GitHub repository. Just edit, push, and
+                    your changes are live. It couldn't be easier.
+                </p>
+            </Thanks>
+            <Thanks name="hiive" url="https://hiivelabs.com/">
+                <p>
+                    hiive is responsible for the design and layout of this site, with copious input from Kojika.
+                </p>
+            </Thanks>
+        </div>
+    </div>
+</div>
+
+
+<script is:inline data-astro-rerun>
+    // this block of script is a workaround for a bizarre Astro quirk/bug that I haven't figured out
+    // sometimes the first bio block is set as hidden, so I'm just making sure that any 'hidden' attributes
+    // are removed from the relevant block.
+    function checkHiddenBios() {
+        const bios = document.querySelectorAll('div.bio'); // Select all bios
+        console.warn('bio-refresh');
+        bios.forEach(bio => {
+            if (bio.classList.contains('hidden')) {
+                bio.classList.remove('hidden');
+                console.warn('hidden class removed from bio');
+            }
+        });
+    }
+    checkHiddenBios();
+</script>
