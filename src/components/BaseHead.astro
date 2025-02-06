@@ -2,6 +2,10 @@
 import { ClientRouter } from 'astro:transitions'
 
 import {getSiteCode} from '../scripts/getSiteConfig'
+
+import SvgLinkIcon from '../assets/images/shared/external-link.svg'
+console.log(SvgLinkIcon);
+
 import StyleHelper from "./StyleHelper.astro";
 
 export interface Props {
@@ -12,6 +16,7 @@ export interface Props {
 
 const { title, description, permalink } = Astro.props
 const siteCode = getSiteCode();
+
 ---
 
 <!-- Global Metadata -->
@@ -50,14 +55,39 @@ const siteCode = getSiteCode();
 <StyleHelper/>
 
 <!-- This is intentionally inlined to avoid FOUC -->
-<script is:inline>
+<script is:inline define:vars={{SvgLinkIcon}} data-astro-rerun>
+    // import { createSvgExternalLinkIcon } from "/public/scripts/createSvgExternalLinkIcon.js";
     // set up theming
-    const root = document.documentElement;
-    const theme = localStorage.getItem('theme');
-    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        root.classList.add('theme-dark');
-    } else {
-        root.classList.remove('theme-dark');
+    function setTheme() {
+        const root = document.documentElement;
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            root.classList.add('theme-dark');
+        } else {
+            root.classList.remove('theme-dark');
+        }
     }
+    setTheme();
+
+    // update any external links
+
+    function updateExternalLinksIcon() {
+        import("/scripts/createSvgExternalLinkIcon.js")
+            .then(({createSvgExternalLinkIcon}) => {
+                async function addSvgExternalLinkIcon() {
+                    const externalLinks = Array.from(document.querySelectorAll('[data-external-link]'));
+                    const svgElement = await createSvgExternalLinkIcon(SvgLinkIcon);
+                    externalLinks.forEach(el => {
+                        el.innerText = " ";
+                        el.appendChild(svgElement.cloneNode(true));
+                    })
+                }
+
+                addSvgExternalLinkIcon();
+            });
+    }
+    document.addEventListener("astro:page-load", updateExternalLinksIcon);
 </script>
+
+
 
