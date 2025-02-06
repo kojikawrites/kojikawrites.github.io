@@ -1,0 +1,56 @@
+---
+interface Props {
+    href: string;
+    title: string;
+    class?: string;
+    showIcon?: boolean;
+    showExternal?: boolean;
+}
+
+const {
+    href,
+    title,
+    class:className = "",
+    showIcon = true,
+    showExternal = true,
+    ...rest
+} = Astro.props;
+
+import toSafeId from "../../scripts/toSafeId.ts";
+import SvgLinkIcon from '../../assets/images/shared/external-link.svg'
+
+const placeholderId = toSafeId("svg-placeholder");
+
+---
+<a href={href}
+   class={className}
+   title={title}
+   target="_blank"
+   rel="noopener nofollow noreferrer"
+   {...rest}>
+    <slot name="link-content"/>
+    {showIcon &&
+       <slot name="link-icon" />
+    }
+    {showExternal &&
+        <span id={placeholderId} class="hidden" />
+    }
+</a>
+
+<script is:inline define:vars={{placeholderId, SvgLinkIcon}} data-astro-rerun>
+    function ensureLinkIcon() {
+        import("/scripts/createSvgExternalLinkIcon.js")
+            .then(({createSvgExternalLinkIcon}) => {
+                async function addSvgExternalLinkIcon() {
+                    const span = document.getElementById(placeholderId);
+                    const svgElement = await createSvgExternalLinkIcon(SvgLinkIcon);
+                    if (span) {
+                        span.replaceWith(svgElement);
+                    }
+                }
+
+                addSvgExternalLinkIcon();
+            });
+    }
+    ensureLinkIcon();
+</script>

@@ -1,4 +1,5 @@
 ---
+import BaseIconLink from "./_BaseIconLink.astro";
 interface Props {
     href: string;
     class?: string;
@@ -20,29 +21,27 @@ const faviconUrls = [
 ];
 
 import toSafeId from "../../scripts/toSafeId.ts";
-import SvgLinkIcon from '../../assets/images/shared/external-link.svg'
 
 const faviconImgId = toSafeId('link-favicon-img');
-const placeholderId = toSafeId("svg-placeholder");
 
 console.log('faviconUrls', faviconUrls); // DO NOT REMOVE!
 console.log('faviconDomain', faviconDomain);
 
 ---
 
-<a href={faviconHref}
-   class=`highlight-link ${className}`
-   target="_blank"
-   rel="noopener nofollow noreferrer"
-   {...rest}>
-    <slot/>
-    {showIcon &&
-        <img id={faviconImgId} src="" alt={faviconHref} width="16" height="16" class="w-4 h-4 inline relative -top-0.5" />
-    }
-    <span id={placeholderId} class="hidden" />
-</a>
+<BaseIconLink href={faviconHref}
+              class=`highlight-link ${className}`
+              title="Open External Link..."
+              showIcon={showIcon}
+              {...rest}>
 
-<script is:inline define:vars={{showIcon, faviconImgId, SvgLinkIcon, faviconHref, faviconDomain, faviconUrls, placeholderId}} data-astro-rerun>
+    <slot slot="link-content"/>
+
+    <img slot="link-icon" id={faviconImgId} src="" alt={faviconHref} width="16" height="16" class="w-4 h-4 inline relative -top-0.5" />
+</BaseIconLink>
+
+
+<script is:inline define:vars={{showIcon, faviconImgId, faviconHref, faviconUrls}} data-astro-rerun>
     function setFaviconImg() {
         const img = document.getElementById(faviconImgId);
         function tryNext(index) {
@@ -76,20 +75,4 @@ console.log('faviconDomain', faviconDomain);
         console.warn(`Setting favicon (${faviconHref})`);
         setFaviconImg();
     }
-
-    function addExternalLinkIcon() {
-        import("/scripts/createSvgExternalLinkIcon.js")
-            .then(({createSvgExternalLinkIcon}) => {
-                async function addSvgExternalLinkIcon() {
-                    const span = document.getElementById(placeholderId);
-                    const svgElement = await createSvgExternalLinkIcon(SvgLinkIcon);
-                    if (span) {
-                        span.replaceWith(svgElement);
-                    }
-                }
-
-                addSvgExternalLinkIcon();
-            });
-    }
-    addExternalLinkIcon();
 </script>
