@@ -1,4 +1,5 @@
 ---
+import {getSiteCode} from "../../scripts/getSiteConfig.ts";
 interface Props {
     href: string;
     title: string;
@@ -22,7 +23,19 @@ import toSafeId from "../../scripts/toSafeId.ts";
 import SvgLinkIcon from '../../assets/images/shared/external-link.svg'
 
 const placeholderId = toSafeId("svg-placeholder");
-const isInternalLinkToFile = !href.includes("://") && /\.\w+$/.test(href);
+const isInternal = !href.includes("://") || href.includes(`//${getSiteCode()}`);
+
+function hasDownloadFileExtension(path: string): boolean {
+    // List of common webpage extensions to exclude
+    const excludedExtensions = new Set(["html", "htm", "asp", "aspx", "php", "jsp"]);
+
+    // Match the last part of the string after a dot (e.g., ".pdf")
+    const match = path.match(/\.([^./]+)$/);
+
+    // Return false if there's no extension or it's a webpage extension
+    return match ? !excludedExtensions.has(match[1].toLowerCase()) : false;
+}
+const isLinkToFile = hasDownloadFileExtension(href);
 
 ---
 <a href={href}
@@ -33,15 +46,12 @@ const isInternalLinkToFile = !href.includes("://") && /\.\w+$/.test(href);
    {...rest}>
     <slot name="link-content"/>
     {showIcon &&
-       <slot name="link-icon" />
+            <slot name="link-icon" />
     }
-    {showExternal &&
-        <span id={placeholderId} class="hidden" />
-    }
-    {isInternalLinkToFile && showDownload &&
-        <svg width="12px" height="12px"
-             class="inline relative -top-0.5"
-             viewBox="0 0 54 53" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    {isInternal && isLinkToFile && showDownload &&
+            <svg width="12px" height="12px"
+                 class="inline relative -top-0.5"
+                 viewBox="0 0 54 53" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
             <g transform="matrix(1,0,0,1,-25.317,-25.1688)">
                 <g transform="matrix(1,0,0,1.14141,-275,-163.663)">
                     <path d="M325.153,202.882C325.227,202.961 326.124,203.778 327.224,203.778C328.324,203.778 329.134,203.053 329.306,202.87L340.434,191.743C341.541,190.636 341.541,188.841 340.435,187.734C339.328,186.626 337.532,186.627 336.426,187.733L330.059,194.099L330.059,168.272C330.059,166.707 328.789,165.437 327.224,165.437C325.659,165.437 324.389,166.707 324.389,168.272L324.389,194.098L318.024,187.733C316.917,186.627 315.122,186.627 314.014,187.733C312.907,188.84 312.907,190.635 314.014,191.743L325.153,202.882Z"
@@ -51,6 +61,9 @@ const isInternalLinkToFile = !href.includes("://") && /\.\w+$/.test(href);
                 </g>
             </g>
         </svg>
+    }
+    {showExternal && !isInternal &&
+            <span id={placeholderId} class="hidden" />
     }
 </a>
 
