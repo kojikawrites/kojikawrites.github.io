@@ -12,7 +12,7 @@ import tailwind from '@astrojs/tailwind';
 import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
 import pagefind from "astro-pagefind";
-import frontmatterData from "/src/scripts/extractPagesFrontMatter.mjs";
+import frontmatter from "/src/scripts/extractPagesFrontMatter.mjs";
 
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
 
@@ -34,7 +34,7 @@ export default defineConfig({
 
     hooks: {
         "astro:build:start": async () => {
-            console.log("🔍 Extracting frontmatter...");
+            console.log("🔍 Done Extracting frontmatter...");
         },
     },
     vite: {

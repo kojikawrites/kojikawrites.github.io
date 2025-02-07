@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-const getSiteCode = () => {
+export const getSiteCode = () => {
     try {
         return new URL(import.meta.env.VITE_SITE_NAME ?? process.env.VITE_SITE_NAME).hostname;
     } catch (e) {
@@ -136,6 +136,7 @@ const directories = [
     //path.resolve(`src/assets/posts/${siteCode}`)
 ];
 
+
 // console.log(directories);
 // Scan all directories
 let allFiles = directories.flatMap(directory => getAllFiles(directory, directory));
@@ -143,9 +144,10 @@ let allFiles = directories.flatMap(directory => getAllFiles(directory, directory
 let frontmatterData = extractFrontmatter(allFiles);
 
 // Save the combined results to JSON
-const outputPath = "src/data/frontmatter.json";
+const outputPath = `src/assets/_private/state/${siteCode}/frontmatter.json`;
 fs.writeFileSync(outputPath, JSON.stringify(frontmatterData, null, 2));
 
 console.log(`✅ Frontmatter extracted and saved to ${outputPath}`);
 
 export default frontmatterData;
+

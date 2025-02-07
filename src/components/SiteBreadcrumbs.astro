@@ -52,11 +52,14 @@ function buildCustomCrumbs(
 
         // Check if key is in valid_breadcrumbs
         const findBreadcrumb = (href: string): Record<string, string> | undefined => {
-            // console.log('findBreadcrumbURL', Astro.url.pathname);
+
             // console.log(slugsToTitles);
             const v = reference.breadcrumbs.valid_breadcrumbs;
+            const astroPath = Astro.url.pathname.replace(/\/$/, '');;
+            console.log('findBreadcrumbURL', astroPath);
+            console.log('findBreadcrumbURL:v', v);
             // look via full pathname first, then via href
-            const customBreadcrumb = v.find(item => item.href === Astro.url.pathname) ?? v.find(item => item.href === href);
+            const customBreadcrumb = v.find(item => item.href === astroPath) ?? v.find(item => item.href === href);
             return customBreadcrumb;
         };
 

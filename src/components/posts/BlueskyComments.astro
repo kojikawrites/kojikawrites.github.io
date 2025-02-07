@@ -6,13 +6,13 @@ interface Props {
 // import blueskyJson from "../../assets/_private/state/hiivelabs.com/bluesky_posted.json"
 //console.log('BLUESKYTYPE',typeof blueskyJson);
 
-import { getSiteConfig } from "../../scripts/getSiteConfig";
+import { getSiteConfig, getSiteCode } from "../../scripts/getSiteConfig";
 import {getAllKeys} from "../../scripts/keyUtils";
 import {KeyType} from "../../scripts/enums";
 import { Comments } from "../comments/Comments";
-import { getBlueskyPostedJson} from "../../scripts/getBlueskyPostedJson";
+import { getJson} from "../../scripts/getJson";
 
-const blueskyJson = await getBlueskyPostedJson();
+const blueskyJson = await getJson(getSiteCode(), 'bluesky_posted.json');
 // console.log('blueskyJson', blueskyJson);
 
 const { filename } = Astro.props;
