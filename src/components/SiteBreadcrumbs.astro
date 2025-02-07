@@ -1,6 +1,5 @@
 ---
 import { Breadcrumbs } from "astro-breadcrumbs";
-import path from 'path';
 import "../styles/breadcrumbs.scss";
 
 import {matchUrlToPattern} from "../scripts/matchUrlToPattern";
@@ -16,6 +15,7 @@ const slugsToTitles = allPosts.reduce((acc: Record<string, string>, post: { slug
 }, {});
 
 const matchedSlugs = matchUrlToPattern(Astro.routePattern, Astro.url.pathname);
+// console.log('matchUrlToPattern', Astro.routePattern, Astro.url.pathname);
 const customCrumbs = buildCustomCrumbs(matchedSlugs, siteConfig.navbar, slugsToTitles);
 
 // console.log('Astro.routePattern, Astro.url.pathname', Astro.routePattern, Astro.url);
@@ -54,29 +54,15 @@ function buildCustomCrumbs(
         const findBreadcrumb = (href: string): Record<string, string> | undefined => {
             // console.log('findBreadcrumbURL', Astro.url.pathname);
             // console.log(slugsToTitles);
-
-            const customBreadcrumb = reference.breadcrumbs.valid_breadcrumbs.find(item => item.href === href);
+            const v = reference.breadcrumbs.valid_breadcrumbs;
+            // look via full pathname first, then via href
+            const customBreadcrumb = v.find(item => item.href === Astro.url.pathname) ?? v.find(item => item.href === href);
             return customBreadcrumb;
-            // if (customBreadcrumb) {
-            //     console.log('customBreadcrumb', customBreadcrumb);
-            //     return customBreadcrumb;
-            // }
-            // // TODO FIX TO INCLUDE NON-BLOG PAGES!
-            // let slug = path.basename(Astro.url.pathname);
-            // console.log('slug', slug);
-            // const synthesizedBreadcrumb = (slug in slugsToTitles)
-            //     ? {
-            //         href: slug,
-            //         label: slugsToTitles[slug]
-            //       }
-            //     : null;
-            // return synthesizedBreadcrumb;
-
-
         };
 
         const validBreadcrumb = findBreadcrumb(key);
-        console.warn('findBreadcrumb', validBreadcrumb);
+        // console.warn('findBreadcrumb -> patternOrder :', matchedDict);
+        // console.warn('findBreadcrumb', validBreadcrumb);
         if (validBreadcrumb?.href && matchedDict[key].length > 0) {
             const rawText = matchedDict[key];
             // console.warn(`Found breadcrumb for ${key}: ${key}, ${rawText}, ${validBreadcrumb.label}`);
