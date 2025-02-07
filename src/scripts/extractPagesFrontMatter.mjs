@@ -35,10 +35,11 @@ function extractSlug(entry) {
 
 /**
  * Recursively scans a directory and returns an array of file paths.
+ * @param {string} rootDir - The base directory of this search.
  * @param {string} dir - The directory to scan.
  * @returns {Record<string, string>[]} - List of file paths.
  */
-function getAllFiles(dir) {
+function getAllFiles(rootDir, dir) {
     let results = [];
     if (!fs.existsSync(dir)) return results; // Prevent errors if directory doesn't exist
 
@@ -47,10 +48,10 @@ function getAllFiles(dir) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
         if (stat && stat.isDirectory()) {
-            results = results.concat(getAllFiles(filePath));
+            results = results.concat(getAllFiles(rootDir, filePath));
         } else if (file.endsWith(".md") || file.endsWith(".astro") || file.endsWith(".mdx")) {
             results.push({
-                directory: dir,
+                directory: rootDir,
                 filepath: filePath
             });
         }
@@ -141,8 +142,8 @@ const directories = [
 ];
 
 // console.log(directories);
-// Scan both directories
-let allFiles = directories.flatMap(getAllFiles);
+// Scan all directories
+let allFiles = directories.flatMap(directory => getAllFiles(directory, directory));
 // console.log('allFiles', allFiles);
 let frontmatterData = extractFrontmatter(allFiles);
 
