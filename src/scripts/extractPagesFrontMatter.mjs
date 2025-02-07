@@ -8,14 +8,35 @@ const getSiteCode = () => {
     }
 };
 
-function extractSlug(filePath) {
-    return path.basename(filePath, path.extname(filePath));
+function extractSlug(entry) {
+    // Compute the path relative to the given directory.
+    // console.log("extractSlug", entry);
+    const directory = entry.directory;
+    const filepath = entry.filepath;
+
+    const relative = path.relative(directory, filepath); // e.g., "test/about.astro"
+
+    // Parse the relative path into directory, filename, extension, etc.
+    const parsed = path.parse(relative);
+
+    // If the filename (without extension) is "index", then use only the directory part.
+    // Otherwise, join the directory and the filename (without extension).
+    let slug = parsed.name === 'index'
+        ? parsed.dir
+        : path.join(parsed.dir, parsed.name);
+
+    // Ensure the slug starts with a leading slash if it's non-empty.
+    if (slug && !slug.startsWith(path.sep)) {
+        slug = path.sep + slug;
+    }
+
+    return slug;
 }
 
 /**
  * Recursively scans a directory and returns an array of file paths.
  * @param {string} dir - The directory to scan.
- * @returns {string[]} - List of file paths.
+ * @returns {Record<string, string>[]} - List of file paths.
  */
 function getAllFiles(dir) {
     let results = [];
@@ -28,7 +49,10 @@ function getAllFiles(dir) {
         if (stat && stat.isDirectory()) {
             results = results.concat(getAllFiles(filePath));
         } else if (file.endsWith(".md") || file.endsWith(".astro") || file.endsWith(".mdx")) {
-            results.push(filePath);
+            results.push({
+                directory: dir,
+                filepath: filePath
+            });
         }
     });
 
@@ -39,23 +63,28 @@ function getAllFiles(dir) {
 
 /**
  * Extracts frontmatter from an array of file paths.
- * @param {string[]} files - List of files to process.
+ * @param {Record<string, string>[]} files - List of files to process.
  * @returns {Record<string, object>} - A mapping of file paths to frontmatter data.
  */
 function extractFrontmatter(files) {
     const frontmatterData = [];
 
-    files.forEach((file) => {
-        const title = extractTitleFromFrontmatter(file); // Extract frontmatter
-        if (title) {
-            frontmatterData.push(
-                {
-                    href: extractSlug(file),
-                    title: title
-                }
-            );
+    files.forEach((entry) => {
+        const file = entry['filepath'];
+        // console.log('entry', entry);
+        const label = extractTitleFromFrontmatter(file); // Extract frontmatter
+        // special case - we don't need to do this for 404
+        if (label !== "404") {
+            if (label) {
+                const slug = extractSlug(entry);
+                frontmatterData.push(
+                    {
+                        href: slug,
+                        label: label
+                    }
+                );
+            }
         }
-
     });
 
     return frontmatterData;
@@ -111,9 +140,10 @@ const directories = [
     //path.resolve(`src/assets/posts/${siteCode}`)
 ];
 
-console.log(directories);
+// console.log(directories);
 // Scan both directories
 let allFiles = directories.flatMap(getAllFiles);
+// console.log('allFiles', allFiles);
 let frontmatterData = extractFrontmatter(allFiles);
 
 // Save the combined results to JSON
