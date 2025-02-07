@@ -1,0 +1,34 @@
+---
+import BaseIconLink from "./_BaseIconLink.astro";
+interface Props {
+    href: string;
+    class?: string;
+    title?: string;
+    showIcon?: boolean;
+    showExternal?: boolean;
+    showDownload?: boolean;
+}
+
+const {
+    href:faviconHref,
+    class:className = "",
+    title = "Follow Link...",
+    showIcon = true,
+    showExternal = true,
+    showDownload = true,
+    ...rest } = Astro.props;
+
+
+---
+
+<BaseIconLink href={faviconHref}
+              class=`highlight-link ${className}`
+              title={title}
+              showIcon={showIcon}
+              showExternal={showExternal}
+              showDownload={showDownload}
+              {...rest}>
+
+    <slot slot="link-content"/>
+</BaseIconLink>
+
