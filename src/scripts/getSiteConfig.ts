@@ -1,4 +1,4 @@
-import frontmatterData from '../data/frontmatter.json'
+// import frontmatterData from '../data/frontmatter.json'
 
 
 export function getSiteCode(): string {
@@ -71,14 +71,14 @@ export async function getSiteConfig() {
     //     }
     // );
     return await yamlGlobs[matchingKey]().then(async (config) => {
-
+        const frontmatterData = await import('src/data/frontmatter.json');
         // Ensure that the config has a navbar with breadcrumbs.
         if (config.navbar && config.navbar.breadcrumbs) {
             // Retrieve the current valid_breadcrumbs array.
             const validBreadcrumbs: NavbarEntry[] = config.navbar.breadcrumbs.valid_breadcrumbs || [];
 
             // Iterate over each entry in the frontmatter JSON.
-            for (const [href, label] of Object.entries(frontmatterData)) {
+            for (const [href, label] of Object.entries(frontmatterData.default || frontmatterData)) {
                 // Add a new NavbarEntry only if an entry with the same href is not already present.
                 if (!validBreadcrumbs.some(entry => entry.href === href)) {
                     validBreadcrumbs.push({ href, label });
