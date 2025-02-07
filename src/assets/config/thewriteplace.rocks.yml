@@ -28,8 +28,8 @@ navbar:
         href: '/about'
         label: 'About'
       -
-        href: "/contact-us"
-        label: "contact us"
+        href: "/contact"
+        label: "contact me"
     breadcrumbs:
       include: true
       valid_breadcrumbs:
