@@ -65,10 +65,10 @@ function getAllFiles(rootDir, dir) {
 /**
  * Extracts frontmatter from an array of file paths.
  * @param {Record<string, string>[]} files - List of files to process.
- * @returns {Record<string, object>} - A mapping of file paths to frontmatter data.
+ * @returns {Record<string, string>} - A mapping of file paths to frontmatter data.
  */
 function extractFrontmatter(files) {
-    const frontmatterData = [];
+    const frontmatterData = {};
 
     files.forEach((entry) => {
         const file = entry['filepath'];
@@ -78,12 +78,7 @@ function extractFrontmatter(files) {
         if (label !== "404") {
             if (label) {
                 const slug = extractSlug(entry);
-                frontmatterData.push(
-                    {
-                        href: slug,
-                        label: label
-                    }
-                );
+                frontmatterData[slug] = label;
             }
         }
     });
