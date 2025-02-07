@@ -12,6 +12,7 @@ import tailwind from '@astrojs/tailwind';
 import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
 import pagefind from "astro-pagefind";
+import frontmatterData from "/src/scripts/extractPagesFrontMatter.mjs";
 
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
 
@@ -22,8 +23,7 @@ import sitemap from '@astrojs/sitemap';
 const siteName = () => {
     try {
         return import.meta.env.VITE_SITE_NAME ?? process.env.VITE_SITE_NAME;
-    }
-    catch (e) {
+    } catch (e) {
         return undefined;
     }
 };
@@ -31,64 +31,70 @@ console.log('siteName:', siteName());
 
 // https://astro.build/config
 export default defineConfig({
-  vite: {
-    css: {
-      devSourcemap: true,
-      transformer: "postcss",
-    },
-    plugins: [yaml()]
-  },
 
-  // site: 'https://hiivelabs.com', //`${siteName}`,//'https://hiivelabs.com',
-  site: siteName(),//'https://hiivelabs.com',
-  trailingSlash: 'ignore',
-
-  integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind(), sitemap()],
-  markdown: {
-    shikiConfig: {
-      themes: {
-        light: "solarized-light",
-        dark: "dark-plus",
-      },
-      // defaultColor: 'dark',
-      wrap: true,
-      transformers: [transformerNotationHighlight(), transformerMetaHighlight()],
+    hooks: {
+        "astro:build:start": async () => {
+            console.log("🔍 Extracting frontmatter...");
+        },
     },
-    syntaxHighlight: 'shiki',
-    remarkPlugins: [
-        remarkGfm,
-        remarkSmartypants,
-        remarkReadingTime,
-        remarkPublishDateFromFilename,
-        remarkMath
-    ],
-    rehypePlugins: [
-      [
-        rehypeExternalLinks,
-        {
-          target: '_blank',
-          rel: ['nofollow', 'noopener', 'noreferrer'],
-          contentProperties: {"data-external-link": true},
-          content: { type: 'text', value: '' } // ' 🔗'
-        }
-      ],
-      [
-          rehypeMathjax,
-          {
-              tex: {
-                  inlineMath: [['\\(', '\\)'], ['$', '$']],
-                  displayMath: [['\\[', '\\]'], ['$$', '$$']]
-              },
-              options: {
-                  skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-              },
-              chtml: {
-                  fontURL: "[mathjax]/components/output/chtml/fonts/woff-v2",
-                  scale: 1.05,
-                  matchFontHeight: false,
-              }
-          }
-      ],
-    ],
-  },
+    vite: {
+        css: {
+            devSourcemap: true,
+            transformer: "postcss",
+        },
+        plugins: [yaml()]
+    },
+
+    // site: 'https://hiivelabs.com', //`${siteName}`,//'https://hiivelabs.com',
+    site: siteName(),//'https://hiivelabs.com',
+    trailingSlash: 'ignore',
+
+    integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind(), sitemap()],
+    markdown: {
+        shikiConfig: {
+            themes: {
+                light: "solarized-light",
+                dark: "dark-plus",
+            },
+            // defaultColor: 'dark',
+            wrap: true,
+            transformers: [transformerNotationHighlight(), transformerMetaHighlight()],
+        },
+        syntaxHighlight: 'shiki',
+        remarkPlugins: [
+            remarkGfm,
+            remarkSmartypants,
+            remarkReadingTime,
+            remarkPublishDateFromFilename,
+            remarkMath
+        ],
+        rehypePlugins: [
+            [
+                rehypeExternalLinks,
+                {
+                    target: '_blank',
+                    rel: ['nofollow', 'noopener', 'noreferrer'],
+                    contentProperties: {"data-external-link": true},
+                    content: {type: 'text', value: ''} // ' 🔗'
+                }
+            ],
+            [
+                rehypeMathjax,
+                {
+                    tex: {
+                        inlineMath: [['\\(', '\\)'], ['$', '$']],
+                        displayMath: [['\\[', '\\]'], ['$$', '$$']]
+                    },
+                    options: {
+                        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+                    },
+                    chtml: {
+                        fontURL: "[mathjax]/components/output/chtml/fonts/woff-v2",
+                        scale: 1.05,
+                        matchFontHeight: false,
+                    }
+                }
+            ],
+        ],
+    },
 })
