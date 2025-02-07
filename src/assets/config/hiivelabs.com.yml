@@ -24,7 +24,7 @@ navbar:
       label: "mission statement"
     - href: '/about'
       label: 'About'
-    - href: "/contact-us"
+    - href: "/contact"
       label: "contact us"
   breadcrumbs:
     include: true
