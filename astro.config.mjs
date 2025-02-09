@@ -13,6 +13,7 @@ import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
 import pagefind from "astro-pagefind";
 import frontmatter from "/src/scripts/extractPagesFrontMatter.mjs"; // DO NOT DELETE
+
 import rehypeLinkDecorator from "./rehype-link-decorator.mjs";
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
 
@@ -30,10 +31,13 @@ console.log('siteName:', siteName());
 
 // https://astro.build/config
 export default defineConfig({
-
+    experimental: {
+        svg: true,
+    },
     hooks: {
         "astro:build:start": async () => {
             console.log("🔍 Done Extracting frontmatter...");
+            const dummy = frontmatter; // to avoid unused import warning.
         },
     },
     vite: {
@@ -97,28 +101,56 @@ export default defineConfig({
                                 }
                             },
                             {
+                                iconName: "-favicon-link",
+                                exclusions: ["www.ospreypublishing.com"],
+                                properties: {
+                                    className: ["inline", "relative", "-top-0.5", "favicon-link-img"],
+
+                                }
+                            },
+                            {
                                 iconName: ".wikipedia.",
                                 iconFile: "./src/assets/images/shared/links/wikipedia.svg",
-                                properties: { className: ["inline", "relative", "-top-0.5"] },
-                                contentProperties: { className: ["wiki-link"] }
+                                properties: {
+                                    className: ["inline", "relative", "-top-0.5"],
+                                    width: "0.9em",
+                                    height: "0.9em",
+                                },
+                                contentProperties: {
+                                    className: ["wiki-link"],
+                                }
                             },
                             {
                                 iconName: "github.com",
                                 iconFile: "./src/assets/images/shared/links/github.svg",
-                                properties: { className: ["inline", "relative", "-top-0.5"] },
-                                contentProperties: { className: ["github-link"] }
+                                properties: {
+                                    className: ["inline", "relative", "-top-0.5"],
+                                    width: "0.9em",
+                                    height: "0.9em",
+                                },
+                                contentProperties: {
+                                    className: ["github-link"],
+                                }
                             },
                             {
                                 iconName: "store.steampowered.com",
                                 iconFile: "./src/assets/images/shared/links/steam.svg",
                                 properties: { className: ["inline", "relative", "-top-0.5"] },
-                                contentProperties: { className: ["steam-link"] }
+                                contentProperties: {
+                                    className: ["steam-link"],
+                                    width: "0.9em",
+                                    height: "0.9em",
+                                }
                             },
                             {
                                 iconName: "bsky.app",
                                 iconFile: "./src/assets/images/shared/links/bluesky.svg",
                                 properties: { className: ["inline", "relative", "-top-0.5"] },
-                                contentProperties: { className: ["bluesky-link"] }
+                                contentProperties: {
+                                    className: ["bluesky-link"],
+                                    width: "0.9em",
+                                    height: "0.9em",
+                                }
                             },
 
                         ]

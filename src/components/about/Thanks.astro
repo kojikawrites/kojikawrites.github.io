@@ -1,9 +1,10 @@
 ---
-import FaviconLink from "../links/FaviconLink.astro";
 interface Props {
     name: string;
     url?: string;
 }
+
+import SvgExternalLink from 'src/assets/images/shared/links/-external-link.svg';
 
 const { name, url } = Astro.props;
 // Remove everything up to and including "//" and trailing slashes
@@ -15,9 +16,10 @@ const displayUrl = url
 <div class="text-nowrap">
     <h3>{name}</h3>
     {url ?
-        <FaviconLink href={url} showIcon={false}>
+        <a href={url}>
             {displayUrl}
-        </FaviconLink>
+            <SvgExternalLink class="inline w-[0.8em] h-[0.8em]" />
+        </a>
         : ""
     }
 </div>

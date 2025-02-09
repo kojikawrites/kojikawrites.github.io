@@ -2,6 +2,38 @@ import fs from 'fs';
 import { unified } from 'unified';
 import rehypeParse from 'rehype-parse';
 import isAbsoluteUrl from 'is-absolute-url'
+
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const request = require('sync-request');
+
+function getFaviconUrlSync(websiteUrl) {
+    const faviconDomain = new URL(websiteUrl).hostname;
+    const faviconUrls = [
+        `https://icons.duckduckgo.com/ip3/${faviconDomain}.ico`,
+        `https://api.faviconkit.com/${faviconDomain}/16`,
+        `https://www.google.com/s2/favicons?sz=16&domain=${faviconDomain}`,
+        `https://${faviconDomain}/favicon.ico`,
+
+    ];
+
+    for (const url of faviconUrls) {
+        try {
+            // Add strictSSL: false to bypass certificate verification
+            const res = request('HEAD', url, { timeout: 5000, strictSSL: false });
+            if (res.statusCode >= 200 && res.statusCode < 300) {
+                // console.log(`Using favicon (${url})`);
+                return url;
+            }
+        } catch (e) {
+            //console.warn(`Failed to fetch ${url}: ${e.message}`);
+        }
+    }
+
+    //console.warn(`No valid favicon found for ${websiteUrl}`);
+    return null;
+}
+
 const defaultProtocols = ['http', 'https'];
 
 function getNbspNode () {
@@ -174,8 +206,21 @@ function isDownloadLink(pathString) {
     }
 }
 
-let iconDictionary = {}
-let contentPropDictionary = {}
+function buildEmptyTag(tagName, props)
+{
+    const tagHast = {
+        type: 'element',
+        tagName: tagName,
+        properties: props
+    };
+    // console.log('buildEmptyTag:', tagHast);
+    return tagHast;
+}
+
+const iconDictionary = {}
+const contentPropDictionary = {}
+const faviconDictionary = {}
+const exclusionsDictionary = {}
 
 export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
     // console.log('rehypeLinkDecorator', node);
@@ -185,15 +230,28 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
 
     if (icons) {
         icons.forEach(iconInfoEntry => {
-            const {iconName, iconFile, properties:iconProps = {}, contentProperties = {}} = iconInfoEntry;
+            const {
+                iconName,
+                iconFile = null,
+                properties:iconProps = {},
+                contentProperties = {},
+                exclusions = null,
+            } = iconInfoEntry;
             if (iconName in iconDictionary) {
                 return;
             }
-            if (!fs.existsSync(iconFile))
+            if (iconFile && !fs.existsSync(iconFile))
             {
                 console.error('rehypeLinkDecorator: Cannot find icon: ', iconName);
             }
-            iconDictionary[iconName] = loadSvgContent(iconFile, iconProps)
+            if (exclusions && exclusions.length > 0) {
+                exclusionsDictionary[iconName] = exclusions;
+            }
+
+            iconDictionary[iconName] = iconFile
+                ? loadSvgContent(iconFile, iconProps)
+                : buildEmptyTag('img', iconProps);
+
             contentPropDictionary[iconName] = contentProperties;
 
             console.log('rehypeLinkDecorator: Loaded Icon for:', iconName);
@@ -235,23 +293,65 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
     const href = node.properties?.href;
     if (href) {
         // check for other links (website-specific)
+        let iconAdded = false;
         Object.entries(iconDictionary).forEach(([iconName, iconEntry]) => {
-            if (!iconName.startsWith("-")) {
+            if (iconName && !iconName.startsWith("-")) {
                 if (href.toLowerCase().includes(iconName.toLowerCase())) {
                     iconNode.children.push(getNbspNode());
                     iconNode.children.push(iconEntry)
                     // merge contentProperties with parent node
                     node.properties = { ...(node.properties || {}), ...contentPropDictionary[iconName] };
+                    // console.log('rehypeLinkDecorator -> iconNode:', iconNode);
+                    iconAdded = true;
                 }
             }
         });
+
+        // test add favicon
+        const needFavicon = !iconAdded && "-favicon-link" in iconDictionary;
+        if (needFavicon) {
+            try {
+                const faviconDomain = new URL(href)?.hostname;
+                const exclusions = "-favicon-link" in exclusionsDictionary
+                    ? exclusionsDictionary["-favicon-link"]
+                    : {};
+                console.log("exclusions", exclusions);
+                if (exclusions.includes(faviconDomain)) {
+                    console.log(`rehypeLinkDecorator -> faviconDomain EXCLUDED: '${faviconDomain}'`);
+                }
+                else {
+                    console.log(`rehypeLinkDecorator -> faviconDomain: '${faviconDomain}'`);
+                    if (faviconDomain && !(faviconDomain in faviconDictionary)) {
+                        const selectedFavicon = getFaviconUrlSync(href);
+                        faviconDictionary[faviconDomain] = selectedFavicon;
+                        console.log('rehypeLinkDecorator -> selectedFavicon:', selectedFavicon);
+                    }
+                    if (faviconDomain in faviconDictionary) {
+                        const favicon = faviconDictionary[faviconDomain];
+                        if (favicon) {
+                            // console.log('rehypeLinkDecorator -> imgNode:', imgNode);
+                            // imgNode.properties = { ...imgNode.properties, ...iconDictionary["-favicon-link"].properties }
+                            // console.log('rehypeLinkDecorator -> imgNode:', imgNode);
+                            const imgNode = iconDictionary["-favicon-link"];
+                            imgNode.properties.src = favicon;
+
+                            iconNode.children.push(getNbspNode());
+                            iconNode.children.push(imgNode);
+                        }
+                    }
+                }
+            }
+            catch (e) {
+
+            }
+        }
 
         // check if download link
         const isDownload = isDownloadLink(href);
         console.log(`rehypeLinkDecorator: isDownloadLink: '${href}' -> ${isDownload}`);
         if (isDownload) {
             iconNode.children.push(getNbspNode());
-            iconNode.children.push(iconDictionary["-download-link"])
+            iconNode.children.push(iconDictionary["-download-link"]);
         }
 
         // check if external link
