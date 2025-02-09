@@ -36,10 +36,10 @@ function getFaviconUrlSync(websiteUrl) {
 
 const defaultProtocols = ['http', 'https'];
 
-function getNbspNode () {
+function getSpaceNode (breaking) {
     return {
         type: 'text',
-        value: '\u00a0',
+        value: breaking ? ' ' : '\u00a0',
     }
 }
 
@@ -84,7 +84,7 @@ function splitLastWord(node) {
         position: node.position ? { ...node.position } : undefined
     };
 
-    return [leftNode, getNbspNode(), rightNode];
+    return [leftNode, getSpaceNode(true), rightNode];
 }
 
 function addClassToSpecificNodeType(node, nodeTag, newClass) {
@@ -141,8 +141,8 @@ function loadSvgContent(svgFilename, svgProps) {
     const svg = fs.readFileSync(svgFilename, 'utf8');
     // // Parse the SVG content into HAST
     let svgHast = unified()
-         .use(rehypeParse, { fragment: true, space: 'svg' })
-         .parse(svg)
+        .use(rehypeParse, { fragment: true, space: 'svg' })
+        .parse(svg)
     svgHast = findFirstSvg(svgHast);
     svgHast = addClassToSpecificNodeType(svgHast, 'svg', 'with-before');
     svgHast = addClassToSpecificNodeType(svgHast, 'svg','inline');
@@ -297,7 +297,7 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
         Object.entries(iconDictionary).forEach(([iconName, iconEntry]) => {
             if (iconName && !iconName.startsWith("-")) {
                 if (href.toLowerCase().includes(iconName.toLowerCase())) {
-                    iconNode.children.push(getNbspNode());
+                    iconNode.children.push(getSpaceNode());
                     iconNode.children.push(iconEntry)
                     // merge contentProperties with parent node
                     node.properties = { ...(node.properties || {}), ...contentPropDictionary[iconName] };
@@ -335,7 +335,7 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
                             const imgNode = iconDictionary["-favicon-link"];
                             imgNode.properties.src = favicon;
 
-                            iconNode.children.push(getNbspNode());
+                            iconNode.children.push(getSpaceNode());
                             iconNode.children.push(imgNode);
                         }
                     }
@@ -350,7 +350,7 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
         const isDownload = isDownloadLink(href);
         console.log(`rehypeLinkDecorator: isDownloadLink: '${href}' -> ${isDownload}`);
         if (isDownload) {
-            iconNode.children.push(getNbspNode());
+            iconNode.children.push(getSpaceNode());
             iconNode.children.push(iconDictionary["-download-link"]);
         }
 
@@ -363,7 +363,7 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
         console.log(`rehypeLinkDecorator: isExternalLink: '${href}' -> ${isExternal}`);
         if (isExternal) {
             // add external icon to iconNode
-            iconNode.children.push(getNbspNode());
+            iconNode.children.push(getSpaceNode());
             iconNode.children.push(iconDictionary["-external-link"]);
         }
     }
