@@ -2,7 +2,6 @@ import fs from 'fs';
 import { unified } from 'unified';
 import rehypeParse from 'rehype-parse';
 import isAbsoluteUrl from 'is-absolute-url'
-
 const defaultProtocols = ['http', 'https'];
 
 function getNbspNode () {
@@ -121,20 +120,59 @@ function loadSvgContent(svgFilename, svgProps) {
     return svgHast;
 }
 
-function hasDownloadFileExtension(pathString) {
-    // List of common webpage extensions to exclude
+function isDownloadLink(pathString) {
+    // List of common webpage extensions to exclude.
     const excludedExtensions = new Set([
         "html", "htm", "asp", "aspx", "php", "jsp", "shtml", "cfm", "cfml", "xhtml"
     ]);
 
-    // This regex matches a dot, then captures one or more characters that are not a dot, slash, question mark, or backslash,
-    // and then stops either at a query string, hash, or the end of the string.
-    const match = pathString?.toLowerCase().match(/\.([^./?\\]+)(?:[?#]|$)/);
+    try {
+        // Use the URL API to parse the URL and extract the pathname.
+        const url = new URL(pathString);
+        const pathname = url.pathname; // e.g., "/" or "/some/file.pdf"
+        // Remove empty segments (which can happen if the path starts/ends with a slash).
+        const segments = pathname.split('/').filter(Boolean);
+        // If there are no segments or the last segment lacks a dot, assume no file extension.
+        if (segments.length === 0) {
+            return false;
+        }
+        const lastSegment = segments[segments.length - 1];
+        if (!lastSegment.includes('.')) {
+            return false;
+        }
 
-    // If there is a match, convert the captured extension to lowercase and check that it is not one of the excluded types.
-    return match ? !excludedExtensions.has(match[1].toLowerCase()) : false;
+        // Match the file extension at the end of the last segment.
+        const match = lastSegment.toLowerCase().match(/\.([^./?\\]+)$/);
+        if (!match) {
+            return false;
+        }
+        const extension = match[1].toLowerCase();
+
+        // Heuristic: if the last segment contains more than one dot and the extension is longer than 4 letters,
+        // treat it as not a file. This prevents misclassifying routes like
+        // "blah.bsky.social" as downloadable.
+        const parts = lastSegment.split('.');
+        if (parts.length > 2 && extension.length > 4) {
+            return false;
+        }
+
+        const isDownload = !excludedExtensions.has(extension);
+        return isDownload;
+    } catch (e) {
+        // Fallback for strings that aren’t valid URLs.
+        const match = pathString?.toLowerCase().match(/\.([^./?\\]+)(?:[?#]|$)/);
+        if (!match) {
+            return false;
+        }
+        const extension = match[1].toLowerCase();
+        const parts = pathString.split('.');
+        if (parts.length > 2 && extension.length > 4) {
+            return false;
+        }
+        const isDownload = !excludedExtensions.has(extension);
+        return isDownload;
+    }
 }
-
 
 let iconDictionary = {}
 
@@ -163,8 +201,6 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
     if (node.type !== 'element' && node.tagName !== 'a') {
         return {};
     }
-    // is it an external link?
-    // console.log('node.children BEFORE', node.children);
 
     // set up our node to contain the icon
     let iconNode = {
@@ -194,41 +230,38 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
         }
     }
 
-    // add a nbsp to ensure that the first icon is separated from the previous node.
-    iconNode.children.push(getNbspNode());
-
-
     const href = node.properties?.href;
     if (href) {
         // check for other links (website-specific)
         Object.entries(iconDictionary).forEach(([iconName, iconEntry]) => {
             if (!iconName.startsWith("-")) {
                 if (href.toLowerCase().includes(iconName.toLowerCase())) {
-                    iconNode.children.push(iconEntry)
                     iconNode.children.push(getNbspNode());
+                    iconNode.children.push(iconEntry)
                 }
             }
         });
 
         // check if download link
-        const isDownload = hasDownloadFileExtension(href);
+        const isDownload = isDownloadLink(href);
+        console.log(`rehypeLinkDecorator: isDownloadLink: '${href}' -> ${isDownload}`);
         if (isDownload) {
-            iconNode.children.push(iconDictionary["-download-link"])
             iconNode.children.push(getNbspNode());
+            iconNode.children.push(iconDictionary["-download-link"])
         }
+
+        // check if external link
         const siteProtocols = protocols || defaultProtocols;
-        const isAbsolute = isAbsoluteUrl(href)
+        const isExternal = !href.startsWith(siteName) && isAbsoluteUrl(href)
             ? siteProtocols.includes(href.slice(0, href.indexOf(':')))
             : href.startsWith('//');
-        if (isAbsolute && !href.startsWith(siteName)) {
+
+        console.log(`rehypeLinkDecorator: isExternalLink: '${href}' -> ${isExternal}`);
+        if (isExternal) {
             // add external icon to iconNode
+            iconNode.children.push(getNbspNode());
             iconNode.children.push(iconDictionary["-external-link"]);
         }
     }
-
-    // console.log('node.children AFTER', node.children);
-
-
-
     return iconNode;
 }
