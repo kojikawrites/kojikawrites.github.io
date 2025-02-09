@@ -99,20 +99,28 @@ export default defineConfig({
                             {
                                 iconName: ".wikipedia.",
                                 iconFile: "./src/assets/images/shared/links/wikipedia.svg",
-                                properties: { className: ["inline", "relative", "-top-0.5"] }
+                                properties: { className: ["inline", "relative", "-top-0.5"] },
+                                contentProperties: { className: ["wiki-link"] }
                             },
                             {
                                 iconName: "github.com",
                                 iconFile: "./src/assets/images/shared/links/github.svg",
-                                properties: { className: ["inline", "relative", "-top-0.5"] }
+                                properties: { className: ["inline", "relative", "-top-0.5"] },
+                                contentProperties: { className: ["github-link"] }
                             },
                             {
                                 iconName: "store.steampowered.com",
                                 iconFile: "./src/assets/images/shared/links/steam.svg",
-                                properties: { className: ["inline", "relative", "-top-0.5"] }
+                                properties: { className: ["inline", "relative", "-top-0.5"] },
+                                contentProperties: { className: ["steam-link"] }
                             },
-                            // "download": "download-link-icon.png",
-                            // "wiki": "wiki-link-icon.png",
+                            {
+                                iconName: "bsky.app",
+                                iconFile: "./src/assets/images/shared/links/bluesky.svg",
+                                properties: { className: ["inline", "relative", "-top-0.5"] },
+                                contentProperties: { className: ["bluesky-link"] }
+                            },
+
                         ]
                         return rehypeLinkDecorator(e, icons, siteName);
                     }

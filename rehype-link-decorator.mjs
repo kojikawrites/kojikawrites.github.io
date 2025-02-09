@@ -175,6 +175,7 @@ function isDownloadLink(pathString) {
 }
 
 let iconDictionary = {}
+let contentPropDictionary = {}
 
 export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
     // console.log('rehypeLinkDecorator', node);
@@ -184,7 +185,7 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
 
     if (icons) {
         icons.forEach(iconInfoEntry => {
-            const {iconName, iconFile, properties:iconProps = {}} = iconInfoEntry;
+            const {iconName, iconFile, properties:iconProps = {}, contentProperties = {}} = iconInfoEntry;
             if (iconName in iconDictionary) {
                 return;
             }
@@ -193,6 +194,7 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
                 console.error('rehypeLinkDecorator: Cannot find icon: ', iconName);
             }
             iconDictionary[iconName] = loadSvgContent(iconFile, iconProps)
+            contentPropDictionary[iconName] = contentProperties;
 
             console.log('rehypeLinkDecorator: Loaded Icon for:', iconName);
         })
@@ -238,6 +240,8 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
                 if (href.toLowerCase().includes(iconName.toLowerCase())) {
                     iconNode.children.push(getNbspNode());
                     iconNode.children.push(iconEntry)
+                    // merge contentProperties with parent node
+                    node.properties = { ...(node.properties || {}), ...contentPropDictionary[iconName] };
                 }
             }
         });
