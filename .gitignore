@@ -24,4 +24,3 @@ pnpm-debug.log*
 .venv/
 /site.txt
 /src/assets/_private/state/**/published_posts*.json
-/src/assets/_private/state/**/frontmatter.json
