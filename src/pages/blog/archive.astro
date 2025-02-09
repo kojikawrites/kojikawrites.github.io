@@ -8,7 +8,7 @@ import {buildPermalink} from "../../scripts/urlUtils";
 
 const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
 
-const title = 'Blog Archive';
+const title = 'Archive';
 const description = 'Article archive.';
 // const permalink = `${Astro.site.href}blog/archive`;
 //const permalink = `${Astro.site.href}${Astro.url.pathname}`;

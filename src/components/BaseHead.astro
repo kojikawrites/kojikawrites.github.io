@@ -4,7 +4,7 @@ import { ClientRouter } from 'astro:transitions'
 import {getSiteCode} from '../scripts/getSiteConfig'
 
 import SvgLinkIcon from '../assets/images/shared/external-link.svg'
-console.log(SvgLinkIcon);
+// console.log(SvgLinkIcon);
 
 import StyleHelper from "./StyleHelper.astro";
 
@@ -69,25 +69,6 @@ const siteCode = getSiteCode();
         }
     }
     setTheme();
-
-    // update any external links
-
-    function updateExternalLinksIcon() {
-        import("/scripts/createSvgExternalLinkIcon.js")
-            .then(({createSvgExternalLinkIcon}) => {
-                async function addSvgExternalLinkIcon() {
-                    const externalLinks = Array.from(document.querySelectorAll('[data-external-link]'));
-                    const svgElement = await createSvgExternalLinkIcon(SvgLinkIcon);
-                    externalLinks.forEach(el => {
-                        el.innerText = " ";
-                        el.appendChild(svgElement.cloneNode(true));
-                    })
-                }
-
-                addSvgExternalLinkIcon();
-            });
-    }
-    document.addEventListener("astro:page-load", updateExternalLinksIcon);
 </script>
 
 

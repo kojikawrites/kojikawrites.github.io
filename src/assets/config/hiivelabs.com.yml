@@ -32,8 +32,8 @@ navbar:
       - href: "[slug]"
         label: "[slug]"
       #      - "[...page]"
-      - href: "archive"
-        label: "archive"
+#      - href: "archive"
+#        label: "archive"
 
 # blog path (can be posts or blog)
 # posts = src/assets/posts/...
