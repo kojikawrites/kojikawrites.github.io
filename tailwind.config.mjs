@@ -20,4 +20,9 @@ export default {
 		},
 	},
 	plugins: [],
+	safelist: [
+		{
+			pattern: /.*/, // preserve all classes
+		},
+	],
 }
