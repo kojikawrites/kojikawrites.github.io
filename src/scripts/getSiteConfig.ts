@@ -7,11 +7,6 @@ export function getSiteCode(): string {
         .replace(/\s/g, '');      // Remove all whitespace characters;
 }
 
-
-async function getFrontMatterJson() {
-
-}
-
 export async function getSiteConfig() {
     const site = getSiteCode();
     interface ThemedImage {
