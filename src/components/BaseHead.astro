@@ -68,25 +68,6 @@ const siteCode = getSiteCode();
         }
     }
     setTheme();
-
-    // update any external links
-
-    function updateExternalLinksIcon() {
-        import("/scripts/createSvgExternalLinkIcon.js")
-            .then(({createSvgExternalLinkIcon}) => {
-                async function addSvgExternalLinkIcon() {
-                    const externalLinks = Array.from(document.querySelectorAll('[data-external-link]'));
-                    const svgElement = await createSvgExternalLinkIcon(SvgLinkIcon);
-                    externalLinks.forEach(el => {
-                        el.innerText = " ";
-                        el.appendChild(svgElement.cloneNode(true));
-                    })
-                }
-
-                addSvgExternalLinkIcon();
-            });
-    }
-    document.addEventListener("astro:page-load", updateExternalLinksIcon);
 </script>
 
 

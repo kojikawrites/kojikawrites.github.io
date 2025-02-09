@@ -12,13 +12,12 @@ import tailwind from '@astrojs/tailwind';
 import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
 import pagefind from "astro-pagefind";
-import frontmatter from "/src/scripts/extractPagesFrontMatter.mjs";
-
+import frontmatter from "/src/scripts/extractPagesFrontMatter.mjs"; // DO NOT DELETE
+import rehypeLinkDecorator from "./rehype-link-decorator.mjs";
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
 
 
 import sitemap from '@astrojs/sitemap';
-
 
 const siteName = () => {
     try {
@@ -74,8 +73,49 @@ export default defineConfig({
                 {
                     target: '_blank',
                     rel: ['nofollow', 'noopener', 'noreferrer'],
-                    contentProperties: {"data-external-link": true},
-                    content: {type: 'text', value: ''} // ' 🔗'
+                    contentProperties: {
+                        "className": ["inline-block"]
+                    },
+                    content: (e) => {
+                        const icons = [
+                            {
+                                iconName: "-external-link",
+                                iconFile: "./src/assets/images/shared/links/-external-link.svg",
+                                properties: {
+                                    className: ["inline", "relative", "-top-0.5"],
+                                    width: "0.8em",
+                                    height: "0.8em",
+                                }
+                            },
+                            {
+                                iconName: "-download-link",
+                                iconFile: "./src/assets/images/shared/links/-download-link.svg",
+                                properties: {
+                                    className: ["inline", "relative", "-top-[2px]"],
+                                    width: "0.8em",
+                                    height: "0.8em",
+                                }
+                            },
+                            {
+                                iconName: ".wikipedia.",
+                                iconFile: "./src/assets/images/shared/links/wikipedia.svg",
+                                properties: { className: ["inline", "relative", "-top-0.5"] }
+                            },
+                            {
+                                iconName: "github.com",
+                                iconFile: "./src/assets/images/shared/links/github.svg",
+                                properties: { className: ["inline", "relative", "-top-0.5"] }
+                            },
+                            {
+                                iconName: "store.steampowered.com",
+                                iconFile: "./src/assets/images/shared/links/steam.svg",
+                                properties: { className: ["inline", "relative", "-top-0.5"] }
+                            },
+                            // "download": "download-link-icon.png",
+                            // "wiki": "wiki-link-icon.png",
+                        ]
+                        return rehypeLinkDecorator(e, icons, siteName);
+                    }
                 }
             ],
             [
