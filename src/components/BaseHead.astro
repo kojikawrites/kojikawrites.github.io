@@ -3,7 +3,7 @@ import { ClientRouter } from 'astro:transitions'
 
 import {getSiteCode} from '../scripts/getSiteConfig'
 
-import SvgLinkIcon from '../assets/images/shared/external-link.svg'
+//import SvgLinkIcon from '../assets/images/shared/external-link.svg'
 // console.log(SvgLinkIcon);
 
 import StyleHelper from "./StyleHelper.astro";
@@ -55,7 +55,7 @@ const siteCode = getSiteCode();
 <StyleHelper/>
 
 <!-- This is intentionally inlined to avoid FOUC -->
-<script is:inline define:vars={{SvgLinkIcon}} data-astro-rerun>
+<script is:inline data-astro-rerun>
     // import { createSvgExternalLinkIcon } from "/public/scripts/createSvgExternalLinkIcon.js";
     // set up theming
     function setTheme() {

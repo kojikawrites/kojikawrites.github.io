@@ -20,4 +20,7 @@ export default {
 		},
 	},
 	plugins: [],
+	safelist: [
+		'favicon-link-img'
+	],
 }
