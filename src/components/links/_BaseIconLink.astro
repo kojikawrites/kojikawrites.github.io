@@ -37,10 +37,16 @@ function hasDownloadFileExtension(path: string): boolean {
 }
 const isLinkToFile = hasDownloadFileExtension(href);
 
+const resolvedTitle = title ?? isLinkToFile
+    ? "Download File..."
+    : isInternal
+        ? "Follow Link..."
+        : "Follow External Link (will open in a new window).";
+
 ---
 <a href={href}
    class={className}
-   title={title}
+   title={resolvedTitle}
    target="_blank"
    rel="noopener nofollow noreferrer"
    {...rest}>

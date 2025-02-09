@@ -1,3 +1,4 @@
+import {getJson} from "./getJson.ts";
 
 export function getSiteCode(): string {
     return import.meta.env.SITE
@@ -6,6 +7,10 @@ export function getSiteCode(): string {
         .replace(/\s/g, '');      // Remove all whitespace characters;
 }
 
+
+async function getFrontMatterJson() {
+
+}
 
 export async function getSiteConfig() {
     const site = getSiteCode();
@@ -64,8 +69,36 @@ export async function getSiteConfig() {
         console.warn(`No yaml found for ${site}...`);
     }
     // console.log(`Reading ${site} yaml config...`);
-    return await yamlGlobs[matchingKey]().then(y => {
-            return y;
+    // return await yamlGlobs[matchingKey]().then(y => {
+    //         return y;
+    //     }
+    // );
+    return await yamlGlobs[matchingKey]().then(async (config) => {
+
+        // Ensure that the config has a navbar with breadcrumbs.
+        if (config.navbar && config.navbar.breadcrumbs) {
+            // Retrieve the current valid_breadcrumbs array.
+            const validBreadcrumbs: NavbarEntry[] = config.navbar.breadcrumbs.valid_breadcrumbs || [];
+            const frontmatterData = await getJson(site, 'frontmatter.json');
+
+            // console.log('frontmatterData', frontmatterData);
+            // Iterate over each entry in the frontmatter JSON.
+            for (const entry of Object.entries(frontmatterData)) {
+
+                const href = entry[0];
+                const label = entry[1];
+                // Add a new NavbarEntry only if an entry with the same href is not already present.
+                if (!validBreadcrumbs.some(entry => entry.href === href)) {
+                    validBreadcrumbs.push({ href, label });
+                    console.log('Adding Breadcrumb: ', { href, label });
+                }
+            }
+            // Update the config with the new list of breadcrumbs.
+            config.navbar.breadcrumbs.valid_breadcrumbs = validBreadcrumbs;
         }
-    );
+
+        //console.log(config.navbar.breadcrumbs.valid_breadcrumbs);
+
+        return config;
+    });
 }
