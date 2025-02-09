@@ -21,8 +21,6 @@ export default {
 	},
 	plugins: [],
 	safelist: [
-		{
-			pattern: /.*/, // preserve all classes
-		},
+		'favicon-link-img'
 	],
 }
