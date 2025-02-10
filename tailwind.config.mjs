@@ -21,6 +21,9 @@ export default {
 	},
 	plugins: [],
 	safelist: [
-		'favicon-link-img'
+		'favicon-link-img',
+		{
+			pattern: /.*(?:-list|-card)$/,
+		},
 	],
 }
