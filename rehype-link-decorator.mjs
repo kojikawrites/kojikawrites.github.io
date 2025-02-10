@@ -1,10 +1,11 @@
 import fs from 'fs';
 import path from 'path';
-import { unified } from 'unified';
+import {unified} from 'unified';
 import rehypeParse from 'rehype-parse';
 import isAbsoluteUrl from 'is-absolute-url'
 
-import { createRequire } from 'module';
+import {createRequire} from 'module';
+
 const require = createRequire(import.meta.url);
 const request = require('sync-request');
 
@@ -101,16 +102,40 @@ function downloadFaviconSync(faviconUrl, fileNameNoExt, outputDir) {
             const filePath = path.join(outputDir, fileName);
             // Write the fetched data to file.
             fs.writeFileSync(filePath, res.getBody());
-            console.log(`Favicon downloaded to ${filePath}`);
+            console.log(`rehypeLinkDecorator: Favicon downloaded to ${filePath}`);
             return filePath;
         } else {
-            console.warn(`GET request failed for ${faviconUrl} with status ${res.statusCode}`);
+            console.warn(`rehypeLinkDecorator: GET request failed for ${faviconUrl} with status ${res.statusCode}`);
             return null;
         }
     } catch (e) {
-        console.error(`Failed to download favicon from ${faviconUrl}: ${e.message}`);
+        console.error(`rehypeLinkDecorator: Failed to download favicon from ${faviconUrl}: ${e.message}`);
         return null;
     }
+}
+
+function buildFaviconPathDevMode(dirPath, faviconDomain) {
+    // The directory where the favicon files are located.
+    let matchingFile;
+    try {
+        // Read all files in the directory.
+        const files = fs.readdirSync(dirPath);
+        // Find the first file whose base name matches faviconDomain.
+        matchingFile = files.find(file => {
+            const parsed = path.parse(file);
+            return parsed.name === faviconDomain;
+        });
+    } catch (error) {
+        console.error(`rehypeLinkDecorator: Error reading directory '${dirPath}':`, error);
+    }
+
+    // If a matching file was found, return its full path; otherwise, default to .png.
+    const devPath = matchingFile
+        ? path.join(dirPath, matchingFile)
+        : path.join(dirPath, `${faviconDomain}.png`);
+
+    console.log(`rehypeLinkDecorator: Building dev mode path: ${devPath}`);
+    return devPath;
 }
 
 const defaultProtocols = ['http', 'https'];
@@ -267,8 +292,7 @@ function isDownloadLink(pathString) {
             return false;
         }
 
-        const isDownload = !excludedExtensions.has(extension);
-        return isDownload;
+        return !excludedExtensions.has(extension);
     } catch (e) {
         // Fallback for strings that aren’t valid URLs.
         const match = pathString?.toLowerCase().match(/\.([^./?\\]+)(?:[?#]|$)/);
@@ -280,20 +304,17 @@ function isDownloadLink(pathString) {
         if (parts.length > 2 && extension.length > 4) {
             return false;
         }
-        const isDownload = !excludedExtensions.has(extension);
-        return isDownload;
+        return !excludedExtensions.has(extension);
     }
 }
 
 function buildEmptyTag(tagName, props)
 {
-    const tagHast = {
+    return {
         type: 'element',
         tagName: tagName,
         properties: props
     };
-    // console.log('buildEmptyTag:', tagHast);
-    return tagHast;
 }
 
 const iconDictionary = {}
@@ -386,7 +407,7 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
             }
         });
 
-        // test add favicon
+        // add favicon if necessary
         const needFavicon = !iconAdded && "-favicon-link" in iconDictionary;
         if (needFavicon) {
             const siteFolder = new URL(siteName)?.hostname
@@ -397,15 +418,17 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
                 const exclusions = "-favicon-link" in exclusionsDictionary
                     ? exclusionsDictionary["-favicon-link"]
                     : {};
-                console.log("exclusions", exclusions);
+                //console.log("exclusions", exclusions);
                 if (exclusions.includes(faviconDomain)) {
                     console.log(`rehypeLinkDecorator -> faviconDomain EXCLUDED: '${faviconDomain}'`);
                 }
                 else {
-                    console.log(`rehypeLinkDecorator -> faviconDomain: '${faviconDomain}'`);
+                    // console.log(`rehypeLinkDecorator -> faviconDomain: '${faviconDomain}'`);
                     if (faviconDomain && !(faviconDomain in faviconDictionary)) {
                         let selectedFavicon = getFaviconUrlSync(href);
-                        const downloadedFavicon = downloadFaviconSync(selectedFavicon, faviconDomain, favIconDownloadPath);
+                        const downloadedFavicon = import.meta.env.PROD
+                            ? downloadFaviconSync(selectedFavicon, faviconDomain, favIconDownloadPath)
+                            : buildFaviconPathDevMode(favIconDownloadPath, faviconDomain);
                         selectedFavicon = downloadedFavicon.replace(buildTimePublicPrefix, '') ?? selectedFavicon;
 
                         faviconDictionary[faviconDomain] = selectedFavicon;
@@ -433,7 +456,6 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
 
         // check if download link
         const isDownload = isDownloadLink(href);
-        console.log(`rehypeLinkDecorator: isDownloadLink: '${href}' -> ${isDownload}`);
         if (isDownload) {
             iconNode.children.push(getSpaceNode());
             iconNode.children.push(iconDictionary["-download-link"]);
@@ -445,7 +467,7 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
             ? siteProtocols.includes(href.slice(0, href.indexOf(':')))
             : href.startsWith('//');
 
-        console.log(`rehypeLinkDecorator: isExternalLink: '${href}' -> ${isExternal}`);
+        console.log(`rehypeLinkDecorator: '${href}' -> isDownloadLink(${isDownload}), isExternalLink(${isExternal})`);
         if (isExternal) {
             // add external icon to iconNode
             iconNode.children.push(getSpaceNode());
