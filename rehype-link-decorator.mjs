@@ -292,8 +292,7 @@ function isDownloadLink(pathString) {
             return false;
         }
 
-        const isDownload = !excludedExtensions.has(extension);
-        return isDownload;
+        return !excludedExtensions.has(extension);
     } catch (e) {
         // Fallback for strings that aren’t valid URLs.
         const match = pathString?.toLowerCase().match(/\.([^./?\\]+)(?:[?#]|$)/);
@@ -305,8 +304,7 @@ function isDownloadLink(pathString) {
         if (parts.length > 2 && extension.length > 4) {
             return false;
         }
-        const isDownload = !excludedExtensions.has(extension);
-        return isDownload;
+        return !excludedExtensions.has(extension);
     }
 }
 
