@@ -154,7 +154,7 @@ export default defineConfig({
                             },
 
                         ]
-                        return rehypeLinkDecorator(e, icons, siteName);
+                        return rehypeLinkDecorator(e, icons, siteName());
                     }
                 }
             ],

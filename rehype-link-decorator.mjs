@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { unified } from 'unified';
 import rehypeParse from 'rehype-parse';
 import isAbsoluteUrl from 'is-absolute-url'
@@ -32,6 +33,84 @@ function getFaviconUrlSync(websiteUrl) {
 
     //console.warn(`No valid favicon found for ${websiteUrl}`);
     return null;
+}
+
+/**
+ * Determines the file extension based on the content type header.
+ * Falls back to extracting the extension from the URL's pathname.
+ *
+ * @param {string} contentType - The Content-Type header from the HTTP response.
+ * @param {string} faviconUrl - The original favicon URL.
+ * @returns {string} - The file extension without the dot.
+ */
+function getFileExtension(contentType, faviconUrl) {
+    if (contentType) {
+        // Remove any charset info, e.g. "image/png; charset=utf-8"
+        const ct = contentType.split(';')[0].trim();
+        switch (ct) {
+            case 'image/png':
+                return 'png';
+            case 'image/jpeg':
+            case 'image/jpg':
+                return 'jpg';
+            case 'image/gif':
+                return 'gif';
+            case 'image/svg+xml':
+                return 'svg';
+            case 'image/x-icon':
+            case 'image/vnd.microsoft.icon':
+                return 'ico';
+            default:
+                break;
+        }
+    }
+    // Fallback: try to get extension from the URL's pathname
+    const parsedUrl = new URL(faviconUrl);
+    const ext = path.extname(parsedUrl.pathname);
+    if (ext) {
+        return ext.slice(1); // Remove the leading dot
+    }
+    // Default to ico if nothing else works
+    return 'ico';
+}
+
+/**
+ * Downloads the favicon synchronously.
+ *
+ * @param {string} faviconUrl - The URL to fetch the favicon from.
+ * @param {string} fileNameNoExt - The filename to save the file to.
+ * @param {string} outputDir - The directory where the file should be saved.
+ * @returns {string|null} - The full file path of the saved favicon, or null if failed.
+ */
+function downloadFaviconSync(faviconUrl, fileNameNoExt, outputDir) {
+    // Ensure the output directory exists.
+    if (!fs.existsSync(outputDir)) {
+        throw new Error(`Output directory does not exist: ${outputDir}`);
+    }
+
+    try {
+        // Download the favicon via a synchronous GET request.
+        const res = request('GET', faviconUrl, { timeout: 5000, strictSSL: false });
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+            // Retrieve the content type from headers.
+            const contentType = res.headers['content-type'];
+            // Determine the file extension.
+            const fileExt = getFileExtension(contentType, faviconUrl);
+            // Construct the full file name and path.
+            const fileName = `${fileNameNoExt}.${fileExt}`;
+            const filePath = path.join(outputDir, fileName);
+            // Write the fetched data to file.
+            fs.writeFileSync(filePath, res.getBody());
+            console.log(`Favicon downloaded to ${filePath}`);
+            return filePath;
+        } else {
+            console.warn(`GET request failed for ${faviconUrl} with status ${res.statusCode}`);
+            return null;
+        }
+    } catch (e) {
+        console.error(`Failed to download favicon from ${faviconUrl}: ${e.message}`);
+        return null;
+    }
 }
 
 const defaultProtocols = ['http', 'https'];
@@ -310,6 +389,9 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
         // test add favicon
         const needFavicon = !iconAdded && "-favicon-link" in iconDictionary;
         if (needFavicon) {
+            const siteFolder = new URL(siteName)?.hostname
+            const buildTimePublicPrefix = 'public';
+            const favIconDownloadPath = `${buildTimePublicPrefix}/favicons/${siteFolder}/external`;
             try {
                 const faviconDomain = new URL(href)?.hostname;
                 const exclusions = "-favicon-link" in exclusionsDictionary
@@ -322,7 +404,10 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
                 else {
                     console.log(`rehypeLinkDecorator -> faviconDomain: '${faviconDomain}'`);
                     if (faviconDomain && !(faviconDomain in faviconDictionary)) {
-                        const selectedFavicon = getFaviconUrlSync(href);
+                        let selectedFavicon = getFaviconUrlSync(href);
+                        const downloadedFavicon = downloadFaviconSync(selectedFavicon, faviconDomain, favIconDownloadPath);
+                        selectedFavicon = downloadedFavicon.replace(buildTimePublicPrefix, '') ?? selectedFavicon;
+
                         faviconDictionary[faviconDomain] = selectedFavicon;
                         console.log('rehypeLinkDecorator -> selectedFavicon:', selectedFavicon);
                     }
