@@ -386,8 +386,8 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
             }
         });
 
-        // test add favicon
-        const needFavicon = !iconAdded && "-favicon-link" in iconDictionary;
+        // add favicon if necessary
+        const needFavicon = !iconAdded && "-favicon-link" in iconDictionary && !import.meta.env.DEV;
         if (needFavicon) {
             const siteFolder = new URL(siteName)?.hostname
             const buildTimePublicPrefix = 'public';
