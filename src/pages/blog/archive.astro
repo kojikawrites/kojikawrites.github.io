@@ -5,8 +5,12 @@ import PostSummary from "../../components/posts/PostSummary.astro";
 
 import getPosts from "../../scripts/getPosts";
 import {buildPermalink} from "../../scripts/urlUtils";
+import {getSiteConfig} from "../../scripts/getSiteConfig";
 
 const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
+const siteConfig = await getSiteConfig();
+const smallMode = siteConfig.blog.small_mode;
+const largeMode = siteConfig.blog.large_mode;
 
 const title = 'Archive';
 const description = 'Article archive.';
@@ -21,7 +25,7 @@ const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
     <PagePostCount postCount={allPosts.length} class="post-count" />
     <ul>
     {allPosts.map((post, _) => (
-        <PostSummary post={post} />
+        <PostSummary post={post} smallMode={smallMode} largeMode={largeMode} />
     ))}
     </ul>
   </div>
