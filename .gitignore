@@ -24,4 +24,4 @@ pnpm-debug.log*
 .venv/
 /site.txt
 /src/assets/_private/state/**/published_posts*.json
-/public/favicons/hiivelabs.com/external/
+/public/favicons/*/external/
