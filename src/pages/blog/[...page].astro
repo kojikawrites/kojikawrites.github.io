@@ -38,11 +38,11 @@ const firstPath = pathname[1];
   <div class="post-list min-h-[75vh]">
     <h1>Recent Posts</h1>
     <PagePostCount postCount={allPostsCount} postsPerPage={paginationSize} class="post-count" />
-    <ul>
+
+    <!--post summaries -->
     {page.data.map((post, _) => (
         <PostSummary post={post} />
     ))}
-    </ul>
 
     {allPostsCount > paginationSize
         ? (
