@@ -23,7 +23,7 @@ const id = toSafeId("post-summary");
 const imgId = `${id}-img`;
 
 const smallType = "card";
-const largeType = "list";
+const largeType = "card";
 
 const classExt = `sm-${smallType}-lg-${largeType}`;
 ---
@@ -33,16 +33,18 @@ const classExt = `sm-${smallType}-lg-${largeType}`;
 
     <!-- post thumbnail -->
     {thumbnailSrc && (
-        <div class={`post-thumbnail-${classExt}`}>
-            <a href={href} class={`post-thumbnail-link-${classExt}`}>
-                <Image id={imgId} src={getMediaMetadata(thumbnailSrc)} alt={title}
-                       class={`post-thumbnail-img-${classExt}`} />
-            </a>
-        </div>
+            <div class={`post-thumbnail-${classExt}`}>
+                <a href={href} class={`post-thumbnail-link-${classExt}`}>
+                    <Image id={imgId} src={getMediaMetadata(thumbnailSrc)} alt={title}
+                           class={`post-thumbnail-img-${classExt}`} />
+                </a>
+            </div>
     )}
     <div class={`post-details-${classExt}`}>
         <!-- post title -->
-        <div class={`post-title-${classExt} ${thumbnailSrc ? `post-title-offset-${classExt}` : ''}`}>
+        <div class={`post-title-${classExt} ${thumbnailSrc
+            ? `post-title-offset-with-img-${classExt}`
+            : `post-title-offset-no-img-${classExt}`}`}>
             <h3 class={`post-title-link-${classExt}`}>
                 <a href={href}>{title}</a>
             </h3>
