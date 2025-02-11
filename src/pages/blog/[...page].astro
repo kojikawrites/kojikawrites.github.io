@@ -12,6 +12,9 @@ import {buildPermalink} from "../../scripts/urlUtils";
 const allPostsCount = getPosts().length;
 const siteConfig = await getSiteConfig();
 const paginationSize = siteConfig.blog.pagination_size;
+const smallMode = siteConfig.blog.small_mode;
+const largeMode = siteConfig.blog.large_mode;
+
 
 const title = 'Blog';
 const description = 'Latest articles.';
@@ -38,11 +41,11 @@ const firstPath = pathname[1];
   <div class="post-list min-h-[75vh]">
     <h1>Recent Posts</h1>
     <PagePostCount postCount={allPostsCount} postsPerPage={paginationSize} class="post-count" />
-    <ul>
+
+    <!--post summaries -->
     {page.data.map((post, _) => (
-        <PostSummary post={post} />
+        <PostSummary post={post} smallMode={smallMode} largeMode={largeMode} />
     ))}
-    </ul>
 
     {allPostsCount > paginationSize
         ? (

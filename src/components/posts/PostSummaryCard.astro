@@ -1,8 +1,6 @@
 ---
 interface Props {
     post: any
-    smallMode: string
-    largeMode: string
 }
 
 import FormattedDate from "../FormattedDate.astro";
@@ -12,11 +10,7 @@ import getMediaMetadata from "../../scripts/getMediaMetadata";
 import {getSiteConfig} from "../../scripts/getSiteConfig";
 import toSafeId from '../../scripts/toSafeId';
 
-const {
-    post,
-    smallMode = "card",
-    largeMode = "card",
-} = Astro.props;
+const post = Astro.props.post;
 
 const siteConfig = await getSiteConfig();
 const { path } = getPostData(post);
@@ -27,7 +21,11 @@ console.log("post", frontmatter);
 const { title, publishDate, description, author, readingTime, thumbnail:thumbnailSrc = null} = frontmatter;
 const id = toSafeId("post-summary");
 const imgId = `${id}-img`;
-const classExt = `sm-${smallMode}-lg-${largeMode}`;
+
+const smallType = "card";
+const largeType = "card";
+
+const classExt = `sm-${smallType}-lg-${largeType}`;
 ---
 
 <!-- post summary text -->
