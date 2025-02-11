@@ -16,7 +16,7 @@ const displayUrl = url
 <div class="text-nowrap">
     <h3>{name}</h3>
     {url ?
-        <a href={url}>
+        <a href={url} target="_blank" rel="noopener noreferrer">
             {displayUrl}
             <SvgExternalLink class="inline w-[0.8em] h-[0.8em]" />
         </a>

@@ -22,6 +22,7 @@
         @apply animate-blur;
         @apply hover:animate-sharpen;
         @apply pl-4 py-0.5 mb-1;
+        @apply rounded-lg;
     }
 
     .key-post-list {
