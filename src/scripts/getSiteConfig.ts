@@ -24,6 +24,8 @@ export async function getSiteConfig() {
             pagination_size: number;
             path: string;
             prefix: string;
+            small_mode: string;
+            large_mode: string;
         };
         navbar: {
             logo: ThemedImage,

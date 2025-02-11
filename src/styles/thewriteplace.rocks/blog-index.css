@@ -88,6 +88,7 @@
     :root {
         --thumbnail-image-width-card: 288px;
         --thumbnail-image-width-list: 288px;
+        --thumbnail-left-offset: 24px;
     }
     /* card layout */
 
@@ -247,13 +248,13 @@
 
     }
     .post-title-offset-with-img-list {
-        @apply lg:relative lg:-left-[calc(var(--thumbnail-image-width-list)+20px)];
+        @apply lg:relative lg:-left-[calc(var(--thumbnail-image-width-list)+var(--thumbnail-left-offset))];
 
-        @apply w-[calc(100%+var(--thumbnail-image-width-list)+20px)];
+        @apply w-[calc(100%+var(--thumbnail-image-width-list)+var(--thumbnail-left-offset))];
     }
 
     .post-title-offset-no-img-list {
-        @apply lg:relative lg:-left-[20px];
+        @apply lg:relative lg:-left-[var(--thumbnail-left-offset)];
     }
 
     .post-title-offset-list::before {

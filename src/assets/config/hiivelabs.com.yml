@@ -42,6 +42,8 @@ blog:
   pagination_size: 10
   path: posts
   prefix: blog/
+  small_mode: 'card'
+  large_mode: 'list'
 
 # footer setup
 footer:
