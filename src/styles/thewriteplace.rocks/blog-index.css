@@ -59,6 +59,10 @@
                 @apply color-text-secondary;
                 @apply bg-[#FFFFFF20];
 
+                a {
+                    @apply block w-full h-full;
+                }
+
                 a::before {
                     @apply hidden; /* clear out link animation */
                 }

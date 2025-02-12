@@ -23,10 +23,8 @@ const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
   <div class="post-list">
     <h1>Post Archive</h1>
     <PagePostCount postCount={allPosts.length} class="post-count" />
-    <ul>
     {allPosts.map((post, _) => (
         <PostSummary post={post} smallMode={smallMode} largeMode={largeMode} />
     ))}
-    </ul>
   </div>
 </BaseLayout>
