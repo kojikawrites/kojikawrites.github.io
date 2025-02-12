@@ -94,6 +94,13 @@
         --thumbnail-image-width-list: 192px;
         --thumbnail-left-offset: 24px;
     }
+
+    /* shared */
+    .footer-caption {
+        @apply opacity-75;
+        @apply italic;
+    }
+
     /* card layout */
 
     /* */
@@ -282,7 +289,7 @@
         @apply h-fit lg:h-full;
         /*@apply max-w-prose;*/
         @apply flex;
-        @apply flex-col-reverse lg:flex-col;
+        @apply flex-col-reverse lg:relative lg:-top-16;
         /*@apply bg-orange-500;*/
     }
 
@@ -299,7 +306,7 @@
         @apply text-[0.8rem] leading-3 font-family-sans-alt;
         @apply w-fit lg:pt-2;
         @apply z-10;
-        @apply lg:-top-8;
+        @apply lg:-top-16;
     }
 
     .post-link-list::before {

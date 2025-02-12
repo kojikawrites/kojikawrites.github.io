@@ -12,6 +12,7 @@
   function handleChange(event) {
     theme = event.target.value;
     localStorage.setItem('theme', theme);
+    localStorage.setItem('themeSet', 'true');
     window.dispatchEvent(new Event("storage"));
   }
 
@@ -53,13 +54,13 @@
     <label class={theme === t ? 'checked' : ''}>
       {@html icons[i]}
       <input
-        type="radio"
-        name="theme-toggle"
-        checked={theme === t}
-        value={t}
-        title={`Use ${t} theme`}
-        aria-label={`Use ${t} theme`}
-        on:change={handleChange}
+              type="radio"
+              name="theme-toggle"
+              checked={theme === t}
+              value={t}
+              title={`Use ${t} theme`}
+              aria-label={`Use ${t} theme`}
+              on:change={handleChange}
       />
     </label>
   {/each}

@@ -2,10 +2,6 @@
 import { ClientRouter } from 'astro:transitions'
 
 import {getSiteCode} from '../scripts/getSiteConfig'
-
-//import SvgLinkIcon from '../assets/images/shared/external-link.svg'
-// console.log(SvgLinkIcon);
-
 import StyleHelper from "./StyleHelper.astro";
 
 export interface Props {
@@ -56,18 +52,61 @@ const siteCode = getSiteCode();
 
 <!-- This is intentionally inlined to avoid FOUC -->
 <script is:inline data-astro-rerun>
-    // import { createSvgExternalLinkIcon } from "/public/scripts/createSvgExternalLinkIcon.js";
-    // set up theming
+    // localStorage.clear();
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     function setTheme() {
         const root = document.documentElement;
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        let theme = localStorage.getItem('theme');
+        const themeSet = localStorage.getItem('themeSet');
+        // set up theming
+        // if a theme hasn't been manually set, query the system theme.
+        if (themeSet !== 'true') {
+
+            if (darkModeMediaQuery.matches) {
+                // dark theme on system
+                theme = 'dark';
+            }
+            else {
+                // light theme on system
+                theme = 'light';
+            }
+        }
+        // set the theme.
+        if (theme === 'dark') {
+            console.log('Setting dark mode');
             root.classList.add('theme-dark');
         } else {
+            console.log('Setting light mode');
             root.classList.remove('theme-dark');
         }
     }
     setTheme();
+
+    window.addEventListener('storage', setTheme)
+
+    // set up theme listener
+    function handleThemeChange(e) {
+        const root = document.documentElement;
+        if (e.matches) {
+            console.log('Switched to dark mode');
+            root.classList.add('theme-dark');
+
+        } else {
+            console.log('Switched to light mode');
+            root.classList.remove('theme-dark');
+        }
+    }
+    // if user hasn't manually set theme, we can respond to system theme
+
+    // set up theming
+    darkModeMediaQuery.addEventListener('change', (e) => {
+        const themeSet = localStorage.getItem('themeSet');
+        console.log('BaseHead: themeSet', themeSet);
+        if (!themeSet) {
+            handleThemeChange(e);
+        }
+    });
+
 </script>
 
 
