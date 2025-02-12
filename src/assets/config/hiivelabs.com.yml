@@ -43,7 +43,7 @@ blog:
   path: posts
   prefix: blog/
   small_mode: 'card'
-  large_mode: 'list'
+  large_mode: 'card'
 
 # footer setup
 footer:
