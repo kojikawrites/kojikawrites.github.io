@@ -12,6 +12,7 @@
   function handleChange(event) {
     theme = event.target.value;
     localStorage.setItem('theme', theme);
+    localStorage.setItem('themeSet', 'true');
     window.dispatchEvent(new Event("storage"));
   }
 

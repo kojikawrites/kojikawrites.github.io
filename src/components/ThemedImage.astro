@@ -105,6 +105,7 @@ console.log(themedImgId);
             function setThemedImage()   {
                 var themedImgs = document.querySelectorAll(`[id='${themedImgId}']`);
                 const theme = getActiveTheme();
+                console.log('ThemedImage.setThemedImage', theme);
                 // alert(theme, themedImgId);
                 themedImgs.forEach((img: HTMLElement) => {
 
@@ -123,12 +124,21 @@ console.log(themedImgId);
             setThemedImage();
 
             // this should catch theme changes
-            window.addEventListener('storage', (_) => {
-                setThemedImage();
-            });
+            window.addEventListener('storage', setThemedImage);
 
-            document.addEventListener("astro:after-swap", (_) => {
-                setThemedImage();
+
+            document.addEventListener("astro:after-swap", setThemedImage);
+
+
+            // if user hasn't manually set theme, we can respond to system theme
+            // set up theming
+            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            darkModeMediaQuery.addEventListener('change', () => {
+                const themeSet = localStorage.getItem('themeSet');
+                console.log('ThemedImage: themeSet', themeSet);
+                if (!themeSet) {
+                    setThemedImage();
+                }
             });
         }
     }
