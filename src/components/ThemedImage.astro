@@ -84,13 +84,13 @@ console.log(themedImgId);
 
 <themed-image-data-holder id={getSafeId(id)} data-themed-img-id={themedImgId}>
     {Object.keys(themedImageGlobs).map((theme, _) => (
-        <Image id={themedImgId}
-               src={getValueOrFirst(themedImageGlobs, theme)}
-               alt={alt}
-               title={alt}
-               class=`${className} hidden`
-               data-theme={theme}
-               {...rest} />
+            <Image id={themedImgId}
+                   src={getValueOrFirst(themedImageGlobs, theme)}
+                   alt={alt}
+                   title={alt}
+                   class=`${className} hidden`
+                   data-theme={theme}
+                   {...rest} />
     ))}
 </themed-image-data-holder>
 <!-- '/@client-scripts/theme'; //@client-scripts  '/src/scripts/client/theme.ts'; -->
