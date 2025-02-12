@@ -1,5 +1,6 @@
 @layer base {
     :root {
+        --theme-color: #FFFFFF;
         --background-image: url('/src/assets/images/hiivelabs.com/hiive-background-light.png');
         --background-body: #dddddd;
         --background-feature: #eeeeee;
@@ -24,6 +25,7 @@
     }
 
     :root.theme-dark {
+        --theme-color: #000000;
         --background-image: url('/src/assets/images/hiivelabs.com/hiive-background-dark.png');
         --background-body: #202122;
         --background-feature: #28292A;
