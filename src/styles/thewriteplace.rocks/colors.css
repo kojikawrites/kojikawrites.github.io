@@ -1,5 +1,6 @@
 @layer base {
     :root {
+        --theme-color: #FFFFFF;
         --background-image: url('/src/assets/images/thewriteplace.rocks/kojika-background-light.png');
         --background-body: #ddd;
         --background-feature: #eee;
@@ -25,6 +26,7 @@
     }
 
     :root.theme-dark {
+        --theme-color: #000000;
         --background-image: url('/src/assets/images/thewriteplace.rocks/kojika-background-dark.png');
         --background-body: #202122;
         --background-feature: #28292A;

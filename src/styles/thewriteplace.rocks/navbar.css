@@ -35,4 +35,7 @@
             @apply w-fit max-w-fit min-w-fit;
         }
     }
+    .navbar-bottom-fader {
+        @apply absolute w-full h-2 left-0 bg-gradient-to-b from-[var(--theme-color)] to-transparent;
+    }
 }
