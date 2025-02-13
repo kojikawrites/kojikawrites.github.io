@@ -29,26 +29,32 @@ console.log("FB-URL:", href);
     <script is:inline>
 
         function setTheme() {
-            const fbComments = (document.querySelectorAll(".fb-comments")[0]);
-            if (fbComments) {
-                let theme = localStorage.getItem('theme');
-                const themeSet = localStorage.getItem('themeSet');
-                if (themeSet) {
-                    fbComments.dataset.colorscheme = theme;
-                }
+            // Get all fb-comments elements
+            const fbComments = document.querySelectorAll('.fb-comments');
+            if (!fbComments.length) return;
 
+            // Get theme from localStorage (if set)
+            const theme = localStorage.getItem('theme');
+            const themeSet = localStorage.getItem('themeSet');
+            if (!themeSet) {
+                return;
             }
+
+            fbComments.forEach(fbComment => {
+                // Update the data attribute for colorscheme
+                fbComment.dataset.colorscheme = theme;
+
+                // Force refresh any iframes within this fb-comments element
+                fbComment.querySelectorAll('iframe').forEach(iframe => {
+                    // Option 1: reassign the same src to force a reload
+                    //iframe.src = iframe.src;
+
+                    // Option 2 (if the above doesn't work):
+                    // iframe.contentWindow.location.reload();
+                });
+            });
         }
 
-        // if user hasn't manually set theme, we can respond to system theme
-        // set up theming
-        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        darkModeMediaQuery.addEventListener('change', (e) => {
-            const themeSet = localStorage.getItem('themeSet');
-            console.log('ThemedImage: themeSet', themeSet);
-            if (!themeSet) {
-                setTheme();
-            }
-        });
+        setTheme();
     </script>
  }
