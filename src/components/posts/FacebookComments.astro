@@ -1,0 +1,77 @@
+---
+import {getActiveTheme} from "../../scripts/client/theme";
+interface Props {
+    numPosts?: number;
+}
+
+const {numPosts = 5} = Astro.props;
+import { getSiteConfig } from "../../scripts/getSiteConfig";
+
+const siteConfig = await getSiteConfig();
+const fbAppId = siteConfig.facebook.app_id;
+const href = import.meta.env.DEV
+    ? 'https://hiivelabs.com/test/'
+    : Astro.request.url.toString();
+console.log("FB-URL:", href);
+
+---
+{ siteConfig.facebook.include &&
+    <fb-theme-helper>
+        <hr />
+        <h2>Comments</h2>
+        <div class="fb-block">
+            <div id="fb-root" />
+            <script is:inline async defer
+                    crossorigin="anonymous"
+                    src=`https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0&appId=${fbAppId}` />
+            <div class="fb-comments w-full"
+                 data-colorscheme="light"
+                 data-href={href}
+                 data-width="100%"
+                 data-numposts={numPosts} />
+        </div>
+    </fb-theme-helper>
+ }
+<script>
+    import { getActiveTheme } from "../../scripts/client/theme";
+    class FBThemeHelper extends HTMLElement {
+        connectedCallback() {
+
+            // get values
+            function setTheme()   {
+                const fbComments = document.querySelectorAll('[data-colorscheme]');
+                const theme = getActiveTheme();
+                console.log('FacebookThemeController.setTheme', theme);
+                fbComments.forEach((fbComment: HTMLElement) => {
+                    if (fbComment.dataset.colorscheme !== theme) {
+                        fbComment.dataset.colorscheme = theme;
+                    }
+                });
+                return true;
+            }
+
+            // initial set.
+            setTheme();
+
+            // this should catch theme changes
+            window.addEventListener('storage', setTheme);
+
+
+            document.addEventListener("astro:after-swap", setTheme);
+
+
+            // if user hasn't manually set theme, we can respond to system theme
+            // set up theming
+            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            darkModeMediaQuery.addEventListener('change', () => {
+                const themeSet = localStorage.getItem('themeSet');
+                console.log('FacebookThemeController.setTheme', themeSet);
+                if (!themeSet) {
+                    setTheme();
+                }
+            });
+        }
+    }
+
+    customElements.define('fb-theme-helper', FBThemeHelper);
+</script>
