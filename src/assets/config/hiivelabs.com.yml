@@ -77,3 +77,5 @@ rss:
   site:
     name: hiivelabs Blog
     description: A blog about ML, AI, Gamedev and other random stuff that crosses my mind.
+
+#  ncu --interactive --format group
