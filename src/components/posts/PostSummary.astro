@@ -23,7 +23,7 @@ const { path } = getPostData(post);
 const href = `/${siteConfig.blog.prefix}${path}`;
 
 const { frontmatter } = post;
-console.log("post", frontmatter);
+// console.log("post", frontmatter);
 const { title, publishDate, description, author, readingTime, thumbnail:thumbnailSrc = null} = frontmatter;
 const id = toSafeId("post-summary");
 const imgId = `${id}-img`;

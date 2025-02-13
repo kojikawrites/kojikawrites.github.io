@@ -11,6 +11,7 @@ export interface Props {
 }
 const { title, description, permalink, current } = Astro.props;
 
+import { getSiteConfig } from "../scripts/getSiteConfig";
 
 ---
 <html lang="en">
@@ -19,6 +20,7 @@ const { title, description, permalink, current } = Astro.props;
   <BaseHead title={title} description={description} permalink={permalink} />
 </head>
 <body lang="en-us">
+
 <div class="layout min-h-full">
   <Header current={current} />
   <main>
