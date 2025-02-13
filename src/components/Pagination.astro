@@ -65,7 +65,7 @@ function buildPaginationUrl(url:string, ix:number = null) {
 
 </nav>
 <script is:inline data-astro-rerun>
-    // clear the '/#pagination' anchor ref off the end of the url to make it look nice.
+    // clear any '/#blah' anchor refs off the end of the url to make it look nice.
     (function() {
         const { pathname, search } = window.location;
         // Remove trailing slash from pathname if it's not the root "/"
