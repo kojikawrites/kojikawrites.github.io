@@ -22,9 +22,9 @@
     "@astrojs/ts-plugin": "^1.10.4",
     "@atproto/api": "^0.13.19",
     "@kobalte/core": "^0.13.7",
-    "astro": "^5.2.5",
+    "astro": "^5.2.6",
     "astro-breadcrumbs": "^3.3.1",
-    "astro-pagefind": "^1.7.0",
+    "astro-pagefind": "^1.8.0",
     "atproto": "^0.0.1",
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.6",
@@ -35,23 +35,23 @@
     "prism-themes": "^1.9.0",
     "reading-time": "^2.0.0-1",
     "rehype-external-links": "github:hiive/rehype-external-links",
-    "rehype-mathjax": "^6.0.0",
-    "remark-gfm": "^4.0.0",
+    "rehype-mathjax": "^7.0.0",
+    "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "remark-smartypants": "^3.0.2",
-    "sass": "^1.83.0",
+    "sass": "^1.84.0",
     "solid-icons": "^1.1.0",
-    "solid-js": "^1.9.3",
+    "solid-js": "^1.9.4",
     "spotlight.js": "^0.7.8",
     "sync-request": "^6.1.0",
     "tailwindcss": "^3.4.16",
-    "tm-themes": "^1.9.5",
-    "typescript": "^5.7.2"
+    "tm-themes": "^1.9.12",
+    "typescript": "^5.7.3"
   },
   "devDependencies": {
     "@rollup/plugin-yaml": "^4.1.2",
-    "@shikijs/transformers": "^1.24.2",
-    "postcss": "^8.4.49",
+    "@shikijs/transformers": "^2.3.2",
+    "postcss": "^8.5.2",
     "postcss-lighten-darken": "^0.9.0"
   }
 }
