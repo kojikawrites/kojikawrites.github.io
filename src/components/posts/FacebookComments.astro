@@ -1,0 +1,40 @@
+---
+interface Props {
+    numPosts?: number;
+}
+
+const {numPosts = 5} = Astro.props;
+import { getSiteConfig } from "../../scripts/getSiteConfig";
+
+const siteConfig = await getSiteConfig();
+const fbAppId = siteConfig.facebook.app_id;
+const href = Astro.request.url.toString();
+console.log("FB-URL:", href);
+
+---
+{ siteConfig.facebook.include &&
+    <style>
+        .fb_iframe_widget,
+        .fb_iframe_widget span,
+        .fb_iframe_widget iframe[style]  {width: 100% !important;}
+
+        .fb-comments {
+            width: 100% !important;
+            min-height: 512px !important;
+        }
+
+    </style>
+
+    <div class="w-full h-fit min-h-1 border border-gray-200 rounded-md mt-16">
+        <div id="fb-root" />
+        <script is:inline async defer
+                crossorigin="anonymous"
+                src=`https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0&appId=${fbAppId}` />
+
+        <div class="fb-comments"
+             data-colorscheme="light"
+             data-href={href}
+             data-width="100%"
+             data-numposts={numPosts} />
+    </div>
+ }
