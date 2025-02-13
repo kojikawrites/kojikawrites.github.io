@@ -61,7 +61,9 @@ export default defineConfig({
             },
             // defaultColor: 'dark',
             wrap: true,
-            transformers: [transformerNotationHighlight(), transformerMetaHighlight()],
+            transformers: [
+                transformerNotationHighlight({ matchAlgorithm: 'v3', }),
+                transformerMetaHighlight({ matchAlgorithm: 'v3', })],
         },
         syntaxHighlight: 'shiki',
         remarkPlugins: [
