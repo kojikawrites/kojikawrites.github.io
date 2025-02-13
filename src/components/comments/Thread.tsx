@@ -13,7 +13,7 @@ import { VsComment, VsHeart, VsHeartFilled, VsLink } from "solid-icons/vs";
 import {
   type ThreadViewPostUI,
   enrichThreadWithUIData,
-  flatten, replaceHashtags,
+  flatten, replaceHashtagsAndAutoPostText,
 } from "./utils";
 import { Reply } from "./Reply";
 
@@ -150,7 +150,7 @@ const Post = ({
           ${post.showParentReplyLine ? "comments-thread-parent-reply-line" : ""}
           ${post.showChildReplyLine ? "comments-thread-child-reply-line" : ""}
           `} >
-          <p class="comments-thread-post-body" innerHTML={replaceHashtags(text, categories)}></p>
+          <p class="comments-thread-post-body highlight-link" innerHTML={replaceHashtagsAndAutoPostText(text, categories)}></p>
           <div class="comments-thread-post-controls">
             <button
               type="button"

@@ -115,23 +115,30 @@ export function enrichThreadWithUIData(
 const siteConfig = await getSiteConfig();
 /**
  * Replaces hashtags in a string with a custom <a> tag linking to the tag page.
- *
+ * and autpost text.
  * @param inputText - The text containing hashtags (e.g., "#example").
  * @param allCategories - list of all categories from site posts.
  * @returns A string where hashtags are replaced with <a> tags.
  */
-export function replaceHashtags(inputText: string, allCategories:string[]): string {
+export function replaceHashtagsAndAutoPostText(inputText: string, allCategories:string[]): string {
+
+    function replaceAutoPostText(t: string): string {
+        return siteConfig.bluesky.auto_post_text
+            ? t.replace(siteConfig.bluesky.auto_post_text, "")
+            : t;
+    }
+    const postText = replaceAutoPostText(inputText);
     if (!siteConfig.bluesky.hashtag_link)
     {
-        return inputText;
+        return postText;
     }
 
-    return inputText.replace(/#([\w-]+)/g, (_, category) => {
+    return postText.replace(/#([\w-]+)/g, (_, category) => {
 
         const categoryLink = siteConfig.bluesky.hashtag_link.replace("[HASHTAG]", category?.toLowerCase()); // /category/#[HASHTAG]
 
         return allCategories.includes(category.toLowerCase())
-            ? `<a href="${categoryLink}">#${category}</a>`
+            ? `<a class="color-text-highlight-color" href="${categoryLink}">#${category}</a>`
             : '';
     });
 }

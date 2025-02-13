@@ -212,7 +212,7 @@ def extract_metadata_from_file(file_path, slug, assets_dir):
 
     return title, categories, description, full_image_path
 
-def post_to_bluesky(title, post_date, description, image_path, url, categories, category_aliases, client, testrun=False):
+def post_to_bluesky(title, post_date, description, image_path, url, categories, category_aliases, auto_post_text, client, testrun=False):
     # Process the thumbnail
     image_path_thumbnail = None
     if image_path and not testrun:
@@ -249,7 +249,9 @@ def post_to_bluesky(title, post_date, description, image_path, url, categories, 
             thumb=blob
         )
     )
-    tb.text("\n\n(This is an automated post.)")
+    if auto_post_text is None:
+        auto_post_text = "(This is an automated post.)"
+    tb.text(f"\n\n{auto_post_text}")
 
     if testrun:
         embed_str = ''# f'{embed}'
@@ -269,7 +271,7 @@ def post_to_bluesky(title, post_date, description, image_path, url, categories, 
         print(f"Error posting to Bluesky: {e}")
         return False, None
 
-def load_aliases_from_config(config_file):
+def load_config(config_file):
     try:
         import yaml
         full_file_path = config_file  # get_working_path_to_file(config_file)
@@ -277,7 +279,8 @@ def load_aliases_from_config(config_file):
             docs = yaml.safe_load_all(file)
             config = next(docs)
             aliases = config["tags_and_categories"]["aliases"]
-            return aliases
+            auto_post_text = config["bluesky"]["auto_post_text"]
+            return (aliases, auto_post_text)
     except:
         print(f"Error loading config: {full_file_path}")
         return {}
@@ -465,7 +468,7 @@ def main():
         print("[Test Run] Skipping Bluesky login.")
 
     # Post to Bluesky and update the tracking list
-    category_aliases = load_aliases_from_config(args.config_file)
+    category_aliases, auto_post_text = load_config(args.config_file)
     for post in posts_to_announce:
         title = post['title']
         url = post['url']
@@ -474,7 +477,17 @@ def main():
         description = post['description']
         image_path = post['image_path']
         post_date = post['date']
-        success, response = post_to_bluesky(title, post_date, description, image_path, url, categories, category_aliases, client, testrun=args.testrun)
+        success, response = post_to_bluesky(
+                            title,
+                            post_date,
+                            description,
+                            image_path,
+                            url,
+                            categories,
+                            category_aliases,
+                            auto_post_text,
+                            client,
+                            testrun=args.testrun)
         if success:
             if not args.testrun:
                 # Extract embedding info
