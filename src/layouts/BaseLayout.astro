@@ -11,6 +11,10 @@ export interface Props {
 }
 const { title, description, permalink, current } = Astro.props;
 
+import { getSiteConfig } from "../scripts/getSiteConfig";
+
+const siteConfig = await getSiteConfig();
+// const fbAppId = siteConfig.facebook.app_id;
 
 ---
 <html lang="en">
@@ -19,6 +23,11 @@ const { title, description, permalink, current } = Astro.props;
   <BaseHead title={title} description={description} permalink={permalink} />
 </head>
 <body lang="en-us">
+<!--<div id="fb-root" />-->
+<!--<script is:inline async defer-->
+<!--        crossorigin="anonymous"-->
+<!--        src=`https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0&appId=${fbAppId}` />-->
+
 <div class="layout min-h-full">
   <Header current={current} />
   <main>

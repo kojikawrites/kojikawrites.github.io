@@ -9,7 +9,7 @@ interface Props {
 import { getSiteConfig, getSiteCode } from "../../scripts/getSiteConfig";
 import {getAllKeys} from "../../scripts/keyUtils";
 import {KeyType} from "../../scripts/enums";
-import { Comments } from "../comments/Comments";
+import { Comments } from "../bluesky/Comments";
 import { getJson} from "../../scripts/getJson";
 
 const blueskyJson = await getJson(getSiteCode(), 'bluesky_posted.json');

@@ -1,0 +1,13 @@
+---
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = 'Tags';
+const description = 'Posts grouped by Tag.';
+const permalink = `${Astro.site.href}${Astro.url.pathname}`;
+import FacebookComments from "../components/posts/FacebookComments.astro";
+
+---
+<BaseLayout title={title} description={description} permalink={permalink} current="/test"> <!-- {Astro.url.pathname} -->
+    <FacebookComments />
+</BaseLayout>

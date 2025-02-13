@@ -42,7 +42,12 @@ export async function getSiteConfig() {
         bluesky: {
             include: boolean;
             hashtag_link: string;
+            auto_post_text: string;
         };
+        facebook: {
+            include: boolean;
+            app_id: string;
+        }
         tags_and_categories : {
             aliases: any;
         };

@@ -1,4 +1,6 @@
 ---
+// import FacebookComments from "./FacebookComments.astro";
+
 interface Props {
 	post: any,
 }
@@ -25,4 +27,5 @@ const { originalFilename } = getPostData(post);
 }
 
 <BlueskyComments filename={originalFilename} />
+<!--<FacebookComments />-->
 <hr />
