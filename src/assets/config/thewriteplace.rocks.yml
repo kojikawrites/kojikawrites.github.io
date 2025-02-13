@@ -59,6 +59,11 @@ bluesky:
     include: true
     hashtag_link: /categories/#[HASHTAG]
     auto_post_text: (This is an automated post.)
+
+facebook:
+  include: false
+  app_id: APP_ID_HERE
+
 # tag/category information
 tags_and_categories:
     aliases:
