@@ -58,7 +58,7 @@ bluesky:
   auto_post_text: (This is an automated post.)
 
 facebook:
-  include: true
+  include: false
   app_id: 222424367791673  #151619264893019
 
 # tag/category information
