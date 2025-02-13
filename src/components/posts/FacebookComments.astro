@@ -1,4 +1,5 @@
 ---
+import {getActiveTheme} from "../../scripts/client/theme";
 interface Props {
     numPosts?: number;
 }
@@ -13,48 +14,98 @@ console.log("FB-URL:", href);
 
 ---
 { siteConfig.facebook.include &&
-    <div class="w-full h-fit">
-        <div id="fb-root" />
-        <script is:inline async defer
-                crossorigin="anonymous"
-                src=`https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0&appId=${fbAppId}` />
+    <fb-theme-helper>
+        <div class="w-full h-fit">
+            <div id="fb-root" />
+            <script is:inline async defer
+                    crossorigin="anonymous"
+                    src=`https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0&appId=${fbAppId}` />
 
-        <div class="fb-comments"
-             data-colorscheme="light"
-             data-href={href}
-             data-width="100%"
-             data-numposts={numPosts} />
-    </div>
+            <div class="fb-comments"
+                 data-colorscheme="light"
+                 data-href={href}
+                 data-width="100%"
+                 data-numposts={numPosts} />
+        </div>
+    </fb-theme-helper>
 
-    <script is:inline>
+    <!--<script is:inline>-->
 
-        function setTheme() {
-            // Get all fb-comments elements
-            const fbComments = document.querySelectorAll('.fb-comments');
-            if (!fbComments.length) return;
+    <!--    function setTheme() {-->
+    <!--        // Get all fb-comments elements-->
+    <!--        const fbComments = document.querySelectorAll('[data-colorscheme]');-->
+    <!--        if (!fbComments.length) {-->
+    <!--            console.warn('FBComments: no fb div found');-->
+    <!--            return;-->
+    <!--        }-->
 
-            // Get theme from localStorage (if set)
-            const theme = localStorage.getItem('theme');
-            const themeSet = localStorage.getItem('themeSet');
-            if (!themeSet) {
-                return;
+    <!--        // Get theme from localStorage (if set)-->
+    <!--        const theme = localStorage.getItem('theme');-->
+    <!--        const themeSet = localStorage.getItem('themeSet');-->
+    <!--        if (!themeSet) {-->
+    <!--            return;-->
+    <!--        }-->
+
+    <!--        fbComments.forEach(fbComment => {-->
+    <!--            // Update the data attribute for colorscheme-->
+    <!--            fbComment.dataset.colorscheme = theme;-->
+    <!--            console.log('FBComments: setting theme:', theme);-->
+    <!--            // Force refresh any iframes within this fb-comments element-->
+    <!--            fbComment.querySelectorAll('iframe').forEach(iframe => {-->
+    <!--                // Option 1: reassign the same src to force a reload-->
+    <!--                //iframe.src = iframe.src;-->
+
+    <!--                // Option 2 (if the above doesn't work):-->
+    <!--                // iframe.contentWindow.location.reload();-->
+    <!--            });-->
+    <!--        });-->
+    <!--    }-->
+
+    <!--    setTheme();-->
+    <!--</script>-->
+
+    <script>
+        import { getActiveTheme } from "../../scripts/client/theme";
+        class FBThemeHelper extends HTMLElement {
+            connectedCallback() {
+                // const id = this.id;
+
+                // get values
+                function setTheme()   {
+                    const fbComments = document.querySelectorAll('[data-colorscheme]');
+                    const theme = getActiveTheme();
+                    console.log('FacebookThemeController.setTheme', theme);
+                    fbComments.forEach((fbComment: HTMLElement) => {
+                        if (fbComment.dataset.colorscheme !== theme) {
+                            fbComment.dataset.colorscheme = theme;
+                        }
+                    });
+                    return true;
+                }
+
+                // initial set.
+                setTheme();
+
+                // this should catch theme changes
+                window.addEventListener('storage', setTheme);
+
+
+                document.addEventListener("astro:after-swap", setTheme);
+
+
+                // if user hasn't manually set theme, we can respond to system theme
+                // set up theming
+                const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                darkModeMediaQuery.addEventListener('change', () => {
+                    const themeSet = localStorage.getItem('themeSet');
+                    console.log('FacebookThemeController.setTheme', themeSet);
+                    if (!themeSet) {
+                        setTheme();
+                        }
+                    });
+                }
             }
 
-            fbComments.forEach(fbComment => {
-                // Update the data attribute for colorscheme
-                fbComment.dataset.colorscheme = theme;
-
-                // Force refresh any iframes within this fb-comments element
-                fbComment.querySelectorAll('iframe').forEach(iframe => {
-                    // Option 1: reassign the same src to force a reload
-                    //iframe.src = iframe.src;
-
-                    // Option 2 (if the above doesn't work):
-                    // iframe.contentWindow.location.reload();
-                });
-            });
-        }
-
-        setTheme();
+        customElements.define('fb-theme-helper', FBThemeHelper);
     </script>
  }
