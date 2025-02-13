@@ -1,5 +1,6 @@
 @layer components {
 
+    /* START BlueSky */
     .comments {
         @apply w-full flex flex-col gap-2;
         @apply color-text-secondary;
@@ -178,4 +179,12 @@
     .comments-thread-continue-thread-button {
         @apply flex flex-row items-center justify-center gap-2 color-text-secondary;
     }
+    /* END BlueSky*/
+
+    /* START Facebook */
+    .fb-block {
+        @apply bg-[#FFFFFF90] rounded-lg;
+        @apply h-fit w-fit py-2 px-6 lg:px-4 lg:w-full mx-auto;
+    }
+    /* END Facebook */
 }

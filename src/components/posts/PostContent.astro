@@ -1,5 +1,4 @@
 ---
-// import FacebookComments from "./FacebookComments.astro";
 
 interface Props {
 	post: any,
@@ -8,6 +7,7 @@ interface Props {
 import { components } from '../../scripts/mixins/autoImportComponents';
 
 import BlueskyComments from "./BlueskyComments.astro";
+import FacebookComments from "./FacebookComments.astro";
 import Signature from "../Signature.astro";
 
 import getPostData from "../../scripts/getPostData";
@@ -27,5 +27,5 @@ const { originalFilename } = getPostData(post);
 }
 
 <BlueskyComments filename={originalFilename} />
-<!--<FacebookComments />-->
+<FacebookComments />
 <hr />
