@@ -5,6 +5,10 @@
 /* global defaults */
 @layer base {
 
+    :root {
+        @apply scroll-smooth;
+    }
+
     html {
         @apply overflow-y-scroll;
     }
