@@ -6,7 +6,7 @@ import isAbsoluteUrl from 'is-absolute-url'
 
 import {createRequire} from 'module';
 
-const require = createRequire(import.meta.url);
+const require = createRequire(import.meta.url); // need to stay
 const request = require('sync-request');
 
 function getFaviconUrlSync(websiteUrl) {
