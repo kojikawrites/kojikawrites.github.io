@@ -60,7 +60,7 @@
     @apply top-[22px];
     @apply z-[1];
     @apply border-[10px] max-md:border-l-0 md:border-r-0;
-    @apply border-transparent max-md:border-r-[var(--text-main)] md:border-l-[var(--text-main)];
+    @apply border-transparent max-md:border-r-[var(--background-mid)] md:border-l-[var(--background-mid)];
 }
 
 .timeline-container:nth-child(even)::before { /* .timeline-right::before */
@@ -69,14 +69,14 @@
     @apply top-[22px] md:left-[30px];
     @apply z-[1];
     @apply border-[10px] border-l-0;
-    @apply border-transparent border-r-[var(--text-main)];
+    @apply border-transparent border-r-[var(--background-mid)];
 }
 
 .timeline-container::before {
     @apply max-md:left-[60px];
     @apply max-md:border-8;
     @apply max-md:border-[10px] max-md:border-l-0;
-    @apply max-md:border-transparent max-md:border-r-[var(--text-main)];
+    @apply max-md:border-transparent max-md:border-r-[var(--background-mid)];
 }
 
 .timeline-container:nth-child(even)::after { /* .timeline-right::after */
@@ -90,16 +90,26 @@
 /* The actual content */
 .timeline-content {
     @apply relative pt-2 pb-4 px-3;
-    @apply bg-[var(--text-main)];
-    @apply text-[var(--background-body)];
+    @apply bg-[var(--background-mid)];
+    @apply text-[var(--text-main)];
     @apply rounded;
     /*@apply opacity-85;*/
 }
 
-.timeline-content > h4 {
-    @apply pt-0 mt-0;
-}
-.timeline-content > p {
-    @apply pt-2 pb-1 my-0;
+.timeline-content {
+    h4 {
+        @apply pt-0 mt-0;
+    }
+    p {
+        @apply mt-0 pt-0 pb-1 my-0;
+    }
+    .lightbox-caption {
+        @apply color-text-secondary;
+        @apply mb-3;
+    }
 }
 
+
+.timeline-divider {
+    @apply relative  -top-1 pt-0 mb-1 mt-0 h-0.5 bg-[var(--background-feature)] opacity-75;
+}

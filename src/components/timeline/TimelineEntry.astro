@@ -17,6 +17,7 @@ function isValidISODate(dateStr) {
 <div class="timeline-container">
     <div class="timeline-content">
         <h4>{ isValidISODate(date) ? <FormattedDate date={date} /> : date }</h4>
+        <hr class="timeline-divider" />
         <div>
             <slot/>
         </div>
