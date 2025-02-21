@@ -22,7 +22,7 @@
 /* breadcrumb */
 .c-breadcrumbs {
   @apply max-h-4 w-full min-h-6;
-  @apply border-t-[1px] border-gray-500 border-opacity-100;
+  @apply border-t-[1px] border-[var(--background-mid)] border-opacity-100;
   .c-breadcrumbs__crumbs {
     @apply pl-2 pt-0.5 lg:pl-6 w-full max-w-full;
 

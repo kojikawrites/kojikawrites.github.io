@@ -50,7 +50,7 @@
 
     .search-button {
         @apply pl-2 pr-6 py-1;
-        @apply border-t-[1px] border-gray-500 border-opacity-100;
+        @apply border-t-[1px] border-[var(--background-mid)] border-opacity-100;
         @apply bg-[var(--background-feature)];
         @apply enable-input;
     }

@@ -227,8 +227,8 @@
 
     img.favicon-link-img
     {
-        @apply rounded border border-gray-500; /* border-[var(--text-secondary)];*/
-        @apply bg-gradient-to-br from-white to-gray-300;
+        @apply rounded border border-[var(--background-mid)]; /* border-[var(--text-secondary)];*/
+        @apply bg-gradient-to-br from-[var(--theme-color)] to-[var(--background-mid)];
         @apply w-[14px] h-[14px];
         @apply bg-clip-border;
     }

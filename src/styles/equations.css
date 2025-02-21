@@ -6,7 +6,7 @@
     .equation {
         @apply bg-color-background-feature color-text-highlight-color;
         @apply w-fit ml-0.5 lg:p-3 lg:ml-6 lg:self-center text-sm lg:text-base;
-        @apply rounded border-gray-500;
+        @apply rounded border-[var(--background-mid)];
     }
 
     .equation-note {
