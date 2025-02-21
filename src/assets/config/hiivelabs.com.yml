@@ -22,8 +22,8 @@ navbar:
   right:
     - href: "/mission"
       label: "mission statement"
-#    - href: "/roadmap"
-#      label: "roadmap"
+    - href: "/roadmap"
+      label: "timeline/roadmap"
     - href: '/about'
       label: 'About'
     - href: "/contact"
