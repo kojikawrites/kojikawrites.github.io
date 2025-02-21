@@ -1,10 +1,11 @@
 @layer base {
     :root {
+        --tw-bg-opacity: 1.0;
         --theme-color: #FFFFFF;
         --background-image: url('/src/assets/images/hiivelabs.com/hiive-background-light.png');
         --background-body: #dddddd;
         --background-feature: #eeeeee;
-        --background-mid: #D0D0D0;
+        --background-mid: rgb(208 208 208 / var(--tw-bg-opacity, 1) );
         --text-main: #16191b;
         --text-secondary: #4b4f52;
         --primary-color: #ff6707;
@@ -26,11 +27,13 @@
     }
 
     :root.theme-dark {
+        --tw-bg-opacity: 1.0;
         --theme-color: #000000;
         --background-image: url('/src/assets/images/hiivelabs.com/hiive-background-dark.png');
         --background-body: #202122;
         --background-feature: #28292A;
-        --background-mid: #404040;
+        --background-mid: rgb(64 64 64 / var(--tw-bg-opacity, 1) );
+
         --text-main: #fff;
         --text-secondary: #bbb;
         --text-highlight-color: #FFE38D;
