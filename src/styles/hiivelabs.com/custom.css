@@ -17,7 +17,7 @@
 @import "404.css";
 @import "tags-and-categories.css";
 @import "comments.css";
-@import "roadmap.css";
+@import "timeline.css";
 
 @layer base {
     /* custom classes to make colors friendlier with tailwind */
