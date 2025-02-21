@@ -1,14 +1,16 @@
 ---
-title: Roadmap
-description: Roadmap and Timeline
+title: Timeline and Roadmap
+description: Timeline and Roadmap
 ---
 
-import FormattedDate from "../../../components/FormattedDate.astro";
+
+import Timeline from "../../../components/timeline/Timeline.astro";
+import TimelineEntry from "../../../components/timeline/TimelineEntry.astro";
 import LightboxImage from "../../../components/gallery/LightboxImage.astro";
 import EmbeddedYouTube from "../../../components/EmbeddedYouTube.astro";
 
 <div class="roadmap">
-    ## Roadmap
+    ## Timeline and Roadmap
 
     I've been working on the vague concept of writing a roguelike for many years, but I've never quite gotten around
     to it –- at least, not in earnest.
@@ -26,90 +28,87 @@ import EmbeddedYouTube from "../../../components/EmbeddedYouTube.astro";
     this case, there are unknowns both in terms of the research that needs to be done and the time I can find to
     work on it.
 
-    <div class="timeline">
-        <div class="timeline-container">
-            <div class="timeline-content">
-                #### <FormattedDate date="05-05-2014"/>
+    ### Timeline
 
-                Work began on a prototype basic roguelike a few weeks before this date, using temporary assets
-                from a prior project.
-                The aim was to test the workability of various procedural generation techniques to get the feel
-                for how much effort would be involved in putting together a basic effort.
+    The story so far...
 
-                <LightboxImage src="/src/assets/images/hiivelabs.com/roadmap/roguelite-wip.png"
-                               alt="Early WIP showcasing basic roguelike functionality"/>
+    <Timeline>
+        <TimelineEntry date="Late 2013/Early 2014">
+            Work began on a prototype basic roguelike a few weeks before this date, using temporary assets
+            from a prior project.
+            The aim was to test the workability of various procedural generation techniques to get the feel
+            for how much effort would be involved in putting together a basic effort.
 
-
-                Most likely I was inspired by playing <a href="https://store.steampowered.com/app/98800">Dungeons of
-                Dredmor</a> or <a href="https://store.steampowered.com/app/207430">Hack, Slash, Loot</a>, both of
-                which had come out a few years before, but that I had been too busy to really play.
-
-            </div>
-        </div>
-        <div class="timeline-container">
-            <div class="timeline-content">
-                #### Early 2019
-
-                Probably the next time I got a chance to delve into roguelike was in early 2019 when I started
-                playing around with various procedural generation techniques and built several libraries in C# that
-                ultimately resulted in the demos and prototypes that are detailed in the earliest blog posts on this
-                site.
-
-                Life -- as it has a habit of doing -- got in the way, and I wasn't able to devote any spare time
-                to programming due to various external factors too boring to go into here. Ultimately, it wasn't
-                until early 2023 that I was able to get back into it.
-
-                By then, of course, technology had moved on and Rust came to by attention as a promising target for
-                game development. Not only that, but developing in Rust would serve as a good learning exercise that
-                would be potentially useful in my primary career.
-            </div>
-        </div>
-        <div class="timeline-container">
-            <div class="timeline-content">
-                #### May - August 2023
-
-                Worldmap generation.
-
-                <EmbeddedYouTube youtubeId="oR9W1vJIjKo"
-                                 caption="World map generator quick test" />
+            <LightboxImage src="/src/assets/images/hiivelabs.com/roadmap/roguelite-wip.png"
+                           alt="Early WIP showcasing basic roguelike functionality"/>
 
 
-            </div>
-        </div>
-        <div class="timeline-container">
-            <div class="timeline-content">
-                #### September - October 2023
+            Most likely I was inspired by playing <a href="https://store.steampowered.com/app/98800">Dungeons of
+            Dredmor</a> or <a href="https://store.steampowered.com/app/207430">Hack, Slash, Loot</a>, both of
+            which had come out a few years before, but that I had been too busy to really play.
+        </TimelineEntry>
 
-                Work on a C# landscape generation tool.
+        <TimelineEntry date="Early 2019">
+            Probably the next time I got a chance to delve into roguelike was in early 2019 when I started
+            playing around with various procedural generation techniques and built several libraries in C# that
+            ultimately resulted in the demos and prototypes that are detailed in the earliest blog posts on this
+            site.
 
-                <EmbeddedYouTube youtubeId="-C0cBw2rQo4"
-                                 caption="Testbed for a real-time chunk based procedurally generated landscape engine" />
+            Life -- as it has a habit of doing -- got in the way, and I wasn't able to devote any spare time
+            to programming due to various external factors too boring to go into here. Ultimately, it wasn't
+            until early 2023 that I was able to get back into it.
 
-            </div>
-        </div>
-        <div class="timeline-container">
-            <div class="timeline-content">
-                <h4>2016</h4>
-                <p>Lorem ipsum..</p>
-            </div>
-        </div>
-        <div class="timeline-container">
-            <div class="timeline-content">
-                <h4>2017</h4>
-                <p>Lorem ipsum..</p>
-                <p>Lorem ipsum..</p>
-                <p>Lorem ipsum..</p>
-                <p>Lorem ipsum..</p>
-                <p>Lorem ipsum..</p>
-                <p>Lorem ipsum..</p>
-                <p>Lorem ipsum..</p>
-            </div>
-        </div>
-        <div class="timeline-container">
-            <div class="timeline-content">
-                <h4>2016</h4>
-                <p>Lorem ipsum..</p>
-            </div>
-        </div>
-    </div>
+            By then, of course, technology had moved on and Rust came to by attention as a promising target for
+            game development. Not only that, but developing in Rust would serve as a good learning exercise that
+            would be potentially useful in my primary career.
+        </TimelineEntry>
+
+        <TimelineEntry date="May - August 2023">
+            Worldmap generation.
+
+            <EmbeddedYouTube youtubeId="oR9W1vJIjKo"
+                             caption="World map generator quick test" />
+        </TimelineEntry>
+
+        <TimelineEntry date="September - October 2023">
+            Work on a C# landscape generation tool.
+
+            <EmbeddedYouTube youtubeId="-C0cBw2rQo4"
+                             caption="Testbed for a real-time chunk based procedurally generated landscape engine" />
+
+        </TimelineEntry>
+
+        <TimelineEntry date="Late October 2023">
+            Further work on the landscape generation tool. Mostly bug-fixing and optimization, as well as chunk-based
+            storage and streaming to and from disk. This was useful to ensure that landscape chunks were only generated
+            once and then stored from that point, allowing for persistent features and modifications to be applied.
+            <EmbeddedYouTube youtubeId="vxD22Ptloqc"
+                             caption="Chunk-based procedural landscape generated on the fly and streamed to/from disk on demand." />
+        </TimelineEntry>
+
+        <TimelineEntry date="April/May 2024">
+            By early 2024, I had decided to switch development to Rust (to encourage me to learn a new and unfamiliar
+            language). This is about the time I conceived of starting the blog to keep track of progress.
+
+            The video shows an experiment in fast landscape generation using shaders in Rust.
+            <EmbeddedYouTube youtubeId="YI0QIM3GCW4"
+                             caption="Rust shader-based landscape generation experiments." />
+        </TimelineEntry>
+
+        <TimelineEntry date="05-20-2024">
+            First "real" [blog entry](/blog/gamedev/roguelike/2024/05/20/the-fawn-engine-post), detailing a bit of background on the plans, and introducing the Flexible Architecture
+            for World-building and Narrative. A bit of a mouthful, but the best backcronym ever.
+
+        </TimelineEntry>
+
+
+        <TimelineEntry date="TBD">
+            To Be Continued...
+
+        </TimelineEntry>
+
+    </Timeline>
+
+    ### Roadmap (TODO)
+    This section will be filled in over the coming weeks.
 </div>
