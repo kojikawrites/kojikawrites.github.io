@@ -5,8 +5,8 @@ import SiteLogo from './SiteLogo.astro';
 import {getSiteConfig} from "../scripts/getSiteConfig";
 const siteConfig = await getSiteConfig();
 const { current = '', showTheme = false } = Astro.props;
-const selected = "selected max-w-fit text-nowrap text-left lg:text-center lg:px-2 py-1";
-const notSelected = "max-w-fit text-nowrap text-left lg:text-center lg:px-2 py-1";
+const selected = "selected max-w-fit text-nowrap text-left xl:text-center xl:px-2 py-1";
+const notSelected = "max-w-fit text-nowrap text-left xl:text-center xl:px-2 py-1";
 
 const leftNav = siteConfig.navbar.left;
 const rightNav = siteConfig.navbar.right;
@@ -22,9 +22,9 @@ const {dark, light, alt} = siteConfig.navbar.logo;
 </style>
 
 <div class="z-20 fixed top-0 left-0 w-full">
-  <div class="navbar w-full mx-auto px-1 lg:px-2 py-4 flex flex-row">
+  <div class="navbar w-full mx-auto px-1 xl:px-2 py-4 flex flex-row">
     <div class="flex flex-row items-start py-1">
-      <button id="menu" aria-label="Toggle Menu" class="lg:hidden">
+      <button id="menu" aria-label="Toggle Menu" class="xl:hidden">
         <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path class="navmenu-toggle" fill-rule="evenodd"
                 d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z">
@@ -37,7 +37,7 @@ const {dark, light, alt} = siteConfig.navbar.logo;
       </button>
     </div>
 
-    <div class="lg:flex lg:flex-row min-w-48 w-full">
+    <div class="xl:flex xl:flex-row min-w-48 w-full">
       <!-- logo -->
       <a class={current === "" ? selected : notSelected} href='/'>
         <SiteLogo alt={alt}
@@ -46,8 +46,8 @@ const {dark, light, alt} = siteConfig.navbar.logo;
                   class="site-logo" />
       </a>
       <!-- left nav -->
-      <nav class="flex flex-col items-start lg:flex-row">
-        <div class="navmenu-toggle hidden lg:flex">
+      <nav class="flex flex-col items-start xl:flex-row">
+        <div class="navmenu-toggle hidden xl:flex">
           {leftNav.map((item, _) => (
               <a href={item.href} class={current === item.href ? selected : notSelected}>
                 {item.label}
@@ -56,8 +56,8 @@ const {dark, light, alt} = siteConfig.navbar.logo;
         </div>
       </nav>
       <!-- right nav -->
-      <nav class="flex flex-col lg:items-end lg:flex-row lg:justify-end" >
-        <div class="navmenu-toggle hidden lg:flex">
+      <nav class="flex flex-col xl:items-end xl:flex-row xl:justify-end" >
+        <div class="navmenu-toggle hidden xl:flex">
         {rightNav.map((item, _) => (
             <a href={item.href} class={current === item.href ? selected : notSelected}>
               {item.label}
@@ -67,7 +67,7 @@ const {dark, light, alt} = siteConfig.navbar.logo;
       </nav>
     </div>
     <!-- {showTheme && -->
-    <div class="theme-toggle-container align-top pr-20 lg:pr-8"  >
+    <div class="theme-toggle-container align-top pr-20 xl:pr-8"  >
       <ThemeToggleButton client:load />
     </div>
     <!-- } -->
