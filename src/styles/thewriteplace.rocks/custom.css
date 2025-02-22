@@ -17,83 +17,100 @@
 @import "404.css";
 @import "tags-and-categories.css";
 @import "comments.css";
+@import "timeline.css";
 
 @layer base {
     /* custom classes to make colors friendlier with tailwind */
     .color-primary-color {
-        color: var(--primary-color);
+        color: rgb(var(--primary-color));
     }
 
     .color-primary-color-alt {
-        color: var(--primary-color-alt);
+        color: rgb(var(--primary-color-alt));
     }
 
     .color-hiive-green {
-        color: var(--hiive-green);
+        color: rgb(var(--hiive-green));
     }
     .color-secondary-color {
-        color: var(--secondary-color);
+        color: rgb(var(--secondary-color));
     }
     .color-primary-color-contrast {
-        color: var(--primary-color-contrast);
+        color: rgb(var(--primary-color-contrast));
     }
 
     .color-text-main {
-        color: var(--text-main);
+        color: rgb(var(--text-main));
     }
 
     .color-text-secondary {
-        color: var(--text-secondary)
+        color: rgb(var(--text-secondary));
     }
 
     .color-text-highlight-color {
-        color: var(--text-highlight-color);
+        color: rgb(var(--text-highlight-color));
     }
 
     .color-text-highlight-color-alt-green {
-        color: var(--text-highlight-color-alt-green);
+        color: rgb(var(--text-highlight-color-alt-green));
     }
     .color-text-highlight-color-alt-blue {
-        color: var(--text-highlight-color-alt-blue);
+        color: rgb(var(--text-highlight-color-alt-blue));
     }
     .color-text-highlight-color-alt-purple {
-        color: var(--text-highlight-color-alt-purple);
+        color: rgb(var(--text-highlight-color-alt-purple));
     }
 
     .color-heading-color {
-        color: var(--heading-color);
+        color: rgb(var(--heading-color));
+    }
+
+    .color-background-mid {
+        color: rgb(var(--background-mid));
     }
 
     .bg-color-background-feature {
-        background-color: var(--background-feature);
+        background-color: rgb(var(--background-feature) / var(--tw-bg-opacity));
     }
 
     .bg-color-background-body {
-        background-color: var(--background-body)
+        background-color: rgb(var(--background-body) / var(--tw-bg-opacity));
     }
 
     .bg-color-primary-color {
-        background-color: var(--primary-color);
+        background-color: rgb(var(--primary-color) / var(--tw-bg-opacity));
     }
 
     .bg-color-primary-color-contrast {
-        background-color: var(--primary-color-contrast);
+        background-color: rgb(var(--primary-color-contrast) / var(--tw-bg-opacity));
     }
 
     .bg-color-secondary-color {
-        background-color: var(--secondary-color);
+        background-color: rgb(var(--secondary-color) / var(--tw-bg-opacity));
     }
 
     .bg-color-text-main {
-        background: var(--text-main);
+        background: rgb(var(--text-main) / var(--tw-bg-opacity));
+    }
+
+    .bg-color-mid {
+        background: rgb(var(--background-mid) / var(--tw-bg-opacity));
     }
 
     .bg-color-text-secondary {
-        background: var(--text-secondary)
+        background: rgb(var(--text-secondary) / var(--tw-bg-opacity));
+    }
+
+    .border-primary-color {
+        border-color: rgb(var(--primary-color));
     }
 
     .border-text-secondary {
-        border-color: var(--text-secondary)
+        border-color: rgb(var(--text-secondary));
+    }
+
+    .border-background-mid {
+        border-color: rgb(var(--background-mid));
     }
 
     .highlight {
@@ -226,8 +243,8 @@
 
     img.favicon-link-img
     {
-        @apply rounded border border-gray-500; /* border-[var(--text-secondary)];*/
-        @apply bg-gradient-to-br from-white to-gray-300;
+        @apply rounded border border-[rgb(var(--background-mid))]; /* border-[var(--text-secondary)];*/
+        @apply bg-gradient-to-br from-[rgb(var(--theme-color))] to-[rgb(var(--background-mid))];
         @apply w-[14px] h-[14px];
         @apply bg-clip-border;
     }

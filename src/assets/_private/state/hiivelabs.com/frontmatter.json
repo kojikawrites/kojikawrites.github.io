@@ -2,9 +2,9 @@
   "/blog/archive": "Archive",
   "/categories": "Categories",
   "/tags": "Tags",
-  "/test": "Tags",
   "/about": "About",
   "/contact": "Contact Us",
   "/home": "Home",
-  "/mission": "Mission Statement"
+  "/mission": "Mission Statement",
+  "/roadmap": "Timeline and Roadmap"
 }
