@@ -12,7 +12,7 @@
             .portrait {
                 @apply w-full;
                 @apply lg:w-72 lg:h-auto lg:mr-4 lg:float-left;
-                @apply border border-[var(--background-mid)] rounded-lg;
+                @apply border border-[rgb(var(--background-mid))] rounded-lg;
             }
         }
         .bio:first-child {

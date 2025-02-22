@@ -11,7 +11,7 @@
 .timeline::after {
     content: '';
     @apply absolute w-[6px];
-    @apply bg-[var(--text-main)];
+    @apply bg-color-text-main;
     @apply -ml-[3px];
 
     @apply top-0 bottom-0 left-[27.5px] md:left-1/2;
@@ -38,8 +38,8 @@
     content: '';
     @apply absolute top-5 w-6 h-6 -right-3;
     @apply z-[1];
-    @apply border-4 rounded-full border-[var(--secondary-color)];
-    @apply bg-[var(--text-main)];
+    @apply border-4 rounded-full border-[rgb(var(--secondary-color))];
+    @apply bg-color-text-main;
 }
 
 
@@ -60,7 +60,7 @@
     @apply top-[22px];
     @apply z-[1];
     @apply border-[10px] max-md:border-l-0 md:border-r-0;
-    @apply border-transparent max-md:border-r-[var(--background-mid)] md:border-l-[var(--background-mid)];
+    @apply border-transparent max-md:border-r-[rgb(var(--background-mid))] md:border-l-[rgb(var(--background-mid))];
 }
 
 .timeline-container:nth-child(even)::before { /* .timeline-right::before */
@@ -69,14 +69,14 @@
     @apply top-[22px] md:left-[30px];
     @apply z-[1];
     @apply border-[10px] border-l-0;
-    @apply border-transparent border-r-[var(--background-mid)];
+    @apply border-transparent border-r-[rgb(var(--background-mid))];
 }
 
 .timeline-container::before {
     @apply max-md:left-[60px];
     @apply max-md:border-8;
     @apply max-md:border-[10px] max-md:border-l-0;
-    @apply max-md:border-transparent max-md:border-r-[var(--background-mid)];
+    @apply max-md:border-transparent max-md:border-r-[rgb(var(--background-mid))];
 }
 
 .timeline-container:nth-child(even)::after { /* .timeline-right::after */
@@ -90,8 +90,8 @@
 /* The actual content */
 .timeline-content {
     @apply relative pt-2 pb-4 px-3;
-    @apply bg-[var(--background-mid)];
-    @apply text-[var(--text-main)];
+    @apply bg-color-mid;
+    @apply color-text-main;
     @apply rounded;
     /*@apply opacity-85;*/
 }
@@ -111,5 +111,5 @@
 
 
 .timeline-divider {
-    @apply relative  -top-1 pt-0 mb-1 mt-0 h-0.5 bg-[var(--background-feature)] opacity-75;
+    @apply relative  -top-1 pt-0 mb-1 mt-0 h-0.5 bg-color-background-feature opacity-75;
 }

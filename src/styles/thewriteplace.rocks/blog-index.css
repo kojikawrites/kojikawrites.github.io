@@ -36,10 +36,10 @@
                 .post-thumbnail {
                     /*@apply max-w-32 max-h-32;*/
                     @apply box-content h-auto w-auto py-[0.5px] px-[0.5px];
-                    @apply border-2 border-[var(--background-mid)] rounded-lg;
+                    @apply border-2 border-background-mid rounded-lg;
                     @apply transition-none;
                     @apply transition-colors duration-300 ease-linear ;
-                    @apply hover:border-[var(--primary-color)];
+                    @apply hover:border-primary-color;
                 }
             }
         }
@@ -70,13 +70,12 @@
 
 
             .pagination-link.disabled {
-                @apply text-[var(--background-mid)];
-                @apply bg-[#FFFFFF10];
-                /*@apply border border-[var(--background-mid)];*/
+                @apply color-background-mid;
+                @apply bg-[#FFFFFF10]; /* TODO */
             }
 
             .pagination-link.active {
-                @apply bg-[#FFFFFF40] cursor-pointer;
+                @apply bg-[#FFFFFF40] cursor-pointer; /* TODO */
                 @apply color-text-main;
 
             }
@@ -106,10 +105,10 @@
     /* */
     .post-summary-wrapper-card {
         @apply flex flex-col lg:flex-row;
-        @apply bg-[var(--background-feature)];
+        @apply bg-color-background-feature;
         @apply my-4 lg:my-4 mx-auto;
         @apply p-4 lg:py-3 lg:px-3;
-        @apply border rounded-xl border-[var(--text-secondary)];
+        @apply border rounded-xl border-text-secondary;
         @apply h-fit align-top;
     }
 
@@ -119,10 +118,10 @@
 
     .post-thumbnail-img-card {
         @apply w-full lg:min-w-[var(--thumbnail-image-width-card)] lg:max-w-[var(--thumbnail-image-width-card)];
-        @apply border rounded-xl border-[var(--text-secondary)];
+        @apply border rounded-xl border-text-secondary;
         @apply transition-none;
         @apply transition-colors duration-300 ease-linear ;
-        @apply hover:border-[var(--primary-color)];
+        @apply hover:border-primary-color;
     }
 
     .post-title-card {
@@ -231,11 +230,11 @@
 
     .post-thumbnail-img-list {
         @apply w-full lg:min-w-[var(--thumbnail-image-width-list)] lg:max-w-[var(--thumbnail-image-width-list)];
-        @apply border rounded-xl border-[var(--text-secondary)];
+        @apply border rounded-xl border-text-secondary;
         @apply relative top-12;
         @apply transition-none;
         @apply transition-colors duration-300 ease-linear ;
-        @apply hover:border-[var(--primary-color)];
+        @apply hover:border-primary-color;
     }
 
 

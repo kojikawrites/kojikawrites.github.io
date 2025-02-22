@@ -36,6 +36,6 @@
         }
     }
     .navbar-bottom-fader {
-        @apply absolute w-full h-2 left-0 bg-gradient-to-b from-[var(--theme-color)] to-transparent;
+        @apply absolute w-full h-2 left-0 bg-gradient-to-b from-[rgb(var(--theme-color))] to-transparent;
     }
 }
