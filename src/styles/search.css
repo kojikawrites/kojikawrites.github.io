@@ -3,9 +3,9 @@
 @layer components {
     .pagefind-ui {
         --pagefind-ui-scale: 0.75;
-        --pagefind-ui-primary: var(--primary-color);
-        --pagefind-ui-text: var(--text-main);
-        --pagefind-ui-background: var(--background-feature);
+        --pagefind-ui-primary: rgb(var(--primary-color));
+        --pagefind-ui-text: rgb(var(--text-main));
+        --pagefind-ui-background: rgb(var(--background-feature));
         --pagefind-ui-border: slategrey;
         --pagefind-ui-border-width: 1px;
         --pagefind-ui-border-radius: 0.25rem;
@@ -50,8 +50,10 @@
 
     .search-button {
         @apply pl-2 pr-6 py-1;
-        @apply border-t-[1px] border-[var(--background-mid)] border-opacity-100;
-        @apply bg-[var(--background-feature)];
+        @apply border-t-[1px] border-background-mid border-opacity-100;
+        @apply bg-color-background-feature;
+        @apply color-text-main;
+        @apply fill-[rgb(var(--text-main))];
         @apply enable-input;
     }
 

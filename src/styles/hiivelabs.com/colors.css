@@ -1,51 +1,52 @@
 @layer base {
     :root {
         --tw-bg-opacity: 1.0;
-        --theme-color: #FFFFFF;
+        --theme-color: 255 255 255;
         --background-image: url('/src/assets/images/hiivelabs.com/hiive-background-light.png');
-        --background-body: #dddddd;
-        --background-feature: #eeeeee;
-        --background-mid: rgb(208 208 208 / var(--tw-bg-opacity, 1) );
-        --text-main: #16191b;
-        --text-secondary: #4b4f52;
-        --primary-color: #ff6707;
-        --primary-color-alt: #FF9717;
-        --primary-color-contrast: #fff;
-        --secondary-color: #ee4707;
-        --heading-color: #dd4700;
-        --text-highlight-color: #001B84;
-        --text-highlight-color-alt-green: #4a5a23;
-        --text-highlight-color-alt-blue: #234a5a;
-        --text-highlight-color-alt-purple: #3e235a;
-        --text-code-color: #001B84;
+        --background-body: 221 221 221;
+        --background-feature: 238 238 238;
+        --background-mid: 208 208 208;
+        --text-main: 22 25 27;
+        --text-secondary: 75 79 82;
+        --primary-color: 255 103 7;
+        --primary-color-alt: #255 152 23;
+        --primary-color-contrast: 255 255 255;
+        --secondary-color: 238 71 07;
+        --heading-color: 221 71 00;
+        --text-highlight-color: 00 27 132;
+        --text-highlight-color-alt-green: 74 90 35;
+        --text-highlight-color-alt-blue: 35 74 90;
+        --text-highlight-color-alt-purple: 62 35 90;
+        --text-code-color: 00 27 132;
+        --bg-quote-block: 00 00 00 32;
+        --hiive-green: 00 100 00; /* Dark Green */
+
         --font-family-serif: Merriweather, serif;
         --font-family-sans: 'Fira Sans', sans-serif;
         --font-family-sans-alt: "Roboto", sans-serif;
         --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-        --bg-quote-block: #00000020;
-        --hiive-green: #006400; /* Dark Green */
+
     }
 
     :root.theme-dark {
         --tw-bg-opacity: 1.0;
-        --theme-color: #000000;
+        --theme-color: 00 00 00;
         --background-image: url('/src/assets/images/hiivelabs.com/hiive-background-dark.png');
-        --background-body: #202122;
-        --background-feature: #28292A;
-        --background-mid: rgb(64 64 64 / var(--tw-bg-opacity, 1) );
-
-        --text-main: #fff;
-        --text-secondary: #bbb;
-        --text-highlight-color: #FFE38D;
-        --text-highlight-color-alt-green: #d8e5b3;
-        --text-highlight-color-alt-blue: #b3d8e5;
-        --text-highlight-color-alt-purple: #eed3e5;
-        --text-code-color: #FFE38D;
-        --primary-color: #ff6707;
-        --primary-color-alt: #ee5700;
-        --secondary-color: #ffA707;
-        --heading-color: #ff6707;
-        --bg-quote-block: #CCCCCC20;
-        --hiive-green: #00CC00; /* Light Green */
+        --background-body: 32 33 34;
+        --background-feature: 30 41 42;
+        --background-mid: 64 64 64;
+        --text-main: 255 255 255;
+        --text-secondary: 187 187 187;
+        --text-highlight-color: 255 227 141;
+        --text-highlight-color-alt-green: 216 229 179;
+        --text-highlight-color-alt-blue: 179 216 229;
+        --text-highlight-color-alt-purple: 238 211 229;
+        --text-code-color: 255 227 141;
+        --primary-color: 255 103 07;
+        --primary-color-alt: 238 87 00;
+        --secondary-color: 255 167 07;
+        --heading-color: 255 103 07;
+        --bg-quote-block: 204 204 204 32;
+        --hiive-green: 00 204 00; /* Light Green */
     }
 }
