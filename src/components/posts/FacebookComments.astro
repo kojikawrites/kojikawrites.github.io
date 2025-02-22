@@ -62,8 +62,8 @@ console.log("FB-URL:", href);
 
             // if user hasn't manually set theme, we can respond to system theme
             // set up theming
-            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            darkModeMediaQuery.addEventListener('change', () => {
+            const darkModeMediaQueryFC = window.matchMedia('(prefers-color-scheme: dark)');
+            darkModeMediaQueryFC.addEventListener('change', () => {
                 const themeSet = localStorage.getItem('themeSet');
                 console.log('FacebookThemeController.setTheme', themeSet);
                 if (!themeSet) {
