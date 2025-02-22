@@ -1,9 +1,11 @@
 @layer base {
     :root {
+        --tw-bg-opacity: 1.0;
         --theme-color: #FFFFFF;
         --background-image: url('/src/assets/images/thewriteplace.rocks/kojika-background-light.png');
-        --background-body: #ddd;
-        --background-feature: #eee;
+        --background-body: #dddddd;
+        --background-feature: #eeeeee;
+        --background-mid: rgb(208 208 208 / var(--tw-bg-opacity, 1) );
         --text-main: #16191b;
         --text-secondary: #4b4f52;
         --primary-color: #2E8B57; /* Primary Green (SeaGreen) */
@@ -26,10 +28,13 @@
     }
 
     :root.theme-dark {
+        --tw-bg-opacity: 1.0;
         --theme-color: #000000;
         --background-image: url('/src/assets/images/thewriteplace.rocks/kojika-background-dark.png');
         --background-body: #202122;
         --background-feature: #28292A;
+        --background-mid: rgb(64 64 64 / var(--tw-bg-opacity, 1) );
+
         --text-main: #fff;
         --text-secondary: #bbb;
         --text-highlight-color: #FFE38D;

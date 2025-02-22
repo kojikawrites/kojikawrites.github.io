@@ -36,7 +36,7 @@
                 .post-thumbnail {
                     /*@apply max-w-32 max-h-32;*/
                     @apply box-content h-auto w-auto py-[0.5px] px-[0.5px];
-                    @apply border-2 border-gray-500 rounded-lg;
+                    @apply border-2 border-[var(--background-mid)] rounded-lg;
                     @apply transition-none;
                     @apply transition-colors duration-300 ease-linear ;
                     @apply hover:border-[var(--primary-color)];
@@ -70,9 +70,9 @@
 
 
             .pagination-link.disabled {
-                @apply text-gray-500;
+                @apply text-[var(--background-mid)];
                 @apply bg-[#FFFFFF10];
-                /*@apply border border-gray-500;*/
+                /*@apply border border-[var(--background-mid)];*/
             }
 
             .pagination-link.active {

@@ -1,0 +1,115 @@
+.roadmap {
+    @apply pt-4;
+}
+
+/* The actual timeline (the vertical ruler) */
+.timeline {
+    @apply relative max-w-full mx-auto my-0;
+}
+
+/* The actual timeline (the vertical ruler) */
+.timeline::after {
+    content: '';
+    @apply absolute w-[6px];
+    @apply bg-[var(--text-main)];
+    @apply -ml-[3px];
+
+    @apply top-0 bottom-0 left-[27.5px] md:left-1/2;
+
+    --mask-fade: 16px;
+    mask-image: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0) 0px,
+        rgba(0, 0, 0, 1) var(--mask-fade),
+        rgba(0, 0, 0, 1) calc(100% - var(--mask-fade)),
+        rgba(0, 0, 0, 0) calc(100%));
+}
+
+/* Container around content */
+.timeline-container {
+    @apply relative py-3;
+    @apply pl-[70px] pr-6 md:px-10;
+    @apply rounded;
+    @apply bg-inherit;
+    @apply w-full md:w-1/2;
+}
+
+/* The circles on the timeline */
+.timeline-container::after {
+    content: '';
+    @apply absolute top-5 w-6 h-6 -right-3;
+    @apply z-[1];
+    @apply border-4 rounded-full border-[var(--secondary-color)];
+    @apply bg-[var(--text-main)];
+}
+
+
+.timeline-container:nth-child(odd) { /*, .timeline-left { */
+    /* Styles for odd numbered containers */
+    @apply left-0;
+}
+
+.timeline-container:nth-child(even) { /*, .timeline-right { */
+    /* Styles for even numbered containers */
+    @apply left-0 md:left-1/2;
+}
+
+/* Add arrows to the odds container (pointing right in lg mode) */
+.timeline-container:nth-child(odd)::before { /* , .timeline-left::before */
+    content: " ";
+    @apply absolute right-[30px] h-0 w-0;
+    @apply top-[22px];
+    @apply z-[1];
+    @apply border-[10px] max-md:border-l-0 md:border-r-0;
+    @apply border-transparent max-md:border-r-[var(--background-mid)] md:border-l-[var(--background-mid)];
+}
+
+.timeline-container:nth-child(even)::before { /* .timeline-right::before */
+    content: " ";
+    @apply absolute right-[30px] h-0 w-0;
+    @apply top-[22px] md:left-[30px];
+    @apply z-[1];
+    @apply border-[10px] border-l-0;
+    @apply border-transparent border-r-[var(--background-mid)];
+}
+
+.timeline-container::before {
+    @apply max-md:left-[60px];
+    @apply max-md:border-8;
+    @apply max-md:border-[10px] max-md:border-l-0;
+    @apply max-md:border-transparent max-md:border-r-[var(--background-mid)];
+}
+
+.timeline-container:nth-child(even)::after { /* .timeline-right::after */
+    @apply max-md:left-[15px] md:-left-[12.5px];
+}
+
+.timeline-container:nth-child(odd)::after { /* , .timeline-left::after */
+    @apply max-md:left-[15px];
+}
+
+/* The actual content */
+.timeline-content {
+    @apply relative pt-2 pb-4 px-3;
+    @apply bg-[var(--background-mid)];
+    @apply text-[var(--text-main)];
+    @apply rounded;
+    /*@apply opacity-85;*/
+}
+
+.timeline-content {
+    h4 {
+        @apply pt-0 mt-0;
+    }
+    p {
+        @apply mt-0 pt-0 pb-1 my-0;
+    }
+    .lightbox-caption {
+        @apply color-text-secondary;
+        @apply mb-3;
+    }
+}
+
+
+.timeline-divider {
+    @apply relative  -top-1 pt-0 mb-1 mt-0 h-0.5 bg-[var(--background-feature)] opacity-75;
+}

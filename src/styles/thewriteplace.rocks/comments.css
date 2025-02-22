@@ -26,7 +26,7 @@
             @apply flex flex-col gap-2;
             @apply font-family-sans;
             @apply bg-color-background-feature;
-            @apply border border-gray-500;
+            @apply border border-[var(--background-mid)];
             @apply mt-2 py-2 pl-2 pr-6;
         }
         .comments-popover-display-name {
@@ -73,7 +73,7 @@
 
     .comments-login-input::placeholder {
         @apply text-xs;
-        @apply text-gray-500;
+        @apply text-[var(--background-mid)];
     }
 
     .comments-login-input-label {
@@ -136,7 +136,7 @@
     }
     .comments-thread-list-highlighted-post {
         @apply border-t border-b pt-2 my-2;
-        @apply border-gray-500;
+        @apply border-[var(--background-mid)];
     }
     .comments-thread-avatar {
         @apply rounded-full w-12;
@@ -165,7 +165,7 @@
     }
     .comments-thread-post-wrapper {
         @apply flex flex-col gap-4 pb-4 w-full;
-        @apply border-gray-500 ml-6 pl-6;
+        @apply border-[var(--background-mid)] ml-6 pl-6;
     }
     .comments-thread-post-body {
         @apply mt-0;
