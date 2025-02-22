@@ -122,7 +122,7 @@
             @apply m-4 max-w-[80%] w-fit;
         }
         .lightbox-image {
-            @apply border border-[var(--background-mid)] rounded-sm lg:rounded-lg;
+            @apply border border-background-mid rounded-sm lg:rounded-lg;
         }
         .lightbox-image-gallery-caption {
             @apply max-sm:hidden;
@@ -156,15 +156,15 @@
         .quote-block {
             @apply font-family-monospace;
 
-            @apply bg-[var(--bg-quote-block)];
+            @apply bg-[rgb(var(--bg-quote-block))];
             @apply color-text-highlight-color;
         }
 
         /* checklist css */
         div.checklist {
-            @apply border-[var(--background-mid)] border-2;
-            @apply bg-[var(--background-mid)] bg-opacity-15;
-            @apply bg-gray-500 bg-opacity-15;
+            @apply border-background-mid border-2;
+            @apply bg-color-mid bg-opacity-50;
+
             @apply px-8 my-4 pb-4;
             p {
                 @apply font-family-monospace;
@@ -204,7 +204,7 @@
             --th-background: #40404080;
             @apply bg-[var(--th-background)];
             @apply font-extrabold text-base text-left;
-            @apply border border-[var(--background-mid)];
+            @apply border border-background-mid;
             @apply py-1 px-4;
         }
 
@@ -220,7 +220,7 @@
 
         div.data-table td {
             @apply py-2 px-4;
-            @apply border border-[var(--background-mid)];
+            @apply border border-background-mid;
         }
 
         /* END table styles */

@@ -17,7 +17,7 @@
 
     .key-post-header {
         --bg-post-header-color: #50505030;
-        @apply bg-[var(--bg-post-header-color)];
+        @apply bg-[rgb(var(--bg-post-header-color))];
         @apply cursor-pointer;
         @apply animate-blur;
         @apply hover:animate-sharpen;
@@ -41,7 +41,7 @@
 
     /* tag/category button setup */
     .key-button-border-color {
-        border-color: var(--primary-color-contrast);
+        border-color: rgb(var(--primary-color-contrast));
     }
 
     .key-button-common {
