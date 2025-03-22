@@ -19,56 +19,59 @@
 @import "comments.css";
 @import "timeline.css";
 
+
+
 @layer base {
     /* custom classes to make colors friendlier with tailwind */
     .color-primary-color {
-        color: rgb(var(--primary-color));
+        color: rgb(var(--primary-color) / var(--tw-text-opacity));
     }
 
     .color-primary-color-alt {
-        color: rgb(var(--primary-color-alt));
+        color: rgb(var(--primary-color-alt) / var(--tw-text-opacity));
     }
 
     .color-hiive-green {
-        color: rgb(var(--hiive-green));
+        color: rgb(var(--hiive-green) / var(--tw-text-opacity));
     }
     .color-secondary-color {
-        color: rgb(var(--secondary-color));
+        color: rgb(var(--secondary-color) / var(--tw-text-opacity));
     }
     .color-primary-color-contrast {
-        color: rgb(var(--primary-color-contrast));
+        color: rgb(var(--primary-color-contrast) / var(--tw-text-opacity));
     }
 
     .color-text-main {
-        color: rgb(var(--text-main));
+        color: rgb(var(--text-main) / var(--tw-text-opacity));
     }
 
     .color-text-secondary {
-        color: rgb(var(--text-secondary));
+        color: rgb(var(--text-secondary) / var(--tw-text-opacity));
     }
 
     .color-text-highlight-color {
-        color: rgb(var(--text-highlight-color));
+        color: rgb(var(--text-highlight-color) / var(--tw-text-opacity));
     }
 
     .color-text-highlight-color-alt-green {
-        color: rgb(var(--text-highlight-color-alt-green));
+        color: rgb(var(--text-highlight-color-alt-green) / var(--tw-text-opacity));
     }
     .color-text-highlight-color-alt-blue {
-        color: rgb(var(--text-highlight-color-alt-blue));
+        color: rgb(var(--text-highlight-color-alt-blue) / var(--tw-text-opacity));
     }
     .color-text-highlight-color-alt-purple {
-        color: rgb(var(--text-highlight-color-alt-purple));
+        color: rgb(var(--text-highlight-color-alt-purple) / var(--tw-text-opacity));
     }
 
     .color-heading-color {
-        color: rgb(var(--heading-color));
+        color: rgb(var(--heading-color) / var(--tw-text-opacity));
     }
 
     .color-background-mid {
-        color: rgb(var(--background-mid));
+        color: rgb(var(--background-mid) / var(--tw-text-opacity));
     }
 
+    /* bg */
     .bg-color-background-feature {
         background-color: rgb(var(--background-feature) / var(--tw-bg-opacity));
     }
@@ -90,33 +93,36 @@
     }
 
     .bg-color-text-main {
-        background: rgb(var(--text-main) / var(--tw-bg-opacity));
+        background-color: rgb(var(--text-main) / var(--tw-bg-opacity));
     }
 
     .bg-color-mid {
-        background: rgb(var(--background-mid) / var(--tw-bg-opacity));
+        background-color: rgb(var(--background-mid) / var(--tw-bg-opacity));
     }
 
     .bg-color-text-secondary {
-        background: rgb(var(--text-secondary) / var(--tw-bg-opacity));
+        background-color: rgb(var(--text-secondary) / var(--tw-bg-opacity));
     }
 
+    /* border */
     .border-primary-color {
-        border-color: rgb(var(--primary-color));
+        border-color: rgb(var(--primary-color) / var(--tw-border-opacity));
     }
 
     .border-text-secondary {
-        border-color: rgb(var(--text-secondary));
+        border-color: rgb(var(--text-secondary) / var(--tw-border-opacity));
     }
 
     .border-background-mid {
-        border-color: rgb(var(--background-mid));
+        border-color: rgb(var(--background-mid) / var(--tw-border-opacity));
     }
 
+    /* general */
     .highlight {
         @apply color-secondary-color;
     }
 
+    /* fonts */
     .font-family-serif {
         /*noinspection CssNoGenericFontName*/
         font-family: var(--font-family-serif);

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/*@theme {*/
+/*    --breakpoint-xl: 30rem;*/
+/*}*/
+
 /* global defaults */
 @layer base {
 
