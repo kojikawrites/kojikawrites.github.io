@@ -76,6 +76,9 @@ tags_and_categories:
       - rl
     cellular-automata:
       - ca
+    procedural-generation:
+      - procgen
+      - proc-gen
 search:
   include: true
 
