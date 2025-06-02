@@ -56,7 +56,7 @@ Shaun's approach is well described on his website, so I won't bother to detail i
 His approach is as follows:
 
 1. Fill a playfield of half the intended width and full intended height with tetrominoes, packed as well as possible
-from right to left.
+from right to left. (Imagine a game of Tetris on its side.)
 2. Make some aesthetic tweaks to the final packed shapes to eliminate undesirable features.
 3. This is the right half of the maze, and it is mirrored to create the left half.
 4. Boundaries between tetrominoes define the paths of the maze.
@@ -79,7 +79,7 @@ segments indicate the "wall grouping" -- a feature used by Shaun's algorithm to 
 </LightboxGallery>
 
 Notice here that the walls are one tile thick, whereas the paths are two tiles thick. This will be important later for
-rendering and -- more importantly -- path finding, as it adds a wrinkle to the process.
+rendering and -- more importantly -- path-finding, as it adds a wrinkle to the process.
 
 The second image above shows how the maze can be split into a set of 3×3 tiles. Analysis of these shows that we can
 build an arbitrary (within the limits of those that the generator can generate) Pacman-style maze with the following
@@ -109,7 +109,8 @@ following image.
 />
 
 For various reasons that I will not go into here, but that are relevant for the final product[^3], I made a deliberate
-choice not to do it this way. Instead, I chose to partition the maze as shown in the following image:
+choice not to do it this way. Instead, I chose to partition the maze in "board game" fashion, as shown in the following
+image:
 
 [^3]: Again, I'm not intending to be deliberately obtuse, but I do want to keep the "why" under wraps until the project
 I'm working on is formally announced.
@@ -121,11 +122,12 @@ I'm working on is formally announced.
 />
 
 In the above scheme, the cost of moving between tiles is dependent on the shape of the tile.
-Moving across rectangular tiles incurs no cost. Only the square tiles incur a cost for path finding.
+Moving across rectangular tiles (shaded darker gray) incurs no cost. Only the square tiles (in lighter gray) incur a
+cost for path-finding.
 
 Conceptually, both images are the same; the first shows the path as vectors of length 3 (in terms of sub-tiles), with
-the movement cost being incurred for each vector traversed. The second shows the paths as squares (ignoring the rectangles
-as they have zero cost) with the center of each square corresponding to the endpoint of each vector in the first image.
+the movement cost being incurred for each vector traversed. The second shows the paths as spaced-out squares with the
+center of each square corresponding to the endpoint of each vector in the first image.
 
 I acknowledge that -- at first glance -- the second scheme is a little more complex visually (and also slightly in terms
 of implementation) but I *promise* I have a good reason for doing it this way.
