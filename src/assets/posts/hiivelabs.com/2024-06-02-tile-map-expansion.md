@@ -9,8 +9,8 @@ description: |
   dependency resolution, illustrating how layers build upon one another to generate new terrain progressively. The 
   discussion highlights how these optimizations contribute to a seamless and scalable world-generation framework.
 author: hiive
-categories: gamedev roguelike
-tags: world-building terrain-generation procedural-generation c-sharp
+categories: [gamedev, roguelike, procedural-generation]
+tags: [world-building, terrain-generation, c-sharp]
 thumbnail: /src/assets/images/hiivelabs.com/blog/tilemap.png
 ---
 

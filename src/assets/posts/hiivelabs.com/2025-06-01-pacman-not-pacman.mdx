@@ -1,0 +1,141 @@
+---
+title:  "This Is Not Pacman, Part 1"
+description: In which we discuss pivoting, temporarily, to a new project.
+author: hiive
+categories: [gamedev, graphics, procedural-generation]
+tags: [pacman-like, maze-generation, pixel-art, sekrit-project-1, python]
+thumbnail: /src/assets/images/hiivelabs.com/blog/pacnotpac/pacman-not-pacman-2.png
+---
+## Not Pacman
+
+In the last month or so, an opportunity has arisen to work on a fun and interesting project that should actually result
+in a tangible commercial product. It's not strictly in my usual line of work these days, but it's something I've done
+before many moons past.
+
+So, given that I had a stroke of inspiration, I thought I'd turn my hand to it again. I reached
+out to a company in the industry that I admired and told them about my proposal. After a couple of weeks of tweaking and
+munging, we had something we were both happy with, and the project was greenlit.
+
+This post isn’t directly about that project -- but it is about something related.
+
+And no. It's not Pacman.
+
+## Still Not Pacman
+For reasons as yet unspecified, the unnamed project in question requires a simple game to be produced. It has to be
+simple enough to be easily understood from both a gameplay *and* a code perspective, while still being complex enough
+to generate sufficiently interesting[^1] data.
+
+[^1]: I have a specific definition of "interesting" in mind here that I'm not going to explain.
+When I get further along in the project, I'll discuss it in more detail, but I don't want to jinx things just as I'm
+getting started.
+
+I noodled around with this problem over a weekend and -- with a bit of web searching -- came up with an idea
+that I think will fit all the necessary criteria. In this case, a relatively simple "clicker"-style maze-based tower
+defense game using procedural generation to create depth fits the bill.
+It allows me to create a relatively simple-to-program game without having to spend an inordinate amount of time creating
+content.
+
+### Pacman-Style Mazes Are Surprisingly Hard To Make
+Naturally the first step (at least in my mind) is to figure out a good way to generate interesting mazes. Given the
+nature of tower-defense games, I wanted to have a relatively simple maze layout reminiscent of the classic arcade style.
+
+For most people (at least those above a certain age), I would imagine that if I said "arcade-style mazes", the first
+thing that would pop into their head would be "Pacman", and I'm afraid I was no exception.
+
+I decided to do a little research into randomly generating Pacman-style mazes only to find that (a) it's harder than it
+looks and (b) it's a solved problem.
+
+Specifically, [Shaun LeBron's Excellent Website](https://shaunlebron.github.io/pacman-mazegen/) details an excellent
+approach in great detail, and I looked to this for inspiration[^2].
+
+[^2]:And by "inspiration" I mean I stole it wholesale and converted his algorithm to Python (with a few tweaks for my
+own nefarious purposes).
+
+Shaun's approach is well described on his website, so I won't bother to detail it here beyond a basic summary.
+
+His approach is as follows:
+
+1. Fill a playfield of half the intended width and full intended height with tetrominoes, packed as well as possible
+from right to left.
+2. Make some aesthetic tweaks to the final packed shapes to eliminate undesirable features.
+3. This is the right half of the maze, and it is mirrored to create the left half.
+4. Boundaries between tetrominoes define the paths of the maze.
+
+The modifications I have made in the Python conversion of the code are pretty simple -- I removed tunnels (as I have no
+use for them in my game), and I tweaked the maze generation slightly for my own aesthetic and gameplay reasons.
+
+The following images show early debug renderings of generated mazes. The different coloring for the various wall
+segments indicate the "wall grouping" -- a feature used by Shaun's algorithm to determine which walls to grow or shrink.
+
+<LightboxGallery caption="Pacman Maze Debug Views">
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pacnotpac/debug-maze-1.png"
+                   alt="Pacman-Style Maze - Debug View"
+                  caption="Tetromino edges are eroded to form paths."
+    />
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pacnotpac/debug-maze-2.jpg"
+                  alt="Pacman-Style Maze - Debug View"
+                  caption="Each maze tile is made up of a 3×3 set of sub-tiles."
+    />
+</LightboxGallery>
+
+Notice here that the walls are one tile thick, whereas the paths are two tiles thick. This will be important later for
+rendering and -- more importantly -- path finding, as it adds a wrinkle to the process.
+
+The second image above shows how the maze can be split into a set of 3×3 tiles. Analysis of these shows that we can
+build an arbitrary (within the limits of those that the generator can generate) Pacman-style maze with the following
+tileset, as shown.
+
+<LightboxGallery caption="Pacman Maze Vectorized Rendering">
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pacnotpac/maze-parts.png"
+                  alt="Pacman-style maze tileset."
+                  caption="Any generator-produced Pacman-style maze can be built with these 16 tiles."
+    />
+    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pacnotpac/vector-maze-render-1.png"
+                   alt="Pacman-style maze, rendered in vector-based tiles."
+                   caption="An example Pacman-style maze, rendered in vector-based tiles."
+    />
+</LightboxGallery>
+
+### Segmentation For Path-Finding
+
+If we wanted to path-find in a maze like this, it's pretty evident that we could treat the gray grid intersection points
+as nodes, and the grid edges (where they do not cross a wall) as paths with a traversal cost of 1, as shown in the
+following image.
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/pacnotpac/vector-maze-render-2.png"
+               alt="Pacman-style maze, rendered in vector-based tiles."
+               caption="An example Pacman-style maze, rendered in vector-based tiles, showing pathways in gray."
+/>
+
+For various reasons that I will not go into here, but that are relevant for the final product[^3], I made a deliberate
+choice not to do it this way. Instead, I chose to partition the maze as shown in the following image:
+
+[^3]: Again, I'm not intending to be deliberately obtuse, but I do want to keep the "why" under wraps until the project
+I'm working on is formally announced.
+
+<LightboxImage src="/src/assets/images/hiivelabs.com/blog/pacnotpac/vector-maze-render-3.png"
+               alt="Pacman-style maze, rendered in vector-based tiles."
+               caption="An example Pacman-style maze, rendered in vector-based tiles,
+                        showing traversable tiles in gray outline."
+/>
+
+In the above scheme, the cost of moving between tiles is dependent on the shape of the tile.
+Moving across rectangular tiles incurs no cost. Only the square tiles incur a cost for path finding.
+
+Conceptually, both images are the same; the first shows the path as vectors of length 3 (in terms of sub-tiles), with
+the movement cost being incurred for each vector traversed. The second shows the paths as squares (ignoring the rectangles
+as they have zero cost) with the center of each square corresponding to the endpoint of each vector in the first image.
+
+I acknowledge that -- at first glance -- the second scheme is a little more complex visually (and also slightly in terms
+of implementation) but I *promise* I have a good reason for doing it this way.
+
+Anyway, that's enough for this post. All the code used to generate the mazes you see here (and more) will be open
+sourced by the end of the project. Additionally, I've been remiss in keeping a regular posting schedule, so I want to
+get this first post on this topic wrapped up. My next post will cover the various path-finding algorithms, as well as
+some other details of my progress on this part of the overall project.
+
+This is intended to be the first post in a series that detail my progress not only on the development of this game, but
+also in the overall project. I'm looking forward to being able to announce it officially, but I'll need to make significantly
+more progress before I feel comfortable in doing so.
+
+
