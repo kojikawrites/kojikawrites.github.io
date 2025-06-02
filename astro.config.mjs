@@ -32,8 +32,9 @@ console.log('siteName:', siteName());
 // https://astro.build/config
 export default defineConfig({
     experimental: {
-        svg: true,
+
     },
+    svg: true,
     hooks: {
         "astro:build:start": async () => {
             console.log("🔍 Done Extracting frontmatter...");
