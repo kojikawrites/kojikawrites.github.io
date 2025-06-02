@@ -405,6 +405,9 @@ def main():
                 for file in post_files:
                     if file.endswith('.md') or file.endswith('.mdx'):
                         file_path = os.path.join(post_root, file)
+                        if "_drafts" in file_path:
+                            print(f"{file} is in draft status. Skipping...")
+                            continue
                         # print(f"FILE: {post_dirs}, {file}")
                         relative_path = os.path.relpath(file_path, args.post_dir)
                         post_id = relative_path.replace('\\', '/')
