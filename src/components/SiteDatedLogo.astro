@@ -1,0 +1,25 @@
+---
+interface Props {
+    alt: string;
+    class?: string;
+    id?: string;
+}
+
+import ThemedDatedImage from './ThemedDatedImage.astro';
+
+import getSafeId from '../scripts/toSafeId';
+import {getSiteCode} from "../scripts/getSiteConfig";
+import {getJson} from "../scripts/getJson";
+
+
+// const siteConfig = await getSiteConfig();
+const siteCode = getSiteCode();
+const logoSrc = await getJson(siteCode, 'logo-map.json');
+// console.warn(logoSrc)
+
+const id = getSafeId(Astro.props.id ?? Astro.props.alt, false);
+const { class: logoClass } = Astro.props;
+
+---
+<ThemedDatedImage id={id} alt={Astro.props.alt} srcList={logoSrc} class={logoClass}/>
+
