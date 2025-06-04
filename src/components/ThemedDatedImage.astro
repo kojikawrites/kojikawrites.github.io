@@ -28,7 +28,7 @@ function buildSrcList(
     src: string | undefined,
     imageGlobs: Record<string, () => Promise<{ default: ImageMetadata }>>,
     availableThemes: string[]
-): { [theme: string]: Promise<{ default: ImageMetadata }> } {
+): { [p: string]: { image: Promise<{ default: ImageMetadata }>; alt: string } } {
 
     let finalSrcList = {}
 
@@ -71,25 +71,40 @@ function buildSrcList(
         `default`                      // every other day not covered by the above
     ];
     return Object.fromEntries(
-        Object.entries(finalSrcList).flatMap(([theme, filenames]) => {
-            return Object.entries(filenames).map(([key, filename]) => {
+        Object.entries(finalSrcList).flatMap(([theme, logos]) => {
+            return Object.entries(logos).map(([key, logo]) => {
                 // console.log(key, filename)
+                const filename = logo.src;
+                const altText = logo.alt;
                 const value = imageGlobs[`${filename}`];
                 if (!value) {
                     console.warn(`No image glob found for ${filename}`);
                 }
-                return [`${theme}-${key}`, value()];
+                return [`${theme}-${key}`, {image: value(), alt: altText} ];
             });
         })
     );
 }
 
-function getValueOrFirst<T>(dict: Record<string, Promise<{default: ImageMetadata}>>, key: string): Promise<{default: ImageMetadata}> {
+function getValueOrFirstImage<T>(dict: {
+    [p: string]: { image: Promise<{ default: ImageMetadata }>; alt: string }
+}, key: string): Promise<{ default: ImageMetadata }> {
     if (key in dict) {
-        return dict[key];
+        return dict[key].image;
     } else {
         const values = Object.values(dict);
-        return values.length > 0 ? values[0] : undefined;
+        return values.length > 0 ? values[0].image : undefined;
+    }
+}
+
+function getValueOrFirstAltText<T>(dict: {
+    [p: string]: { image: Promise<{ default: ImageMetadata }>; alt: string }
+}, key: string, defaultValue: string): string {
+    if (key in dict) {
+        return dict[key].alt;
+    } else {
+        const values = Object.values(dict);
+        return values.length > 0 ? values[0].alt : defaultValue;
     }
 }
 
@@ -103,9 +118,9 @@ console.log('themedImgId', themedImgId);
 <themed-dated-image-data-holder id={getSafeId(id)} data-themed-img-id={themedImgId}>
     {Object.keys(themedImageGlobs).map((datedTheme, _) => (
             <Image id={themedImgId}
-                   src={getValueOrFirst(themedImageGlobs, datedTheme)}
-                   alt={alt}
-                   title={alt}
+                   src={getValueOrFirstImage(themedImageGlobs, datedTheme)}
+                   alt={getValueOrFirstAltText(themedImageGlobs, datedTheme, alt)}
+                   title={getValueOrFirstAltText(themedImageGlobs, datedTheme, alt)}
                    class=`${className} hidden`
                    data-dated-theme={datedTheme}
                    {...rest} />
