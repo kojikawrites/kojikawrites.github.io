@@ -61,14 +61,14 @@ function buildSrcList(
     const day = String(today.getDate()).padStart(2, "0");
 
     const dateKeys = [
-        `${year}-${month}-${day}`,
-        `xxxx-${month}-${day}`,
-        `${year}-${month}-xx`,
-        `${year}-xx-${day}`,
-        `xxxx-xx-${day}`,
-        `xxxx-${month}-xx`,
-        `${year}-xx-xx`,
-        `default`
+        `${year}-${month}-${day}`,     // exact match (1)
+        `xxxx-${month}-${day}`,        // recurring exact day (1 per year)
+        `${year}-xx-${day}`,           // a specific day every month in a specific year (~12)
+        `xxxx-xx-${day}`,              // a specific day every month (~12 per year)
+        `${year}-${month}-xx`,         // all days of one month in a specific year (28-31)
+        `xxxx-${month}-xx`,            // all month (28-31 per year)
+        `${year}-xx-xx`,               // all of a specific year (365/366)
+        `default`                      // every other day not covered by the above
     ];
 
     return Object.fromEntries(
