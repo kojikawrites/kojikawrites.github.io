@@ -1,9 +1,10 @@
 # main page logo
 main:
   logo:
-    dark: "/src/assets/images/thewriteplace.rocks/logos/logo2-dark.png"
-    light: "/src/assets/images/thewriteplace.rocks/logos/logo2-light.png"
+#    dark: "/src/assets/images/thewriteplace.rocks/logos/logo2-dark.png"
+#    light: "/src/assets/images/thewriteplace.rocks/logos/logo2-light.png"
     alt: "thewriteplace.rocks"
+    dynamic_dir: "/src/assets/images/thewriteplace.rocks/logos/dynamic"
 
 # navbar setup
 navbar:
