@@ -1,9 +1,11 @@
 {
   "dark": {
+    "xxxx-06-19": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-19/hiive-logo-juneteenth-dark.svg",
     "xxxx-06-xx": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-xx/hiive-logo-pride-dark.svg",
     "default": "/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-dark.svg"
   },
   "light": {
+    "xxxx-06-19": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-19/hiive-logo-juneteenth-light.svg",
     "xxxx-06-xx": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-xx/hiive-logo-pride-light.svg",
     "default": "/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-light.svg"
   }
