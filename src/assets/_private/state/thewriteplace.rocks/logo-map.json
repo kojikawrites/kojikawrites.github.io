@@ -1,5 +1,9 @@
 {
   "dark": {
+    "xxxx-06-19": {
+      "src": "/src/assets/images/thewriteplace.rocks/logos/dynamic/xxxx-06-19/logo2-juneteenth-dark.png",
+      "alt": "Happy Juneteenth!"
+    },
     "xxxx-06-xx": {
       "src": "/src/assets/images/thewriteplace.rocks/logos/dynamic/xxxx-06-xx/logo2-pride-dark.png",
       "alt": "Happy Pride Month!"
@@ -10,6 +14,10 @@
     }
   },
   "light": {
+    "xxxx-06-19": {
+      "src": "/src/assets/images/thewriteplace.rocks/logos/dynamic/xxxx-06-19/logo2-juneteenth-light.png",
+      "alt": "Happy Juneteenth!"
+    },
     "xxxx-06-xx": {
       "src": "/src/assets/images/thewriteplace.rocks/logos/dynamic/xxxx-06-xx/logo2-pride-light.png",
       "alt": "Happy Pride Month!"
