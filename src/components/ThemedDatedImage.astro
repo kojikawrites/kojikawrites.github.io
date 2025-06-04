@@ -1,0 +1,228 @@
+---
+interface Props {
+    alt: string;
+    srcList?: Record<string, Record<string, string>>;
+    src?: string;
+    class?: string;
+    id?: string;
+}
+
+import getSafeId from '../scripts/toSafeId';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+// import { getActiveTheme } from '@client-scripts/theme';
+
+// console.log('getActiveTheme', getActiveTheme());
+
+const {
+    alt = "",
+    srcList= {},
+    src: srcString = "",
+    class:className = "",
+    id= null,
+    ...rest
+} = Astro.props;
+
+function buildSrcList(
+    srcList: Record<string, Record<string, string>> | undefined,
+    src: string | undefined,
+    imageGlobs: Record<string, () => Promise<{ default: ImageMetadata }>>,
+    availableThemes: string[]
+): { [p: string]: { image: Promise<{ default: ImageMetadata }>; alt: string } } {
+
+    let finalSrcList = {}
+
+    if (src && (!srcList || Object.keys(srcList).length == 0)) {
+        // Step 1: We have a src string, but no srcList.
+        // We need to construct a srcList by replacing [THEME] with each available theme.
+        // console.log("buildSrcList: src", src);
+        finalSrcList = availableThemes.reduce((acc, theme: string) => {
+            acc[theme] = src.includes('[THEME]')
+                ? src.replace('[THEME]', theme)
+                : src;
+            // console.log('buildSrcList: theme:filename', `${theme}:${finalSrcList}`);
+            return acc;
+        }, {});
+    } else if (srcList && !src) {
+        // We already have a srcList
+        // console.log("buildSrcList: srcList", srcList);
+        finalSrcList = srcList;
+
+    } else {
+        // Invalid scenario: both or neither provided
+        return null;
+    }
+
+    // Step 2: Build a new dictionary where each theme is the key, and the value is taken from imageGlobs.
+    // finalSrcList keys: theme names, finalSrcList values: filenames
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    const dateKeys = [
+        `${year}-${month}-${day}`,     // exact match (1)
+        `xxxx-${month}-${day}`,        // recurring exact day (1 per year)
+        `${year}-xx-${day}`,           // a specific day every month in a specific year (~12)
+        `xxxx-xx-${day}`,              // a specific day every month (~12 per year)
+        `${year}-${month}-xx`,         // all days of one month in a specific year (28-31)
+        `xxxx-${month}-xx`,            // all month (28-31 per year)
+        `${year}-xx-xx`,               // all of a specific year (365/366)
+        `default`                      // every other day not covered by the above
+    ];
+    return Object.fromEntries(
+        Object.entries(finalSrcList).flatMap(([theme, logos]) => {
+            return Object.entries(logos).map(([key, logo]) => {
+                // console.log(key, filename)
+                const filename = logo.src;
+                const altText = logo.alt;
+                const value = imageGlobs[`${filename}`];
+                if (!value) {
+                    console.warn(`No image glob found for ${filename}`);
+                }
+                return [`${theme}-${key}`, {image: value(), alt: altText} ];
+            });
+        })
+    );
+}
+
+function getValueOrFirstImage<T>(dict: {
+    [p: string]: { image: Promise<{ default: ImageMetadata }>; alt: string }
+}, key: string): Promise<{ default: ImageMetadata }> {
+    if (key in dict) {
+        return dict[key].image;
+    } else {
+        const values = Object.values(dict);
+        return values.length > 0 ? values[0].image : undefined;
+    }
+}
+
+function getValueOrFirstAltText<T>(dict: {
+    [p: string]: { image: Promise<{ default: ImageMetadata }>; alt: string }
+}, key: string, defaultValue: string): string {
+    if (key in dict) {
+        return dict[key].alt;
+    } else {
+        const values = Object.values(dict);
+        return values.length > 0 ? values[0].alt : defaultValue;
+    }
+}
+
+const themedImgId = id ?? getSafeId(`themed-image-${className}-${alt}`);
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,svg,webp}');
+const themedImageGlobs = buildSrcList(srcList, srcString, images, ['dark', 'light'])
+// console.log('themedDatedImageGlobs', Object.keys(themedImageGlobs), images);
+console.log('themedImgId', themedImgId);
+---
+
+<themed-dated-image-data-holder id={getSafeId(id)} data-themed-img-id={themedImgId}>
+    {Object.keys(themedImageGlobs).map((datedTheme, _) => (
+            <Image id={themedImgId}
+                   src={getValueOrFirstImage(themedImageGlobs, datedTheme)}
+                   alt={getValueOrFirstAltText(themedImageGlobs, datedTheme, alt)}
+                   title={getValueOrFirstAltText(themedImageGlobs, datedTheme, alt)}
+                   class=`${className} hidden`
+                   data-dated-theme={datedTheme}
+                   {...rest} />
+    ))}
+</themed-dated-image-data-holder>
+<!-- '/@client-scripts/theme'; //@client-scripts  '/src/scripts/client/theme.ts'; -->
+<script>
+    import { getActiveTheme } from "../scripts/client/theme";
+
+    function getCurrentDateForLogos() {
+        let today = new Date();
+
+        // Only override in dev mode and if a test date is provided
+        const isDev = import.meta.env.DEV;
+        const override = import.meta.env.PUBLIC_LOGO_TEST_DATE;
+        console.warn(isDev, override)
+        console.warn("PUBLIC_LOGO_TEST_DATE:", import.meta.env.PUBLIC_LOGO_TEST_DATE);
+        if (isDev && override) {
+            const [year, month, day] = override.split("-");
+            if (year && month && day) {
+                today = new Date(`${year}-${month}-${day}T00:00:00`);
+            } else {
+                console.warn("Invalid format for PUBLIC_LOGO_TEST_DATE, expected YYYY-MM-DD.");
+            }
+        }
+
+        return today;
+    }
+    class ThemedImageDataHolder extends HTMLElement {
+
+        connectedCallback() {
+            // const id = this.id;
+            const themedImgId = this.dataset.themedImgId;
+
+            // get values
+            function setThemedDatedImage()   {
+                var themedImgs = document.querySelectorAll(`[id='${themedImgId}']`);
+                const theme = getActiveTheme();
+                const today = getCurrentDateForLogos();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, "0");
+                const day = String(today.getDate()).padStart(2, "0");
+
+                const themedDateKeys = [
+                    `${theme}-${year}-${month}-${day}`,     // exact match (1)
+                    `${theme}-xxxx-${month}-${day}`,        // recurring exact day (1 per year)
+                    `${theme}-${year}-xx-${day}`,           // a specific day every month in a specific year (~12)
+                    `${theme}-xxxx-xx-${day}`,              // a specific day every month (~12 per year)
+                    `${theme}-${year}-${month}-xx`,         // all days of one month in a specific year (28-31)
+                    `${theme}-xxxx-${month}-xx`,            // all month (28-31 per year)
+                    `${theme}-${year}-xx-xx`,               // all of a specific year (365/366)
+                    `${theme}-default`                      // every other day not covered by the above
+                ];
+                // const themedDateKey = themedDateKeys[0];
+                // console.log('ThemedDatedImage.setThemedDatedImage', themedDateKey);
+                let themedDataKey = null;
+
+                for (const key of themedDateKeys) {
+                    const match = Array.from(themedImgs).find(
+                        (img: HTMLElement) => img.dataset.datedTheme === key
+                    );
+                    if (match) {
+                        themedDataKey = key;
+                        break;
+                    }
+                }
+                console.log('themedDataKey', themedDataKey);
+                // alert(theme, themedImgId);
+                themedImgs.forEach((img: HTMLElement) => {
+
+                    if (themedDataKey === img.dataset.datedTheme) {
+                        img.classList.remove('hidden');
+                    }
+                    else {
+                        img.classList.add('hidden');
+                    }
+                    //img.style.display = theme === img.dataset.theme ? 'block': 'none';
+                });
+                return true;
+            }
+
+            // initial set.
+            setThemedDatedImage();
+
+            // this should catch theme changes
+            window.addEventListener('storage', setThemedDatedImage);
+
+            document.addEventListener("astro:after-swap", setThemedDatedImage);
+
+            // if user hasn't manually set theme, we can respond to system theme
+            // set up theming
+            const darkModeMediaQueryTI = window.matchMedia('(prefers-color-scheme: dark)');
+            darkModeMediaQueryTI.addEventListener('change', () => {
+                const themeSet = localStorage.getItem('themeSet');
+                console.log('ThemedImage: themeSet', themeSet);
+                if (!themeSet) {
+                    setThemedDatedImage();
+                }
+            });
+        }
+    }
+
+    customElements.define('themed-dated-image-data-holder', ThemedImageDataHolder);
+</script>
+

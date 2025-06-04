@@ -1,0 +1,22 @@
+{
+  "dark": {
+    "xxxx-06-xx": {
+      "src": "/src/assets/images/thewriteplace.rocks/logos/dynamic/xxxx-06-xx/logo2-pride-dark.png",
+      "alt": "Happy Pride Month!"
+    },
+    "default": {
+      "src": "/src/assets/images/thewriteplace.rocks/logos/dynamic/logo2-dark.png",
+      "alt": "thewriteplace.rocks"
+    }
+  },
+  "light": {
+    "xxxx-06-xx": {
+      "src": "/src/assets/images/thewriteplace.rocks/logos/dynamic/xxxx-06-xx/logo2-pride-light.png",
+      "alt": "Happy Pride Month!"
+    },
+    "default": {
+      "src": "/src/assets/images/thewriteplace.rocks/logos/dynamic/logo2-light.png",
+      "alt": "thewriteplace.rocks"
+    }
+  }
+}

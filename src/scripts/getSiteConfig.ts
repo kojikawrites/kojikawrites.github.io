@@ -13,6 +13,7 @@ export async function getSiteConfig() {
         dark: string;
         light: string;
         alt: string;
+        dynamic_dir: string; //TODO ARTEMP
     }
     interface NavbarEntry {
         href: string;
@@ -20,6 +21,10 @@ export async function getSiteConfig() {
     }
 
     const yamlGlobs = import.meta.glob<{
+        main: {
+            alt: string;
+            dynamic_dir: string;
+        }
         blog: {
             pagination_size: number;
             path: string;

@@ -1,13 +1,11 @@
 ---
-import SiteLogo from 'src/components/SiteLogo.astro';
+import SiteDatedLogo from 'src/components/SiteDatedLogo.astro';
 import {getSiteConfig} from "src/scripts/getSiteConfig";
 
 const siteConfig = await getSiteConfig();
 ---
 
-<SiteLogo alt={siteConfig.main.logo.alt}
-          dark={siteConfig.main.logo.dark}
-          light={siteConfig.main.logo.light}
+<SiteDatedLogo alt={siteConfig.main.logo.alt}
           id="main-page-logo"
           class="main-page-logo"/>
 
