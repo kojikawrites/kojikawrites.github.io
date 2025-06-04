@@ -140,8 +140,8 @@ console.log('themedImgId', themedImgId);
                 const theme = getActiveTheme();
                 const today = new Date();
                 const year = today.getFullYear();
-                const month = "07"; //String(today.getMonth() + 1).padStart(2, "0");
-                const day = "04";// String(today.getDate()).padStart(2, "0");
+                const month = String(today.getMonth() + 1).padStart(2, "0");
+                const day = String(today.getDate()).padStart(2, "0");
 
                 const themedDateKeys = [
                     `${theme}-${year}-${month}-${day}`,     // exact match (1)
