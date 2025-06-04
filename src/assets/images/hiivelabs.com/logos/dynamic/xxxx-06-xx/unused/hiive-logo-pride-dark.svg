@@ -215,22 +215,20 @@
         <rect x="427.14" y="108.47" width="9.73" height="9.86" style="fill:rgb(255,128,28);"/>
         <rect x="475.77" y="108.47" width="9.73" height="9.86" style="fill:rgb(255,128,28);"/>
         <g>
-            <g>
-                <path d="M336.58,143.87L323.3,121.21L336.58,98.55L363.16,98.55L376.45,121.21L363.16,143.87L336.58,143.87Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
-                <path d="M335.99,370.88L322.7,348.23L335.99,325.57L362.57,325.57L375.85,348.23L362.57,370.88L335.99,370.88Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
-                <path d="M336.55,279.85L323.26,257.19L336.55,234.53L363.12,234.53L376.41,257.19L363.12,279.85L336.55,279.85Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
-                <path d="M336.56,234.53L323.27,211.87L336.56,189.21L363.13,189.21L376.42,211.87L363.13,234.53L336.56,234.53Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
-                <path d="M336.48,189.19L323.19,166.53L336.48,143.87L363.06,143.87L376.34,166.53L363.06,189.19L336.48,189.19Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
-                <path d="M336.54,325.47L323.25,302.81L336.54,280.15L363.12,280.15L376.4,302.81L363.12,325.47L336.54,325.47Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
-            </g>
             <path d="M336.58,143.87L323.3,121.21L336.58,98.55L363.16,98.55L376.45,121.21L363.16,143.87L336.58,143.87Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
             <path d="M335.99,370.88L322.7,348.23L335.99,325.57L362.57,325.57L375.85,348.23L362.57,370.88L335.99,370.88Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
             <path d="M336.55,279.85L323.26,257.19L336.55,234.53L363.12,234.53L376.41,257.19L363.12,279.85L336.55,279.85Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
             <path d="M336.56,234.53L323.27,211.87L336.56,189.21L363.13,189.21L376.42,211.87L363.13,234.53L336.56,234.53Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
             <path d="M336.48,189.19L323.19,166.53L336.48,143.87L363.06,143.87L376.34,166.53L363.06,189.19L336.48,189.19Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
             <path d="M336.54,325.47L323.25,302.81L336.54,280.15L363.12,280.15L376.4,302.81L363.12,325.47L336.54,325.47Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
-            <path d="M323.26,393.84L336.55,371.19L363.12,371.19L376.41,393.84L323.26,393.84Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
         </g>
+        <path d="M336.58,143.87L323.3,121.21L336.58,98.55L363.16,98.55L376.45,121.21L363.16,143.87L336.58,143.87Z" style="fill:rgb(50,50,50);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
+        <path d="M335.99,370.88L322.7,348.23L335.99,325.57L362.57,325.57L375.85,348.23L362.57,370.88L335.99,370.88Z" style="fill:rgb(129,66,0);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
+        <path d="M336.55,279.85L323.26,257.19L336.55,234.53L363.12,234.53L376.41,257.19L363.12,279.85L336.55,279.85Z" style="fill:rgb(255,142,212);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
+        <path d="M336.56,234.53L323.27,211.87L336.56,189.21L363.13,189.21L376.42,211.87L363.13,234.53L336.56,234.53Z" style="fill:rgb(103,162,255);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
+        <path d="M336.48,189.19L323.19,166.53L336.48,143.87L363.06,143.87L376.34,166.53L363.06,189.19L336.48,189.19Z" style="fill:rgb(129,66,0);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
+        <path d="M336.54,325.47L323.25,302.81L336.54,280.15L363.12,280.15L376.4,302.81L363.12,325.47L336.54,325.47Z" style="fill:rgb(103,162,255);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
+        <path d="M323.26,393.84L336.55,371.19L363.12,371.19L376.41,393.84L323.26,393.84Z" style="fill:rgb(255,128,28);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
         <rect x="348.2" y="374.13" width="9.73" height="9.86"/>
         <rect x="348.26" y="383.99" width="9.73" height="9.86"/>
         <rect x="377.38" y="393.84" width="9.73" height="9.86" style="fill:rgb(255,128,28);"/>
