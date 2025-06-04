@@ -129,7 +129,28 @@ console.log('themedImgId', themedImgId);
 <!-- '/@client-scripts/theme'; //@client-scripts  '/src/scripts/client/theme.ts'; -->
 <script>
     import { getActiveTheme } from "../scripts/client/theme";
+
+    function getCurrentDateForLogos() {
+        let today = new Date();
+
+        // Only override in dev mode and if a test date is provided
+        const isDev = import.meta.env.DEV;
+        const override = import.meta.env.PUBLIC_LOGO_TEST_DATE;
+        console.warn(isDev, override)
+        console.warn("PUBLIC_LOGO_TEST_DATE:", import.meta.env.PUBLIC_LOGO_TEST_DATE);
+        if (isDev && override) {
+            const [year, month, day] = override.split("-");
+            if (year && month && day) {
+                today = new Date(`${year}-${month}-${day}T00:00:00`);
+            } else {
+                console.warn("Invalid format for PUBLIC_LOGO_TEST_DATE, expected YYYY-MM-DD.");
+            }
+        }
+
+        return today;
+    }
     class ThemedImageDataHolder extends HTMLElement {
+
         connectedCallback() {
             // const id = this.id;
             const themedImgId = this.dataset.themedImgId;
@@ -138,7 +159,7 @@ console.log('themedImgId', themedImgId);
             function setThemedDatedImage()   {
                 var themedImgs = document.querySelectorAll(`[id='${themedImgId}']`);
                 const theme = getActiveTheme();
-                const today = new Date();
+                const today = getCurrentDateForLogos();
                 const year = today.getFullYear();
                 const month = String(today.getMonth() + 1).padStart(2, "0");
                 const day = String(today.getDate()).padStart(2, "0");
