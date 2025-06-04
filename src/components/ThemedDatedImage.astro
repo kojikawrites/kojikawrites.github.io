@@ -70,18 +70,16 @@ function buildSrcList(
         `${year}-xx-xx`,               // all of a specific year (365/366)
         `default`                      // every other day not covered by the above
     ];
-
     return Object.fromEntries(
-        Object.entries(finalSrcList).map(([theme, _]) => {
-            // Look up the glob from imageGlobs using the filename
-            // const filename = filelist['default']
-            const datedSrc = dateKeys.map(key => finalSrcList[theme]?.[key]).find(Boolean);
-            // console.warn(`datedSrc: ${datedSrc}`)
-            const value = imageGlobs[`${datedSrc}`];
-            if (!value) {
-                console.warn(`No image glob found for ${datedSrc}`);
-            }
-            return [theme, value()];
+        Object.entries(finalSrcList).flatMap(([theme, filenames]) => {
+            return Object.entries(filenames).map(([key, filename]) => {
+                // console.log(key, filename)
+                const value = imageGlobs[`${filename}`];
+                if (!value) {
+                    console.warn(`No image glob found for ${filename}`);
+                }
+                return [`${theme}-${key}`, value()];
+            });
         })
     );
 }
@@ -98,21 +96,21 @@ function getValueOrFirst<T>(dict: Record<string, Promise<{default: ImageMetadata
 const themedImgId = id ?? getSafeId(`themed-image-${className}-${alt}`);
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,svg,webp}');
 const themedImageGlobs = buildSrcList(srcList, srcString, images, ['dark', 'light'])
-//console.log('themedImageGlobs', Object.keys(themedImageGlobs), images);
-console.log(themedImgId);
+// console.log('themedDatedImageGlobs', Object.keys(themedImageGlobs), images);
+console.log('themedImgId', themedImgId);
 ---
 
-<themed-image-data-holder id={getSafeId(id)} data-themed-img-id={themedImgId}>
-    {Object.keys(themedImageGlobs).map((theme, _) => (
+<themed-dated-image-data-holder id={getSafeId(id)} data-themed-img-id={themedImgId}>
+    {Object.keys(themedImageGlobs).map((datedTheme, _) => (
             <Image id={themedImgId}
-                   src={getValueOrFirst(themedImageGlobs, theme)}
+                   src={getValueOrFirst(themedImageGlobs, datedTheme)}
                    alt={alt}
                    title={alt}
                    class=`${className} hidden`
-                   data-theme={theme}
+                   data-dated-theme={datedTheme}
                    {...rest} />
     ))}
-</themed-image-data-holder>
+</themed-dated-image-data-holder>
 <!-- '/@client-scripts/theme'; //@client-scripts  '/src/scripts/client/theme.ts'; -->
 <script>
     import { getActiveTheme } from "../scripts/client/theme";
@@ -122,14 +120,42 @@ console.log(themedImgId);
             const themedImgId = this.dataset.themedImgId;
 
             // get values
-            function setThemedImage()   {
+            function setThemedDatedImage()   {
                 var themedImgs = document.querySelectorAll(`[id='${themedImgId}']`);
                 const theme = getActiveTheme();
-                console.log('ThemedImage.setThemedImage', theme);
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, "0");
+                const day = String(today.getDate()).padStart(2, "0");
+
+                const themedDateKeys = [
+                    `${theme}-${year}-${month}-${day}`,     // exact match (1)
+                    `${theme}-xxxx-${month}-${day}`,        // recurring exact day (1 per year)
+                    `${theme}-${year}-xx-${day}`,           // a specific day every month in a specific year (~12)
+                    `${theme}-xxxx-xx-${day}`,              // a specific day every month (~12 per year)
+                    `${theme}-${year}-${month}-xx`,         // all days of one month in a specific year (28-31)
+                    `${theme}-xxxx-${month}-xx`,            // all month (28-31 per year)
+                    `${theme}-${year}-xx-xx`,               // all of a specific year (365/366)
+                    `${theme}-default`                      // every other day not covered by the above
+                ];
+                // const themedDateKey = themedDateKeys[0];
+                // console.log('ThemedDatedImage.setThemedDatedImage', themedDateKey);
+                let themedDataKey = null;
+
+                for (const key of themedDateKeys) {
+                    const match = Array.from(themedImgs).find(
+                        (img: HTMLElement) => img.dataset.datedTheme === key
+                    );
+                    if (match) {
+                        themedDataKey = key;
+                        break;
+                    }
+                }
+                console.log('themedDataKey', themedDataKey);
                 // alert(theme, themedImgId);
                 themedImgs.forEach((img: HTMLElement) => {
 
-                    if (theme === img.dataset.theme) {
+                    if (themedDataKey === img.dataset.datedTheme) {
                         img.classList.remove('hidden');
                     }
                     else {
@@ -141,14 +167,12 @@ console.log(themedImgId);
             }
 
             // initial set.
-            setThemedImage();
+            setThemedDatedImage();
 
             // this should catch theme changes
-            window.addEventListener('storage', setThemedImage);
+            window.addEventListener('storage', setThemedDatedImage);
 
-
-            document.addEventListener("astro:after-swap", setThemedImage);
-
+            document.addEventListener("astro:after-swap", setThemedDatedImage);
 
             // if user hasn't manually set theme, we can respond to system theme
             // set up theming
@@ -157,12 +181,12 @@ console.log(themedImgId);
                 const themeSet = localStorage.getItem('themeSet');
                 console.log('ThemedImage: themeSet', themeSet);
                 if (!themeSet) {
-                    setThemedImage();
+                    setThemedDatedImage();
                 }
             });
         }
     }
 
-    customElements.define('themed-image-data-holder', ThemedImageDataHolder);
+    customElements.define('themed-dated-image-data-holder', ThemedImageDataHolder);
 </script>
 
