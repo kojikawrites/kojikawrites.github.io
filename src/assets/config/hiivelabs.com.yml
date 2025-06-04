@@ -1,9 +1,10 @@
 # main page logo
 main:
   logo:
-    dark: "/src/assets/images/hiivelabs.com/logos/hiive-logo-dark-pride.svg"
-    light: "/src/assets/images/hiivelabs.com/logos/hiive-logo-light-pride.svg"
+#    dark: "/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-dark.svg"
+#    light: "/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-light.svg"
     alt: "hiivelabs.com"
+    dynamic_dir: "/src/assets/images/hiivelabs.com/logos/dynamic"
 
 # navbar setup
 navbar:

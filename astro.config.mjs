@@ -13,6 +13,8 @@ import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
 import pagefind from "astro-pagefind";
 import frontmatter from "/src/scripts/extractPagesFrontMatter.mjs"; // DO NOT DELETE
+import siteLogos from "/src/scripts/extractDateLogoMap.mjs" // DO NOT DELETE
+
 
 import rehypeLinkDecorator from "./rehype-link-decorator.mjs";
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
@@ -39,6 +41,7 @@ export default defineConfig({
         "astro:build:start": async () => {
             console.log("🔍 Done Extracting frontmatter...");
             const dummy = frontmatter; // to avoid unused import warning.
+            const dummy2 = siteLogos // to avoid unused import warning.
         },
     },
     vite: {
