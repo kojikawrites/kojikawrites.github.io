@@ -35,7 +35,7 @@
         <path d="M296.37,348.2L283.08,325.54L296.37,302.88L322.94,302.88L336.23,325.54L322.94,348.2L296.37,348.2Z" style="fill:rgb(168,0,142);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
         <path d="M296.15,393.59L282.86,370.93L296.15,348.28L322.72,348.28L336.01,370.93L322.72,393.59L296.15,393.59Z" style="fill:white;fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
         <path d="M296.7,302.56L283.42,279.9L296.7,257.24L323.28,257.24L336.57,279.9L323.28,302.56L296.7,302.56Z" style="fill:rgb(22,39,255);fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
-        <path d="M243.24,393.59L256.53,370.93L283.1,370.93L296.39,393.59L243.24,393.59Z" style="fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
+        <path d="M243.24,393.59L256.53,370.93L283.1,370.93L296.39,393.59L243.24,393.59Z" style="fill:white;fill-rule:nonzero;stroke:black;stroke-width:6px;"/>
         <rect x="127.94" y="146.89" width="19.29" height="9.86" style="fill:white;"/>
         <rect x="108.07" y="156.75" width="9.86" height="9.86" style="fill:white;"/>
         <rect x="88.89" y="166.6" width="9.86" height="9.86" style="fill:white;"/>
