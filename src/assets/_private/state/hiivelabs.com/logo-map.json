@@ -1,12 +1,30 @@
 {
   "dark": {
-    "xxxx-06-19": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-19/hiive-logo-juneteenth-dark.svg",
-    "xxxx-06-xx": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-xx/hiive-logo-pride-dark.svg",
-    "default": "/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-dark.svg"
+    "xxxx-06-19": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-19/hiive-logo-juneteenth-dark.svg",
+      "alt": "Happy Juneteenth!"
+    },
+    "xxxx-06-xx": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-xx/hiive-logo-pride-dark.svg",
+      "alt": "Happy Pride Month!"
+    },
+    "default": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-dark.svg",
+      "alt": "hiivelabs.com"
+    }
   },
   "light": {
-    "xxxx-06-19": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-19/hiive-logo-juneteenth-light.svg",
-    "xxxx-06-xx": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-xx/hiive-logo-pride-light.svg",
-    "default": "/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-light.svg"
+    "xxxx-06-19": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-19/hiive-logo-juneteenth-light.svg",
+      "alt": "Happy Juneteenth!"
+    },
+    "xxxx-06-xx": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-xx/hiive-logo-pride-light.svg",
+      "alt": "Happy Pride Month!"
+    },
+    "default": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-light.svg",
+      "alt": "hiivelabs.com"
+    }
   }
 }

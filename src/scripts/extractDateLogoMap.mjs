@@ -98,7 +98,16 @@ for (const folder of folders) {
         const key = directoryKey(folder);
         if (!themeMap[key]) {
             const relativePath = `/${dynamic_dir}/${folder ? folder + "/" : ""}${file}`;
-            themeMap[key] = relativePath;
+            let altText = config.main.logo.alt; // default fallback
+            const altPath = path.join(folderPath, "alt.txt");
+            if (fs.existsSync(altPath)) {
+                altText = fs.readFileSync(altPath, "utf8").trim();
+            }
+            themeMap[key] = {
+                src: relativePath,
+                alt: altText,
+            };
+
         }
     }
 }
