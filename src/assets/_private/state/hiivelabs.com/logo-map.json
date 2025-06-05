@@ -1,15 +1,35 @@
 {
   "dark": {
+    "2025-07-04": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/2025-07-04/hiive-logo-independence-day-dark.svg",
+      "alt": "Happy Treason Day, you Ungrateful Colonials!"
+    },
+    "2026-07-04": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/2026-07-04/hiive-logo-independence-day-alt-dark.svg",
+      "alt": "Happy Treason Day, you Ungrateful Colonials!"
+    },
+    "2027-07-04": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/2027-07-04/hiive-logo-independence-day-alt-dark.svg",
+      "alt": "Happy Treason Day, you Ungrateful Colonials!"
+    },
+    "2028-07-04": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/2028-07-04/hiive-logo-independence-day-alt-dark.svg",
+      "alt": "Happy Treason Day, you Ungrateful Colonials!"
+    },
+    "2025-06-xx": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/2025-06-xx/hiive-logo-pride-alt-dark.svg",
+      "alt": "Happy Pride Month!"
+    },
     "xxxx-06-19": {
       "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-19/hiive-logo-juneteenth-dark.svg",
       "alt": "Happy Juneteenth!\n\n(And Happy Anniversary Joe and Tina!)"
     },
     "xxxx-07-04": {
-      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-07-04/hiive-logo-independence-day-dark.svg",
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-07-04/hiive-logo-independence-day-alt2-dark.svg",
       "alt": "Happy Treason Day, you Ungrateful Colonials!"
     },
     "xxxx-06-xx": {
-      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-xx/hiive-logo-pride-alt-dark.svg",
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-xx/hiive-logo-pride-month-dark.svg",
       "alt": "Happy Pride Month!"
     },
     "default": {
@@ -18,16 +38,36 @@
     }
   },
   "light": {
+    "2025-07-04": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/2025-07-04/hiive-logo-independence-day-light.svg",
+      "alt": "Happy Treason Day, you Ungrateful Colonials!"
+    },
+    "2026-07-04": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/2026-07-04/hiive-logo-independence-day-alt-light.svg",
+      "alt": "Happy Treason Day, you Ungrateful Colonials!"
+    },
+    "2027-07-04": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/2027-07-04/hiive-logo-independence-day-alt-light.svg",
+      "alt": "Happy Treason Day, you Ungrateful Colonials!"
+    },
+    "2028-07-04": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/2028-07-04/hiive-logo-independence-day-alt-light.svg",
+      "alt": "Happy Treason Day, you Ungrateful Colonials!"
+    },
+    "2025-06-xx": {
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/2025-06-xx/hiive-logo-pride-alt-light.svg",
+      "alt": "Happy Pride Month!"
+    },
     "xxxx-06-19": {
       "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-19/hiive-logo-juneteenth-light.svg",
       "alt": "Happy Juneteenth!\n\n(And Happy Anniversary Joe and Tina!)"
     },
     "xxxx-07-04": {
-      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-07-04/hiive-logo-independence-day-light.svg",
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-07-04/hiive-logo-independence-day-alt2-light.svg",
       "alt": "Happy Treason Day, you Ungrateful Colonials!"
     },
     "xxxx-06-xx": {
-      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-xx/hiive-logo-pride-alt-light.svg",
+      "src": "/src/assets/images/hiivelabs.com/logos/dynamic/xxxx-06-xx/hiive-logo-pride-month-light.svg",
       "alt": "Happy Pride Month!"
     },
     "default": {
