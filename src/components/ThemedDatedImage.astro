@@ -55,6 +55,7 @@ function buildSrcList(
 
     // Step 2: Build a new dictionary where each theme is the key, and the value is taken from imageGlobs.
     // finalSrcList keys: theme names, finalSrcList values: filenames
+    /*
     const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, "0");
@@ -70,6 +71,7 @@ function buildSrcList(
         `${year}-xx-xx`,               // all of a specific year (365/366)
         `default`                      // every other day not covered by the above
     ];
+     */
     return Object.fromEntries(
         Object.entries(finalSrcList).flatMap(([theme, logos]) => {
             return Object.entries(logos).map(([key, logo]) => {
@@ -188,6 +190,7 @@ console.log('themedImgId', themedImgId);
                     }
                 }
                 console.log('themedDataKey', themedDataKey);
+                // console.log('themedDateKeys', themedDateKeys);
                 // alert(theme, themedImgId);
                 themedImgs.forEach((img: HTMLElement) => {
 
@@ -196,6 +199,7 @@ console.log('themedImgId', themedImgId);
                     }
                     else {
                         img.classList.add('hidden');
+                        img.remove();
                     }
                     //img.style.display = theme === img.dataset.theme ? 'block': 'none';
                 });
