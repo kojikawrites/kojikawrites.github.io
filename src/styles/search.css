@@ -52,6 +52,8 @@
         @apply pl-2 pr-6 py-1;
         @apply border-t-[1px] border-background-mid border-opacity-100;
         @apply bg-color-background-feature;
+        /* Fix for iOS Safari transparency issue - same as navbar */
+        background-color: rgb(var(--background-feature)) !important;
         @apply color-text-main;
         @apply fill-[rgb(var(--text-main))];
         @apply enable-input;

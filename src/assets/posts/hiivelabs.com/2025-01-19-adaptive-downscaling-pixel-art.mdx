@@ -1,57 +1,57 @@
 ---
-title: 'Adaptive Downscaling of Pixel Art'
+title: Adaptive Downscaling of Pixel Art
 author: hiive
-description: 'This post explains an adaptive approach for downscaling pixel art while preserving detail, combining naive resampling, block-based color sampling, edge detection, and conditional replacement to produce sharper results. It’s implemented in Python with code in a GitHub repository. The approach merges standard scaling with specialized steps to handle transparency, edges, and color distribution.'
-categories: [gamedev, graphics]
-tags: [pixel-art, python, image-processing, algorithms]
-thumbnail: /src/assets/images/hiivelabs.com/blog/pixel/house_final.png
+description: >-
+  This post explains an adaptive approach for downscaling pixel art while
+  preserving detail, combining naive resampling, block-based color sampling,
+  edge detection, and conditional replacement to produce sharper results. It’s
+  implemented in Python with code in a GitHub repository. The approach merges
+  standard scaling with specialized steps to handle transparency, edges, and
+  color distribution.
+thumbnail: >-
+  /src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/thumbnail.png
+categories:
+  - gamedev
+  - graphics
+tags:
+  - pixel-art
+  - python
+  - image-processing
+  - algorithms
 ---
-
 ## TLDR;
+
 Before getting started, the code discussed in this post is available [here](https://github.com/hiive/pixel_scale)
 
-for anyone who wants to skip these explanations and go straight to the code. PRs for corrections or improvements are
-always welcome.
+for anyone who wants to skip these explanations and go straight to the code. PRs for corrections or improvements are always welcome.
 
 ## Scaling Pixel Art
 
-Okay, first of all, I’d like to acknowledge the scattered way my mind works. Last week I was working on a DSL for
-Cellular Automata, and this week I’m posting about a completely different topic. It’s not my fault -- when inspiration
-strikes, I have to explore it. This post covers the results of those explorations.
+Okay, first of all, I’d like to acknowledge the scattered way my mind works. Last week I was working on a DSL for Cellular Automata, and this week I’m posting about a completely different topic. It’s not my fault -- when inspiration strikes, I have to explore it. This post covers the results of those explorations.
 
-For the game, I’m using a variety of placeholder art purchased from itch.io and other sources.
-Not all of it is the same scale, so even though I’ve selected graphics from different artists that fit together
-conceptually, there are noticeable differences in tile size. Some artwork is based on a 16×16 grid, some on 32×32,
-others on 48×48, and a few even on 8×8.
+For the game, I’m using a variety of placeholder art purchased from itch.io and other sources. Not all of it is the same scale, so even though I’ve selected graphics from different artists that fit together conceptually, there are noticeable differences in tile size. Some artwork is based on a 16×16 grid, some on 32×32, others on 48×48, and a few even on 8×8.
 
-To make these assets look congruent, some form of scaling is required. However, due to the intricate nature of pixel
-art, standard scaling techniques -- especially when downscaling -- often introduce significant distortion, greatly
-reducing the quality of the artwork.
+To make these assets look congruent, some form of scaling is required. However, due to the intricate nature of pixel art, standard scaling techniques -- especially when downscaling -- often introduce significant distortion, greatly reducing the quality of the artwork.
 
 ### An Adaptive Downscaling Algorithm
-Although there are several well-known algorithms for upscaling pixel art, I had difficulty finding automated techniques
-for downscaling. This isn’t too surprising, because a key feature of small-scale pixel art is the subtle shading used
-to imply features that aren’t actually present, leaving our brains to fill in the missing details.
 
-I started thinking about a method to preserve this kind of detail while downscaling pixel artwork, and came up with the
-following methods.
+Although there are several well-known algorithms for upscaling pixel art, I had difficulty finding automated techniques for downscaling. This isn’t too surprising, because a key feature of small-scale pixel art is the subtle shading used to imply features that aren’t actually present, leaving our brains to fill in the missing details.
+
+I started thinking about a method to preserve this kind of detail while downscaling pixel artwork, and came up with the following methods.
 
 1. Create a scaled copy the input image using a good downscaling algorithm such as  [Lanczos Resampling](https://en.wikipedia.org/wiki/Lanczos_resampling),
-[Bilinear Interpolation](https://en.wikipedia.org/wiki/Bilinear_interpolation) or [Bicubic Interpolation](https://en.wikipedia.org/wiki/Bicubic_interpolation).
+   [Bilinear Interpolation](https://en.wikipedia.org/wiki/Bilinear_interpolation) or [Bicubic Interpolation](https://en.wikipedia.org/wiki/Bicubic_interpolation).
 2. Take another copy of the input image and perform one or more of the following operations:
-    - (a) Majority Color Block Sampling
-    - (b) Edge-preserving Downscale
+   * (a) Majority Color Block Sampling
+   * (b) Edge-preserving Downscale
 3. Create a mask for the output image, to differentiate between transparent and opaque regions.
 4. Use the current output image, the mask, and the scaled copy from step 1 to perform a conditional replace,
-producing the final output image.
+   producing the final output image.
 5. Also optionally, quantize the final output to a common palette.
 
 #### Majority Color Block Sampling
 
-This straightforward technique downscales an image by examining square blocks of pixels sized according to the scale
-factor, then selecting the most frequent color within each block. For instance, with a 2× factor, the source image is
-processed in non-overlapping 2×2 blocks. It preserves transparency by making the output pixel fully transparent if
-the majority of the block is transparent.
+This straightforward technique downscales an image by examining square blocks of pixels sized according to the scale factor, then selecting the most frequent color within each block. For instance, with a 2× factor, the source image is processed in non-overlapping 2×2 blocks. It preserves transparency by making the output pixel fully transparent if the majority of the block is transparent.
 
 The following Python code performs this operation:
 
@@ -115,11 +115,8 @@ def majority_color_block_sampling(img, scale_factor):
 ```
 
 #### Edge-preserving Downscale
-This technique on its own isn’t enough, as it focuses solely on preserving edges. However, it’s useful when combined
-with other methods because it can highlight important details that might otherwise vanish. First, the image is
-converted to grayscale and run through an edge detection filter, selecting edges above a given threshold. Then,
-Majority Color Block Sampling is performed on the original image, and the same scale factor is applied to the edge
-detection data. Finally, those edges are used as a mask to retain critical details in the downscaled image.
+
+This technique on its own isn’t enough, as it focuses solely on preserving edges. However, it’s useful when combined with other methods because it can highlight important details that might otherwise vanish. First, the image is converted to grayscale and run through an edge detection filter, selecting edges above a given threshold. Then, Majority Color Block Sampling is performed on the original image, and the same scale factor is applied to the edge detection data. Finally, those edges are used as a mask to retain critical details in the downscaled image.
 
 The following Python code performs this operation:
 
@@ -167,10 +164,8 @@ def refined_edge_preserving_downscale(img, scale_factor, soft_edges, edge_thresh
 ```
 
 #### Conditional Replace
-During this step, the final output is produced by using the naively downscaled image (from step 1), the alpha mask
-(from step 2), and the image with preserved edges (from step 3). Pixels specified by the mask are conditionally
-replaced in the final image based on opacity thresholds, ensuring that transparent or minimally opaque areas are
-properly handled. This combines the smoother downscale with sharper, retained details from the edge preservation step.
+
+During this step, the final output is produced by using the naively downscaled image (from step 1), the alpha mask (from step 2), and the image with preserved edges (from step 3). Pixels specified by the mask are conditionally replaced in the final image based on opacity thresholds, ensuring that transparent or minimally opaque areas are properly handled. This combines the smoother downscale with sharper, retained details from the edge preservation step.
 
 The following Python code performs this operation:
 
@@ -236,166 +231,101 @@ def conditional_replace(
 ```
 
 ### Example Output
+
 I tested multiple images to refine this algorithm, including a house sprite and character sprite that are shown below.
 
-- House
+* House
 
-The following gallery shows the images produced at each step in the process, from input to final output.The gallery
-shows the process from the original image to the final result.
-The naive downscales lose significant detail, while the adaptive approach retains edges, shading, and transparency
-more effectively.
+The following gallery shows the images produced at each step in the process, from input to final output.The gallery shows the process from the original image to the final result. The naive downscales lose significant detail, while the adaptive approach retains edges, shading, and transparency more effectively.
 
 <LightboxGallery caption="Image Gallery: Adaptive Downscale Sequence">
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_orig.png"
-                  description="The input image"
-                  caption="Input Image"
-                  alt="Step 0: The input image"/>
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_naive_scale.png"
-                  description="Naively downscaled original image"
-                  caption="Naive Downscale"
-                  alt="Step 1: A naively downscaled version of the original image.
-                  The loss of detail due to downscaling is evident."/>
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_mcbs.png"
-                  description="Majority color block downscaling of the original image"
-                  caption="MCB Downscale"
-                  alt="Step 2a: Majority color block downscaling of the original image.
-                  Detail is preserved, but some pixel transitions are quite jarring."/>
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_epd.png"
-                  caption="Edge Downscale"
-                  description="Edge preserving downscale of the image from step 2(a)"
-                  alt="Step 2b: Edge preserving downscale of the image from step 2(a).
-                   Edge detail is preserved. Everything else is left transparent."/>
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_mask.png"
-                  description="The transparency mask for the downscaled image."
-                  caption="Transparency Mask"
-                  alt="Step 3: The downscaled image mask"/>
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_final.png"
-                  caption="Final Output ↓3×"
-                  description="This image is the result of the original naive downscaled image
-                  overlaid with the results of step 2(b), giving us a nicely downscaled image
-                  while still preserving edge details."
-                  alt="Step 4: The final output image"/>
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house_orig.png" alt="Step 0: The input image" description="The input image" caption="Input Image" />
 
+  <GalleryImage
+    image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house_naive_scale.png"
+    alt="Step 1: A naively downscaled version of the original image.
+The loss of detail due to downscaling is evident."
+    description="Naively downscaled original image"
+    caption="Naive Downscale"
+  />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house_mcbs.png" alt="Step 2(a): Majority color block downscaling of the original image. Detail is preserved, but some pixel transitions are quite jarring." description="Majority color block downscaling of the original image" caption="MCB Downscale" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house_epd.png" alt="Step 2(b): Edge preserving downscale of the image from step 2(a). Edge detail is preserved. Everything else is left transparent." description="Edge preserving downscale of the image from step 2(a)" caption="Edge Downscale" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house_mask.png" alt="Step 3: The downscaled image mask" description="The transparency mask for the downscaled image." caption="Transparency Mask" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house_final.png" src="/src/assets/images/hiivelabs.com/blog/pixel/house_final.png" alt="Step 4: The final output image" description="This image is the result of the original naive downscaled image overlaid with the results of step 2(b), giving us a nicely downscaled image while still preserving edge details." caption="Final Output ↓3×" />
 </LightboxGallery>
 
 The original input image.
-<LightboxImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_orig.png"
-               description="The input image"
-               alt="Step 0: The input image"/>
-In the final image, scaled by 3×, minor tweaks to the edge detection threshold could yield further improvements,
-but it already represents a promising first iteration.
-<LightboxImage src="/src/assets/images/hiivelabs.com/blog/pixel/house_final.png"
-               description="The output image"
-               alt="Step 4: The final output image"/>
 
-The following gallery compares downscales at 2×, 3×, and 4× using nearest-neighbor, bilinear, and this detail-aware
-adaptive technique. The adaptive version generally preserves shapes and edges more clearly than the others.
+<LightboxImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house_orig.png" alt="Step 0: The input image" description="The input image" />
+
+In the final image, scaled by 3×, minor tweaks to the edge detection threshold could yield further improvements, but it already represents a promising first iteration.
+
+<LightboxImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house_final.png" alt="Step 4: The final output image" description="The output image" />
+
+The following gallery compares downscales at 2×, 3×, and 4× using nearest-neighbor, bilinear, and this detail-aware adaptive technique. The adaptive version generally preserves shapes and edges more clearly than the others.
+
 <LightboxGallery caption="Image Gallery: Downscale Examples">
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-nearest-neighbor.png"
-                  caption="Nearest Neighbor"
-                  alt="Nearest Neighbor downscaling examples." />
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-bilinear.png"
-                  caption="Bilinear Sampling"
-                  alt="Bilinear downscaling examples." />
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/house-example-detail-aware.png"
-                  caption="Adaptive Detail Aware"
-                  alt="Detail aware downscaling examples." />
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house-example-nearest-neighbor.png" alt="Nearest Neighbor downscaling examples." caption="Nearest Neighbor" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house-example-bilinear.png" alt="Bilinear downscaling examples." caption="Bilinear Sampling" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/house-example-detail-aware.png" alt="Detail aware downscaling examples." caption="Adaptive Detail Aware" />
 </LightboxGallery>
 
-
-- Character
-Character graphics tend to be smaller, so the default edge-detection threshold was sometimes too sensitive --
-overemphasizing details like a blade swish. Even so, the downscaled results at 2× retain most of the important features,
-balancing smooth transitions with recognizable edges. A bonus image shows how going down by 3× is about as small as
-you can get while keeping enough visible detail for practical use for this example.
+* Character Character graphics tend to be smaller, so the default edge-detection threshold was sometimes too sensitive -- overemphasizing details like a blade swish. Even so, the downscaled results at 2× retain most of the important features, balancing smooth transitions with recognizable edges. A bonus image shows how going down by 3× is about as small as you can get while keeping enough visible detail for practical use for this example.
 
 <LightboxGallery caption="Image Gallery: Adaptive Downscale Sequence">
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_orig.png"
-                  description="The input image."
-                  caption="Input Image"
-                  alt="Step 0: The input image."/>
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_naive_scale.png"
-                  description="Naively downscaled original image."
-                  caption="Naive Downscale"
-                  alt="Step 1: A naively downscaled version of the original image.
-                  The loss of detail due to downscaling is evident."/>
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_mcbs.png"
-                  description="Majority color block downscaling of the original image."
-                  caption="MCB Downscale"
-                  alt="Step 2: Majority color block downscaling of the original image."/>
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_mask.png"
-                  description="The transparency mask for the downscaled image."
-                  caption="Transparency Mask"
-                  alt="Step 3: The downscaled image mask."/>
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_final.png"
-                  description="This image is the result of the original naive downscaled image
-                  overlaid with the results of step 2, giving us a nicely downscaled image
-                  while still preserving most details."
-                  caption="Final Output ↓2×"
-                  alt="Step 4: The final output image (2× reduction)."/>
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/character_final_x3.png"
-                  caption="Final Output ↓3×"
-                  description="Bonus image. This is reduced by a factor 3×, and is about as small
-                  as it can get while still retaining enough detail to be usable."
-                  alt="Step 4: The final output image (3× reduction)."/>
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/character_orig.png" alt="Step 0: The input image." description="The input image." caption="Input Image" />
+
+  <GalleryImage
+    image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/character_naive_scale.png"
+    alt="Step 1: A naively downscaled version of the original image.
+The loss of detail due to downscaling is evident."
+    description="Naively downscaled original image."
+    caption="Naive Downscale"
+  />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/character_mcbs.png" alt="Step 2: Majority color block downscaling of the original image." description="Majority color block downscaling of the original image." caption="MCB Downscale" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/character_mask.png" alt="Step 3: The downscaled image mask." description="The transparency mask for the downscaled image." caption="Transparency Mask" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/character_final.png" alt="Step 4: The final output image (2× reduction)." description="This image is the result of the original naive downscaled image overlaid with the results of step 2, giving us a nicely downscaled image while still preserving most details." caption="Final Output ↓2×" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/character_final_x3.png" alt="Step 4: The final output image (3× reduction)." description="Bonus image. This is reduced by a factor 3×, and is about as small as it can get while still retaining enough detail to be usable." caption="Final Output ↓3×" />
 </LightboxGallery>
 
-A final comparison of a single character frame at original size, reduced 2×, and reduced 3× highlights the difference
-between nearest-neighbor, bilinear, and adaptive methods, illustrating how nuanced details can be maintained at
-smaller scales.
+A final comparison of a single character frame at original size, reduced 2×, and reduced 3× highlights the difference between nearest-neighbor, bilinear, and adaptive methods, illustrating how nuanced details can be maintained at smaller scales.
 
-<LightboxImage src="/src/assets/images/hiivelabs.com/blog/pixel/char_examples.png"
-               alt="Adaptive downscaling character examples."
-               />
+<LightboxImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/char_examples.png" alt="Adaptive downscaling character examples." />
 
-<LightboxImage src="/src/assets/images/hiivelabs.com/blog/pixel/char_examples_nn.png"
-               alt="Nearest Neighbor downscaling character examples."
-               />
+<LightboxImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/char_examples_nn.png" alt="Nearest Neighbor downscaling character examples." />
 
-<LightboxImage src="/src/assets/images/hiivelabs.com/blog/pixel/char_examples_bilinear.png"
-               alt="Bilinear Filtering downscaling character examples."
-               />
+<LightboxImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/char_examples_bilinear.png" alt="Bilinear Filtering downscaling character examples." />
 
 ## Lastly, a reminder...
 
-The code discussed in this post (plus any updates made since this post) is available
-[here](https://github.com/hiive/pixel_scale). PRs for corrections or improvements are always welcome.
-
+The code discussed in this post (plus any updates made since this post) is available [here](https://github.com/hiive/pixel_scale). PRs for corrections or improvements are always welcome.
 
 ## Postscript
 
-Update <FormattedDate date="1/21/2025" />: I conducted additional tests of the algorithm after posting the above to
-assess how well it handles an “extreme” case. I chose the well-known Yoshi sprite from Super Mario World on the SNES.
-This was a challenging test because the sprite contains a lot of detail packed into its 32×32 pixel grid.
+Update <FormattedDate date={"2025-01-21"} />: I conducted additional tests of the algorithm after posting the above to assess how well it handles an “extreme” case. I chose the well-known Yoshi sprite from Super Mario World on the SNES. This was a challenging test because the sprite contains a lot of detail packed into its 32×32 pixel grid.
 
-The following images display, in order, the input 32×32 Yoshi sprite, the 16×16 nearest neighbor downscaled sprite,
-the 16×16 bilinear downscaled sprite, and finally the 16×16 adaptive detail downscaled sprite.
+The following images display, in order, the input 32×32 Yoshi sprite, the 16×16 nearest neighbor downscaled sprite, the 16×16 bilinear downscaled sprite, and finally the 16×16 adaptive detail downscaled sprite.
 
 <LightboxGallery caption="Image Gallery: Adaptive Downscaling Stress Test">
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_original.png"
-                  caption="32×32 Yoshi"
-                  alt="Original 32×32 Yoshi sprite."
-    />
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/yoshi_original.png" alt="Original 32×32 Yoshi sprite." caption="32×32 Yoshi" />
 
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_nn.png"
-                  caption="16×16 Nearest Neighbor"
-                  alt="16×16 Nearest Neighbor downscaled Yoshi sprite."
-    />
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/yoshi_nn.png" alt="16×16 Nearest Neighbor downscaled Yoshi sprite." caption="16×16 Nearest Neighbor" />
 
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_bilinear.png"
-                  caption="16×16 Bilinear Sample"
-                  alt="16×16 bilinear downscaled Yoshi sprite."
-    />
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/yoshi_bilinear.png" alt="16×16 bilinear downscaled Yoshi sprite." caption="16×16 Bilinear Sample" />
 
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/pixel/yoshi_adaptive.png"
-                  caption="16×16 Adaptive Sample"
-                  alt="16×16 Adaptive detail downscaled Yoshi sprite."
-    />
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-19-adaptive-downscaling-pixel-art/yoshi_adaptive.png" alt="16×16 Adaptive detail downscaled Yoshi sprite." caption="16×16 Adaptive Sample" />
 </LightboxGallery>
 
-Although, in my opinion, adaptive downscaling still produces the best results, the output isn’t as good as what a
-skilled pixel artist could achieve. This demonstrates that with highly detailed source images, the algorithm is limited
-in what it can compress into a smaller space.
+Although, in my opinion, adaptive downscaling still produces the best results, the output isn’t as good as what a skilled pixel artist could achieve. This demonstrates that with highly detailed source images, the algorithm is limited in what it can compress into a smaller space.
 
-However, if we use the adaptive downscaling output for heavily outlined sprites as a time-saving step that can be
-manually tweaked during post-processing, the algorithm appears to be up to the challenge.
+However, if we use the adaptive downscaling output for heavily outlined sprites as a time-saving step that can be manually tweaked during post-processing, the algorithm appears to be up to the challenge.

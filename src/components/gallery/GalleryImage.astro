@@ -1,6 +1,7 @@
 ---
 interface Props {
-    src: string;
+    image?: string;  // New picker field
+    src?: string;    // Legacy text field
     alt: string;
     description: string;
     caption?: string;
@@ -9,9 +10,25 @@ interface Props {
 
 import {Image} from "astro:assets";
 import getMediaMetadata from "../../scripts/getMediaMetadata.ts";
+import {getSiteCode} from "../../scripts/getSiteConfig.ts";
 
+const siteCode = getSiteCode()
 
-const { src, alt, description, caption = null, class:className, ...rest } = Astro.props;
+const { image, src: srcRaw, alt, description, caption = null, class:className, ...rest } = Astro.props;
+
+// Handle dual fields: image (picker) takes priority, fallback to src (legacy text)
+let src;
+const sourceValue = image || srcRaw;
+if (sourceValue) {
+    // If it starts with / or src/, it's already a full path (legacy format)
+    if (sourceValue.startsWith('/') || sourceValue.startsWith('src/')) {
+        src = sourceValue.startsWith('/') ? sourceValue : `/${sourceValue}`;
+    } else {
+        // It's just a filename from fields.image(), prepend the directory
+        src = `/src/assets/images/${siteCode}/blog/${sourceValue}`;
+    }
+}
+
 const resolvedCaption = caption;
 ---
 <div class="cursor-pointer"

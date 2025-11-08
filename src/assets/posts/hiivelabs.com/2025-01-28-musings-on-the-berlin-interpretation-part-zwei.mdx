@@ -1,21 +1,31 @@
 ---
-title:  "Musings on the Berlin Interpretation, Part Zwei"
-description: This article introduces “The Hiive Interpretation,” a modern framework for defining roguelikes inspired by the original Berlin Interpretation. It reexamines core principles to accommodate contemporary game designs, distinguishing between traditional roguelikes, roguelites, and hybrids. Through detailed analysis and case studies of notable games, the post aims to foster clearer discussions and understanding within the roguelike community. The goal is to provide a flexible, insightful tool that respects the genre’s legacy while embracing its evolution.
+title: Musings on the Berlin Interpretation, Part Zwei
 author: hiive
-categories: gamedev roguelike
-tags: musings berlin-interpretation
-thumbnail: /src/assets/images/hiivelabs.com/blog/bi2/adom.jpg
+description: >-
+  This article introduces “The Hiive Interpretation,” a modern framework for
+  defining roguelikes inspired by the original Berlin Interpretation. It
+  reexamines core principles to accommodate contemporary game designs,
+  distinguishing between traditional roguelikes, roguelites, and hybrids.
+  Through detailed analysis and case studies of notable games, the post aims to
+  foster clearer discussions and understanding within the roguelike community.
+  The goal is to provide a flexible, insightful tool that respects the genre’s
+  legacy while embracing its evolution.
+categories:
+  - gamedev
+  - roguelike
+tags:
+  - musings
+  - berlin-interpretation
+thumbnail: >-
+  /src/assets/images/hiivelabs.com/blog/2025-01-28-musings-on-the-berlin-interpretation-part-zwei/thumbnail.jpg
 ---
-
 ## Revisiting Berlin...
-About six months ago, I wrote a [post](/blog/gamedev/roguelike/2024/07/11/musings-on-the-berlin-interpretation)
-critiquing the original Berlin Interpretation of roguelike games, That piece generated some thoughtful discussion, which
-led me to reflect further on how I might improve and refine the interpretation to account for all the developments and
-advances in the genre since 2008.
+
+About six months ago, I wrote a [post](/blog/gamedev/roguelike/2024/07/11/musings-on-the-berlin-interpretation) critiquing the original Berlin Interpretation of roguelike games, That piece generated some thoughtful discussion, which led me to reflect further on how I might improve and refine the interpretation to account for all the developments and advances in the genre since 2008.
 
 ## A Modest Proposal...
-At its core, this post proposes a modernized definition. The goal is to preserve the genre’s roots while providing a
-framework that accommodates the creativity and diversity seen in today’s designs.
+
+At its core, this post proposes a modernized definition. The goal is to preserve the genre’s roots while providing a framework that accommodates the creativity and diversity seen in today’s designs.
 
 If you want a soundbite to take away, then it would be that a roguelike is a:
 
@@ -25,895 +35,553 @@ For a game to considered be a roguelike, it doesn't have to check *all* of those
 
 So here, for your edification, delight and/or scorn is...
 
-# <em> "The Hiive Interpretation" </em>
+# ***"The Hiive Interpretation"***
 
 ## I. Introduction
-The roguelike genre has a rich history, evolving from humble beginnings into a diverse and innovative space. As games
-continue to push the boundaries of design, revisiting the foundational ideas behind roguelikes can provide clarity and
-inspiration for future projects.
+
+The roguelike genre has a rich history, evolving from humble beginnings into a diverse and innovative space. As games continue to push the boundaries of design, revisiting the foundational ideas behind roguelikes can provide clarity and inspiration for future projects.
 
 ### Context and Purpose
-The Berlin Interpretation, established in 2008, was a milestone for codifying key roguelike principles such as
-procedural generation, permadeath, and non-modality (although other definitions of the genre were attempted long
-before 2008).
+
+The Berlin Interpretation, established in 2008, was a milestone for codifying key roguelike principles such as procedural generation, permadeath, and non-modality (although other definitions of the genre were attempted long before 2008).
 
 Modern roguelike games seem to have evolved and reinterpreted these principles to create distinct emergent styles:
 
-- *Tactical Depth*: Games like [*Dungeon Crawl Stone Soup (DCSS)*](https://github.com/crawl/crawl)
-    and [*Brogue*](https://github.com/tmewett/BrogueCE) use procedural generation to craft unpredictable,
-    high-stakes scenarios where every decision matters.
-- *Adventure Simulation*: Titles like [*Caves of Qud*](https://store.steampowered.com/app/333640/) and
-    [*Cogmind*](https://store.steampowered.com/app/722730/) prioritize systemic reactivity, letting players shape stories
-    through interactions with a living world.
+* *Tactical Depth*: Games like [*Dungeon Crawl Stone Soup (DCSS)*](https://github.com/crawl/crawl) and [*Brogue*](https://github.com/tmewett/BrogueCE) use procedural generation to craft unpredictable, high-stakes scenarios where every decision matters.
+* *Adventure Simulation*: Titles like [*Caves of Qud*](https://store.steampowered.com/app/333640/) and [*Cogmind*](https://store.steampowered.com/app/722730/) prioritize systemic reactivity, letting players shape stories through interactions with a living world.
 
-These styles aren’t mutually exclusive -- for example, [*Cogmind*](https://store.steampowered.com/app/722730/) blends
-tactical play with procedural storytelling and large scale world simulation.
+These styles aren’t mutually exclusive -- for example, [*Cogmind*](https://store.steampowered.com/app/722730/) blends tactical play with procedural storytelling and large scale world simulation.
 
 ### Tactical vs. Simulationist Philosophies
+
 Modern roguelikes often prioritize one of two design pillars, though many blend elements of both:
-    - *Tactical Philosophy:* Emphasizes **fast-paced decision-making**, mechanical clarity, and immediate feedback.
-        Games like [*DCSS*](https://github.com/crawl/crawl) and
-        [*Jupiter Hell*](https://store.steampowered.com/app/811320) exemplify this approach, focusing on moment-to-moment
-        positioning and risk-reward optimization. Procedural generation here creates unpredictable *challenges*
-        (e.g., vault layouts, enemy spawns).
-    - *Simulationist Philosophy:* Prioritizes **systemic reactivity**, environmental storytelling, and player
-        imagination. Titles like [*Caves of Qud*](https://store.steampowered.com/app/333640/) and
-        [*Ancient  Domains of Mystery (ADOM)*](https://store.steampowered.com/app/333300) use procedural generation to craft
-        *narrative possibilities* (e.g., faction conflicts, procedurally generated lore). These games trade tactical
-        immediacy for emergent storytelling.
 
-Hybrids like [*Dwarf Fortress (Adventure Mode)*](https://store.steampowered.com/app/975370) blend these philosophies but
-often lean toward one pole.
+* *Tactical Philosophy:* Emphasizes **fast-paced decision-making**, mechanical clarity, and immediate feedback. Games like [*DCSS*](https://github.com/crawl/crawl) and [*Jupiter Hell*](https://store.steampowered.com/app/811320) exemplify this approach, focusing on moment-to-moment positioning and risk-reward optimization. Procedural generation here creates unpredictable *challenges* (e.g., vault layouts, enemy spawns).
+* *Simulationist Philosophy:* Prioritizes **systemic reactivity**, environmental storytelling, and player
+  imagination. Titles like [*Caves of Qud*](https://store.steampowered.com/app/333640/) and [*Ancient  Domains of Mystery (ADOM)*](https://store.steampowered.com/app/333300) use procedural generation to craft *narrative possibilities* (e.g., faction conflicts, procedurally generated lore). These games trade tactical  mmediacy for emergent storytelling.
 
-Frequently, but not always, these efforts are open source and free with many contributors, but many commercial roguelikes
-exist, written by small teams or solo developers. The nature of roguelike development is -- in many ways -- simpler than
-many other game genres, lowering the barrier for entry for nascent game programmers.
+Hybrids like [*Dwarf Fortress (Adventure Mode)*](https://store.steampowered.com/app/975370) blend these philosophies but often lean toward one pole.
 
-Other modern games like [*Hades*](https://store.steampowered.com/app/1145360), [*Binding of Isaac*](https://store.steampowered.com/app/250900),
-and [*Dead Cells*](https://store.steampowered.com/app/588650) exhibit the influence of roguelikes, while titles such
-as [*Slay the Spire*](https://store.steampowered.com/app/646570) and [*Balatro*](https://store.steampowered.com/app/2379780)
-demonstrate new mechanics (in this case, deck building) that blur the lines between genres. These shifts in the
-gaming landscape call for a more nuanced understanding of what defines a roguelike today.
+Frequently, but not always, these efforts are open source and free with many contributors, but many commercial roguelikes exist, written by small teams or solo developers. The nature of roguelike development is -- in many ways -- simpler than many other game genres, lowering the barrier for entry for nascent game programmers.
 
-Note that some consider roguelite to be a derogatory term. I need to make it clear that is not how its use is intended
-here. In this article, roguelite refers to a game that borrows some design principles from roguelike games (commonly
-the procedural generation or permadeath aspects), and melds them with another game genre. Because of this, roguelites
-are often referred to by a genre portmanteau, such as "action roguelite" or "deck-builder roguelite".
+Other modern games like [*Hades*](https://store.steampowered.com/app/1145360), [*Binding of Isaac*](https://store.steampowered.com/app/250900), and [*Dead Cells*](https://store.steampowered.com/app/588650) exhibit the influence of roguelikes, while titles such as [*Slay the Spire*](https://store.steampowered.com/app/646570) and [*Balatro*](https://store.steampowered.com/app/2379780) demonstrate new mechanics (in this case, deck building) that blur the lines between genres. These shifts in the gaming landscape call for a more nuanced understanding of what defines a roguelike today.
 
-(Of course, they're sometimes also referred to as roguelikes -- but that's another issue, and one that only serves to
-unhelpfully muddy the definitions further. Personally, I refer to games such as
-[*Brogue*](https://github.com/tmewett/BrogueCE) as "traditional roguelikes" and
-[*Caves of Qud*](https://store.steampowered.com/app/333640/) as "modern roguelikes", whereas a I would call a game like
-[*Heroes of Hammerwatch*](https://store.steampowered.com/app/677120) a "roguelite" or "action roguelite". Part of
-the purpose of writing this definition is to clear up some of the confusion regarding genre classification of these
-types of game.)
+Note that some consider roguelite to be a derogatory term. I need to make it clear that is not how its use is intended here. In this article, roguelite refers to a game that borrows some design principles from roguelike games (commonly the procedural generation or permadeath aspects), and melds them with another game genre. Because of this, roguelites are often referred to by a genre portmanteau, such as "action roguelite" or "deck-builder roguelite".
 
-With that in mind, this article builds on my earlier critique of the Berlin Interpretation, offering a revised framework
-that reflects modern approaches while maintaining the genre’s core identity.
+(Of course, they're sometimes also referred to as roguelikes -- but that's another issue, and one that only serves to unhelpfully muddy the definitions further. Personally, I refer to games such as [*Brogue*](https://github.com/tmewett/BrogueCE) as "traditional roguelikes" and [*Caves of Qud*](https://store.steampowered.com/app/333640/) as "modern roguelikes", whereas a I would call a game like [*Heroes of Hammerwatch*](https://store.steampowered.com/app/677120) a "roguelite" or "action roguelite". Part of the purpose of writing this definition is to clear up some of the confusion regarding genre classification of these types of game.)
+
+With that in mind, this article builds on my earlier critique of the Berlin Interpretation, offering a revised framework that reflects modern approaches while maintaining the genre’s core identity.
 
 ### A Personal Lens
+
 While this piece represents my own perspective on the topic, I see it as more than just a theoretical exercise.
 
-It’s an opportunity to clarify my own understanding of the genre and the kind of game I want to create. I welcome debate
-and discussion, knowing full well that agreement isn’t guaranteed -- it’s through these conversations that the genre
-continues to evolve.
+It’s an opportunity to clarify my own understanding of the genre and the kind of game I want to create. I welcome debate and discussion, knowing full well that agreement isn’t guaranteed -- it’s through these conversations that the genre continues to evolve.
 
-Besides, pretty much every rogueli<span class="equation-snippet">$x$</span>e[^1] aficionado has an opinion
-on this, so here's mine...
+Besides, pretty much every rogueli<EquationSnippet equation="x" inline />e<FootnoteRef id="1" />  aficionado has an opinion on this, so here's mine...
 
-[^1]: Where: <span class="equation-snippet" style="position:relative; top: 4px;">$x \in \set{k|t}$</span>
+<FootnoteDefinition id="1">
+  Where:  <EquationSnippet equation="x \in \set{k|t}" inline style="position:relative; top: 4px;" />.
+</FootnoteDefinition>
 
 ### Objective
-Roguelikes are, to me, about thriving in relentless, unpredictable environments that challenge players to adapt and
-overcome. They reward tactical decision-making, resource management, and improvisation, creating high-stakes gameplay
-where every choice matters. While roguelites emphasize action and meta-progression, roguelikes remain intimate,
-methodical and tactical experiences defined by their emergent stories and systemic complexity.
+
+Roguelikes are, to me, about thriving in relentless, unpredictable environments that challenge players to adapt and overcome. They reward tactical decision-making, resource management, and improvisation, creating high-stakes gameplay where every choice matters. While roguelites emphasize action and meta-progression, roguelikes remain intimate, methodical and tactical experiences defined by their emergent stories and systemic complexity.
 
 In my opinion, roguelikes are defined by how they apply foundational principles, not rigid adherence to tradition.
 
-My goal is to create a framework that embraces systemic complexity and player agency -- leveraging procedural
-generation for tactical depth, meaningful stakes (but not necessarily permadeath), and non-modality for immersion
-(where appropriate) -- while welcoming innovations like dynamic storytelling, limited meta-progression and the
-capabilities of modern computers.
+My goal is to create a framework that embraces systemic complexity and player agency -- leveraging procedural generation for tactical depth, meaningful stakes (but not necessarily permadeath), and non-modality for immersion (where appropriate) -- while welcoming innovations like dynamic storytelling, limited meta-progression and the capabilities of modern computers.
 
 Ultimately, my intent is to create my game according to these principles.
 
 ### Legacy and Evolution
-The roguelike genre has its roots in early classics like [*Rogue*](https://en.wikipedia.org/wiki/Rogue_(video_game)),
-[*NetHack*](https://github.com/NetHack/NetHack), [*ADOM*](https://store.steampowered.com/app/333300)
-and [*Tales of Maj'Eyal (ToME)*](https://store.steampowered.com/app/259680).
-These games laid the groundwork for procedural exploration, tense encounters, and meaningful consequences, which remain
-essential to the genre’s appeal.
 
-In my view, there’s plenty of room for the genre to evolve without losing its identity. Modern tools like AI-driven
-procedural generation and dynamic narrative systems offer exciting opportunities to build on these foundations.
-The challenge lies in balancing tactical depth and improvisation with innovations that add to, rather than detract
-from, what makes roguelikes distinctive.
+The roguelike genre has its roots in early classics like [*Rogue*](https://en.wikipedia.org/wiki/Rogue_\(video_game\)), [*NetHack*](https://github.com/NetHack/NetHack), [*ADOM*](https://store.steampowered.com/app/333300) and [*Tales of Maj'Eyal (ToME)*](https://store.steampowered.com/app/259680). These games laid the groundwork for procedural exploration, tense encounters, and meaningful consequences, which remain essential to the genre’s appeal.
+
+In my view, there’s plenty of room for the genre to evolve without losing its identity. Modern tools like AI-driven procedural generation and dynamic narrative systems offer exciting opportunities to build on these foundations. The challenge lies in balancing tactical depth and improvisation with innovations that add to, rather than detract from, what makes roguelikes distinctive.
 
 ## II. Core Tenets   *(Non-Negotiable)*
-Roguelikes are built around a set of fundamental principles that define the genre. While individual games may experiment
-and innovate, these core tenets provide the foundation for what makes a roguelike unique.
 
-Though the roguelike genre has broadened substantially, traditional roguelikes have historically remained bound by a
-few distinctive features. Let's start with what, traditionally have -- for the most part -- been considered to be the
-minimum set of core qualities for a traditional roguelike:
+Roguelikes are built around a set of fundamental principles that define the genre. While individual games may experiment and innovate, these core tenets provide the foundation for what makes a roguelike unique.
 
-- ### Procedural Generation
-    The vast majority levels and layouts should be randomly generated via procedural generation. Certain fixed features
-    are permissible (e.g., towns and shops), but these should be minimized.
-- ### Strict Turn-Based Pacing
-    Every action -- movement, attacking, using an item -- advances time by a discrete step. This ensures that players can
-    deliberate over each decision without facing the pressure of a ticking clock.
-- ### Singular Character Focus
-     Many traditional roguelikes place the player in control of exactly one primary character. This intense focus on a
-    single survivor or hero heightens tension because defeat spells the end of the entire run.
-- ### Grid-Based Navigation
-    Movement typically unfolds on a square or (occasionally) a hex grid, simplifying the geometry of combat and exploration.
-    This design grants clarity to tactical maneuvers, making precise positioning a critical element of success.
-- ### Consequences for Failure
-    Roguelikes traditionally prioritize high-stakes consequences, primarily permadeath, but modern designs explore a
-    spectrum of stakes. What unites them is meaningful risk  --  whether through traditional permadeath, resource loss,
-    narrative setbacks, or some other means of inflicting loss.
-- ### Minimal to No Meta-Progression
-    In traditional roguelikes, each run stands on its own. Death means losing all progress and items. While some titles may
-    include optional unlocks or class additions, the emphasis remains on learning the game’s systems rather than accruing
-    permanent upgrades across multiple attempts.
-- ### ASCII or Simple Tile Aesthetic
-    Many classic roguelikes rely on ASCII or basic tile sets, though visuals vary widely in modern counterparts. Regardless
-    of style, readability and conveying vital information are always prioritized over pretty graphics.
+Though the roguelike genre has broadened substantially, traditional roguelikes have historically remained bound by a few distinctive features. Let's start with what, traditionally have -- for the most part -- been considered to be the minimum set of core qualities for a traditional roguelike:
 
-These qualities are very similar (although still less restrictive) that those in the Berlin Interpretation.
-However, as I've made clear in my introduction, I feel that these are still too restrictive.
-With that in mind, the remainder of this section will present a new proposed set of criteria that relax the principles
-the define a traditional roguelike, and provide a less restrictive set of guidance for the definition of modern
-roguelikes. To be classified as a traditional roguelike, a game would typically use the most restrictive features
-of the principles below, whereas a modern roguelike would likely take the less restrictive options. Either way, my
-argument is that, as long as the game has met all the criteria, it should be classified as a roguelike of some kind.
+* ### Procedural Generation
+
+  The vast majority levels and layouts should be randomly generated via procedural generation. Certain fixed features are permissible (e.g., towns and shops), but these should be minimized.
+* ### Strict Turn-Based Pacing
+
+  Every action -- movement, attacking, using an item -- advances time by a discrete step. This ensures that players can
+  deliberate over each decision without facing the pressure of a ticking clock.
+* ### Singular Character Focus
+
+  Many traditional roguelikes place the player in control of exactly one primary character. This intense focus on a single survivor or hero heightens tension because defeat spells the end of the entire run.
+* ### Grid-Based Navigation
+
+  Movement typically unfolds on a square or (occasionally) a hex grid, simplifying the geometry of combat and exploration. This design grants clarity to tactical maneuvers, making precise positioning a critical element of success.
+* ### Consequences for Failure
+
+  Roguelikes traditionally prioritize high-stakes consequences, primarily permadeath, but modern designs explore a spectrum of stakes. What unites them is meaningful risk  --  whether through traditional permadeath, resource loss, narrative setbacks, or some other means of inflicting loss.
+* ### Minimal to No Meta-Progression
+
+  In traditional roguelikes, each run stands on its own. Death means losing all progress and items. While some titles may include optional unlocks or class additions, the emphasis remains on learning the game’s systems rather than accruing permanent upgrades across multiple attempts.
+* ### ASCII or Simple Tile Aesthetic
+
+  Many classic roguelikes rely on ASCII or basic tile sets, though visuals vary widely in modern counterparts. Regardless of style, readability and conveying vital information are always prioritized over pretty graphics.
+
+These qualities are very similar (although still less restrictive) that those in the Berlin Interpretation. However, as I've made clear in my introduction, I feel that these are still too restrictive. With that in mind, the remainder of this section will present a new proposed set of criteria that relax the principles the define a traditional roguelike, and provide a less restrictive set of guidance for the definition of modern roguelikes. To be classified as a traditional roguelike, a game would typically use the most restrictive features of the principles below, whereas a modern roguelike would likely take the less restrictive options. Either way, my argument is that, as long as the game has met all the criteria, it should be classified as a roguelike of some kind.
 
 The principles, and the criteria for each, are as follows:
 
 ### A. Procedural Generation
-Procedural generation lies at the heart of roguelikes, ensuring that every run is unpredictable and distinct.
-This randomness fuels emergent gameplay, where systems interact in surprising ways to create unique challenges.
+
+Procedural generation lies at the heart of roguelikes, ensuring that every run is unpredictable and distinct. This randomness fuels emergent gameplay, where systems interact in surprising ways to create unique challenges.
 
 Every playthrough must generate levels, encounters, loot, or narrative elements algorithmically.
-Some static components (e.g., [*Caves of Qud's*](https://store.steampowered.com/app/333640/)
-overworld map, [*ADOM's*](https://store.steampowered.com/app/333300) static quest hubs) are allowed if used sparingly.
-Similarly, pre-designed boss arenas or story-critical locations
-(e.g., [*Jupiter Hell's*](https://store.steampowered.com/app/811320) final level) are also acceptable.
+Some static components (e.g., [*Caves of Qud's*](https://store.steampowered.com/app/333640/) overworld map, [*ADOM's*](https://store.steampowered.com/app/333300) static quest hubs) are allowed if used sparingly. Similarly, pre-designed boss arenas or story-critical locations (e.g., [*Jupiter Hell's*](https://store.steampowered.com/app/811320) final level) are also acceptable.
 
-- #### (i) Emergent Worlds
-    Each new playthrough begins in an uncharted world, with layouts, creatures, and loot shuffled to keep players on their
-    toes. This unpredictability forces players to adapt, as they can’t rely on memorized maps or patterns. Even after
-    repeated attempts, there’s always the chance of discovering an unexpected encounter or hidden feature that prompts a
-    new mode of tactical play.
+* #### (i) Emergent Worlds
 
-- #### (ii) Balanced Unpredictability
-    While randomness is essential, it’s most compelling when paired with thoughtful design. Games like
-    [*Caves of Qud*](https://store.steampowered.com/app/333640/) achieve this by anchoring their worlds with consistent faction
-    ecosystems, ensuring that even unpredictable events feel grounded in logic.
-    Similarly, [*DCSS*](https://github.com/crawl/crawl) balances procedural
-    generation with carefully tuned systems, creating a sense of coherence without sacrificing variety.
+  Each new playthrough begins in an uncharted world, with layouts, creatures, and loot shuffled to keep players on their toes. This unpredictability forces players to adapt, as they can’t rely on memorized maps or patterns. Even after repeated attempts, there’s always the chance of discovering an unexpected encounter or hidden feature that prompts a new mode of tactical play.
+* #### (ii) Balanced Unpredictability
 
-    By blending chaos with structure, roguelikes ensure that every playthrough is dynamic yet strategic, rewarding players
-    who adapt to changing circumstances.
+  While randomness is essential, it’s most compelling when paired with thoughtful design. Games like [*Caves of Qud*](https://store.steampowered.com/app/333640/) achieve this by anchoring their worlds with consistent faction ecosystems, ensuring that even unpredictable events feel grounded in logic. Similarly, [*DCSS*](https://github.com/crawl/crawl) balances procedural generation with carefully tuned systems, creating a sense of coherence without sacrificing variety.
+
+  By blending chaos with structure, roguelikes ensure that every playthrough is dynamic yet strategic, rewarding players who adapt to changing circumstances.
 
 ### B. Tactical Foundations: Time and Space
-Roguelikes rely on deliberate pacing and clear spatial systems. Turn-based or pauseable real-time mechanics let players
-plan each action carefully, and grid-based or alternative layouts keep positioning meaningful.
 
-- #### (i) Time Mechanics
-    Tactical pacing is a defining feature of roguelikes, emphasizing deliberate, methodical decision-making over quick
-    reflexes. Whether players are managing movement, attacks, or abilities, the focus is on careful planning, where each
-    action can carry significant consequences.
+Roguelikes rely on deliberate pacing and clear spatial systems. Turn-based or pauseable real-time mechanics let players plan each action carefully, and grid-based or alternative layouts keep positioning meaningful.
 
-    ##### Turn-Based or Pauseable Real-Time
-    Roguelikes prioritize tactical thinking by offering turn-based gameplay or real-time systems with the option to pause.
-    These mechanics allow players to assess their situation and make informed decisions before committing to their next
-    action.
+* #### (i) Time Mechanics
 
-    Turn-based roguelikes, such as [*NetHack*](https://github.com/NetHack/NetHack), or
-    [*Zorbus*](https://store.steampowered.com/app/2125420), give players the space to carefully weigh their moves, while games
-    [*FTL: Faster Than Light*](https://store.steampowered.com/app/212680) use a pauseable real-time system to achieve a
-    similar level of tactical control. Both approaches reward foresight and encourage players to think critically about
-    positioning, timing, and resource use.
+  Tactical pacing is a defining feature of roguelikes, emphasizing deliberate, methodical decision-making over quick reflexes. Whether players are managing movement, attacks, or abilities, the focus is on careful planning, where each action can carry significant consequences.
 
-    ##### Exclusion of Reflex-Driven Gameplay
-    In contrast to action roguelites like [*Hades*](https://store.steampowered.com/app/1145360),
-    [*Returnal*](https://store.steampowered.com/app/1649240), or the *Risk of Rain* series
-    ([2013 Edition](https://store.steampowered.com/app/248820), [Sequel](https://store.steampowered.com/app/632360),
-        [Remaster of 2013 Edition](https://store.steampowered.com/app/1337520)), roguelikes avoid reflex-driven gameplay.
-    These games emphasize thoughtful choices and improvisation over quick reactions. While action roguelites offer fast-paced
-    excitement, roguelikes create engagement through intentional pacing, where each move can be considered carefully.
-    There are no real-time limited decisions in a roguelike, other than those you set for yourself.
+  ##### Turn-Based or Pauseable Real-Time
 
-- #### (ii) Spatial Systems
-    Roguelikes may employ a variety of spatial systems, provided they enable tactical decision-making through measurable
-    risk-reward mechanics (e.g., line-of-sight, flanking, environmental interactions).
-    Traditional 2D (or higher dimensional) grids -- usually square or hex based -- are the gold standard, offering clear
-    positional clarity. However, other systems are permissible if it retains tactical depth, such as
-    [*Heat Signature's*](https://store.steampowered.com/app/268130) paused planning or
-    [*HyperRogue's*](https://store.steampowered.com/app/342610) non-Euclidean geometry.
+  Roguelikes prioritize tactical thinking by offering turn-based gameplay or real-time systems with the option to pause. These mechanics allow players to assess their situation and make informed decisions before committing to their next action.
 
-    Systems that lack tactical positioning or rely on reflex-driven mechanics would likely disqualify a game from the
-    roguelike genre. For example, chaotic freeform movement like [*Diablo*'s](https://en.wikipedia.org/wiki/Diablo_(video_game))
-    click-to-move combat does not emphasize meaningful positional strategy. Similarly, fast-paced, reflex-heavy systems such
-    as [*Hades’*](https://store.steampowered.com/app/1145360) dash-spam mechanics prioritize quick reactions over deliberate
-    planning, undermining the genre’s core emphasis on tactical depth.
+  Turn-based roguelikes, such as [*NetHack*](https://github.com/NetHack/NetHack), or [*Zorbus*](https://store.steampowered.com/app/2125420), give players the space to carefully weigh their moves, while games [*FTL: Faster Than Light*](https://store.steampowered.com/app/212680) use a pauseable real-time system to achieve a similar level of tactical control. Both approaches reward foresight and encourage players to think critically about positioning, timing, and resource use.
 
-    ##### Spatial Clarity
-    Roguelikes thrive on providing players with clear spatial mechanics that allow for meaningful positional decisions.
-    Whether the design uses grids, hexes, or discrete zones, the key is ensuring that each movement feels deliberate.
-    For instance, [*Into the Breach*](https://store.steampowered.com/app/590380) uses a tile-based system to highlight every
-    action’s consequences, giving players complete visibility into potential outcomes.
+  ##### Exclusion of Reflex-Driven Gameplay
 
-    [*Terminus: Zombie Survivors*](https://store.steampowered.com/app/1534980) offers an alternative approach by combining a
-    graph-based overworld map with grid-based nodes for each specific building or structure. On the overworld, players
-    choose their next destination node from a web of interconnected locations. Once inside a node, movement and combat
-    initiation occur on a grid, governed by action points that determine how many moves or actions can be taken before
-    ending the turn. After the player uses these points, zombies move in response, reinforcing the importance of
-    thoughtful positioning and resourceful tactics.
+  In contrast to action roguelites like [*Hades*](https://store.steampowered.com/app/1145360), [*Returnal*](https://store.steampowered.com/app/1649240), or the *Risk of Rain* series ([2013 Edition](https://store.steampowered.com/app/248820), [Sequel](https://store.steampowered.com/app/632360), [Remaster of 2013 Edition](https://store.steampowered.com/app/1337520)), roguelikes avoid reflex-driven gameplay. These games emphasize thoughtful choices and improvisation over quick reactions. While action roguelites offer fast-paced excitement, roguelikes create engagement through intentional pacing, where each move can be considered carefully. There are no real-time limited decisions in a roguelike, other than those you set for yourself.
+* #### (ii) Spatial Systems
 
-    By blending a broad, node-based travel map with localized grid-based environments, the game ensures that every
-    decision -- from where to go next to how to maneuver through a cramped building -- carries significant tactical weight.
+  Roguelikes may employ a variety of spatial systems, provided they enable tactical decision-making through measurable risk-reward mechanics (e.g., line-of-sight, flanking, environmental interactions). Traditional 2D (or higher dimensional) grids -- usually square or hex based -- are the gold standard, offering clear positional clarity. However, other systems are permissible if it retains tactical depth, such as [*Heat Signature's*](https://store.steampowered.com/app/268130) paused planning or [*HyperRogue's*](https://store.steampowered.com/app/342610) non-Euclidean geometry.
 
-- #### (iii) Tactical Prioritization Over Strategic Planning
-    Roguelikes tend to focus on immediate, tactical decisions rather than long-term strategic planning. While some games
-    incorporate higher-level systems, the heart of the roguelike experience lies in responding to challenges as they arise.
-    This immediacy creates a sense of urgency and tension that defines the genre, ensuring that gameplay remains engaging
-    and impactful.
+  Systems that lack tactical positioning or rely on reflex-driven mechanics would likely disqualify a game from the roguelike genre. For example, chaotic freeform movement like [*Diablo*'s](https://en.wikipedia.org/wiki/Diablo_\(video_game\)) click-to-move combat does not emphasize meaningful positional strategy. Similarly, fast-paced, reflex-heavy systems such as [*Hades’*](https://store.steampowered.com/app/1145360) dash-spam mechanics prioritize quick reactions over deliberate
+  planning, undermining the genre’s core emphasis on tactical depth.
 
-    Tactical depth in roguelikes emphasizes moment-to-moment positioning, resource allocation, and improvisation within
-    individual encounters (e.g., a single room), whereas strategy games tend to focus on macro-level planning
-    (e.g., base-building and multi-mission campaigns).
+  ##### Spatial Clarity
 
-    ##### Pacing and Feedback
-    Speed is a hallmark of tactical roguelikes, ensuring players face a steady stream of meaningful decisions with
-    immediate consequences. This design philosophy traces back to [*Rogue*](https://en.wikipedia.org/wiki/Rogue_(video_game))
-    itself, whose manual emphasized “fast, tense gameplay” as a core innovation.
+  Roguelikes thrive on providing players with clear spatial mechanics that allow for meaningful positional decisions. Whether the design uses grids, hexes, or discrete zones, the key is ensuring that each movement feels deliberate. For instance, [*Into the Breach*](https://store.steampowered.com/app/590380) uses a tile-based system to highlight every action’s consequences, giving players complete visibility into potential outcomes.
 
-    Modern implementations include:
-    - *Streamlined Interfaces*: Features like auto-explore and quick-action hotkeys minimize downtime between decisions.
-    - *Adaptive Animations*: Games like [*Jupiter Hell*](https://store.steampowered.com/app/811320) use snappy animations
-        that don’t slow turn resolution, preserving momentum.
-    - *Concise Scope*: Smaller levels ([*Into the Breach*](https://store.steampowered.com/app/590380)) or action-point
-        systems ([*Terminus: Zombie Survivors*](https://store.steampowered.com/app/1534980)) minimize decision fatigue.
+  [*Terminus: Zombie Survivors*](https://store.steampowered.com/app/1534980) offers an alternative approach by combining a graph-based overworld map with grid-based nodes for each specific building or structure. On the overworld, players choose their next destination node from a web of interconnected locations. Once inside a node, movement and combat initiation occur on a grid, governed by action points that determine how many moves or actions can be taken before ending the turn. After the player uses these points, zombies move in response, reinforcing the importance of thoughtful positioning and resourceful tactics.
 
-    By contrast, simulationist roguelikes ([*Caves of Qud*](https://store.steampowered.com/app/333640/),
-    [*Dwarf Fortress*](https://store.steampowered.com/app/975370) often embrace slower pacing to accommodate environmental
-    storytelling and systemic depth.
+  By blending a broad, node-based travel map with localized grid-based environments, the game ensures that every decision -- from where to go next to how to maneuver through a cramped building -- carries significant tactical weight.
+* #### (iii) Tactical Prioritization Over Strategic Planning
 
-    ##### Immediate Stakes
-    Unlike strategy games that emphasize overarching plans and resource management over extended timelines, roguelikes
-    prioritize the here and now. Each decision -- whether it’s choosing when to heal, where to move, or how to engage an
-    enemy -- has immediate consequences that shape the outcome of a run.
+  Roguelikes tend to focus on immediate, tactical decisions rather than long-term strategic planning. While some games incorporate higher-level systems, the heart of the roguelike experience lies in responding to challenges as they arise. This immediacy creates a sense of urgency and tension that defines the genre, ensuring that gameplay remains engaging and impactful.
 
-    For example, in [*Jupiter Hell*](https://store.steampowered.com/app/811320), players must carefully balance their
-    positioning and ability usage in every combat scenario, as a single misstep can result in swift death. This focus on
-    short-term stakes keeps the player’s attention on the tactical layer, where split-second choices and improvisation
-    determine survival.
+  Tactical depth in roguelikes emphasizes moment-to-moment positioning, resource allocation, and improvisation within individual encounters (e.g., a single room), whereas strategy games tend to focus on macro-level planning (e.g., base-building and multi-mission campaigns).
 
-    ##### Balancing Meta-Layers
-    While some games integrate strategic elements, these systems are usually secondary to the immediate challenges of
-    each run. Games like [*Darkest Dungeon II*](https://store.steampowered.com/app/1940340) explore evolving relationships and
-    larger-scale planning, but the roguelike core remains tied to tactical decision-making within individual encounters.
+  ##### Pacing and Feedback
 
-    In my view, roguelikes benefit most when these meta-layers enhance, rather than overshadow, the immediacy of
-    moment-to-moment gameplay. For example, [*FTL*](https://store.steampowered.com/app/212680) incorporates strategic decisions
-    about which sectors to explore, but the game’s focus remains on navigating encounters and managing resources in
-    pausable real-time. This balance ensures that players stay immersed in the high-stakes tension that defines the genre.
+  Speed is a hallmark of tactical roguelikes, ensuring players face a steady stream of meaningful decisions with immediate consequences. This design philosophy traces back to [*Rogue*](https://en.wikipedia.org/wiki/Rogue_\(video_game\))
+  itself, whose manual emphasized “fast, tense gameplay” as a core innovation.
+
+  Modern implementations include:
+
+  * *Streamlined Interfaces*: Features like auto-explore and quick-action hotkeys minimize downtime between decisions.
+  * *Adaptive Animations*: Games like [*Jupiter Hell*](https://store.steampowered.com/app/811320) use snappy animations that don’t slow turn resolution, preserving momentum.
+  * *Concise Scope*: Smaller levels ([*Into the Breach*](https://store.steampowered.com/app/590380)) or action-point systems ([*Terminus: Zombie Survivors*](https://store.steampowered.com/app/1534980)) minimize decision fatigue.
+
+  By contrast, simulationist roguelikes ([*Caves of Qud*](https://store.steampowered.com/app/333640/), [*Dwarf Fortress*](https://store.steampowered.com/app/975370) often embrace slower pacing to accommodate environmental storytelling and systemic depth.
+
+  ##### Immediate Stakes
+
+  Unlike strategy games that emphasize overarching plans and resource management over extended timelines, roguelikes prioritize the here and now. Each decision -- whether it’s choosing when to heal, where to move, or how to engage an enemy -- has immediate consequences that shape the outcome of a run.
+
+  For example, in [*Jupiter Hell*](https://store.steampowered.com/app/811320), players must carefully balance their positioning and ability usage in every combat scenario, as a single misstep can result in swift death. This focus on short-term stakes keeps the player’s attention on the tactical layer, where split-second choices and improvisation determine survival.
+
+  ##### Balancing Meta-Layers
+
+  While some games integrate strategic elements, these systems are usually secondary to the immediate challenges of each run. Games like [*Darkest Dungeon II*](https://store.steampowered.com/app/1940340) explore evolving relationships and larger-scale planning, but the roguelike core remains tied to tactical decision-making within individual encounters.
+
+  In my view, roguelikes benefit most when these meta-layers enhance, rather than overshadow, the immediacy of moment-to-moment gameplay. For example, [*FTL*](https://store.steampowered.com/app/212680) incorporates strategic decisions about which sectors to explore, but the game’s focus remains on navigating encounters and managing resources in pausable real-time. This balance ensures that players stay immersed in the high-stakes tension that defines the genre.
 
 ### C. Character-Focused Gameplay
-Roguelikes often place a strong emphasis on individual characters or small parties, where every decision feels personal.
-This focus heightens the stakes, as the survival of the player’s character (or small, tightly-knit party) determines
-the outcome of the run.
 
-- #### (i) Individual or Small Party Emphasis
-    Focusing on a single character or small party naturally heightens the stakes. Unlike larger-scale
-    strategy games like [*XCOM: UFO Defense*](https://en.wikipedia.org/wiki/X-COM:_UFO_Defense), roguelikes often revolve
-    around a single hero whose survival is paramount. Every injury or setback feels personal, amplifying the tension of
-    every turn or encounter.
+Roguelikes often place a strong emphasis on individual characters or small parties, where every decision feels personal. This focus heightens the stakes, as the survival of the player’s character (or small, tightly-knit party) determines the outcome of the run.
 
-    As new abilities, equipment, and challenges arise, this narrow focus encourages players to think carefully about how
-    best to develop and protect their characters. The result is a dynamic experience where even minor decisions can have
-    long-term consequences.
+* #### (i) Individual or Small Party Emphasis
 
-    The gallery below contrasts [*XCOM's*](https://en.wikipedia.org/wiki/X-COM:_UFO_Defense) squad-management interface
-    and mechanics with the intimate, singular focus of roguelike design.
+  Focusing on a single character or small party naturally heightens the stakes. Unlike larger-scale strategy games like [*XCOM: UFO Defense*](https://en.wikipedia.org/wiki/X-COM:_UFO_Defense), roguelikes often revolve around a single hero whose survival is paramount. Every injury or setback feels personal, amplifying the tension of every turn or encounter.
+
+  As new abilities, equipment, and challenges arise, this narrow focus encourages players to think carefully about how best to develop and protect their characters. The result is a dynamic experience where even minor decisions can have long-term consequences.
+
+  The gallery below contrasts [*XCOM's*](https://en.wikipedia.org/wiki/X-COM:_UFO_Defense) squad-management interface and mechanics with the intimate, singular focus of roguelike design.
 
 <LightboxGallery caption="Image Gallery: XCOM: UFO Defense">
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/bi2/xcom_original_geoscape.png"
-                  alt="XCOM: UFO Defense (Geoscape), Microprose"
-                  caption="Geoscape"
-                  description="Screenshot of XCOM's Geoscape, the mission planning and prioritization overview, illustrating the
-                  game's emphasis on large-scale strategy and team management rather than single-character survival typical of
-                  roguelikes. (This game was released as UFO: Enemy Unknown in Europe.)"
-    />
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/bi2/xcom_original.png"
-                  alt="XCOM: UFO Defense (Tactical Battle View), Microprose"
-                  caption="Tactical Battle View"
-                  description="Screenshot of XCOM's tactical battle view, showcasing turn-based combat with a squad of soldiers,
-                  highlighting its focus on managing multiple units and strategic planning instead of the single-hero focus found
-                  in traditional roguelikes."
-    />
-    <GalleryImage src="/src/assets/images/hiivelabs.com/blog/bi2/xcom_original_base_layout.png"
-                  alt="XCOM: UFO Defense (Base Layout), Microprose"
-                  caption="Base Layout"
-                  description="Screenshot of XCOM's base layout, showcasing strategic resource management and
-                  facility upgrades that emphasize team-wide planning and support, differentiating it from the single-character
-                  focus typical of traditional roguelikes."
-    />
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-28-musings-on-the-berlin-interpretation-part-zwei/xcom_original_geoscape.png" alt="XCOM: UFO Defense (Geoscape), Microprose" description="Screenshot of XCOM's Geoscape, the mission planning and prioritization overview, illustrating the game's emphasis on large-scale strategy and team management rather than single-character survival typical of roguelikes. (This game was released as UFO: Enemy Unknown in Europe.)" caption="Geoscape" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-28-musings-on-the-berlin-interpretation-part-zwei/xcom_original.png" alt="XCOM: UFO Defense (Tactical Battle View), Microprose" description="Screenshot of XCOM's tactical battle view, showcasing turn-based combat with a squad of soldiers, highlighting its focus on managing multiple units and strategic planning instead of the single-hero focus found in traditional roguelikes." caption="Tactical Battle View" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-28-musings-on-the-berlin-interpretation-part-zwei/xcom_original_base_layout.png" alt="XCOM: UFO Defense (Base Layout), Microprose" description="Screenshot of XCOM's base layout, showcasing strategic resource management and facility upgrades that emphasize team-wide planning and support, differentiating it from the single-character focus typical of traditional roguelikes." caption="Base Layout" />
 </LightboxGallery>
 
 ### D. Meaningful Consequences
-One of the defining features of roguelikes is the importance of consequences. Whether through the threat of permadeath,
-major penalties, or other setbacks, these games challenge players to approach every decision with caution and purpose.
-The stakes are always high, ensuring that every run feels significant.
 
-- #### (i) Permadeath or Major Penalties
-    Permadeath is perhaps the most iconic mechanic in roguelikes, representing the ultimate form of consequence. A single
-    mistake can end a run, forcing players to start over from scratch. This high-risk dynamic adds a unique layer of tension
-    to every decision, as players must balance their desire to explore or push forward with the need to survive.
+One of the defining features of roguelikes is the importance of consequences. Whether through the threat of permadeath, major penalties, or other setbacks, these games challenge players to approach every decision with caution and purpose. The stakes are always high, ensuring that every run feels significant.
 
-    In shorter roguelikes, this all-or-nothing approach can create a satisfying rhythm of trial and error. Starting fresh
-    becomes part of the game’s appeal, encouraging players to adapt and refine their strategies with each attempt. For
-    example, in [*NetHack*](https://github.com/NetHack/NetHack) or
-    [*Brogue*](https://github.com/tmewett/BrogueCE), losing a high-level character can be devastating, but the
-    lessons learned along the way prepare players for future runs.
+* #### (i) Permadeath or Major Penalties
 
-    However, in longer campaigns or more expansive roguelikes, permadeath can become overly punishing. Imagine losing dozens
-    of hours of progress in a sprawling, story-driven roguelike such as [*Caves of Qud*](https://store.steampowered.com/app/333640/)
-    -- a frustration that could turn away even dedicated players. To address this, many modern games implement alternatives
-    such as:
+  Permadeath is perhaps the most iconic mechanic in roguelikes, representing the ultimate form of consequence. A single mistake can end a run, forcing players to start over from scratch. This high-risk dynamic adds a unique layer of tension to every decision, as players must balance their desire to explore or push forward with the need to survive.
 
-    - **Partial resets**, where players retain some progress or resources between runs.
-    - **Intermittent checkpoints**, offering a chance to recover from defeat without completely starting over.
-    - **Recoverable conditions**, such as penalties that can be offset through in-game actions.
+  In shorter roguelikes, this all-or-nothing approach can create a satisfying rhythm of trial and error. Starting fresh becomes part of the game’s appeal, encouraging players to adapt and refine their strategies with each attempt. For example, in [*NetHack*](https://github.com/NetHack/NetHack) or [*Brogue*](https://github.com/tmewett/BrogueCE), losing a high-level character can be devastating, but the lessons learned along the way prepare players for future runs.
 
-    These systems allow for a more forgiving experience while preserving the tension and challenge that make roguelikes
-    unique, and are often implemented in **addition to** permadeath-based play for the more hardcore players.
+  However, in longer campaigns or more expansive roguelikes, permadeath can become overly punishing. Imagine losing dozens of hours of progress in a sprawling, story-driven roguelike such as [*Caves of Qud*](https://store.steampowered.com/app/333640/) -- a frustration that could turn away even dedicated players. To address this, many modern games implement alternatives such as:
 
-- #### (ii) Permissible Meta-Progression
-    While roguelikes traditionally emphasize self-contained runs, some meta-progression can add depth and replayability
-    without undermining the genre’s core principles. Persistent elements such as unlockable character classes, subtle
-    upgrades, or narrative expansions reward long-term engagement while leaving the core challenge intact.
+  * **Partial resets**, where players retain some progress or resources between runs.
+  * **Intermittent checkpoints**, offering a chance to recover from defeat without completely starting over.
+  * **Recoverable conditions**, such as penalties that can be offset through in-game actions.
 
-    For instance, games like [*FTL*](https://store.steampowered.com/app/212680) allow players to unlock new ships or layouts
-    after achieving specific milestones, providing variety without diminishing the tension of individual runs.
-    Similarly, lore-based progression, as seen in [*ADOM*](https://store.steampowered.com/app/333300),
-    enhances the world’s richness while keeping each playthrough unpredictable.
+  These systems allow for a more forgiving experience while preserving the tension and challenge that make roguelikes unique, and are often implemented in **addition to** permadeath-based play for the more hardcore players.
+* #### (ii) Permissible Meta-Progression
 
-    In my view, the best meta-progression systems enhance the roguelike experience by encouraging exploration and
-    experimentation, rather than just making the game easier. They offer players something to work toward over time,
-    but they never overshadow the immediacy and high stakes of each individual run.
+  While roguelikes traditionally emphasize self-contained runs, some meta-progression can add depth and replayability without undermining the genre’s core principles. Persistent elements such as unlockable character classes, subtle upgrades, or narrative expansions reward long-term engagement while leaving the core challenge intact.
 
-- #### (ii) Resource Management and Exploration
-    Roguelikes challenge players to make the most of limited resources while navigating unpredictable environments.
-    The scarcity of supplies creates a constant tension, forcing players to weigh risks and rewards as they explore.
-    Every decision -- from using a health potion to venturing into an unknown area -- can have significant consequences,
-    making resource management and exploration central to the roguelike experience.
+  For instance, games like [*FTL*](https://store.steampowered.com/app/212680) allow players to unlock new ships or layouts after achieving specific milestones, providing variety without diminishing the tension of individual runs. Similarly, lore-based progression, as seen in [*ADOM*](https://store.steampowered.com/app/333300),
+  enhances the world’s richness while keeping each playthrough unpredictable.
 
-    ##### Resource Scarcity and Allocation
-    Effective resource management lies at the heart of roguelike gameplay. Players are often faced with difficult choices,
-    such as whether to use a health potion now or save it for a potentially more dangerous encounter later. This
-    scarcity heightens the stakes, turning even routine encounters into moments of strategic planning.
+  In my view, the best meta-progression systems enhance the roguelike experience by encouraging exploration and experimentation, rather than just making the game easier. They offer players something to work toward over time, but they never overshadow the immediacy and high stakes of each individual run.
+* #### (ii) Resource Management and Exploration
 
-    In games like [*FTL*](https://store.steampowered.com/app/212680), players must carefully allocate limited resources, knowing
-    that overspending on one resource could leave them vulnerable later. Similarly, in
-    [*Brogue*](https://github.com/tmewett/BrogueCE) and others, food management adds another layer of tension,
-    as prolonged exploration risks starvation. This constant pressure encourages players to think ahead, prioritize their
-    needs, and adapt their strategies on the fly.
+  Roguelikes challenge players to make the most of limited resources while navigating unpredictable environments. The scarcity of supplies creates a constant tension, forcing players to weigh risks and rewards as they explore. Every decision -- from using a health potion to venturing into an unknown area -- can have significant consequences, making resource management and exploration central to the roguelike experience.
 
-    ##### Secrets and Risk-Reward Discovery
-    Exploration in roguelikes is often about more than simply grabbing an amulet and then finding the exit -- it’s about
-    uncovering hidden opportunities and navigating the dangers that come with them. Many games hide rare loot, secret
-    passageways, or powerful artifacts in hard-to-reach or hazardous areas, tempting players to take risks for potential
-    rewards.
+  ##### Resource Scarcity and Allocation
 
-    For instance, in [*DCSS*](https://github.com/crawl/crawl), players can encounter treasure vaults
-    and heavily guarded chambers containing valuable equipment or consumables. Accessing these rewards usually requires
-    defeating powerful enemies or navigating environmental hazards, forcing players to weigh the potential gain against the
-    risks to their survival. These mechanics reward players who carefully assess their surroundings and take calculated risks.
+  Effective resource management lies at the heart of roguelike gameplay. Players are often faced with difficult choices, such as whether to use a health potion now or save it for a potentially more dangerous encounter later. This scarcity heightens the stakes, turning even routine encounters into moments of strategic planning.
+
+  In games like [*FTL*](https://store.steampowered.com/app/212680), players must carefully allocate limited resources, knowing
+  that overspending on one resource could leave them vulnerable later. Similarly, in
+  [*Brogue*](https://github.com/tmewett/BrogueCE) and others, food management adds another layer of tension, as prolonged exploration risks starvation. This constant pressure encourages players to think ahead, prioritize their needs, and adapt their strategies on the fly.
+
+  ##### Secrets and Risk-Reward Discovery
+
+  Exploration in roguelikes is often about more than simply grabbing an amulet and then finding the exit -- it’s about uncovering hidden opportunities and navigating the dangers that come with them. Many games hide rare loot, secret passageways, or powerful artifacts in hard-to-reach or hazardous areas, tempting players to take risks for potential rewards.
+
+  For instance, in [*DCSS*](https://github.com/crawl/crawl), players can encounter treasure vaults and heavily guarded chambers containing valuable equipment or consumables. Accessing these rewards usually requires defeating powerful enemies or navigating environmental hazards, forcing players to weigh the potential gain against the risks to their survival. These mechanics reward players who carefully assess their surroundings and take calculated risks.
 
 ### E. Emergent Complexity
-Roguelikes stand out for their ability to create systems that interact in surprising and meaningful ways. Instead of
-relying on pre-scripted scenarios, these games thrive on emergent gameplay, where a combination of mechanics and
-player choices results in unique, often unexpected outcomes. This complexity keeps players engaged by encouraging
-experimentation and rewarding creative problem-solving.
 
-- #### (i) Interlocking Systems
-    The best roguelikes create a web of interconnected systems that constantly interact. Environmental hazards, enemy
-    behaviors, and player abilities are designed to influence one another, often in ways that feel organic rather than
-    scripted. For instance, a fireball spell might ignite flammable terrain, setting off a chain reaction that alters the
-    course of an encounter.
+Roguelikes stand out for their ability to create systems that interact in surprising and meaningful ways. Instead of relying on pre-scripted scenarios, these games thrive on emergent gameplay, where a combination of mechanics and player choices results in unique, often unexpected outcomes. This complexity keeps players engaged by encouraging experimentation and rewarding creative problem-solving.
 
-    This interactivity drives engagement by encouraging players to think beyond immediate problems and consider the broader
-    implications of their actions. Games like [*Dwarf Fortress*](https://store.steampowered.com/app/975370) (in Adventure Mode)
-    exemplify this, offering systems so deeply interconnected that even small changes ripple outward in unpredictable ways.
+* #### (i) Interlocking Systems
 
+  The best roguelikes create a web of interconnected systems that constantly interact. Environmental hazards, enemy behaviors, and player abilities are designed to influence one another, often in ways that feel organic rather than scripted. For instance, a fireball spell might ignite flammable terrain, setting off a chain reaction that alters the course of an encounter.
 
-- #### (ii) Living, Reactive Worlds
-    A reactive game world amplifies the sense of agency and immersion. In my opinion, the most engaging roguelikes feature
-    environments that respond dynamically to player decisions, creating opportunities for both success and failure.
-    Factions might shift their alliances, creatures could adapt to repeated strategies, or the world itself might evolve
-    based on the player’s impact.
+  This interactivity drives engagement by encouraging players to think beyond immediate problems and consider the broader implications of their actions. Games like [*Dwarf Fortress*](https://store.steampowered.com/app/975370) (in Adventure Mode) exemplify this, offering systems so deeply interconnected that even small changes ripple outward in unpredictable ways.
+* #### (ii) Living, Reactive Worlds
 
-    For example, [*Cataclysm: Dark Days Ahead (CDDA)*](https://store.steampowered.com/app/2330750) offers the option of keeping
-    the same persistent world across multiple runs. When a character dies, everything that occurred in that playthrough --
-    destroyed buildings, altered vehicles, dropped items -- remains for the next survivor to discover or reclaim.
-    It’s possible to encounter your previous corpse or salvage your former equipment, lending a tangible feeling that the
-    world remembers and reflects the consequences of each run.
-    This continuity shifts the perspective from a lone survivor’s story to an ongoing, emergent narrative in a single,
-    evolving environment.
+  A reactive game world amplifies the sense of agency and immersion. In my opinion, the most engaging roguelikes feature environments that respond dynamically to player decisions, creating opportunities for both success and failure. Factions might shift their alliances, creatures could adapt to repeated strategies, or the world itself might evolve based on the player’s impact.
 
-    By weaving reactivity into their systems, roguelikes encourage players to consider the broader impact of every choice,
-    strengthening both the challenge and the sense of immersion.
+  For example, [*Cataclysm: Dark Days Ahead (CDDA)*](https://store.steampowered.com/app/2330750) offers the option of keeping the same persistent world across multiple runs. When a character dies, everything that occurred in that playthrough -- destroyed buildings, altered vehicles, dropped items -- remains for the next survivor to discover or reclaim. It’s possible to encounter your previous corpse or salvage your former equipment, lending a tangible feeling that the world remembers and reflects the consequences of each run. This continuity shifts the perspective from a lone survivor’s story to an ongoing, emergent narrative in a single, evolving environment.
 
-- #### (iii) Adaptive Tactics
-    Procedural generation ensures that no two runs are the same, requiring players to continuously adapt their tactics to
-    new challenges. Each map layout, enemy spawn, or resource placement demands fresh strategies, preventing players from
-    relying solely on memorization. This adaptability keeps gameplay dynamic and ensures that players are always engaged,
-    responding to the unique challenges of each run.
+  By weaving reactivity into their systems, roguelikes encourage players to consider the broader impact of every choice,
+  strengthening both the challenge and the sense of immersion.
+* #### (iii) Adaptive Tactics
+
+  Procedural generation ensures that no two runs are the same, requiring players to continuously adapt their tactics to new challenges. Each map layout, enemy spawn, or resource placement demands fresh strategies, preventing players from relying solely on memorization. This adaptability keeps gameplay dynamic and ensures that players are always engaged, responding to the unique challenges of each run.
 
 ## III. Movement, Positioning, and Interface
-Tactical movement and positioning lie at the core of roguelike gameplay. The ability to assess the battlefield and make
-purposeful choices about where to move -- or when to hold position -- can mean the difference between survival and defeat.
-A clear and intuitive interface is essential to support these decisions, ensuring players have the information they
-need to play the game effectively.
 
-- ### Aesthetic Freedom
-    While roguelikes have traditionally embraced ASCII or tile-based visuals, the genre has grown to accommodate a wide
-    variety of art styles. Whether a game uses pixel art, 3D models, a hybrid aesthetic, or even ASCII, the visual design
-    should prioritize readability above all else.
+Tactical movement and positioning lie at the core of roguelike gameplay. The ability to assess the battlefield and make purposeful choices about where to move -- or when to hold position -- can mean the difference between survival and defeat. A clear and intuitive interface is essential to support these decisions, ensuring players have the information they need to play the game effectively.
 
-    For example, a game might use color coding or subtle animations to differentiate terrain types or enemy behaviors.
-    The focus should remain on ensuring that players can parse the environment at a glance, allowing for quick and informed
-    decision-making without sacrificing immersion.
+* ### Aesthetic Freedom
 
-    #### Aesthetic Roles in Tactical vs. Simulationist Design
-    Visuals serve distinct purposes depending on a game’s design priorities:
-    - *Tactical Clarity*: Games like [*Jupiter Hell*](https://store.steampowered.com/app/811320) and
-        [*Brogue*](https://github.com/tmewett/BrogueCE) use clean, readable visuals (e.g., color-coded enemies,
-        terrain contrast) to optimize decision-making speed. Animations, when present, are minimal to avoid disrupting flow.
-    - *Simulationist Abstraction*: Titles like [*Caves of Qud*](https://store.steampowered.com/app/333640/) and
-        [*NetHack*](https://github.com/NetHack/NetHack) leverage minimalist aesthetics (ASCII or simple
-        tiles) to prompt player imagination, akin to reading a book. Abstract graphics allow developers to focus on
-        systemic depth without being constrained by art pipelines.
-    Both approaches prioritize function over form, but their goals differ: tactical clarity enables precision, while
-    abstraction fosters immersion.
+  While roguelikes have traditionally embraced ASCII or tile-based visuals, the genre has grown to accommodate a wide variety of art styles. Whether a game uses pixel art, 3D models, a hybrid aesthetic, or even ASCII, the visual design should prioritize readability above all else.
 
-- ### Modal Flow
-    Many classic roguelikes integrate exploration and combat seamlessly, with both occurring in the same continuous space.
-    This approach often enhances immersion, as players transition fluidly between tactical planning and action.
+  For example, a game might use color coding or subtle animations to differentiate terrain types or enemy behaviors. The focus should remain on ensuring that players can parse the environment at a glance, allowing for quick and informed decision-making without sacrificing immersion.
 
-    However, modal systems, like those used in [*Terminus: Zombie Survivors*](https://store.steampowered.com/app/1534980),
-    can also work effectively if they maintain the game’s emphasis on thoughtful decision-making.
+  #### Aesthetic Roles in Tactical vs. Simulationist Design
 
-    [*Terminus: Zombie Survivors*](https://store.steampowered.com/app/1534980) demonstrates this by balancing its modal
-    combat with a dynamic overworld exploration system, ensuring that the flow of the game remains consistent and engaging.
-    While the combat is distinct from the movement phase, the design preserves the tension and stakes of every decision,
-    a hallmark of the roguelike experience.
+  Visuals serve distinct purposes depending on a game’s design priorities:
+
+  * *Tactical Clarity*: Games like [*Jupiter Hell*](https://store.steampowered.com/app/811320) and [*Brogue*](https://github.com/tmewett/BrogueCE) use clean, readable visuals (e.g., color-coded enemies, terrain contrast) to optimize decision-making speed. Animations, when present, are minimal to avoid disrupting flow.
+  * *Simulationist Abstraction*: Titles like [*Caves of Qud*](https://store.steampowered.com/app/333640/) and
+    [*NetHack*](https://github.com/NetHack/NetHack) leverage minimalist aesthetics (ASCII or simple tiles) to prompt player imagination, akin to reading a book. Abstract graphics allow developers to focus on systemic depth without being constrained by art pipelines. Both approaches prioritize function over form, but their goals differ: tactical clarity enables precision, while abstraction fosters immersion.
+* ### Modal Flow
+
+  Many classic roguelikes integrate exploration and combat seamlessly, with both occurring in the same continuous space. This approach often enhances immersion, as players transition fluidly between tactical planning and action.
+
+  However, modal systems, like those used in [*Terminus: Zombie Survivors*](https://store.steampowered.com/app/1534980),
+  can also work effectively if they maintain the game’s emphasis on thoughtful decision-making.
+
+  [*Terminus: Zombie Survivors*](https://store.steampowered.com/app/1534980) demonstrates this by balancing its modal combat with a dynamic overworld exploration system, ensuring that the flow of the game remains consistent and engaging. While the combat is distinct from the movement phase, the design preserves the tension and stakes of every decision, a hallmark of the roguelike experience.
 
 ## IV. Deprecated/Removed BI Elements
-As the roguelike genre evolves, certain elements from the original Berlin Interpretation (BI) are arguably no longer
-essential. While these features played a significant role in defining early roguelikes, modern interpretations have
-shown that their absence doesn’t detract from the genre’s core identity. Instead, the focus has shifted toward
-principles that better reflect the diversity of contemporary designs.
 
-- ### Enforced Permadeath
-    Traditionally, permadeath was a cornerstone of roguelikes, ensuring that every run carried significant risk. However,
-    in longer or more complex games, this all-or-nothing mechanic can alienate players by erasing hours of progress after a
-    single mistake.
+As the roguelike genre evolves, certain elements from the original Berlin Interpretation (BI) are arguably no longer essential. While these features played a significant role in defining early roguelikes, modern interpretations have shown that their absence doesn’t detract from the genre’s core identity. Instead, the focus has shifted toward principles that better reflect the diversity of contemporary designs.
 
-    Modern roguelikes often adapt permadeath to better suit their design. For example,
-    [*Caves of Qud*](https://store.steampowered.com/app/333640/) offers two optional non-permadeath difficulty mode with
-    checkpoints, allowing players to recover from setbacks without starting over completely. This approach preserves the
-    tension of permadeath while offering a less punishing experience for those who prefer that.
+* ### Enforced Permadeath
 
-    By softening the consequences without eliminating them, these games maintain the stakes that define roguelikes while
-    accommodating a broader range of players. That's not to say that permadeath can't be there as an option for the hardcore
-    player -- it can, and it should, for those who enjoy the extra challenge.
+  Traditionally, permadeath was a cornerstone of roguelikes, ensuring that every run carried significant risk. However, in longer or more complex games, this all-or-nothing mechanic can alienate players by erasing hours of progress after a single mistake.
 
-- ### Grid-Based Mandate
-    Grid-based movement has long been a hallmark of roguelikes, providing clarity and structure to tactical decisions.
-    However, it is no longer an absolute requirement.
+  Modern roguelikes often adapt permadeath to better suit their design. For example,
+  [*Caves of Qud*](https://store.steampowered.com/app/333640/) offers two optional non-permadeath difficulty mode with checkpoints, allowing players to recover from setbacks without starting over completely. This approach preserves the tension of permadeath while offering a less punishing experience for those who prefer that.
 
-    The key lies in maintaining spatial tactical clarity. Whether using a grid, hexes, or free-form movement, the design
-    should provide players with enough information to make meaningful choices about positioning and movement.
-    The format is less important than the system’s ability to support deliberate, tactical spatial play.
+  By softening the consequences without eliminating them, these games maintain the stakes that define roguelikes while accommodating a broader range of players. That's not to say that permadeath can't be there as an option for the hardcore player -- it can, and it should, for those who enjoy the extra challenge.
+* ### Grid-Based Mandate
 
-- ### ASCII Requirement
-    ASCII graphics hold a special place in roguelike history, serving as both a visual style and a practical necessity for
-    early games. While still beloved by some players, modern roguelikes have embraced a variety of aesthetics.
-    Pixel art, 3D models, and even hybrid approaches can all work effectively, provided they prioritize readability and
-    clarity.
+  Grid-based movement has long been a hallmark of roguelikes, providing clarity and structure to tactical decisions. However, it is no longer an absolute requirement.
 
-    For instance, [*Jupiter Hell*](https://store.steampowered.com/app/811320) uses high-quality 3D visuals to represent its
-    environments and characters while retaining the tactical clarity of its ASCII predecessors.
+  The key lies in maintaining spatial tactical clarity. Whether using a grid, hexes, or free-form movement, the design should provide players with enough information to make meaningful choices about positioning and movement. The format is less important than the system’s ability to support deliberate, tactical spatial play.
+* ### ASCII Requirement
 
-    Other games, including [*Brogue*](https://github.com/tmewett/BrogueCE) and
-    [*Cogmind*](https://store.steampowered.com/app/722730/) provide the option of choosing ASCII or graphical tiles in-game.
+  ASCII graphics hold a special place in roguelike history, serving as both a visual style and a practical necessity for early games. While still beloved by some players, modern roguelikes have embraced a variety of aesthetics. Pixel art, 3D models, and even hybrid approaches can all work effectively, provided they prioritize readability and clarity.
 
-    By moving beyond ASCII without sacrificing usability, these games demonstrate that visual innovation can enhance a
-    roguelike’s appeal without compromising the gameplay.
+  For instance, [*Jupiter Hell*](https://store.steampowered.com/app/811320) uses high-quality 3D visuals to represent its environments and characters while retaining the tactical clarity of its ASCII predecessors.
 
-- ### Strict Non-Modality
-    Classic roguelikes often integrated exploration and combat seamlessly within a single interface. While this approach
-    remains effective, modern roguelikes have shown that modal systems can work just as well. Games like
-    [*FTL*](https://store.steampowered.com/app/212680) segment different phases of gameplay -- such as exploration and ship
-    combat -- but maintain a cohesive and strategic experience.
+  Other games, including [*Brogue*](https://github.com/tmewett/BrogueCE) and [*Cogmind*](https://store.steampowered.com/app/722730/) provide the option of choosing ASCII or graphical tiles in-game.
 
-    The key is to preserve the player’s focus on tactical decision-making. If a modal system enhances clarity or adds depth
-    to specific mechanics, it can be a worthwhile departure from the traditional roguelike formula.
+  By moving beyond ASCII without sacrificing usability, these games demonstrate that visual innovation can enhance a roguelike’s appeal without compromising the gameplay.
+* ### Strict Non-Modality
 
-- ### Dungeon-Centric Settings
-    While many roguelikes take place in sprawling dungeons, the genre’s defining principles -- emergent gameplay, resource
-    management, and high-stakes exploration -- can be applied to a wide range of settings. Space stations, post-apocalyptic
-    landscapes, and even abstract environments can serve as compelling backdrops for roguelike gameplay.
+  Classic roguelikes often integrated exploration and combat seamlessly within a single interface. While this approach remains effective, modern roguelikes have shown that modal systems can work just as well. Games like [*FTL*](https://store.steampowered.com/app/212680) segment different phases of gameplay -- such as exploration and ship combat -- but maintain a cohesive and strategic experience.
 
-    For example, [*Approaching Infinity*](https://store.steampowered.com/app/551620) trades traditional dungeon crawling for
-    starship exploration and planetary away missions, whereas [*HyperRogue*](https://store.steampowered.com/app/342610) warps
-    the player out of normal space entirely and into a non-Euclidean hyperspace nightmare.
+  The key is to preserve the player’s focus on tactical decision-making. If a modal system enhances clarity or adds depth to specific mechanics, it can be a worthwhile departure from the traditional roguelike formula.
+* ### Dungeon-Centric Settings
 
-    The core identity of a good roguelike transcends its setting. As long as the game fosters tension and unpredictability,
-    in line with the tenets of the genre, the actual environment can be as varied as the designer’s imagination allows.
+  While many roguelikes take place in sprawling dungeons, the genre’s defining principles -- emergent gameplay, resource management, and high-stakes exploration -- can be applied to a wide range of settings. Space stations, post-apocalyptic landscapes, and even abstract environments can serve as compelling backdrops for roguelike gameplay.
+
+  For example, [*Approaching Infinity*](https://store.steampowered.com/app/551620) trades traditional dungeon crawling for starship exploration and planetary away missions, whereas [*HyperRogue*](https://store.steampowered.com/app/342610) warps the player out of normal space entirely and into a non-Euclidean hyperspace nightmare.
+
+  The core identity of a good roguelike transcends its setting. As long as the game fosters tension and unpredictability, in line with the tenets of the genre, the actual environment can be as varied as the designer’s imagination allows.
 
 ## V. Roguelikes - Traditional, Modern and Hybrid
 
 To my thinking, games that qualify as "true" roguelikes come is three flavors.
 
-First is the Traditional Roguelike. These adhere strictly to the genre's roots; turn-based pacing, permadeath,
-ASCII/tile aesthetics, etc.
+First is the Traditional Roguelike. These adhere strictly to the genre's roots; turn-based pacing, permadeath, ASCII/tile aesthetics, etc.
 
-Secondly, the Modern Roguelike; capable of being almost indistinguishable at first glance from the Traditional Roguelike,
-with features that vary slightly from the traditional roguelike tenets, but that still adhere to the more relaxed
-tenets presented in section II of this document.
+Secondly, the Modern Roguelike; capable of being almost indistinguishable at first glance from the Traditional Roguelike, with features that vary slightly from the traditional roguelike tenets, but that still adhere to the more relaxed tenets presented in section II of this document.
 
-Thirdly, are the hybrid roguelikes; these are games that adhere to most of the tenets, but completely violate, or even
-omit, one or more of them. Hybrids remain rooted in roguelike design (procedural generation, emergent complexity) while
-expanding into adjacent genres.
+Thirdly, are the hybrid roguelikes; these are games that adhere to most of the tenets, but completely violate, or even omit, one or more of them. Hybrids remain rooted in roguelike design (procedural generation, emergent complexity) while expanding into adjacent genres.
 
-Lastly, there is a fourth category, the roguelite; these are games that borrow from maybe one or two of the tenets,
-but completely replace others with totally different systems.
+Lastly, there is a fourth category, the roguelite; these are games that borrow from maybe one or two of the tenets, but completely replace others with totally different systems.
 
 In this section, we will cover the rogue*like* categories. Roguelites will be covered in the next section.
 
-This classification scheme is not perfect. There are cases where deciding how to categorize a particular game is tricky,
-as it could seem to be placed in multiple categories. For this reason, it is best to view these categorizations as a
-continuum rather than a set of rigid classification buckets.
+This classification scheme is not perfect. There are cases where deciding how to categorize a particular game is tricky, as it could seem to be placed in multiple categories. For this reason, it is best to view these categorizations as a continuum rather than a set of rigid classification buckets.
 
-Examining specific games helps illustrate the diversity within the roguelike and roguelite genres, showcasing how
-different design choices align with -- or diverge from -- the core principles discussed. Below, I’ve selected a few
-examples that highlight these distinctions.
+Examining specific games helps illustrate the diversity within the roguelike and roguelite genres, showcasing how different design choices align with -- or diverge from -- the core principles discussed. Below, I’ve selected a few examples that highlight these distinctions.
 
 ## VI. Roguelites
-The terms “roguelike” and “roguelite” are often used interchangeably, but they represent distinct branches of the genre.
-While they share foundational elements like procedural generation and high replayability, their core design philosophies
-differ significantly. Understanding these distinctions helps clarify what sets traditional roguelikes apart from their
-more action-oriented counterparts.
 
-Roguelikes emphasize methodical pacing, systemic depth, and high-stakes gameplay. These games challenge players to
-navigate procedurally generated environments while making deliberate, tactical decisions. Each run is largely
-self-contained, with minimal reliance on persistent upgrades or meta-progression.
+The terms “roguelike” and “roguelite” are often used interchangeably, but they represent distinct branches of the genre. While they share foundational elements like procedural generation and high replayability, their core design philosophies differ significantly. Understanding these distinctions helps clarify what sets traditional roguelikes apart from their more action-oriented counterparts.
 
-Roguelites, by contrast, often incorporate elements of reflex-driven gameplay and/or extensive meta-progression.
-They appeal to a broader audience by incorporating aspects of more popular genres and are often more approachable
-than traditional roguelikes for the casual player. Traditional roguelikes are (arguably correctly) viewed by
-non-aficionados as having a very steep learning curve and having ugly, primitive graphics, although this is changing
-with the advent of some of the more modern efforts.
+Roguelikes emphasize methodical pacing, systemic depth, and high-stakes gameplay. These games challenge players to navigate procedurally generated environments while making deliberate, tactical decisions. Each run is largely self-contained, with minimal reliance on persistent upgrades or meta-progression.
 
-Roguelikes and roguelites are not in competition -- they are complementary approaches to the same foundational ideas.
-Roguelites introduce the genre’s concepts to players who may be unfamiliar with its traditional structure, while
-roguelikes maintain the tactical depth and emergent complexity that define the genre’s roots. Together, they expand the
-roguelike family, offering something for every type of player.
+Roguelites, by contrast, often incorporate elements of reflex-driven gameplay and/or extensive meta-progression. They appeal to a broader audience by incorporating aspects of more popular genres and are often more approachable than traditional roguelikes for the casual player. Traditional roguelikes are (arguably correctly) viewed by non-aficionados as having a very steep learning curve and having ugly, primitive graphics, although this is changing with the advent of some of the more modern efforts.
 
-Roguelites can be broadly broken into categories, based on their primary non-roguelike characteristics. This is not
-something I want to go into too much detail here, as my primary focus is on roguelikes, but I would suggest that a
-reasonable categorization scheme for roguelites could be based on which of the core roguelike tenets they **do not**
+Roguelikes and roguelites are not in competition -- they are complementary approaches to the same foundational ideas. Roguelites introduce the genre’s concepts to players who may be unfamiliar with its traditional structure, while roguelikes maintain the tactical depth and emergent complexity that define the genre’s roots. Together, they expand the roguelike family, offering something for every type of player.
+
+Roguelites can be broadly broken into categories, based on their primary non-roguelike characteristics. This is not something I want to go into too much detail here, as my primary focus is on roguelikes, but I would suggest that a reasonable categorization scheme for roguelites could be based on which of the core roguelike tenets they **do not**
 adhere to.
 
-The primary defining tenets that we can consider are "Strict Turn-Based Pacing", "Singular Character Focus"
-and "Minimal to No Meta-Progression". The other tenets, "Grid-Based Navigation" and "ASCII or Simple Tile Aesthetic" are
-frequently discarded along with a corresponding primary tenet. The descriptor roguelite tends to be more frequently
-applied to games in which the turn-based mechanic is supplanted with real-time action, but this is by no means
-universal.
+The primary defining tenets that we can consider are "Strict Turn-Based Pacing", "Singular Character Focus" and "Minimal to No Meta-Progression". The other tenets, "Grid-Based Navigation" and "ASCII or Simple Tile Aesthetic" are frequently discarded along with a corresponding primary tenet. The descriptor roguelite tends to be more frequently applied to games in which the turn-based mechanic is supplanted with real-time action, but this is by no means universal.
 
 ## VII. Addressing Community Concerns
-The roguelike community is diverse, encompassing players, developers, and enthusiasts with varied perspectives on what
-defines the genre. As the genre evolves, certain concerns and debates have emerged, often centered around preserving
-tradition while embracing innovation. This section addresses some of the most common points of contention.
 
-- ### Legacy Respect
-    Roguelikes trace their roots to foundational titles like [*Rogue*](https://en.wikipedia.org/wiki/Rogue_(video_game)),
-    [*NetHack*](https://github.com/NetHack/NetHack), [*Moria*](https://en.wikipedia.org/wiki/Moria_(1983_video_game)) and
-    [*Angband*](https://github.com/angband/angband).
-    For many in the community, these early games represent the heart of the genre, establishing key principles such as
-    procedural generation, high-stakes gameplay, and emergent complexity.
+The roguelike community is diverse, encompassing players, developers, and enthusiasts with varied perspectives on what defines the genre. As the genre evolves, certain concerns and debates have emerged, often centered around preserving tradition while embracing innovation. This section addresses some of the most common points of contention.
 
-    While innovation is essential for keeping the genre alive, it’s important to respect these traditions. This doesn’t
-    mean rigid adherence to past conventions but rather maintaining the core elements that made roguelikes distinctive.
-    For example, modern games like [*Caves of Qud*](https://store.steampowered.com/app/333640/) and
-    [*Jupiter Hell*](https://store.steampowered.com/app/811320) have successfully built on traditional frameworks while
-    introducing fresh ideas. By preserving the genre’s defining principles, developers can ensure its legacy remains intact.
+* ### Legacy Respect
 
-- ### Gatekeeping Guardrails
-    Defining what constitutes a roguelike has always been a challenge, leading to heated debates within the community.
-    Clear distinctions (even if they're not fully agreed with) help clarify these boundaries.
+  Roguelikes trace their roots to foundational titles like [*Rogue*](https://en.wikipedia.org/wiki/Rogue_\(video_game\)), [*NetHack*](https://github.com/NetHack/NetHack), [*Moria*](https://en.wikipedia.org/wiki/Moria_\(1983_video_game\)) and [*Angband*](https://github.com/angband/angband). For many in the community, these early games represent the heart of the genre, establishing key principles such as procedural generation, high-stakes gameplay, and emergent complexity.
 
-    For instance, while games like [*Hades*](https://store.steampowered.com/app/1145360) and
-    [*Dead Cells*](https://store.steampowered.com/app/588650) share certain elements with roguelikes, they lack the tactical
-    pacing and emergent complexity that define the core experience. These distinctions aren’t meant to gatekeep but to
-    preserve the genre’s identity and guide players and developers in understanding what sets roguelikes apart. At the
-    same time, the roguelike family has expanded to include hybrids and roguelites, offering room for innovation without
-    diluting its core.
+  While innovation is essential for keeping the genre alive, it’s important to respect these traditions. This doesn’t mean rigid adherence to past conventions but rather maintaining the core elements that made roguelikes distinctive. For example, modern games like [*Caves of Qud*](https://store.steampowered.com/app/333640/) and [*Jupiter Hell*](https://store.steampowered.com/app/811320) have successfully built on traditional frameworks while introducing fresh ideas. By preserving the genre’s defining principles, developers can ensure its legacy remains intact.
+* ### Gatekeeping Guardrails
 
-- ### Cultural Conflation
-    As “roguelike” has become an industry buzzword, its meaning has often been stretched to encompass games that share only
-    superficial similarities with the genre. Marketing labels frequently misrepresent roguelikes, leading to confusion among
-    players and developers alike. The term is often misapplied to games with superficial similarities, diluting its meaning.
-    While this fosters creativity, this dilution harms the genre’s identity. Clear labels help players find experiences
-    aligned with their preferences, whether they seek tactical depth, systemic storytelling, or accessible runs.
+  Defining what constitutes a roguelike has always been a challenge, leading to heated debates within the community. Clear distinctions (even if they're not fully agreed with) help clarify these boundaries.
 
-    Examples of such misrepresentation include:
+  For instance, while games like [*Hades*](https://store.steampowered.com/app/1145360) and
+  [*Dead Cells*](https://store.steampowered.com/app/588650) share certain elements with roguelikes, they lack the tactical pacing and emergent complexity that define the core experience. These distinctions aren’t meant to gatekeep but to preserve the genre’s identity and guide players and developers in understanding what sets roguelikes apart. At the same time, the roguelike family has expanded to include hybrids and roguelites, offering room for innovation without diluting its core.
+* ### Cultural Conflation
 
-    - [*Vampire Survivors*](https://store.steampowered.com/app/1794680) is frequently mislabeled as a roguelike despite its
-    arcade-style action and minimal consequence for failure.
+  As “roguelike” has become an industry buzzword, its meaning has often been stretched to encompass games that share only superficial similarities with the genre. Marketing labels frequently misrepresent roguelikes, leading to confusion among players and developers alike. The term is often misapplied to games with superficial similarities, diluting its meaning. While this fosters creativity, this dilution harms the genre’s identity. Clear labels help players find experiences aligned with their preferences, whether they seek tactical depth, systemic storytelling, or accessible runs.
 
-    - [*Returnal*](https://store.steampowered.com/app/1649240) markets itself as a roguelike but emphasizes real-time combat
-    and cinematic storytelling over tactical decision-making. It is more accurately classified as an action roguelite.
+  Examples of such misrepresentation include:
 
-    - [*Cult of the Lamb*](https://store.steampowered.com/app/1313140), although often labeled otherwise, is not a roguelike
-    because it features real-time action, incorporates persistent progression and base-building mechanics, focuses on
-    managing a cult rather than a single character, and lacks traditional roguelike elements like turn-based,
-    grid-based movement and permanent consequences.
+  * [*Vampire Survivors*](https://store.steampowered.com/app/1794680) is frequently mislabeled as a roguelike despite its arcade-style action and minimal consequence for failure.
+  * [*Returnal*](https://store.steampowered.com/app/1649240) markets itself as a roguelike but emphasizes real-time combat and cinematic storytelling over tactical decision-making. It is more accurately classified as an action roguelite.
+  * [*Cult of the Lamb*](https://store.steampowered.com/app/1313140), although often labeled otherwise, is not a roguelike because it features real-time action, incorporates persistent progression and base-building mechanics, focuses on managing a cult rather than a single character, and lacks traditional roguelike elements like turn-based, grid-based movement and permanent consequences.
 
-    [//]: # (# Don't Starve)
+  These examples highlight the need for more precision in terminology. Distinguishing roguelikes (tactical, systemic, high-stakes) from roguelites (often action-oriented and heavy in meta-progression) preserves the genre’s identity and guides players to experiences aligned with their preferences.
 
-    These examples highlight the need for more precision in terminology.
-    Distinguishing roguelikes (tactical, systemic, high-stakes) from roguelites (often action-oriented and heavy in
-    meta-progression) preserves the genre’s identity and guides players to experiences aligned with their preferences.
-
-    This mislabeling risks diminishing the value of the term, making it harder for genuine roguelikes to stand out.
-    Encouraging thoughtful and accurate labeling -- such as distinguishing between roguelikes (and/or traditional roguelikes),
-    roguelites, and hybrids -- helps preserve the genre’s integrity. By doing so, the community can ensure that roguelikes
-    retain their distinct identity while allowing room for diverse interpretations and innovations.
+  This mislabeling risks diminishing the value of the term, making it harder for genuine roguelikes to stand out. Encouraging thoughtful and accurate labeling -- such as distinguishing between roguelikes (and/or traditional roguelikes), roguelites, and hybrids -- helps preserve the genre’s integrity. By doing so, the community can ensure that roguelikes retain their distinct identity while allowing room for diverse interpretations and innovations.
 
 <LightboxGallery caption="Image Gallery: These are NOT roguelikes">
-    <GalleryImage
-        src="/src/assets/images/hiivelabs.com/blog/bi2/vampire_survivors.jpg"
-        alt="Vampire Survivors, poncle"
-        caption="Vampire Survivors"
-        description="Screenshot of Vampire Survivors, an action game with roguelike-inspired wave-based gameplay, but it
-        operates in real-time without turn-based or grid-based systems."
-    />
-    <GalleryImage
-        src="/src/assets/images/hiivelabs.com/blog/bi2/returnal.jpg"
-        alt="Returnal, Housemarque/Climax Studios"
-        caption="Returnal"
-        description="Screenshot of Returnal, a third-person shooter roguelite with procedural generation, permadeath,
-        and limited meta-progression."
-    />
-    <GalleryImage
-        src="/src/assets/images/hiivelabs.com/blog/bi2/cult_of_the_lamb.png"
-        alt="Cult of the Lamb, Massive Monster"
-        caption="Cult of the Lamb"
-        description="Screenshot of Cult of the Lamb, a game that blends roguelike features with real-time action,
-        persistent progression, and base-building, deviating from traditional roguelike mechanics."
-    />
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-28-musings-on-the-berlin-interpretation-part-zwei/vampire_survivors.jpg" alt="Vampire Survivors, poncle" description="Screenshot of Vampire Survivors, an action game with roguelike-inspired wave-based gameplay, but it operates in real-time without turn-based or grid-based systems." caption="Vampire Survivors" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-28-musings-on-the-berlin-interpretation-part-zwei/returnal.jpg" alt="Returnal, Housemarque/Climax Studios" description="Screenshot of Returnal, a third-person shooter roguelite with procedural generation, permadeath, and limited meta-progression." caption="Returnal" />
+
+  <GalleryImage image="/src/assets/images/hiivelabs.com/blog/2025-01-28-musings-on-the-berlin-interpretation-part-zwei/cult_of_the_lamb.png" alt="Cult of the Lamb, Massive Monster" description="Screenshot of Cult of the Lamb, a game that blends roguelike features with real-time action, persistent progression, and base-building, deviating from traditional roguelike mechanics." caption="Cult of the Lamb" />
 </LightboxGallery>
 
 ## VIII. Creative Freedom and Evolution
-The roguelike genre has always been a space for experimentation and innovation. Its core principles -- procedural
-generation, emergent complexity, and high-stakes decision-making -- serve as a foundation that developers can build upon,
-exploring new ideas and pushing the boundaries of what the genre can achieve.
 
-- ### Technology and Player Preferences
-    Advances in technology have opened up new opportunities for roguelike design. Procedural generation has grown more
-    sophisticated, allowing for dynamic narratives, evolving environments, and systems-driven gameplay that reacts to player
-    choices. For example, AI-driven content creation could enable NPCs with unique goals and behaviors, adding depth to
-    procedural worlds.
+The roguelike genre has always been a space for experimentation and innovation. Its core principles -- procedural generation, emergent complexity, and high-stakes decision-making -- serve as a foundation that developers can build upon, exploring new ideas and pushing the boundaries of what the genre can achieve.
 
-    In order to attract more players to the genre, more approachable and visually engaging experiences go a long way.
-    Games like [*Jupiter Hell*](https://store.steampowered.com/app/811320) demonstrate that roguelikes can embrace modern
-    visuals while retaining their tactical depth.
-    Similarly, hybrids like [*KeeperRL*](https://store.steampowered.com/app/329970) show how blending genres can attract new
-    audiences while preserving roguelike principles.
+* ### Technology and Player Preferences
 
-- ### Adaptive Definition
-    The roguelike genre’s ability to adapt has been key to its longevity. Modern interpretations embrace the genre’s
-    spirit -- tactical pacing, emergent gameplay, and meaningful consequences -- while allowing for variation.
+  Advances in technology have opened up new opportunities for roguelike design. Procedural generation has grown more sophisticated, allowing for dynamic narratives, evolving environments, and systems-driven gameplay that reacts to player choices. For example, AI-driven content creation could enable NPCs with unique goals and behaviors, adding depth to procedural worlds.
 
-    This flexibility ensures that roguelikes remain relevant in an ever-changing gaming landscape. Developers are free to
-    experiment with new mechanics, aesthetics, or narrative techniques, provided they enhance the genre’s core appeal.
-    For example, games like [*Rift Wizard*](https://store.steampowered.com/app/1271280),
-    [*Rift Wizard 2*](https://store.steampowered.com/app/2058570) and
-    [**Slay the Spire**](https://store.steampowered.com/app/646570) reimagine traditional roguelike elements in
-    innovative ways, expanding the genre’s possibilities without losing its essence.
+  In order to attract more players to the genre, more approachable and visually engaging experiences go a long way. Games like [*Jupiter Hell*](https://store.steampowered.com/app/811320) demonstrate that roguelikes can embrace modern visuals while retaining their tactical depth. Similarly, hybrids like [*KeeperRL*](https://store.steampowered.com/app/329970) show how blending genres can attract new audiences while preserving roguelike principles.
+* ### Adaptive Definition
+
+  The roguelike genre’s ability to adapt has been key to its longevity. Modern interpretations embrace the genre’s spirit -- tactical pacing, emergent gameplay, and meaningful consequences -- while allowing for variation.
+
+  This flexibility ensures that roguelikes remain relevant in an ever-changing gaming landscape. Developers are free to experiment with new mechanics, aesthetics, or narrative techniques, provided they enhance the genre’s core appeal. For example, games like [*Rift Wizard*](https://store.steampowered.com/app/1271280),
+  [*Rift Wizard 2*](https://store.steampowered.com/app/2058570) and [**Slay the Spire**](https://store.steampowered.com/app/646570) reimagine traditional roguelike elements in innovative ways, expanding the genre’s possibilities without losing its essence.
 
 ## IX. A Practical Checklist for Roguelike Classification
-The roguelike genre is fluid, blending traditions with modern innovations. Below is a practical checklist to help
-categorize games into traditional roguelikes, modern roguelikes, hybrid roguelikes, and roguelites based on the core
-principles discussed in this article.
 
-This framework prioritizes *design philosophy* over *rigid technicalities*, acknowledging that genre boundaries are
-often blurred. While no categorization is perfect -- especially in a genre as experimental as this -- the checklist
-serves as a starting point for understanding how mechanics and priorities shape a game’s identity.
+The roguelike genre is fluid, blending traditions with modern innovations. Below is a practical checklist to help categorize games into traditional roguelikes, modern roguelikes, hybrid roguelikes, and roguelites based on the core principles discussed in this article.
+
+This framework prioritizes *design philosophy* over *rigid technicalities*, acknowledging that genre boundaries are often blurred. While no categorization is perfect -- especially in a genre as experimental as this -- the checklist serves as a starting point for understanding how mechanics and priorities shape a game’s identity.
 
 ### Key Caveats:
-- *Spectrum, Not Silos*: Many games straddle categories (e.g., [*Noita*](https://store.steampowered.com/app/881100) combines
-    roguelite action with roguelike systemic depth).
-- *Evolving Definitions*: Design trends and player expectations shift over time -- today’s hybrid could be tomorrow’s standard.
-- *Subjectivity*: Genre labels are interpretive; focus on why a game fits a category, not just whether it does.
+
+* *Spectrum, Not Silos*: Many games straddle categories (e.g., [*Noita*](https://store.steampowered.com/app/881100) combines
+  roguelite action with roguelike systemic depth).
+* *Evolving Definitions*: Design trends and player expectations shift over time -- today’s hybrid could be tomorrow’s standard.
+* *Subjectivity*: Genre labels are interpretive; focus on why a game fits a category, not just whether it does.
 
 ### Categorization Checklist
-I would recommend using this checklist as a conversation tool, rather than a taxonomy. The best roguelike-adjacent
-games defy categorization, borrowing ideas freely while respecting the genre’s core tension: risk versus reward,
-chaos versus control.
+
+I would recommend using this checklist as a conversation tool, rather than a taxonomy. The best roguelike-adjacent games defy categorization, borrowing ideas freely while respecting the genre’s core tension: risk versus reward, chaos versus control.
 
 <div class="checklist">
-    #### ► Traditional Roguelike
-    - ***Procedural Generation***
-        - Unpredictable, systemic worlds
-        - Minimal static elements
-    - ***Strict Turn-Based***
-        - Discrete time steps (no real-time pressure)
-    - ***Single Character Focus***
-        - Permadeath is default
-        - Optional checkpoints/partial resets allowed only for longer games
-    - ***Minimal Meta-Progression***
-        - No permanent upgrades
-        - Progression is knowledge/skill-based
-    - ***Grid-Based Navigation***
-        - Tactical clarity via squares/hexes.
-    - ***Minimalist Aesthetic***
-        - ASCII/tile-based visuals
-        - Tactical clarity prioritized over graphics
+  #### ► Traditional Roguelike
 
-    *Key*: Permadeath isn’t strictly mandatory, especially in longer games, but consequences must be severe
-    (e.g., major penalties, partial resets, lost progress).
+  * ***Procedural Generation***
+    * Unpredictable, systemic worlds
+    * Minimal static elements
+  * ***Strict Turn-Based***
+    * Discrete time steps (no real-time pressure)
+  * ***Single Character Focus***
+    * Permadeath is default
+    * Optional checkpoints/partial resets allowed only for longer games
+  * ***Minimal Meta-Progression***
+    * No permanent upgrades
+    * Progression is knowledge/skill-based
+  * ***Grid-Based Navigation***
+    * Tactical clarity via squares/hexes.
+  * ***Minimalist Aesthetic***
+    * ASCII/tile-based visuals
+    * Tactical clarity prioritized over graphics
 
-    #### ► Modern Roguelike
-    - ***Procedural Generation***
-        - Balanced randomness (e.g., fixed hubs + random dungeons)
-    - ***Tactical Time Mechanics***
-        - Turn-based or pauseable real-time
-    - ***Spatial Clarity***
-        - Grids, hexes, or alternative systems with measurable positioning
-    - ***Character Focus***
-        - Single hero or small party
-        - Permadeath optional but consequences significant
-    - ***Light Meta-Progression***
-        - Unlocks that add variety (e.g., new classes)
-        - Minimal power creep (difficulty remains intact)
-    - ***Flexible Aesthetics***
-        - Any visual style
-        - Tactical clarity maintained
+  *Key*: Permadeath isn’t strictly mandatory, especially in longer games, but consequences must be severe (e.g., major penalties, partial resets, lost progress).
 
-    *Key*: Modern roguelikes relax traditional principles (e.g., grids, permadeath) but retain systemic depth and
-    tactical focus.
+  #### ► Modern Roguelike
 
-    #### ► Hybrid Roguelike
-    - ***Core Tenets***
-        - Procedural generation
-        - Meaningful consequences (permadeath or major penalties)
-        - Tactical depth
-    - ***Tenet Violations***: Deviates in 1–2 non-core areas
-        - Grids/spatial systems
-        - Permadeath/meaningful consequences
-        - Aesthetic simplicity
-        - Aesthetic simplicity
-    - ***Focus***
-        - Retains tactical depth
-        - Retains systemic complexity
-        - Retains meaningful stakes
+  * ***Procedural Generation***
+    * Balanced randomness (e.g., fixed hubs + random dungeons)
+  * ***Tactical Time Mechanics***
+    * Turn-based or pauseable real-time
+  * ***Spatial Clarity***
+    * Grids, hexes, or alternative systems with measurable positioning
+  * ***Character Focus***
+    * Single hero or small party
+    * Permadeath optional but consequences significant
+  * ***Light Meta-Progression***
+    * Unlocks that add variety (e.g., new classes)
+    * Minimal power creep (difficulty remains intact)
+  * ***Flexible Aesthetics***
+    * Any visual style
+    * Tactical clarity maintained
 
-    *Key*: Hybrids preserve roguelike tactical/systemic depth despite diverging from tradition.
+  *Key*: Modern roguelikes relax traditional principles (e.g., grids, permadeath) but retain systemic depth and  actical focus.
 
-    #### ► Roguelite
-    - ***Action/Reflex-Driven***
-        - Prioritizes real-time action
-        - Reflexes > tactical planning
-    - ***Procedural Generation***
-        - Complexity optional
-        - Can be curated for pacing
-    - ***Heavy Meta-Progression***
-        - Permanent upgrades/abilities between runs
-        - Power progression trivializes early-game challenges
-    - ***Variable Consequences***
-        - Permadeath optional or not present.
-        - Softened penalties (e.g., retain currency/gear)
+  #### ► Hybrid Roguelike
 
-    *Key*: Defined by action pacing and persistent power progression over systemic depth.
+  * ***Core Tenets***
+    * Procedural generation
+    * Meaningful consequences (permadeath or major penalties)
+    * Tactical depth
+  * ***Tenet Violations***: Deviates in 1–2 non-core areas
+    * Grids/spatial systems
+    * Permadeath/meaningful consequences
+    * Aesthetic simplicity
+    * Aesthetic simplicity
+  * ***Focus***
+    * Retains tactical depth
+    * Retains systemic complexity
+    * Retains meaningful stakes
+
+  *Key*: Hybrids preserve roguelike tactical/systemic depth despite diverging from tradition.
+
+  #### ► Roguelite
+
+  * ***Action/Reflex-Driven***
+    * Prioritizes real-time action
+    * Reflexes > tactical planning
+  * ***Procedural Generation***
+    * Complexity optional
+    * Can be curated for pacing
+  * ***Heavy Meta-Progression***
+    * Permanent upgrades/abilities between runs
+    * Power progression trivializes early-game challenges
+  * ***Variable Consequences***
+    * Permadeath optional or not present.
+    * Softened penalties (e.g., retain currency/gear)
+
+  *Key*: Defined by action pacing and persistent power progression over systemic depth.
 </div>
 
-In using this checklist, you may find that a candidate checks off boxes in more than one category; this is expected,
-as genre boundaries are inherently porous. Focus on which category best aligns with the game’s design priorities
-(e.g., tactical depth vs. action pacing) and adherence to core tenets like procedural generation, systemic complexity,
-and meaningful consequences.
-
+In using this checklist, you may find that a candidate checks off boxes in more than one category; this is expected, as genre boundaries are inherently porous. Focus on which category best aligns with the game’s design priorities (e.g., tactical depth vs. action pacing) and adherence to core tenets like procedural generation, systemic complexity, and meaningful consequences.
 
 ## X. Conclusion
-This framework is not meant to be a rigid set of rules but rather a tool for discussion and reflection.
-Just as the roguelike genre itself evolves, the hiive interpretation should adapt to accommodate new ideas,
-technologies, and player preferences. Its purpose is to preserve the genre’s core identity while encouraging innovation
-and diversity within its boundaries.
 
-- ### Living Document
-    By design, the hiive interpretation is intended to grow and change. Developers, players, and enthusiasts are invited to
-    critique, refine, and expand upon its guidelines. This collaborative approach ensures that the framework remains
-    relevant, reflecting the evolving landscape of roguelikes while maintaining respect for their roots.
+This framework is not meant to be a rigid set of rules but rather a tool for discussion and reflection. Just as the roguelike genre itself evolves, the hiive interpretation should adapt to accommodate new ideas, technologies, and player preferences. Its purpose is to preserve the genre’s core identity while encouraging innovation and diversity within its boundaries.
 
-    For example, as hybrids and roguelites continue to emerge, this interpretation can help clarify how these variations
-    relate to traditional roguelikes, providing useful distinctions without discouraging creative exploration. The goal is
-    not to divide but to celebrate the genre’s diversity and richness.
+* ### Living Document
 
-- ### Call to Action
-    If this framework inspires new ideas -- or sparks debate -- then it has succeeded in its purpose. The roguelike genre
-    thrives on iteration, both in its gameplay and in how it’s understood. Developers are encouraged to experiment, players
-    to engage, and communities to discuss and refine what makes roguelikes so compelling.
+  By design, the hiive interpretation is intended to grow and change. Developers, players, and enthusiasts are invited to critique, refine, and expand upon its guidelines. This collaborative approach ensures that the framework remains relevant, reflecting the evolving landscape of roguelikes while maintaining respect for their roots.
 
-- ### Final Pitch
-    Roguelikes remain a unique and vibrant part of the gaming world, defined by their tactical depth, emergent storytelling,
-    and unpredictable challenges. Roguelites, while distinct, offer complementary experiences that expand the genre’s reach.
+  For example, as hybrids and roguelites continue to emerge, this interpretation can help clarify how these variations relate to traditional roguelikes, providing useful distinctions without discouraging creative exploration. The goal is not to divide but to celebrate the genre’s diversity and richness.
+* ### Call to Action
 
-    The hiive interpretation seeks to preserve the essential spirit of roguelikes while leaving room for growth,
-    experimentation, and reinterpretation.
+  If this framework inspires new ideas -- or sparks debate -- then it has succeeded in its purpose. The roguelike genre thrives on iteration, both in its gameplay and in how it’s understood. Developers are encouraged to experiment, players to engage, and communities to discuss and refine what makes roguelikes so compelling.
+* ### Final Pitch
 
-    By keeping these principles in mind, the roguelike community can continue to innovate and collaborate, ensuring that the
-    genre remains as compelling and dynamic as ever.
+  Roguelikes remain a unique and vibrant part of the gaming world, defined by their tactical depth, emergent storytelling, and unpredictable challenges. Roguelites, while distinct, offer complementary experiences that expand the genre’s reach.
 
-    I had originally intended to include a large section containing case studies, applying the principles and tenets
-    herein to existing games to demonstrate the classification process. However, as it stands, this article is quite
-    long enough as it is, so I will save those for some follow-up posts over the next few weeks.
+  The hiive interpretation seeks to preserve the essential spirit of roguelikes while leaving room for growth, experimentation, and reinterpretation.
+
+  By keeping these principles in mind, the roguelike community can continue to innovate and collaborate, ensuring that the genre remains as compelling and dynamic as ever.
+
+  I had originally intended to include a large section containing case studies, applying the principles and tenets herein to existing games to demonstrate the classification process. However, as it stands, this article is quite long enough as it is, so I will save those for some follow-up posts over the next few weeks.
 
 ## XI. Glossary of Terms
 
--	***Berlin Interpretation***:
-    A set of criteria established around 2008 to define what constitutes a roguelike game. This framework
-    traditionally includes elements such as procedural generation, turn-based gameplay, permadeath, and a single-character
-    focus. It serves as a benchmark for comparing both classic and modern roguelike titles.
--	***Procedural Generation***:
-    The algorithmic creation of game content -- such as levels, maps, encounters, or loot -- rather than relying
-    solely on hand-designed assets. This approach ensures that each playthrough is unpredictable and unique.
--	***Emergent Gameplay / Emergent Worlds***:
-    A design approach where complex behaviors and narratives arise from the interaction of simpler game
-    systems. Rather than scripting every event, the game’s systems combine in unexpected ways, allowing for stories or
-    challenges that were not explicitly pre-designed.
--	***Non-Modality***:
-    In the context of roguelikes, non-modality refers to maintaining a consistent mode of gameplay
-    throughout the experience. Instead of switching between radically different gameplay states (for example, a
-    distinct “exploration” mode versus a “combat” mode), the game employs a uniform set of mechanics that apply at all
-    times.
--	***Meta-Progression***:
-    Persistent progress that carries over between individual game runs. Unlike traditional roguelikes --
-    where every new attempt usually starts from scratch -- meta-progression allows players to unlock new abilities,
-    characters, or resources over time, which can alter the overall game experience without undermining the core
-    challenge.
--	***Tactical Depth***:
-    The complexity and richness of decisions made in the heat of gameplay. In roguelikes, tactical depth
-    refers to how much thought a player must put into each move -- balancing risk, positioning, and resource management
-    on a moment-to-moment basis.
--	***Turn-Based Pacing***:
-    A game mechanic where every action (movement, attack, item use) consumes a discrete unit of time
-    (a “turn”). This allows players to deliberate each move without the pressure of real-time constraints.
--	***Grid-Based Navigation***:
-    A spatial system in which movement is constrained to predefined positions (cells on a grid, often
-    square or hexagonal). This system simplifies positioning and tactical calculations, making spatial relationships
-    clear and deliberate.
--	***Non-Euclidean Geometry (in Gaming)***:
-    A design concept where the game world does not follow the traditional rules of Euclidean geometry.
-    Games employing this concept may feature maps or environments where parallel lines do not behave as expected,
-    leading to unusual spatial relationships and navigation challenges.
-
+* ***Berlin Interpretation***: A set of criteria established around 2008 to define what constitutes a roguelike game. This framework traditionally includes elements such as procedural generation, turn-based gameplay, permadeath, and a single-character focus. It serves as a benchmark for comparing both classic and modern roguelike titles.
+* ***Procedural Generation***: The algorithmic creation of game content -- such as levels, maps, encounters, or loot -- rather than relying solely on hand-designed assets. This approach ensures that each play-through is unpredictable and unique.
+* ***Emergent Gameplay / Emergent Worlds***: A design approach where complex behaviors and narratives arise from the interaction of simpler game systems. Rather than scripting every event, the game’s systems combine in unexpected ways, allowing for stories or challenges that were not explicitly pre-designed.
+* ***Non-Modality***: In the context of roguelikes, non-modality refers to maintaining a consistent mode of gameplay throughout the experience. Instead of switching between radically different gameplay states (for example, a distinct “exploration” mode versus a “combat” mode), the game employs a uniform set of mechanics that apply at all times.
+* ***Meta-Progression***: Persistent progress that carries over between individual game runs. Unlike traditional roguelikes -- where every new attempt usually starts from scratch -- meta-progression allows players to unlock new abilities, characters, or resources over time, which can alter the overall game experience without undermining the core challenge.
+* ***Tactical Depth***: The complexity and richness of decisions made in the heat of gameplay. In roguelikes, tactical depth refers to how much thought a player must put into each move -- balancing risk, positioning, and resource management on a moment-to-moment basis.
+* ***Turn-Based Pacing***: A game mechanic where every action (movement, attack, item use) consumes a discrete unit of time (a “turn”). This allows players to deliberate each move without the pressure of real-time constraints.
+* ***Grid-Based Navigation***: A spatial system in which movement is constrained to predefined positions (cells on a grid, often square or hexagonal). This system simplifies positioning and tactical calculations, making spatial relationships clear and deliberate.
+* ***Non-Euclidean Geometry (in Gaming)***: A design concept where the game world does not follow the traditional rules of Euclidean geometry. Games employing this concept may feature maps or environments where parallel lines do not behave as expected, leading to unusual spatial relationships and navigation challenges.
 
 ## XI. Acknowledgements
 
 The final form of this article owes much to the harsh but fair criticism of
-[Zeno Rogue](https://bsky.app/profile/zenorogue.bsky.social), who clearly demonstrated that they were far
-more knowledgeable than I on matters of roguelike history and minutiae.
+[Zeno Rogue](https://bsky.app/profile/zenorogue.bsky.social), who clearly demonstrated that they were far more knowledgeable than I on matters of roguelike history and minutiae.
 
-We did not agree on everything, but despite that, later drafts of this article came out infinitely better for their
-brutal ministrations. Sadly, my ego did not fare as well. Their input and critique was greatly appreciated, nonetheless.
+We did not agree on everything, but despite that, later drafts of this article came out infinitely better for their brutal ministrations. Sadly, my ego did not fare as well. Their input and critique was greatly appreciated, nonetheless.
 
-If you have a few minutes to spare, why not take [Zeno Rogue's](https://bsky.app/profile/zenorogue.bsky.social)
-impressively in-depth [Roguelike Quiz](https://zenorogue.itch.io/isitrl)?
+If you have a few minutes to spare, why not take [Zeno Rogue's](https://bsky.app/profile/zenorogue.bsky.social) impressively in-depth [Roguelike Quiz](https://zenorogue.itch.io/isitrl)?

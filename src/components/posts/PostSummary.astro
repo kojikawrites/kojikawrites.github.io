@@ -9,7 +9,7 @@ import FormattedDate from "../FormattedDate.astro";
 import { Image } from 'astro:assets';
 import getPostData from "../../scripts/getPostData";
 import getMediaMetadata from "../../scripts/getMediaMetadata";
-import {getSiteConfig} from "../../scripts/getSiteConfig";
+import {getSiteConfig, getSiteCode} from "../../scripts/getSiteConfig";
 import toSafeId from '../../scripts/toSafeId';
 
 const {
@@ -19,12 +19,44 @@ const {
 } = Astro.props;
 
 const siteConfig = await getSiteConfig();
+const siteCode = getSiteCode();
 const { path } = getPostData(post);
 const href = `/${siteConfig.blog.prefix}${path}`;
 
 const { frontmatter } = post;
 // console.log("post", frontmatter);
-const { title, publishDate, description, author, readingTime, thumbnail:thumbnailSrc = null} = frontmatter;
+const { title, publishDate, description, author, readingTime, thumbnail = null, thumbnailSrc: thumbnailSrcRaw = null} = frontmatter;
+
+// Extract slug from path (e.g., "/my-post-slug" -> "my-post-slug")
+const slug = path.replace(/^\//, '').replace(/\/$/, '');
+
+// Handle dual fields: thumbnail (picker) takes priority, fallback to thumbnailSrc (text)
+let thumbnailSrc = null;
+const sourceValue = thumbnail || thumbnailSrcRaw;
+
+if (sourceValue) {
+    // Handle both object (newly selected from picker) and string formats
+    let filename: string;
+    if (typeof sourceValue === 'string') {
+        filename = sourceValue;
+    } else if (typeof sourceValue === 'object' && sourceValue !== null) {
+        // When first selected from picker, might be an object
+        filename = (sourceValue as any).filename || (sourceValue as any).name || String(sourceValue);
+    } else {
+        filename = '';
+    }
+
+    if (filename) {
+        // If it starts with / or src/, it's already a full path (legacy format)
+        if (filename.startsWith('/') || filename.startsWith('src/')) {
+            thumbnailSrc = filename.startsWith('/') ? filename : `/${filename}`;
+        } else {
+            // It's just a filename from fields.image(), prepend the directory with slug
+            thumbnailSrc = `/src/assets/images/${siteCode}/blog/${slug}/${filename}`;
+        }
+    }
+}
+
 const id = toSafeId("post-summary");
 const imgId = `${id}-img`;
 const classExt = `sm-${smallMode}-lg-${largeMode}`;
