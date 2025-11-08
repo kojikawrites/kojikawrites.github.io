@@ -1,0 +1,12 @@
+---
+interface Props {
+    equation: string;
+    inline?: boolean;
+    style?: string;
+}
+
+const { equation, inline = true, style } = Astro.props;
+const className = inline ? 'equation-snippet' : 'equation';
+
+---
+<span class={className} style={style}>{equation}</span>

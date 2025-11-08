@@ -1,0 +1,16 @@
+---
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<div class="footnote-definition" id={`fn-${id}`}>
+    <div class="footnote-content">
+
+        <p class="footnote-number">{id}.&nbsp;</p>
+        <slot class="footnote-text" />
+        <a href={`#fnref-${id}`} class="footnote-backref">↩</a>
+    </div>
+</div>

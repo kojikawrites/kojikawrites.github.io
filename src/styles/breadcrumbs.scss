@@ -27,6 +27,8 @@
     @apply pl-2 pt-0.5 lg:pl-6 w-full max-w-full;
 
     @apply bg-[rgb(var(--background-feature))];
+    /* Fix for iOS Safari transparency issue - same as navbar and search */
+    background-color: rgb(var(--background-feature)) !important;
     @apply pb-2;
   }
 

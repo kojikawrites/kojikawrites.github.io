@@ -59,7 +59,8 @@ const hiddenId = `${contentWarningId}-hidden`;
                 toggleDiv.style.fill = warningStyle.color;
             }
 
-            toggleDiv.addEventListener('click', function () {
+            // Click handler function
+            function handleToggleClick() {
                 const isExpanded = toggleDiv.getAttribute('aria-expanded') === 'true';
                 if (!isExpanded) {
                     contentDiv.classList.remove('hidden');
@@ -69,7 +70,23 @@ const hiddenId = `${contentWarningId}-hidden`;
                     // contentDiv.classList.add('hidden');
                     toggleDiv.setAttribute('aria-expanded', 'false');
                 }
-            });
+            }
+
+            // Initialize global listener storage if needed
+            if (!window.__contentWarningListeners) {
+                window.__contentWarningListeners = {};
+            }
+
+            // Remove old listener if it exists (prevents memory leaks on page transitions)
+            if (window.__contentWarningListeners[warningId]) {
+                toggleDiv.removeEventListener('click', window.__contentWarningListeners[warningId]);
+            }
+
+            // Store listener reference for cleanup on next run
+            window.__contentWarningListeners[warningId] = handleToggleClick;
+
+            // Add listener
+            toggleDiv.addEventListener('click', handleToggleClick);
         }
 
         refreshDivs();

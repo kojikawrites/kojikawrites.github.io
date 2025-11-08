@@ -82,10 +82,6 @@ const siteCode = getSiteCode();
             }
         }
 
-        setTheme();
-
-        window.addEventListener('storage', setTheme)
-
         // set up theme listener
         function handleThemeChange(e) {
             const root = document.documentElement;
@@ -99,16 +95,33 @@ const siteCode = getSiteCode();
             }
         }
 
-        // if user hasn't manually set theme, we can respond to system theme
-
-        // set up theming
-        darkModeMediaQuery.addEventListener('change', (e) => {
+        // Wrapper for media query handler that checks themeSet
+        function handleMediaQueryChange(e) {
             const themeSet = localStorage.getItem('themeSet');
             console.log('BaseHead: themeSet', themeSet);
             if (!themeSet) {
                 handleThemeChange(e);
             }
-        });
+        }
+
+        // Remove old listeners if they exist (prevents memory leaks on page transitions)
+        if (window.__baseHeadThemeListeners) {
+            window.removeEventListener('storage', window.__baseHeadThemeListeners.setTheme);
+            darkModeMediaQuery.removeEventListener('change', window.__baseHeadThemeListeners.handleMediaQueryChange);
+        }
+
+        // Store listener references globally for cleanup on next run
+        window.__baseHeadThemeListeners = {
+            setTheme: setTheme,
+            handleMediaQueryChange: handleMediaQueryChange
+        };
+
+        // Initial theme set
+        setTheme();
+
+        // Add listeners
+        window.addEventListener('storage', setTheme);
+        darkModeMediaQuery.addEventListener('change', handleMediaQueryChange);
     })();
 
 </script>
