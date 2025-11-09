@@ -1,18 +1,25 @@
 ---
 import SitePageContent from '../components/SitePageContent.astro';
 import {getSiteCode} from "../scripts/getSiteConfig.ts";
+const siteCode = getSiteCode();
+
 // Export getStaticPaths for static site generation
 export async function getStaticPaths() {
+  const siteCode = getSiteCode();
+
   // Dynamically discover all page content files in the assets directory
-  const pageFiles = import.meta.glob(`../assets/pagecontent/${getSiteCode()}/*`);
+  const pageFiles = import.meta.glob('../assets/pagecontent/**');
 
   // Extract the filename without extension to get the page slug
-  const pages = Object.keys(pageFiles).map(filePath => {
-    // Extract filename from path: ../assets/pagecontent/hiivelabs.com/about.astro -> about
-    const filename = filePath.split('/').pop();
-    const pageSlug = filename.replace(/\.(astro|mdx|md)$/, '');
-    return pageSlug;
-  });
+  // Filter to only include paths containing the current siteCode
+  const pages = Object.keys(pageFiles)
+    .filter(filePath => filePath.includes(`/pagecontent/${siteCode}/`))
+    .map(filePath => {
+      // Extract filename from path: ../assets/pagecontent/hiivelabs.com/about.astro -> about
+      const filename = filePath.split('/').pop();
+      const pageSlug = filename.replace(/\.(astro|mdx|md)$/, '');
+      return pageSlug;
+    });
 
   return pages.map(page => ({
     params: { page },
