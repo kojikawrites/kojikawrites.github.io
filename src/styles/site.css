@@ -132,7 +132,7 @@
     }
 
     div.top-bump {
-        @apply lg:mt-8;
+        @apply mt-4 lg:mt-8;
     }
 
     .footnote-definition {

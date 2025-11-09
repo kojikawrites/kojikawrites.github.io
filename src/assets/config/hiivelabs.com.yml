@@ -1,70 +1,50 @@
-# main page logo
 main:
   logo:
-#    dark: "/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-dark.svg"
-#    light: "/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-light.svg"
-    alt: "hiivelabs.com"
-    dynamic_dir: "/src/assets/images/hiivelabs.com/logos/dynamic"
-
-# navbar setup
+    alt: hiivelabs.com
+    dynamic_dir: /src/assets/images/hiivelabs.com/logos/dynamic
 navbar:
-  # navbar logo setup
   logo:
-    dark: "/src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-dark.svg"
-    light: "/src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-light.svg"
-    alt: "hiivelabs.com"
+    dark: /src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-dark.svg
+    light: /src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-light.svg
+    alt: hiivelabs.com
   left:
-    - href: "/blog"
-      label: "blog"
-    - href: "/categories"
-      label: "categories"
-    - href: "/tags"
-      label: "tags"
+    - href: /blog
+      label: blog
+    - href: /categories
+      label: categories
+    - href: /tags
+      label: tags
   right:
-    - href: "/mission"
-      label: "mission statement"
-    - href: "/roadmap"
-      label: "timeline/roadmap"
-    - href: '/about'
-      label: 'About'
-    - href: "/contact"
-      label: "contact us"
+    - href: /mission
+      label: mission statement
+    - href: /roadmap
+      label: timeline/roadmap
+    - href: /about
+      label: About
+    - href: /contact
+      label: contact us
   breadcrumbs:
     include: true
     valid_breadcrumbs:
-      - href: "[slug]"
-        label: "[slug]"
-      #      - "[...page]"
-#      - href: "archive"
-#        label: "archive"
-
-# blog path (can be posts or blog)
-# posts = src/assets/posts/...
-# blog = src/assets/blog/...
+      - href: '[slug]'
+        label: '[slug]'
 blog:
   pagination_size: 15
   path: posts
   prefix: blog/
-  small_mode: 'card'
-  large_mode: 'card'
-
-# footer setup
+  small_mode: card
+  large_mode: card
 footer:
   content:
-    - "hiivelabs and its logo are registered trademarks of hiive."
-    - "All content © 2005-[CURRENT_YEAR] by hiive."
-
-# include bluesky
+    - hiivelabs and its logo are registered trademarks of hiive.
+    - All content © 2005-[CURRENT_YEAR] by hiive.
 bluesky:
   include: false
   hashtag_link: /categories/#[HASHTAG]
   auto_post_text: (This is an automated post.)
-
 facebook:
   include: false
-  app_id: 222424367791673  #151619264893019
-
-# tag/category information
+  app_id: 222424367791673
 tags_and_categories:
   aliases:
     machine-learning:
@@ -82,11 +62,8 @@ tags_and_categories:
       - proc-gen
 search:
   include: true
-
 rss:
   include: true
   site:
     name: hiivelabs Blog
     description: A blog about ML, AI, Gamedev and other random stuff that crosses my mind.
-
-#  ncu --interactive --format group
