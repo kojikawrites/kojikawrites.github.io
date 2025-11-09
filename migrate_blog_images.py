@@ -63,30 +63,56 @@ class BlogImageMigrator:
         """Extract slug from MDX filename (e.g., 2024-07-11-post.mdx -> 2024-07-11-post)"""
         return mdx_file.stem
 
-    def parse_image_component(self, line: str) -> Tuple[str, Dict[str, str]]:
+    def parse_image_component(self, component_str: str) -> Tuple[str, Dict[str, str]]:
         """
-        Parse a LightboxImage or GalleryImage component line.
+        Parse a LightboxImage or GalleryImage component string (can be multi-line).
         Returns (component_type, attributes_dict)
         """
         # Match component type
-        component_match = re.match(r'^\s*<(LightboxImage|GalleryImage)\s+(.+?)\s*/>', line)
+        component_match = re.search(r'<(LightboxImage|GalleryImage)\s+', component_str)
         if not component_match:
             return None, {}
 
         component_type = component_match.group(1)
-        attrs_str = component_match.group(2)
 
         # Extract attributes (handle both src="..." and image="...")
         attributes = {}
 
         # Pattern for attributes: attr="value" or attr='value'
         attr_pattern = r'(\w+)=(["\'])([^"\']*)\2'
-        for match in re.finditer(attr_pattern, attrs_str):
+        for match in re.finditer(attr_pattern, component_str):
             attr_name = match.group(1)
             attr_value = match.group(3)
             attributes[attr_name] = attr_value
 
         return component_type, attributes
+
+    def extract_image_components(self, body_content: str) -> List[Tuple[str, str, Dict[str, str]]]:
+        """
+        Extract all image components from body content (handles multi-line components).
+        Returns list of (full_component_text, component_type, attributes_dict)
+        """
+        components = []
+
+        # Pattern to match complete component tags (including multi-line)
+        # Matches: <LightboxImage ... /> or <GalleryImage ... />
+        pattern = r'<(LightboxImage|GalleryImage)\s+[^>]*?/>'
+
+        for match in re.finditer(pattern, body_content, re.DOTALL):
+            full_text = match.group(0)
+            component_type = match.group(1)
+
+            # Parse attributes from the full component text
+            attributes = {}
+            attr_pattern = r'(\w+)=(["\'])([^"\']*)\2'
+            for attr_match in re.finditer(attr_pattern, full_text):
+                attr_name = attr_match.group(1)
+                attr_value = attr_match.group(3)
+                attributes[attr_name] = attr_value
+
+            components.append((full_text, component_type, attributes))
+
+        return components
 
     def get_image_path_from_src(self, src: str) -> Path:
         """Convert src attribute to absolute Path object"""
@@ -225,106 +251,95 @@ class BlogImageMigrator:
                         new_frontmatter_str = re.sub(old_thumbnail_line_pattern, new_thumbnail_line, new_frontmatter_str)
                         changes_made = True
 
-        # Process body content for image components
-        lines = body_content.split('\n')
-        new_lines = []
+        # Process body content for image components (handles multi-line components)
+        new_body_content = body_content
+        components = self.extract_image_components(body_content)
 
-        for line in lines:
-            # Check if this is an image component
-            if '<LightboxImage' in line or '<GalleryImage' in line:
-                component_type, attributes = self.parse_image_component(line)
+        for full_component_text, component_type, attributes in components:
+            if 'src' not in attributes and 'image' not in attributes:
+                continue
 
-                if component_type and ('src' in attributes or 'image' in attributes):
-                    # Get current image path
-                    current_src = attributes.get('src') or attributes.get('image')
+            # Get current image path
+            current_src = attributes.get('src') or attributes.get('image')
+            if not current_src:
+                continue
 
-                    if not current_src:
-                        new_lines.append(line)
+            # Get source image path
+            source_image = self.get_image_path_from_src(current_src)
+
+            # Check if image already in slug directory
+            if f"/blog/{slug}/" in current_src:
+                print(f"  ✓ Already migrated: {source_image.name}")
+                continue
+
+            # Build new slug-based path
+            image_filename = source_image.name
+            new_path = self.build_slug_based_path(slug, image_filename)
+
+            # Create slug directory if needed
+            if not slug_dir_created and not self.dry_run:
+                slug_dir = self.blog_images_dir / slug
+                slug_dir.mkdir(parents=True, exist_ok=True)
+                slug_dir_created = True
+
+            # Copy image file
+            dest_image = self.root_dir / new_path.lstrip('/')
+
+            if source_image.exists():
+                if not self.dry_run:
+                    try:
+                        dest_image.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copy2(source_image, dest_image)
+                        self.copied_images.add(dest_image)
+                        self.source_images.add(source_image)
+                        print(f"  📋 Copied: {source_image.name} -> {slug}/{image_filename}")
+                    except Exception as e:
+                        error = f"Error copying {source_image} to {dest_image}: {e}"
+                        self.errors.append(error)
+                        print(f"  ❌ {error}")
                         continue
-
-                    # Get source image path
-                    source_image = self.get_image_path_from_src(current_src)
-
-                    # Check if image already in slug directory
-                    if f"/blog/{slug}/" in current_src:
-                        print(f"  ✓ Already migrated: {source_image.name}")
-                        new_lines.append(line)
-                        continue
-
-                    # Build new slug-based path
-                    image_filename = source_image.name
-                    new_path = self.build_slug_based_path(slug, image_filename)
-
-                    # Create slug directory if needed
-                    slug_dir = self.blog_images_dir / slug
-                    if not slug_dir_created and not self.dry_run:
-                        slug_dir.mkdir(parents=True, exist_ok=True)
-                        slug_dir_created = True
-
-                    # Copy image file
-                    dest_image = self.root_dir / new_path.lstrip('/')
-
-                    if source_image.exists():
-                        if not self.dry_run:
-                            try:
-                                dest_image.parent.mkdir(parents=True, exist_ok=True)
-                                shutil.copy2(source_image, dest_image)
-                                self.copied_images.add(dest_image)
-                                self.source_images.add(source_image)
-                                print(f"  📋 Copied: {source_image.name} -> {slug}/{image_filename}")
-                            except Exception as e:
-                                error = f"Error copying {source_image} to {dest_image}: {e}"
-                                self.errors.append(error)
-                                print(f"  ❌ {error}")
-                                new_lines.append(line)
-                                continue
-                        else:
-                            print(f"  [DRY RUN] Would copy: {source_image.name} -> {slug}/{image_filename}")
-                            self.source_images.add(source_image)
-                    else:
-                        warning = f"Source image not found: {source_image}"
-                        print(f"  ⚠️  {warning}")
-                        self.errors.append(warning)
-                        new_lines.append(line)
-                        continue
-
-                    # Update the line
-                    if self.update_src_to_image:
-                        # Replace src= with image=
-                        if 'src=' in line:
-                            new_line = line.replace(f'src="{current_src}"', f'image="{new_path}"')
-                            new_line = new_line.replace(f"src='{current_src}'", f"image='{new_path}'")
-                            print(f"  ✏️  Updated: src -> image attribute")
-                        else:
-                            new_line = line.replace(f'image="{current_src}"', f'image="{new_path}"')
-                            new_line = new_line.replace(f"image='{current_src}'", f"image='{new_path}'")
-                            print(f"  ✏️  Updated: image path")
-                    else:
-                        # Just update the path
-                        if 'src=' in line:
-                            new_line = line.replace(f'src="{current_src}"', f'src="{new_path}"')
-                            new_line = new_line.replace(f"src='{current_src}'", f"src='{new_path}'")
-                        else:
-                            new_line = line.replace(f'image="{current_src}"', f'image="{new_path}"')
-                            new_line = new_line.replace(f"image='{current_src}'", f"image='{new_path}'")
-                        print(f"  ✏️  Updated: path to {new_path}")
-
-                    new_lines.append(new_line)
-                    changes_made = True
                 else:
-                    new_lines.append(line)
+                    print(f"  [DRY RUN] Would copy: {source_image.name} -> {slug}/{image_filename}")
+                    self.source_images.add(source_image)
             else:
-                new_lines.append(line)
+                warning = f"Source image not found: {source_image}"
+                print(f"  ⚠️  {warning}")
+                self.errors.append(warning)
+                continue
+
+            # Update the component in the body content
+            if self.update_src_to_image:
+                # Replace src= with image=
+                if 'src=' in full_component_text:
+                    new_component = full_component_text.replace(f'src="{current_src}"', f'image="{new_path}"')
+                    new_component = new_component.replace(f"src='{current_src}'", f"image='{new_path}'")
+                    print(f"  ✏️  Updated: src -> image attribute")
+                else:
+                    new_component = full_component_text.replace(f'image="{current_src}"', f'image="{new_path}"')
+                    new_component = new_component.replace(f"image='{current_src}'", f"image='{new_path}'")
+                    print(f"  ✏️  Updated: image path")
+            else:
+                # Just update the path
+                if 'src=' in full_component_text:
+                    new_component = full_component_text.replace(f'src="{current_src}"', f'src="{new_path}"')
+                    new_component = new_component.replace(f"src='{current_src}'", f"src='{new_path}'")
+                else:
+                    new_component = full_component_text.replace(f'image="{current_src}"', f'image="{new_path}"')
+                    new_component = new_component.replace(f"image='{current_src}'", f"image='{new_path}'")
+                print(f"  ✏️  Updated: path to {new_path}")
+
+            # Replace in body content
+            new_body_content = new_body_content.replace(full_component_text, new_component)
+            changes_made = True
 
         # Write updated content
         if changes_made and not self.dry_run:
             try:
                 # Reassemble MDX file with updated frontmatter and body
-                new_body = '\n'.join(new_lines)
                 if frontmatter_str:
-                    new_content = f"---\n{new_frontmatter_str}\n---{new_body}"
+                    new_content = f"---\n{new_frontmatter_str}\n---{new_body_content}"
                 else:
-                    new_content = new_body
+                    new_content = new_body_content
 
                 with open(mdx_file, 'w', encoding='utf-8') as f:
                     f.write(new_content)
