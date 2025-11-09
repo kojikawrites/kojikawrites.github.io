@@ -3,9 +3,9 @@
 Migrate blog images to slug-based directory structure.
 
 This script:
-1. Scans blog posts for LightboxImage and GalleryImage components
+1. Scans blog posts for thumbnails in frontmatter and LightboxImage/GalleryImage components
 2. Copies images to slug-based subdirectories (e.g., blog/2024-07-11-post/image.png)
-3. Updates component attributes to use new paths
+3. Updates thumbnail paths in frontmatter and component attributes in body
 4. Optionally converts src attributes to image attributes
 5. Removes original source images after successful migration
 
@@ -18,13 +18,19 @@ import os
 import re
 import shutil
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set, Tuple, Optional
 
 try:
     from dotenv import load_dotenv
     DOTENV_AVAILABLE = True
 except ImportError:
     DOTENV_AVAILABLE = False
+
+try:
+    import yaml
+    YAML_AVAILABLE = True
+except ImportError:
+    YAML_AVAILABLE = False
 
 
 def load_site_code_from_env() -> str:
@@ -98,13 +104,89 @@ class BlogImageMigrator:
         """Build new slug-based path for image"""
         return f"/src/assets/images/{self.site_code}/blog/{slug}/{image_filename}"
 
+    def parse_frontmatter(self, content: str) -> Tuple[Optional[Dict], str, str]:
+        """
+        Parse MDX file into frontmatter and body.
+        Returns (frontmatter_dict, frontmatter_str, body_content)
+        """
+        # MDX files have frontmatter between --- markers
+        if not content.startswith('---'):
+            return None, '', content
+
+        # Find the end of frontmatter
+        parts = content.split('---', 2)
+        if len(parts) < 3:
+            return None, '', content
+
+        frontmatter_str = parts[1].strip()
+        body_content = parts[2]
+
+        # Parse YAML if available
+        frontmatter_dict = None
+        if YAML_AVAILABLE:
+            try:
+                frontmatter_dict = yaml.safe_load(frontmatter_str)
+            except Exception as e:
+                print(f"  ⚠️  Could not parse YAML frontmatter: {e}")
+
+        return frontmatter_dict, frontmatter_str, body_content
+
+    def process_thumbnail(self, slug: str, thumbnail_path: str, slug_dir_created: bool) -> Tuple[Optional[str], bool]:
+        """
+        Process thumbnail image in frontmatter.
+        Returns (new_thumbnail_path, slug_dir_created)
+        """
+        # Check if already migrated
+        if f"/blog/{slug}/" in thumbnail_path:
+            print(f"  ✓ Thumbnail already migrated")
+            return None, slug_dir_created
+
+        # Get source image path
+        source_image = self.get_image_path_from_src(thumbnail_path)
+        image_filename = source_image.name
+        new_path = self.build_slug_based_path(slug, image_filename)
+
+        # Create slug directory if needed
+        if not slug_dir_created and not self.dry_run:
+            slug_dir = self.blog_images_dir / slug
+            slug_dir.mkdir(parents=True, exist_ok=True)
+            slug_dir_created = True
+
+        # Copy thumbnail file
+        dest_image = self.root_dir / new_path.lstrip('/')
+
+        if source_image.exists():
+            if not self.dry_run:
+                try:
+                    dest_image.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(source_image, dest_image)
+                    self.copied_images.add(dest_image)
+                    self.source_images.add(source_image)
+                    print(f"  📋 Copied thumbnail: {image_filename} -> {slug}/{image_filename}")
+                except Exception as e:
+                    error = f"Error copying thumbnail {source_image} to {dest_image}: {e}"
+                    self.errors.append(error)
+                    print(f"  ❌ {error}")
+                    return None, slug_dir_created
+            else:
+                print(f"  [DRY RUN] Would copy thumbnail: {image_filename} -> {slug}/{image_filename}")
+                self.source_images.add(source_image)
+
+            return new_path, slug_dir_created
+        else:
+            warning = f"Thumbnail not found: {source_image}"
+            print(f"  ⚠️  {warning}")
+            self.errors.append(warning)
+            return None, slug_dir_created
+
     def process_mdx_file(self, mdx_file: Path) -> bool:
         """
         Process a single MDX file:
         1. Extract slug
-        2. Find image components
-        3. Copy images to slug directory
-        4. Update MDX content
+        2. Parse frontmatter and process thumbnail
+        3. Find image components in body
+        4. Copy images to slug directory
+        5. Update MDX content
 
         Returns True if changes were made
         """
@@ -120,10 +202,32 @@ class BlogImageMigrator:
             print(f"  ❌ {error}")
             return False
 
-        lines = content.split('\n')
-        new_lines = []
+        # Parse frontmatter
+        frontmatter_dict, frontmatter_str, body_content = self.parse_frontmatter(content)
         changes_made = False
         slug_dir_created = False
+        new_frontmatter_str = frontmatter_str
+
+        # Process thumbnail in frontmatter
+        if frontmatter_dict and 'thumbnail' in frontmatter_dict:
+            thumbnail_path = frontmatter_dict['thumbnail']
+            if thumbnail_path:
+                # Handle multiline YAML (thumbnail: >-)
+                if isinstance(thumbnail_path, str):
+                    thumbnail_path = thumbnail_path.strip()
+                    new_thumbnail_path, slug_dir_created = self.process_thumbnail(slug, thumbnail_path, slug_dir_created)
+
+                    if new_thumbnail_path:
+                        # Update frontmatter string
+                        # Handle both single-line and multi-line YAML formats
+                        old_thumbnail_line_pattern = rf'thumbnail:\s*>?-?\s*\n?\s*{re.escape(thumbnail_path)}'
+                        new_thumbnail_line = f'thumbnail: {new_thumbnail_path}'
+                        new_frontmatter_str = re.sub(old_thumbnail_line_pattern, new_thumbnail_line, new_frontmatter_str)
+                        changes_made = True
+
+        # Process body content for image components
+        lines = body_content.split('\n')
+        new_lines = []
 
         for line in lines:
             # Check if this is an image component
@@ -215,8 +319,15 @@ class BlogImageMigrator:
         # Write updated content
         if changes_made and not self.dry_run:
             try:
+                # Reassemble MDX file with updated frontmatter and body
+                new_body = '\n'.join(new_lines)
+                if frontmatter_str:
+                    new_content = f"---\n{new_frontmatter_str}\n---{new_body}"
+                else:
+                    new_content = new_body
+
                 with open(mdx_file, 'w', encoding='utf-8') as f:
-                    f.write('\n'.join(new_lines))
+                    f.write(new_content)
                 print(f"  ✅ Updated MDX file")
             except Exception as e:
                 error = f"Error writing {mdx_file}: {e}"
