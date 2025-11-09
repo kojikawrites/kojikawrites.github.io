@@ -1,6 +1,6 @@
 /** @jsxImportSource react */
 // @ts-ignore
-import { config, fields, collection } from '@keystatic/core';
+import { config, fields, collection, singleton } from '@keystatic/core';
 // @ts-ignore
 import { wrapper, block, inline } from '@keystatic/core/content-components';
 import { categories } from './src/scripts/onbuild/categories';
@@ -378,6 +378,7 @@ const minimalHtmlComponents = {
   }),
   // Block elements
   br: simpleBlock('Line Break'),
+  hr: simpleBlock('Horizontal Rule'),
   // Inline elements for text styling (can't have children, use text field instead)
   InlineSpan: inline({
     label: 'Inline Span',
@@ -657,7 +658,37 @@ const sharedCustomComponents = {
       );
     },
   }),
-  MainLogo: simpleBlock('Main Logo'),
+  MainLogo: block({
+    label: 'Main Logo',
+    schema: {},
+    ContentView: () => {
+      return (
+        <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
+          <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
+            🏢 Main Logo (Dated)
+          </div>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '9px', color: 'var(--ks-color-scale-slate11)', marginBottom: '4px' }}>Light Theme:</div>
+              <img
+                src="/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-light.svg"
+                alt="Main logo (light)"
+                style={{ maxWidth: '100%', maxHeight: '150px', height: 'auto', display: 'block', backgroundColor: '#fff', padding: '8px', border: '1px solid var(--ks-color-scale-slate6)' }}
+              />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '9px', color: 'var(--ks-color-scale-slate11)', marginBottom: '4px' }}>Dark Theme:</div>
+              <img
+                src="/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-dark.svg"
+                alt="Main logo (dark)"
+                style={{ maxWidth: '100%', maxHeight: '150px', height: 'auto', display: 'block', backgroundColor: '#222', padding: '8px', border: '1px solid var(--ks-color-scale-slate6)' }}
+              />
+            </div>
+          </div>
+        </div>
+      );
+    },
+  }),
   ThemedImage: block({
     label: 'Themed Image',
     schema: {
@@ -986,29 +1017,69 @@ const blogComponents = {
 const pageComponents = {
   ...minimalHtmlComponents,
   ...sharedCustomComponents,
-    LightboxImage: createLightboxImageComponent(baseImagePath),
-  // LightboxImage: block({
-  //   label: 'Lightbox Image',
-  //   schema: {
-  //     image: fields.image({
-  //       label: 'Image (Picker)',
-  //       directory: `${baseImagePath}`,
-  //       publicPath: `/${baseImagePath}/`,
-  //     }),
-  //     src: fields.text({
-  //       label: 'Or enter path manually',
-  //       description: 'Legacy support - leave empty if using image picker above',
-  //     }),
-  //     alt: fields.text({ label: 'Alt Text' }),
-  //     description: fields.text({ label: 'Detailed Description' }),
-  //   },
-  //   ContentView: createImageContentView({
-  //     imageDirectory: `/${baseImagePath}`,
-  //     includeCaption: false,
-  //     includeSlugTracking: false,
-  //     defaultAlt: 'Lightbox image',
-  //   }),
-  // }),
+  LightboxImage: createLightboxImageComponent(baseImagePath),
+  Biography: wrapper({
+    label: 'Biography',
+    schema: {
+      id: fields.text({
+        label: 'ID',
+        validation: { isRequired: true },
+      }),
+      alt: fields.text({
+        label: 'Alt Text',
+      }),
+      src: fields.text({
+        label: 'Image Path',
+        description: 'Path to portrait image (e.g., /src/assets/images/hiivelabs.com/about/portrait.png)',
+        validation: { isRequired: true },
+      }),
+    },
+    ContentView: (props) => {
+      const { id, alt, src } = props.value;
+
+
+        return (
+        <div style={{ marginBottom: '12px' }}>
+            { /* @ts-ignore */ }
+          <div contenteditable="false" style={{ padding: '12px', border: '1px solid currentColor', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate11)' }}>
+            <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
+              👤 Biography: {id || 'Untitled'}
+            </div>
+            {src && (
+              <div style={{ marginBottom: '8px' }}>
+                <img
+                  src={src}
+                  alt={alt || id || 'Portrait'}
+                  style={{ maxWidth: '200px', maxHeight: '200px', height: 'auto', display: 'block', border: '2px solid currentColor', color: 'var(--ks-color-scale-slate11)' }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                />
+              </div>
+            )}
+            <div style={{ fontSize: '11px', color: 'var(--ks-color-scale-slate11)' }}>
+              <div><strong>ID:</strong> {id || '(none)'}</div>
+              {alt && <div><strong>Alt:</strong> {alt}</div>}
+              <div><strong>Image:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{src || '(none)'}</code></div>
+            </div>
+          </div>
+          <div style={{ marginTop: '8px' }}>
+            {props.children}
+          </div>
+        </div>
+      );
+    },
+  }),
+  Thanks: wrapper({
+    label: 'Thanks',
+    schema: {
+      name: fields.text({
+        label: 'Name',
+        validation: { isRequired: true },
+      }),
+      url: fields.text({
+        label: 'URL',
+      }),
+    },
+  }),
 };
 
 // ============================================================================
@@ -1128,6 +1199,28 @@ export default config({
           label: 'Description',
           validation: { isRequired: true },
         }),
+        showInMenu: fields.checkbox({
+          label: 'Show in Navigation Menu',
+          defaultValue: false,
+        }),
+        menuLabel: fields.text({
+          label: 'Menu Label',
+          description: 'Leave empty to use page title',
+        }),
+        menuPosition: fields.select({
+          label: 'Menu Position',
+          options: [
+            { label: 'None', value: 'none' },
+            { label: 'Left Navigation', value: 'left' },
+            { label: 'Right Navigation', value: 'right' },
+          ],
+          defaultValue: 'none',
+        }),
+        menuOrder: fields.number({
+          label: 'Menu Order',
+          description: 'Lower numbers appear first (e.g., 1, 2, 3...)',
+          defaultValue: 999,
+        }),
         content: fields.mdx({
           label: 'Content',
           options: {
@@ -1138,6 +1231,43 @@ export default config({
           },
           components: pageComponents,
         }),
+      },
+    }),
+  },
+  singletons: {
+    systemMenuItems: singleton({
+      label: 'System Menu Items',
+      path: 'src/assets/config/system-menu-items',
+      format: { data: 'json' },
+      schema: {
+        items: fields.array(
+          fields.object({
+            href: fields.text({
+              label: 'URL',
+              validation: { isRequired: true },
+            }),
+            label: fields.text({
+              label: 'Label',
+              validation: { isRequired: true },
+            }),
+            position: fields.select({
+              label: 'Position',
+              options: [
+                { label: 'Left Navigation', value: 'left' },
+                { label: 'Right Navigation', value: 'right' },
+              ],
+              defaultValue: 'left',
+            }),
+            order: fields.number({
+              label: 'Menu Order',
+              defaultValue: 1,
+            }),
+          }),
+          {
+            label: 'System Menu Items',
+            itemLabel: (props) => props.fields.label.value || 'Menu Item',
+          }
+        ),
       },
     }),
   },
