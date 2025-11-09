@@ -53,59 +53,76 @@ const siteCode = getSiteCode();
 <!-- This is intentionally inlined to avoid FOUC -->
 <script is:inline data-astro-rerun>
     // localStorage.clear();
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    function setTheme() {
-        const root = document.documentElement;
-        let theme = localStorage.getItem('theme');
-        const themeSet = localStorage.getItem('themeSet');
-        // set up theming
-        // if a theme hasn't been manually set, query the system theme.
-        if (themeSet !== 'true') {
+    (function() { // IIFE
+        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-            if (darkModeMediaQuery.matches) {
-                // dark theme on system
-                theme = 'dark';
+        function setTheme() {
+            const root = document.documentElement;
+            let theme = localStorage.getItem('theme');
+            const themeSet = localStorage.getItem('themeSet');
+            // set up theming
+            // if a theme hasn't been manually set, query the system theme.
+            if (themeSet !== 'true') {
+
+                if (darkModeMediaQuery.matches) {
+                    // dark theme on system
+                    theme = 'dark';
+                } else {
+                    // light theme on system
+                    theme = 'light';
+                }
             }
-            else {
-                // light theme on system
-                theme = 'light';
+            // set the theme.
+            if (theme === 'dark') {
+                console.log('Setting dark mode');
+                root.classList.add('theme-dark');
+            } else {
+                console.log('Setting light mode');
+                root.classList.remove('theme-dark');
             }
         }
-        // set the theme.
-        if (theme === 'dark') {
-            console.log('Setting dark mode');
-            root.classList.add('theme-dark');
-        } else {
-            console.log('Setting light mode');
-            root.classList.remove('theme-dark');
+
+        // set up theme listener
+        function handleThemeChange(e) {
+            const root = document.documentElement;
+            if (e.matches) {
+                console.log('Switched to dark mode');
+                root.classList.add('theme-dark');
+
+            } else {
+                console.log('Switched to light mode');
+                root.classList.remove('theme-dark');
+            }
         }
-    }
-    setTheme();
 
-    window.addEventListener('storage', setTheme)
-
-    // set up theme listener
-    function handleThemeChange(e) {
-        const root = document.documentElement;
-        if (e.matches) {
-            console.log('Switched to dark mode');
-            root.classList.add('theme-dark');
-
-        } else {
-            console.log('Switched to light mode');
-            root.classList.remove('theme-dark');
+        // Wrapper for media query handler that checks themeSet
+        function handleMediaQueryChange(e) {
+            const themeSet = localStorage.getItem('themeSet');
+            console.log('BaseHead: themeSet', themeSet);
+            if (!themeSet) {
+                handleThemeChange(e);
+            }
         }
-    }
-    // if user hasn't manually set theme, we can respond to system theme
 
-    // set up theming
-    darkModeMediaQuery.addEventListener('change', (e) => {
-        const themeSet = localStorage.getItem('themeSet');
-        console.log('BaseHead: themeSet', themeSet);
-        if (!themeSet) {
-            handleThemeChange(e);
+        // Remove old listeners if they exist (prevents memory leaks on page transitions)
+        if (window.__baseHeadThemeListeners) {
+            window.removeEventListener('storage', window.__baseHeadThemeListeners.setTheme);
+            darkModeMediaQuery.removeEventListener('change', window.__baseHeadThemeListeners.handleMediaQueryChange);
         }
-    });
+
+        // Store listener references globally for cleanup on next run
+        window.__baseHeadThemeListeners = {
+            setTheme: setTheme,
+            handleMediaQueryChange: handleMediaQueryChange
+        };
+
+        // Initial theme set
+        setTheme();
+
+        // Add listeners
+        window.addEventListener('storage', setTheme);
+        darkModeMediaQuery.addEventListener('change', handleMediaQueryChange);
+    })();
 
 </script>
 

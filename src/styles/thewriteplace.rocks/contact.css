@@ -6,20 +6,72 @@
             @apply uppercase mt-6;
         }
 
-        .bluesky {
+        .fake-table {
+            @apply text-sm font-family-sans-alt font-bold border-none bg-transparent mx-auto my-6;
+            @apply flex flex-col content-center;
+        }
+
+        .fake-table-row {
+            @apply flex flex-row w-full;
+        }
+
+        .left {
+            @apply relative top-1 text-right pb-2 pr-4 w-1/2;
+        }
+
+        .right {
+            @apply text-left flex flex-row;
+        }
+
+
+        #email-icon {
+            @apply top-0;
+        }
+
+
+        .contact-text{
             @apply text-center color-secondary-color;
         }
 
-        table {
-            @apply text-sm font-family-sans-alt font-bold border-none bg-transparent mx-auto my-6;
+        .contact-text-left {
+            @apply relative;
         }
 
-        td.left {
-            @apply relative top-1 text-center pb-2 pr-4;
+        .contact-text-left::after {
+            content: '@';
+            @apply absolute left-8 top-0.5;
+            @apply color-text-main;
         }
 
-        td.right {
-            @apply text-left;
+        .contact-text-right {
+            @apply relative left-0.5;
         }
+
+        .contact-text-right::after {
+            content: '.com';
+            @apply absolute left-16 top-1;
+            @apply color-text-main;
+        }
+
+        .bluesky {
+            @apply text-center color-secondary-color;
+            @apply relative;
+            @apply left-4 !important;
+        }
+
+        .bluesky::before {
+            content: '@';
+            @apply absolute -left-4 top-0.5;
+            @apply color-text-main;
+        }
+
+        #bluesky-icon {
+            @apply ml-4;
+        }
+
+        .hiivelabs-text {
+            @apply ml-5 !important;
+        }
+
     }
 }

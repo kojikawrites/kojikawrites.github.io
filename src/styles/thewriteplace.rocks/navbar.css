@@ -5,6 +5,11 @@
     /* navbar container */
     .navbar {
         @apply bg-color-background-feature;
+        /* Fix for iOS Safari translucency issues with fixed positioning */
+        background-color: rgb(var(--background-feature)) !important;
+        --tw-bg-opacity: 1 !important;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
         --logo-height: 32px;
         a {
             @apply text-inherit text-lg block relative ml-2 bottom-0;
@@ -36,6 +41,10 @@
         }
     }
     .navbar-bottom-fader {
-        @apply absolute w-full h-2 left-0 bg-gradient-to-b from-[rgb(var(--theme-color))] to-transparent;
+        @apply absolute w-full h-2 left-0;
+        bottom: -0.5rem;
+        /* Use direct CSS gradient for iOS Safari compatibility */
+        background: -webkit-linear-gradient(top, rgb(var(--theme-color)), transparent);
+        background: linear-gradient(to bottom, rgb(var(--theme-color)), transparent);
     }
 }

@@ -130,6 +130,30 @@
         @apply py-0 lg:py-6 px-0 lg:px-6 mx-auto;
         /*@apply text-balance;*/
     }
+
+    div.top-bump {
+        @apply mt-4 lg:mt-8;
+    }
+
+    .footnote-definition {
+        @apply m-2 lg:m-4;
+    }
+
+    .footnote-backref {
+        @apply relative -top-0.5;
+    }
+
+    .footnote-number {
+        @apply relative top-[1px];
+        @apply text-base
+    }
+
+    .footnote-content > p {
+        @apply inline;
+        /*@apply text-sm !important;*/
+        /*@apply color-text-secondary !important;*/
+    }
+
 }
 
 
