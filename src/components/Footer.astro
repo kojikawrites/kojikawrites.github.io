@@ -18,15 +18,8 @@ try {
   console.warn('Could not get git commit hash:', error);
 }
 
-// Format build time as a readable string
-const buildDate = new Date(buildTime).toLocaleString('en-US', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-  timeZoneName: 'short'
-});
+// Format build time as YYYY-MM-DD HH:MM:ss UTC
+const buildDate = buildTime.replace('T', ' ').replace(/\.\d{3}Z$/, '') + ' UTC';
 ---
 
 <footer>
