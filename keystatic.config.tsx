@@ -1034,6 +1034,37 @@ const pageComponents = {
         validation: { isRequired: true },
       }),
     },
+    ContentView: (props) => {
+      const { id, alt, src } = props.value;
+
+      return (
+        <div style={{ marginBottom: '12px' }}>
+          <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
+            <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
+              👤 Biography: {id || 'Untitled'}
+            </div>
+            {src && (
+              <div style={{ marginBottom: '8px' }}>
+                <img
+                  src={src}
+                  alt={alt || id || 'Portrait'}
+                  style={{ maxWidth: '200px', maxHeight: '200px', height: 'auto', display: 'block', border: '2px solid currentColor', color: 'var(--ks-color-scale-slate11)' }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                />
+              </div>
+            )}
+            <div style={{ fontSize: '11px', color: 'var(--ks-color-scale-slate11)' }}>
+              <div><strong>ID:</strong> {id || '(none)'}</div>
+              {alt && <div><strong>Alt:</strong> {alt}</div>}
+              <div><strong>Image:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{src || '(none)'}</code></div>
+            </div>
+          </div>
+          <div style={{ marginTop: '8px' }}>
+            {props.children}
+          </div>
+        </div>
+      );
+    },
   }),
   Thanks: wrapper({
     label: 'Thanks',
