@@ -1,7 +1,7 @@
 @layer components {
     /* about page */
     .about {
-        @apply mt-2;
+        @apply lg:pt-6;
         h2 {
             @apply uppercase lg:pt-0 lg:mt-0;
         }
