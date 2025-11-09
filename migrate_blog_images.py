@@ -10,7 +10,7 @@ This script:
 5. Removes original source images after successful migration
 
 Usage:
-    python migrate_blog_images.py [--dry-run] [--update-src-to-image]
+    python migrate_blog_images.py [--dry-run] [--update-src-to-image] [--site-code SITE_CODE]
 """
 
 import argparse
@@ -20,14 +20,35 @@ import shutil
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 
+try:
+    from dotenv import load_dotenv
+    DOTENV_AVAILABLE = True
+except ImportError:
+    DOTENV_AVAILABLE = False
+
+
+def load_site_code_from_env() -> str:
+    """
+    Load SITE_CODE from .env file or environment variable.
+    Returns the site code or 'hiivelabs.com' as default.
+    """
+    # Load .env file if python-dotenv is available
+    if DOTENV_AVAILABLE:
+        load_dotenv()
+
+    # Get SITE_CODE from environment variable (set by .env or system)
+    site_code = os.environ.get('SITE_CODE', 'hiivelabs.com')
+    return site_code
+
 
 class BlogImageMigrator:
-    def __init__(self, dry_run: bool = False, update_src_to_image: bool = False):
+    def __init__(self, site_code: str, dry_run: bool = False, update_src_to_image: bool = False):
+        self.site_code = site_code
         self.dry_run = dry_run
         self.update_src_to_image = update_src_to_image
         self.root_dir = Path(__file__).parent
-        self.blog_posts_dir = self.root_dir / "src/assets/posts/hiivelabs.com"
-        self.blog_images_dir = self.root_dir / "src/assets/images/hiivelabs.com/blog"
+        self.blog_posts_dir = self.root_dir / f"src/assets/posts/{site_code}"
+        self.blog_images_dir = self.root_dir / f"src/assets/images/{site_code}/blog"
         self.source_images: Set[Path] = set()
         self.copied_images: Set[Path] = set()
         self.errors: List[str] = []
@@ -75,7 +96,7 @@ class BlogImageMigrator:
 
     def build_slug_based_path(self, slug: str, image_filename: str) -> str:
         """Build new slug-based path for image"""
-        return f"/src/assets/images/hiivelabs.com/blog/{slug}/{image_filename}"
+        return f"/src/assets/images/{self.site_code}/blog/{slug}/{image_filename}"
 
     def process_mdx_file(self, mdx_file: Path) -> bool:
         """
@@ -250,6 +271,7 @@ class BlogImageMigrator:
         print("=" * 70)
         print("Blog Image Migration Tool")
         print("=" * 70)
+        print(f"Site code: {self.site_code}")
         print(f"Mode: {'DRY RUN' if self.dry_run else 'LIVE'}")
         print(f"Update src to image: {'Yes' if self.update_src_to_image else 'No'}")
         print(f"Blog posts directory: {self.blog_posts_dir}")
@@ -329,6 +351,13 @@ Examples:
 
   # Dry run with src to image conversion
   python migrate_blog_images.py --dry-run --update-src-to-image
+
+  # Use custom site code
+  python migrate_blog_images.py --site-code mysite.com
+
+  # Set SITE_CODE in .env file or environment variable
+  export SITE_CODE=mysite.com
+  python migrate_blog_images.py
         """
     )
 
@@ -344,9 +373,19 @@ Examples:
         help='Convert src attributes to image attributes'
     )
 
+    parser.add_argument(
+        '--site-code',
+        type=str,
+        help='Site code (overrides .env file and SITE_CODE environment variable)'
+    )
+
     args = parser.parse_args()
 
+    # Determine site code: CLI arg > .env file > environment variable > default
+    site_code = args.site_code if args.site_code else load_site_code_from_env()
+
     migrator = BlogImageMigrator(
+        site_code=site_code,
         dry_run=args.dry_run,
         update_src_to_image=args.update_src_to_image
     )
