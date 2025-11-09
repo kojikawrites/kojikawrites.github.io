@@ -657,7 +657,37 @@ const sharedCustomComponents = {
       );
     },
   }),
-  MainLogo: simpleBlock('Main Logo'),
+  MainLogo: block({
+    label: 'Main Logo',
+    schema: {},
+    ContentView: () => {
+      return (
+        <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
+          <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
+            🏢 Main Logo (Dated)
+          </div>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '9px', color: 'var(--ks-color-scale-slate11)', marginBottom: '4px' }}>Light Theme:</div>
+              <img
+                src="/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-light.svg"
+                alt="Main logo (light)"
+                style={{ maxWidth: '100%', maxHeight: '150px', height: 'auto', display: 'block', backgroundColor: '#fff', padding: '8px', border: '1px solid var(--ks-color-scale-slate6)' }}
+              />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '9px', color: 'var(--ks-color-scale-slate11)', marginBottom: '4px' }}>Dark Theme:</div>
+              <img
+                src="/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-dark.svg"
+                alt="Main logo (dark)"
+                style={{ maxWidth: '100%', maxHeight: '150px', height: 'auto', display: 'block', backgroundColor: '#222', padding: '8px', border: '1px solid var(--ks-color-scale-slate6)' }}
+              />
+            </div>
+          </div>
+        </div>
+      );
+    },
+  }),
   ThemedImage: block({
     label: 'Themed Image',
     schema: {

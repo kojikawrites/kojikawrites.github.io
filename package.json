@@ -2,6 +2,7 @@
   "name": "hiivelabs.com",
   "version": "0.0.1",
   "scripts": {
+    "predev": "npx tsx src/scripts/generateKeystaticData.ts && npx tsx src/scripts/generateNavMenu.ts",
     "dev": "astro dev",
     "start": "astro dev --host",
     "prebuild": "npx tsx src/scripts/generateKeystaticData.ts && npx tsx src/scripts/generateNavMenu.ts",
