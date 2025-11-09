@@ -1037,9 +1037,11 @@ const pageComponents = {
     ContentView: (props) => {
       const { id, alt, src } = props.value;
 
-      return (
+
+        return (
         <div style={{ marginBottom: '12px' }}>
-          <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
+            { /* @ts-ignore */ }
+          <div contenteditable="false" style={{ padding: '12px', border: '1px solid currentColor', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate11)' }}>
             <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
               👤 Biography: {id || 'Untitled'}
             </div>
