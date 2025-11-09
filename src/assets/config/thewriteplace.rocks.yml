@@ -30,6 +30,7 @@ blog:
   prefix: blog/
   small_mode: card
   large_mode: card
+  default_author: K°
 footer:
   content:
     - thewriteplace.rocks and its logo are registered trademarks of kojika.
