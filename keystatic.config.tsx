@@ -378,6 +378,7 @@ const minimalHtmlComponents = {
   }),
   // Block elements
   br: simpleBlock('Line Break'),
+  hr: simpleBlock('Horizontal Rule'),
   // Inline elements for text styling (can't have children, use text field instead)
   InlineSpan: inline({
     label: 'Inline Span',
