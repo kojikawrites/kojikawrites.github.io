@@ -4,24 +4,34 @@ interface Props {
     alt?: string;
     image?: string;
     src?: string;
+    slug?: string;
     class?: string;
 }
 
 import ThemedImage from "../ThemedImage.astro";
 import { getSiteCode } from "../../scripts/getSiteConfig.ts";
 
-const {id, alt = "", image, src, class:className} = Astro.props;
+const {id, alt = "", image, src, slug, class:className} = Astro.props;
 const portraitId = `${id}-portrait`;
 
 // Determine the image source - prefer image picker over manual src
 let imagePath: string;
 if (image) {
-    // Image from picker - build path
+    // Image from picker - build path with slug subdirectory
     const siteCode = getSiteCode();
     const baseImagePath = `src/assets/images/${siteCode}`;
-    imagePath = image.startsWith('/') || image.startsWith('src/')
-        ? image
-        : `/${baseImagePath}/${image}`;
+
+    // If image is already a full path, use it as-is
+    if (image.startsWith('/') || image.startsWith('src/')) {
+        imagePath = image;
+    } else {
+        // Derive slug from URL if not provided as prop
+        const pageSlug = slug || Astro.url.pathname.split('/').filter(Boolean).pop() || '';
+        // Build path with slug subdirectory for organization (like blog posts)
+        imagePath = pageSlug
+            ? `/${baseImagePath}/${pageSlug}/${image}`
+            : `/${baseImagePath}/${image}`;
+    }
 } else if (src) {
     // Legacy manual path
     imagePath = src;
