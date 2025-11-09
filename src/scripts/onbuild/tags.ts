@@ -16,6 +16,5 @@ export const tags = [
   "rust",
   "sekrit-project-1",
   "terrain-generation",
-  "world-building",
-  "|"
+  "world-building"
 ];

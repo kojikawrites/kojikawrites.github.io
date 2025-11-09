@@ -19,15 +19,19 @@ export function remarkEquationSnippetTransform() {
 
         if (equationAttr && equationAttr.value) {
           const equation = equationAttr.value;
-          // Handle inline attribute: could be boolean expression {false} or just present (inline)
+          // Handle inline attribute: could be boolean expression {false}, {true}, or just present (inline)
           let isInline = true; // default
           if (inlineAttr) {
             if (inlineAttr.value && typeof inlineAttr.value === 'object' && 'value' in inlineAttr.value) {
-              // JSX expression like inline={false}
-              isInline = inlineAttr.value.value !== false;
+              // JSX expression like inline={false} or inline={true}
+              const val = inlineAttr.value.value;
+              isInline = (val === true || val === 'true');
             } else if (inlineAttr.value === null) {
               // Just `inline` with no value means true
               isInline = true;
+            } else {
+              // Direct boolean value
+              isInline = inlineAttr.value === true;
             }
           }
           const className = isInline ? 'equation-snippet' : 'equation';
@@ -54,15 +58,19 @@ export function remarkEquationSnippetTransform() {
 
         if (equationAttr && equationAttr.value) {
           const equation = equationAttr.value;
-          // Handle inline attribute: could be boolean expression {false} or just present (inline)
+          // Handle inline attribute: could be boolean expression {false}, {true}, or just present (inline)
           let isInline = true; // default
           if (inlineAttr) {
             if (inlineAttr.value && typeof inlineAttr.value === 'object' && 'value' in inlineAttr.value) {
-              // JSX expression like inline={false}
-              isInline = inlineAttr.value.value !== false;
+              // JSX expression like inline={false} or inline={true}
+              const val = inlineAttr.value.value;
+              isInline = (val === true || val === 'true');
             } else if (inlineAttr.value === null) {
               // Just `inline` with no value means true
               isInline = true;
+            } else {
+              // Direct boolean value
+              isInline = inlineAttr.value === true;
             }
           }
           const className = isInline ? 'equation-snippet' : 'equation';

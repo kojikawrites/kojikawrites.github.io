@@ -51,10 +51,10 @@ export function rehypeRenderEquations() {
           if (parsed.children && parsed.children.length > 0) {
             const svgNode = parsed.children[0];
 
-            // Wrap in a span with the appropriate class
+            // Wrap in span (inline) or div (block) with the appropriate class
             const wrapper = {
               type: 'element',
-              tagName: 'span',
+              tagName: className === 'equation' ? 'div' : 'span',
               properties: {
                 className: [className],
                 ...(style ? { style } : {})

@@ -1,9 +1,9 @@
 ---
 interface Props {
     alt: string;
-    src: string;
-    inlineImgSrc: string;
-    previewImgSrc: string;
+    video: string | any;
+    inlineImg: string | any;
+    previewImg: string | any;
     class?: string;
     id?: string;
     description?: string;
@@ -16,9 +16,9 @@ import getMediaMetadata from "../../scripts/getMediaMetadata.ts";
 
 const {
     alt,
-    inlineImgSrc,
-    previewImgSrc,
-    src,
+    video,
+    inlineImg,
+    previewImg,
     description = '',
     class:className = '',
     id: rawId = '',
@@ -31,9 +31,14 @@ const id = (!rawId || rawId.trim().length ==0)
     : rawId;
 const imgId = `${id}-img`;
 
+// Handle both string paths (legacy) and file objects from Keystatic
+const videoPath = typeof video === 'string' ? video : video?.filename || video;
+const inlineImgPath = typeof inlineImg === 'string' ? inlineImg : inlineImg?.filename || inlineImg;
+const previewImgPath = typeof previewImg === 'string' ? previewImg : previewImg?.filename || previewImg;
+
 const resolvedCaption = caption ? 'VIDEO: ' + caption : '';
-const videoSrc = (await getMediaMetadata(src)).default;
-const previewSrc = (await getMediaMetadata(previewImgSrc)).default.src;
+const videoSrc = (await getMediaMetadata(videoPath)).default;
+const previewSrc = (await getMediaMetadata(previewImgPath)).default.src;
 console.log('videoSrc', videoSrc);
 console.log('previewSrc', previewSrc);
 ---
@@ -74,7 +79,7 @@ console.log('previewSrc', previewSrc);
 </style>
 
 <div id={id} class="flex cursor-pointer">
-    <Image src={getMediaMetadata(inlineImgSrc)}
+    <Image src={getMediaMetadata(inlineImgPath)}
            alt={alt} class=`lightbox-image ${className}`
            id={imgId}
            title={alt}
