@@ -25,7 +25,14 @@ export default function menuWatcher(): AstroIntegration {
               stdio: 'inherit',
               cwd: process.cwd()
             });
-            console.log('✅ Menu updated\n');
+            console.log('✅ Menu updated');
+
+            // Trigger full page reload after menu regeneration
+            server.ws.send({
+              type: 'full-reload',
+              path: '*'
+            });
+            console.log('🔃 Page reload triggered\n');
           } catch (error) {
             console.error('❌ Menu regeneration failed');
           } finally {
