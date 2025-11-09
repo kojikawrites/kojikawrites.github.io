@@ -5,12 +5,15 @@ import { execSync } from 'child_process';
 const siteConfig = await getSiteConfig();
 
 // Get build metadata at build time
-let gitCommit = 'unknown';
+let gitCommit = '';
 let buildTime = new Date().toISOString();
 
 try {
   // Get short git commit hash (7 characters)
   gitCommit = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim();
+  if (gitCommit || '' !== '') {
+    gitCommit = ' • ' + gitCommit;
+  }
 } catch (error) {
   console.warn('Could not get git commit hash:', error);
 }
@@ -38,6 +41,6 @@ const buildDate = new Date(buildTime).toLocaleString('en-US', {
   </div>
 
   <div class="page-footer build-info">
-    Build {gitCommit} • {buildDate}
+      ({buildDate}{gitCommit})
   </div>
 </footer>
