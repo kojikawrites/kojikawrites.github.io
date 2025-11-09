@@ -39,7 +39,7 @@
 
         .contact-text-left::after {
             content: '@';
-            @apply absolute left-8 top-0.5;
+            @apply absolute left-[142px] top-0.5;
             @apply color-text-main;
         }
 
@@ -49,8 +49,12 @@
 
         .contact-text-right::after {
             content: '.com';
-            @apply absolute left-16 top-1;
+            @apply absolute left-10 top-1;
             @apply color-text-main;
+        }
+
+        .domain-text {
+            @apply ml-5 !important;
         }
 
         .bluesky {
@@ -65,13 +69,14 @@
             @apply color-text-main;
         }
 
+        .bluesky-text-right::after {
+            content: '.rocks';
+            @apply absolute left-[100px] top-1;
+            @apply color-text-main;
+        }
+
         #bluesky-icon {
             @apply ml-4;
         }
-
-        .hiivelabs-text {
-            @apply ml-5 !important;
-        }
-
     }
 }
