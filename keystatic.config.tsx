@@ -222,8 +222,9 @@ const createImageContentView = (options: {
   );
 };
 
-const createImageComponent = (type: 'Lightbox' | 'Gallery', imagePath: string) => {
+const createImageComponent = (type: 'Lightbox' | 'Gallery', imagePath: string, includeSlugTracking?: boolean) => {
   const isGallery = type === 'Gallery';
+  const slugTracking = includeSlugTracking !== undefined ? includeSlugTracking : isGallery;
 
   return block({
     label: `${type} Image`,
@@ -245,14 +246,16 @@ const createImageComponent = (type: 'Lightbox' | 'Gallery', imagePath: string) =
     ContentView: createImageContentView({
       imageDirectory: `/${imagePath}`,
       includeCaption: isGallery,
-      includeSlugTracking: isGallery,
+      includeSlugTracking: slugTracking,
       defaultAlt: `${type} image`,
     }),
   });
 };
 
-const createLightboxImageComponent = (imagePath: string) => createImageComponent('Lightbox', imagePath);
-const createGalleryImageComponent = (imagePath: string) => createImageComponent('Gallery', imagePath);
+const createLightboxImageComponent = (imagePath: string, includeSlugTracking?: boolean) =>
+  createImageComponent('Lightbox', imagePath, includeSlugTracking);
+const createGalleryImageComponent = (imagePath: string, includeSlugTracking?: boolean) =>
+  createImageComponent('Gallery', imagePath, includeSlugTracking);
 
 // ============================================================================
 // MATHJAX LOADING HOOK
@@ -1017,7 +1020,7 @@ const blogComponents = {
 const pageComponents = {
   ...minimalHtmlComponents,
   ...sharedCustomComponents,
-  LightboxImage: createLightboxImageComponent(baseImagePath),
+  LightboxImage: createLightboxImageComponent(baseImagePath, true),
   Biography: wrapper({
     label: 'Biography',
     schema: {
@@ -1028,43 +1031,95 @@ const pageComponents = {
       alt: fields.text({
         label: 'Alt Text',
       }),
+      image: fields.image({
+        label: 'Portrait Image',
+        directory: baseImagePath,
+        publicPath: `/${baseImagePath}/`,
+      }),
       src: fields.text({
-        label: 'Image Path',
-        description: 'Path to portrait image (e.g., /src/assets/images/hiivelabs.com/about/portrait.png)',
-        validation: { isRequired: true },
+        label: 'Or enter path manually',
+        description: 'Legacy support - leave empty if using image picker above',
       }),
     },
     ContentView: (props) => {
-      const { id, alt, src } = props.value;
+      // Inner component that uses slug context
+      const BiographyContentViewInner: React.FC<{ value: any; children: React.ReactNode }> = ({ value, children }) => {
+        const { id, alt, image, src } = value;
+        const currentSlug = React.useContext(SlugContext);
 
+        // Determine image source
+        let imageSrc: string | null = null;
+        let previewSrc: string | null = null;
+        let sourceInfo = '';
+        let isNewlySelected = false;
+
+        if (image) {
+          const extracted = extractImageData(image);
+          isNewlySelected = extracted.isNewlySelected;
+          previewSrc = extracted.previewSrc;
+
+          if (extracted.filename) {
+            sourceInfo = `Picker: ${extracted.filename}${currentSlug ? ` (slug: ${currentSlug})` : ''}`;
+            imageSrc = buildImagePath(extracted.filename, `/${baseImagePath}`, currentSlug);
+          }
+        } else if (src) {
+          sourceInfo = `Manual: ${src}`;
+          imageSrc = src.startsWith('/') || src.startsWith(`${baseDir}/`)
+            ? src
+            : `/${baseImagePath}/${src}`;
+        }
+
+        // Clean up blob URLs when component unmounts or previewSrc changes
+        React.useEffect(() => {
+          return () => {
+            if (previewSrc && previewSrc.startsWith('blob:')) {
+              URL.revokeObjectURL(previewSrc);
+            }
+          };
+        }, [previewSrc]);
+
+        const displaySrc = isNewlySelected && previewSrc ? previewSrc : imageSrc;
 
         return (
-        <div style={{ marginBottom: '12px' }}>
-            { /* @ts-ignore */ }
-          <div contenteditable="false" style={{ padding: '12px', border: '1px solid currentColor', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate11)' }}>
-            <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
-              👤 Biography: {id || 'Untitled'}
-            </div>
-            {src && (
-              <div style={{ marginBottom: '8px' }}>
-                <img
-                  src={src}
-                  alt={alt || id || 'Portrait'}
-                  style={{ maxWidth: '200px', maxHeight: '200px', height: 'auto', display: 'block', border: '2px solid currentColor', color: 'var(--ks-color-scale-slate11)' }}
-                  onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
-                />
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
+              <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
+                👤 Biography: {id || 'Untitled'}
               </div>
-            )}
-            <div style={{ fontSize: '11px', color: 'var(--ks-color-scale-slate11)' }}>
-              <div><strong>ID:</strong> {id || '(none)'}</div>
-              {alt && <div><strong>Alt:</strong> {alt}</div>}
-              <div><strong>Image:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{src || '(none)'}</code></div>
+              {displaySrc ? (
+                <div style={{ marginBottom: '8px' }}>
+                  <div style={{ fontSize: '9px', color: 'var(--ks-color-scale-slate11)', marginBottom: '4px', fontFamily: 'monospace' }}>
+                    {sourceInfo}{isNewlySelected && previewSrc ? ' (preview)' : ` → ${imageSrc}`}
+                  </div>
+                  <img
+                    src={displaySrc}
+                    alt={alt || id || 'Portrait'}
+                    style={{ maxWidth: '200px', maxHeight: '200px', height: 'auto', display: 'block', border: '2px solid currentColor', color: 'var(--ks-color-scale-slate11)' }}
+                    onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                  />
+                </div>
+              ) : (
+                <div style={{ padding: '40px', textAlign: 'center', backgroundColor: 'var(--ks-color-scale-slate3)', borderRadius: '4px', marginBottom: '8px' }}>
+                  <p style={{ margin: '0', color: 'var(--ks-color-scale-slate11)', fontSize: '14px' }}>📷 No portrait image selected</p>
+                </div>
+              )}
+              <div style={{ fontSize: '11px', color: 'var(--ks-color-scale-slate11)' }}>
+                <div><strong>ID:</strong> {id || '(none)'}</div>
+                {alt && <div><strong>Alt:</strong> {alt}</div>}
+                {imageSrc && <div><strong>Image:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{imageSrc}</code></div>}
+              </div>
+            </div>
+            <div style={{ marginTop: '8px' }}>
+              {children}
             </div>
           </div>
-          <div style={{ marginTop: '8px' }}>
-            {props.children}
-          </div>
-        </div>
+        );
+      };
+
+      return (
+        <SlugProvider enabled={true}>
+          <BiographyContentViewInner value={props.value} children={props.children} />
+        </SlugProvider>
       );
     },
   }),
