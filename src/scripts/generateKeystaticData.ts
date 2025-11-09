@@ -7,41 +7,28 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import yaml from 'js-yaml';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Simple frontmatter parser
+/**
+ * Parse frontmatter from markdown content using proper YAML parser
+ * @param content - Full markdown file content
+ * @returns Parsed frontmatter object or empty object if parsing fails
+ */
 function parseFrontmatter(content: string): any {
   const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
   if (!frontmatterMatch) return {};
 
-  const frontmatter = frontmatterMatch[1];
-  const data: any = {};
-
-  // Parse categories (array format: categories: [foo, bar] or space-separated: categories: foo bar)
-  const categoriesMatch = frontmatter.match(/^categories:\s*\[(.*?)\]/m);
-  if (categoriesMatch) {
-    data.categories = categoriesMatch[1].split(',').map(s => s.trim());
-  } else {
-    const categoriesLineMatch = frontmatter.match(/^categories:\s*(.+)$/m);
-    if (categoriesLineMatch) {
-      data.categories = categoriesLineMatch[1].trim().split(/\s+/);
-    }
+  try {
+    // Use proper YAML parser instead of regex to handle all YAML features
+    const parsed = yaml.load(frontmatterMatch[1]);
+    return parsed || {};
+  } catch (error) {
+    console.error('Failed to parse YAML frontmatter:', error);
+    return {};
   }
-
-  // Parse tags (array format: tags: [foo, bar] or space-separated: tags: foo bar)
-  const tagsMatch = frontmatter.match(/^tags:\s*\[(.*?)\]/m);
-  if (tagsMatch) {
-    data.tags = tagsMatch[1].split(',').map(s => s.trim());
-  } else {
-    const tagsLineMatch = frontmatter.match(/^tags:\s*(.+)$/m);
-    if (tagsLineMatch) {
-      data.tags = tagsLineMatch[1].trim().split(/\s+/);
-    }
-  }
-
-  return data;
 }
 
 // Read all post files from the posts directory
@@ -65,29 +52,68 @@ function getAllPostFiles(dir: string): string[] {
   return files;
 }
 
+/**
+ * Validate that a tag or category string is valid
+ * @param value - The value to validate
+ * @returns true if valid, false otherwise
+ */
+function isValidKey(value: string): boolean {
+  if (!value || typeof value !== 'string') return false;
+
+  const trimmed = value.trim();
+
+  // Must have at least one alphanumeric character
+  if (!/[a-zA-Z0-9]/.test(trimmed)) return false;
+
+  // Must not be only special characters
+  if (/^[^a-zA-Z0-9]+$/.test(trimmed)) return false;
+
+  return true;
+}
+
 // Extract categories and tags from frontmatter
 function extractKeys(postFiles: string[]): { categories: Set<string>, tags: Set<string> } {
   const categories = new Set<string>();
   const tags = new Set<string>();
 
   for (const file of postFiles) {
-    const content = fs.readFileSync(file, 'utf-8');
-    const data = parseFrontmatter(content);
+    try {
+      const content = fs.readFileSync(file, 'utf-8');
+      const data = parseFrontmatter(content);
 
-    // Extract categories
-    if (data.categories) {
-      const cats = Array.isArray(data.categories)
-        ? data.categories
-        : [data.categories];
-      cats.forEach((cat: string) => categories.add(cat.toLowerCase()));
-    }
+      // Extract categories
+      if (data.categories) {
+        const cats = Array.isArray(data.categories)
+          ? data.categories
+          : [data.categories];
+        cats.forEach((cat: string) => {
+          const normalized = cat.toLowerCase().trim();
+          if (isValidKey(normalized)) {
+            categories.add(normalized);
+          } else {
+            console.warn(`Skipping invalid category "${cat}" in ${path.basename(file)}`);
+          }
+        });
+      }
 
-    // Extract tags
-    if (data.tags) {
-      const tagList = Array.isArray(data.tags)
-        ? data.tags
-        : [data.tags];
-      tagList.forEach((tag: string) => tags.add(tag.toLowerCase()));
+      // Extract tags
+      if (data.tags) {
+        const tagList = Array.isArray(data.tags)
+          ? data.tags
+          : [data.tags];
+        tagList.forEach((tag: string) => {
+          const normalized = tag.toLowerCase().trim();
+          if (isValidKey(normalized)) {
+            tags.add(normalized);
+          } else {
+            console.warn(`Skipping invalid tag "${tag}" in ${path.basename(file)}`);
+          }
+        });
+      }
+    } catch (error) {
+      console.error(`Failed to process ${path.basename(file)}:`, error instanceof Error ? error.message : error);
+      // Continue processing other files
+      continue;
     }
   }
 
@@ -99,20 +125,15 @@ const postsDir = path.join(__dirname, '../assets/posts/hiivelabs.com');
 const postFiles = getAllPostFiles(postsDir);
 const { categories, tags } = extractKeys(postFiles);
 
-// Transform categories into Keystatic option format
-const categoryOptions = Array.from(categories).map(cat => ({
-  label: cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-  value: cat,
-})).sort((a, b) => a.label.localeCompare(b.label));
-
-// Transform tags into simple array (sorted)
+// Transform both categories and tags into simple sorted arrays
+const categoryList = Array.from(categories).sort();
 const tagList = Array.from(tags).sort();
 
 // Generate categories.ts content
 const categoriesContent = `// Auto-generated by generateKeystaticData.ts - DO NOT EDIT MANUALLY
 // Run 'npm run generate:keystatic-data' to regenerate
 
-export const categoryOptions = ${JSON.stringify(categoryOptions, null, 2)};
+export const categories = ${JSON.stringify(categoryList, null, 2)};
 `;
 
 // Generate tags.ts content
@@ -133,5 +154,5 @@ fs.writeFileSync(path.join(onbuildDir, 'categories.ts'), categoriesContent);
 fs.writeFileSync(path.join(onbuildDir, 'tags.ts'), tagsContent);
 
 console.log('✅ Generated categories.ts and tags.ts');
-console.log(`   Categories: ${categoryOptions.length}`);
+console.log(`   Categories: ${categoryList.length}`);
 console.log(`   Tags: ${tagList.length}`);

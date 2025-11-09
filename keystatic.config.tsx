@@ -3,10 +3,11 @@
 import { config, fields, collection } from '@keystatic/core';
 // @ts-ignore
 import { wrapper, block, inline } from '@keystatic/core/content-components';
-import { categoryOptions } from './src/scripts/onbuild/categories';
+import { categories } from './src/scripts/onbuild/categories';
 import { tags } from './src/scripts/onbuild/tags';
 import React from 'react';
 import { getSiteCode } from "./src/scripts/getSiteConfig.ts";
+import pre = $effect.pre;
 
 
 
@@ -26,10 +27,52 @@ const blogImagePath = `${baseImagePath}/blog`;
 // CONFIGURATION CONSTANTS
 // ============================================================================
 
-const commonCategoriesText = `Common categories: ${categoryOptions.map(c => c.value).join(', ')}. You can also enter a custom category.`;
+const commonCategoriesText = `Common categories: ${categories.join(', ')}. You can also enter a custom category.`;
 const commonTagsText = `Common tags: ${tags.join(', ')}. You can also enter a custom tag.`;
 
-let currentSlug = ''; // Global slug tracker for ContentView components
+// ============================================================================
+// SLUG CONTEXT - Replaces global mutable state
+// ============================================================================
+
+/** Context for sharing slug state between components without global mutation */
+const SlugContext = React.createContext<string>('');
+
+/** Provider component that tracks slug from DOM and shares it via context */
+const SlugProvider: React.FC<{ children: React.ReactNode; enabled: boolean }> = ({ children, enabled }) => {
+  const [slug, setSlug] = React.useState<string>('');
+
+  React.useEffect(() => {
+    if (!enabled) return;
+
+    const findSlug = (): boolean => {
+      const labels = document.querySelectorAll('label');
+      for (const label of labels) {
+        if (label.textContent?.includes('Slug')) {
+          const inputId = label.getAttribute('for');
+          if (inputId) {
+            const input = document.getElementById(inputId) as HTMLInputElement;
+            if (input?.value && slug !== input.value) {
+              setSlug(input.value);
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    };
+
+    if (!findSlug()) {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+        if (findSlug() || attempts > 20) clearInterval(interval);
+      }, 100);
+      return () => clearInterval(interval);
+    }
+  }, [enabled, slug]);
+
+  return <SlugContext.Provider value={slug}>{children}</SlugContext.Provider>;
+};
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -82,42 +125,6 @@ const buildImagePath = (filename: string, baseDir: string, slug?: string): strin
   return slug ? `${baseDir}/${slug}/${filename}` : `${baseDir}/${filename}`;
 };
 
-/** Hook to track current slug from DOM */
-const useSlugTracking = (enabled: boolean) => {
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
-
-  React.useEffect(() => {
-    if (!enabled) return;
-
-    const findSlug = () => {
-      const labels = document.querySelectorAll('label');
-      for (const label of labels) {
-        if (label.textContent?.includes('Slug')) {
-          const inputId = label.getAttribute('for');
-          if (inputId) {
-            const input = document.getElementById(inputId) as HTMLInputElement;
-            if (input?.value && currentSlug !== input.value) {
-              currentSlug = input.value;
-              forceUpdate();
-              return true;
-            }
-          }
-        }
-      }
-      return false;
-    };
-
-    if (!findSlug()) {
-      let attempts = 0;
-      const interval = setInterval(() => {
-        attempts++;
-        if (findSlug() || attempts > 20) clearInterval(interval);
-      }, 100);
-      return () => clearInterval(interval);
-    }
-  }, [enabled]);
-};
-
 // ============================================================================
 // IMAGE CONTENT VIEW FACTORY
 // ============================================================================
@@ -126,72 +133,92 @@ const createImageContentView = (options: {
   includeCaption?: boolean;
   includeSlugTracking?: boolean;
   defaultAlt?: string;
-}) => (props: any) => {
-  const { image, src, alt, caption } = props.value;
-  useSlugTracking(options.includeSlugTracking ?? false);
+}) => {
+  // Inner component that consumes the slug context
+  const ImageContentViewInner: React.FC<{ value: any }> = ({ value }) => {
+    const { image, src, alt, caption } = value;
+    const currentSlug = React.useContext(SlugContext); // Get slug from context instead of global
 
-  // Determine image source
-  let imageSrc: string | null = null;
-  let previewSrc: string | null = null;
-  let sourceInfo = '';
-  let isNewlySelected = false;
+    // Determine image source
+    let imageSrc: string | null = null;
+    let previewSrc: string | null = null;
+    let sourceInfo = '';
+    let isNewlySelected = false;
 
-  if (image) {
-    const extracted = extractImageData(image);
-    isNewlySelected = extracted.isNewlySelected;
-    previewSrc = extracted.previewSrc;
+    if (image) {
+      const extracted = extractImageData(image);
+      isNewlySelected = extracted.isNewlySelected;
+      previewSrc = extracted.previewSrc;
 
-    if (extracted.filename) {
-      sourceInfo = `Picker: ${extracted.filename}${currentSlug && options.includeSlugTracking ? ` (slug: ${currentSlug})` : ''}`;
-      imageSrc = buildImagePath(
-        extracted.filename,
-        options.imageDirectory,
-        options.includeSlugTracking ? currentSlug : undefined
+      if (extracted.filename) {
+        sourceInfo = `Picker: ${extracted.filename}${currentSlug && options.includeSlugTracking ? ` (slug: ${currentSlug})` : ''}`;
+        imageSrc = buildImagePath(
+          extracted.filename,
+          options.imageDirectory,
+          options.includeSlugTracking ? currentSlug : undefined
+        );
+      }
+    } else if (src) {
+      sourceInfo = `Manual: ${src}`;
+      imageSrc = src.startsWith('/') || src.startsWith(`${baseDir}/`)
+        ? src
+        : `${options.imageDirectory}/${src}`;
+    }
+
+    // Clean up blob URLs when component unmounts or previewSrc changes
+    // Must be called unconditionally (Rules of Hooks)
+    React.useEffect(() => {
+      return () => {
+        if (previewSrc && previewSrc.startsWith('blob:')) {
+          URL.revokeObjectURL(previewSrc);
+        }
+      };
+    }, [previewSrc]);
+
+    if (!imageSrc) {
+      return <div style={{ padding: '12px', border: '1px dashed #ccc', borderRadius: '4px' }}>
+        <p>No image selected</p>
+      </div>;
+    }
+
+    // Placeholder for unsaved images without preview
+    if (isNewlySelected && !previewSrc) {
+      return (
+        <div style={{ padding: '12px', border: '1px solid #e0e0e0', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+          <div style={{ fontSize: '10px', color: '#999', marginBottom: '8px', fontFamily: 'monospace' }}>
+            {sourceInfo}
+          </div>
+          <div style={{ padding: '40px', textAlign: 'center', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
+            <p style={{ margin: '0', color: '#666', fontSize: '14px' }}>💾 Save document to preview image</p>
+          </div>
+          {options.includeCaption && caption && <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>{caption}</p>}
+        </div>
       );
     }
-  } else if (src) {
-    sourceInfo = `Manual: ${src}`;
-    imageSrc = src.startsWith('/') || src.startsWith(`${baseDir}/`)
-      ? src
-      : `${options.imageDirectory}/${src}`;
-  }
 
-  if (!imageSrc) {
-    return <div style={{ padding: '12px', border: '1px dashed #ccc', borderRadius: '4px' }}>
-      <p>No image selected</p>
-    </div>;
-  }
+    const displaySrc = isNewlySelected && previewSrc ? previewSrc : imageSrc;
 
-  // Placeholder for unsaved images without preview
-  if (isNewlySelected && !previewSrc) {
     return (
-      <div style={{ padding: '12px', border: '1px solid #e0e0e0', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+      <div style={{ padding: '12px', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
         <div style={{ fontSize: '10px', color: '#999', marginBottom: '8px', fontFamily: 'monospace' }}>
-          {sourceInfo}
+          {sourceInfo}{isNewlySelected && previewSrc ? ' (preview)' : ` → ${imageSrc}`}
         </div>
-        <div style={{ padding: '40px', textAlign: 'center', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
-          <p style={{ margin: '0', color: '#666', fontSize: '14px' }}>💾 Save document to preview image</p>
-        </div>
+        <img
+          src={displaySrc}
+          alt={alt || options.defaultAlt || 'Image'}
+          style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
+          onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+        />
         {options.includeCaption && caption && <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>{caption}</p>}
       </div>
     );
-  }
+  };
 
-  const displaySrc = isNewlySelected && previewSrc ? previewSrc : imageSrc;
-
-  return (
-    <div style={{ padding: '12px', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
-      <div style={{ fontSize: '10px', color: '#999', marginBottom: '8px', fontFamily: 'monospace' }}>
-        {sourceInfo}{isNewlySelected && previewSrc ? ' (preview)' : ` → ${imageSrc}`}
-      </div>
-      <img
-        src={displaySrc}
-        alt={alt || options.defaultAlt || 'Image'}
-        style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
-        onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
-      />
-      {options.includeCaption && caption && <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>{caption}</p>}
-    </div>
+  // Return the component wrapped in SlugProvider
+  return (props: any) => (
+    <SlugProvider enabled={options.includeSlugTracking ?? false}>
+      <ImageContentViewInner value={props.value} />
+    </SlugProvider>
   );
 };
 
@@ -226,6 +253,92 @@ const createImageComponent = (type: 'Lightbox' | 'Gallery', imagePath: string) =
 
 const createLightboxImageComponent = (imagePath: string) => createImageComponent('Lightbox', imagePath);
 const createGalleryImageComponent = (imagePath: string) => createImageComponent('Gallery', imagePath);
+
+// ============================================================================
+// MATHJAX LOADING HOOK
+// ============================================================================
+
+/**
+ * Custom hook to manage MathJax loading with proper error handling and cleanup
+ * Ensures MathJax is loaded only once and handles loading failures gracefully
+ */
+const useMathJax = (): { loaded: boolean; error: boolean } => {
+  const [loaded, setLoaded] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
+  React.useEffect(() => {
+    // Already loaded
+    if ((window as any).MathJax?.typesetPromise) {
+      setLoaded(true);
+      return;
+    }
+
+    // Check if script is already being loaded
+    const existingScript = document.getElementById('MathJax-script');
+    if (existingScript) {
+      // Wait for existing script to load
+      const checkInterval = setInterval(() => {
+        if ((window as any).MathJax?.typesetPromise) {
+          setLoaded(true);
+          clearInterval(checkInterval);
+        }
+      }, 100);
+
+      // Timeout after 10 seconds
+      const timeout = setTimeout(() => {
+        clearInterval(checkInterval);
+        if (!(window as any).MathJax?.typesetPromise) {
+          console.error('MathJax loading timeout');
+          setError(true);
+        }
+      }, 10000);
+
+      return () => {
+        clearInterval(checkInterval);
+        clearTimeout(timeout);
+      };
+    }
+
+    // Configure MathJax before loading
+    (window as any).MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      startup: {
+        ready: () => {
+          (window as any).MathJax.startup.defaultReady();
+          setLoaded(true);
+        }
+      }
+    };
+
+    // Load MathJax script
+    const script = document.createElement('script');
+    script.src = '/scripts/prebuilt/mathjax-tex-svg-full.js';
+    script.async = true;
+    script.id = 'MathJax-script';
+
+    script.onload = () => {
+      // Loaded flag will be set by MathJax startup.ready callback
+    };
+
+    script.onerror = (e) => {
+      console.error('Failed to load MathJax script:', e);
+      setError(true);
+    };
+
+    document.head.appendChild(script);
+
+    // Cleanup is intentionally not removing the script as it should persist
+    // across component unmounts for other components to use
+  }, []);
+
+  return { loaded, error };
+};
 
 // ============================================================================
 // MINIMAL HTML COMPONENT DEFINITIONS
@@ -272,6 +385,7 @@ const minimalHtmlComponents = {
       text: fields.text({ label: 'Text' }),
       id: fields.text({ label: 'Id' }),
       class: classField(),
+      style: fields.text({ label: 'Style' })
     },
     ContentView: (props) => (
       <span
@@ -310,53 +424,23 @@ const minimalHtmlComponents = {
       const isInline = props.value.inline ?? true;
       const equation = props.value.equation ? `$${props.value.equation}$` :  '(no equation)';
       const containerRef = React.useRef<HTMLDivElement>(null);
+      const { loaded, error } = useMathJax();
 
       React.useEffect(() => {
-        // Ensure MathJax is loaded
-        if (!(window as any).MathJax) {
-          // Configure MathJax before loading
-          (window as any).MathJax = {
-            tex: {
-              inlineMath: [['$', '$'], ['\\(', '\\)']],
-              displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            },
-            svg: {
-              fontCache: 'global'
+        if (!loaded || error || !containerRef.current) return;
+
+        const typeset = async () => {
+          try {
+            if ((window as any).MathJax?.typesetPromise) {
+              await (window as any).MathJax.typesetPromise([containerRef.current]);
             }
-          };
-
-          // Load MathJax script
-          const script = document.createElement('script');
-          script.src = '/scripts/prebuilt/mathjax-tex-svg-full.js';
-          script.async = true;
-          script.id = 'MathJax-script';
-          document.head.appendChild(script);
-        }
-      }, []);
-
-      React.useEffect(() => {
-        const typeset = () => {
-          if (containerRef.current && (window as any).MathJax?.typesetPromise) {
-            (window as any).MathJax.typesetPromise([containerRef.current])
-              .catch((err: any) => console.error('MathJax typeset failed:', err));
+          } catch (err) {
+            console.error('MathJax typeset failed:', err);
           }
         };
 
-        // Wait for MathJax to be ready
-        if ((window as any).MathJax?.typesetPromise) {
-          typeset();
-        } else {
-          // Poll for MathJax to be ready
-          const interval = setInterval(() => {
-            if ((window as any).MathJax?.typesetPromise) {
-              clearInterval(interval);
-              typeset();
-            }
-          }, 100);
-
-          return () => clearInterval(interval);
-        }
-      }, [equation, isInline]);
+        typeset();
+      }, [equation, isInline, loaded, error]);
 
       return (
         <div
@@ -643,8 +727,46 @@ const sharedCustomComponents = {
 // BLOG-SPECIFIC CUSTOM COMPONENTS
 // ============================================================================
 const blogSpecificComponents = {
-  ContentWarning: simpleWrapper('Content Warning', {
-    warning: fields.text({ label: 'Warning' }),
+  ContentWarning: wrapper({
+    label: 'Content Warning',
+    schema: {
+      warning: fields.text({
+        label: 'Warning Text',
+        description: 'Warning message to display',
+        validation: { isRequired: true },
+      }),
+    },
+    ContentView: (props) => {
+      const ref = React.useRef<HTMLDivElement>(null);
+
+      React.useEffect(() => {
+        if (ref.current) {
+          // Navigate DOM to update header
+          const warningHeader = ref.current.parentElement?.parentElement?.firstElementChild?.firstElementChild as HTMLDivElement;
+          if (warningHeader && props.value.warning?.length || 0 > 0) {
+            const prefix =
+                (props.value.warning?.toUpperCase().startsWith("CONTENT WARNING:") || false)
+                    ? ""
+                    : "CONTENT WARNING: ";
+            warningHeader.innerText = `${prefix}${props.value.warning || '(no warning text)'}`;
+          }
+        }
+      }, [props.value.warning]);
+
+      return (
+        <div ref={ref} style={{
+          padding: '12px',
+          color: 'var(--ks-color-scale-slate12)',
+          paddingLeft: '20px',
+          borderLeft: '3px solid var(--ks-color-scale-orange9)',
+          backgroundColor: 'rgba(255, 0, 0, 0.1)'
+        }}>
+          <div style={{ paddingLeft: '8px', borderLeft: '2px solid var(--ks-color-scale-slate6)' }}>
+            {props.children}
+          </div>
+        </div>
+      );
+    },
   }),
   LightboxGallery: simpleWrapper('Lightbox Gallery', {
     caption: fields.text({ label: 'Caption' })
@@ -697,8 +819,158 @@ const blogSpecificComponents = {
   //   }),
   // }),
   GalleryImage: createGalleryImageComponent(blogImagePath),
-  LightboxVideo: simpleBlock('Lightbox Video', {
-    src: fields.text({ label: 'Source' }),
+  LightboxVideo: block({
+    label: 'Lightbox Video',
+    schema: {
+      video: fields.file({
+        label: 'Video File',
+        description: 'Select video file (mp4, webm, etc.)',
+        directory: blogImagePath,
+        publicPath: `/${blogImagePath}/`,
+        validation: { isRequired: true },
+      }),
+      inlineImg: fields.image({
+        label: 'Inline Thumbnail',
+        description: 'Thumbnail image shown inline in the post',
+        directory: blogImagePath,
+        publicPath: `/${blogImagePath}/`,
+        validation: { isRequired: true },
+      }),
+      previewImg: fields.image({
+        label: 'Preview Image',
+        description: 'Preview image shown in lightbox before video plays',
+        directory: blogImagePath,
+        publicPath: `/${blogImagePath}/`,
+        validation: { isRequired: true },
+      }),
+      alt: fields.text({
+        label: 'Alt Text',
+        description: 'Descriptive text for accessibility',
+        validation: { isRequired: true },
+      }),
+      id: fields.text({
+        label: 'ID',
+        description: 'Optional HTML ID for the video element',
+      }),
+      description: fields.text({
+        label: 'Description',
+        description: 'Detailed description shown in lightbox',
+        multiline: true,
+      }),
+      caption: fields.text({
+        label: 'Caption',
+        description: 'Caption shown below the inline image',
+      }),
+      class: fields.text({
+        label: 'CSS Class',
+        description: 'Optional CSS classes for styling',
+      }),
+    },
+    ContentView: (props) => {
+      const { video, inlineImg, previewImg, alt, caption } = props.value;
+      const currentSlug = React.useContext(SlugContext);
+
+      // Extract video source
+      let videoSrc: string | null = null;
+      if (video) {
+        if (typeof video === 'string') {
+          videoSrc = video;
+        } else if (video.filename) {
+          videoSrc = buildImagePath(video.filename, `/${blogImagePath}`, currentSlug);
+        }
+      }
+
+      // Extract inline image source
+      let inlineImageSrc: string | null = null;
+      let inlinePreviewSrc: string | null = null;
+      let inlineIsNew = false;
+
+      if (inlineImg) {
+        const extracted = extractImageData(inlineImg);
+        inlineIsNew = extracted.isNewlySelected;
+        inlinePreviewSrc = extracted.previewSrc;
+        if (extracted.filename) {
+          inlineImageSrc = buildImagePath(extracted.filename, `/${blogImagePath}`, currentSlug);
+        }
+      }
+
+      // Extract preview image source
+      let previewImageSrc: string | null = null;
+      let previewPreviewSrc: string | null = null;
+
+      if (previewImg) {
+        const extracted = extractImageData(previewImg);
+        previewPreviewSrc = extracted.previewSrc;
+        if (extracted.filename) {
+          previewImageSrc = buildImagePath(extracted.filename, `/${blogImagePath}`, currentSlug);
+        }
+      }
+
+      // Cleanup blob URLs
+      React.useEffect(() => {
+        return () => {
+          if (inlinePreviewSrc && inlinePreviewSrc.startsWith('blob:')) {
+            URL.revokeObjectURL(inlinePreviewSrc);
+          }
+          if (previewPreviewSrc && previewPreviewSrc.startsWith('blob:')) {
+            URL.revokeObjectURL(previewPreviewSrc);
+          }
+        };
+      }, [inlinePreviewSrc, previewPreviewSrc]);
+
+      if (!videoSrc || !inlineImageSrc || !previewImageSrc || !alt) {
+        return (
+          <div style={{ padding: '12px', border: '1px dashed #ccc', borderRadius: '4px' }}>
+            <p>⚠️ Missing required fields. Please fill in:</p>
+            <ul style={{ marginLeft: '20px', marginTop: '8px' }}>
+              {!videoSrc && <li>Video File</li>}
+              {!inlineImageSrc && <li>Inline Thumbnail</li>}
+              {!previewImageSrc && <li>Preview Image</li>}
+              {!alt && <li>Alt Text</li>}
+            </ul>
+          </div>
+        );
+      }
+
+      const displayInlineSrc = inlineIsNew && inlinePreviewSrc ? inlinePreviewSrc : inlineImageSrc;
+
+      return (
+        <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
+          <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
+            🎥 Lightbox Video: {videoSrc.split('/').pop()}
+          </div>
+
+          {/* Show inline image preview */}
+          <img
+            src={displayInlineSrc}
+            alt={alt}
+            style={{ maxWidth: '100%', maxHeight: '200px', height: 'auto', display: 'block', border: '2px solid currentColor' }}
+            onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+          />
+
+
+          <div style={{ display: 'grid', gap: '6px', fontSize: '11px', color: 'var(--ks-color-scale-slate11)' }}>
+            <div>
+              <strong>Video:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{videoSrc}</code>
+            </div>
+            <div>
+              <strong>Inline:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{inlineImageSrc}</code>
+            </div>
+            <div>
+              <strong>Preview:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{previewImageSrc}</code>
+            </div>
+            <div>
+              <strong>Alt:</strong> {alt}
+            </div>
+            {caption && (
+              <div>
+                <strong>Caption:</strong> {caption}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    },
   }),
 };
 

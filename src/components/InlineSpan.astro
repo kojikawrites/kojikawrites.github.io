@@ -3,8 +3,9 @@ interface Props {
     text: string;
     id?: string;
     class?: string;
+    style?: string;
 }
 
-const { text, id, class: className = '' } = Astro.props;
+const { text, id, class: className = '', style = ''} = Astro.props;
 ---
-<span id={id} class={className}>{text}</span>
+<span id={id} class={className} style={style}>{text}</span>

@@ -21,8 +21,8 @@ import tailwind from '@astrojs/tailwind';
 import rehypeLinkDecorator from "./rehype-link-decorator.mjs";
 import rehypeFootnotesToEnd from "./rehype-footnotes-to-end.mjs";
 import {rehypeRenderEquations} from "./rehype-render-equations.mjs";
+import rehypeContentWarningTransform from "./rehype-content-warning-transform.mjs";
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
-
 
 import sitemap from '@astrojs/sitemap';
 
@@ -196,6 +196,7 @@ export default defineConfig({
                 }
             ],
             rehypeRenderEquations, // Render EquationSnippet components with MathJax directly
+            rehypeContentWarningTransform, // Transform ContentWarning to use slots
             rehypeFootnotesToEnd,
         ],
     },
