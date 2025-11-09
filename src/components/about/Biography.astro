@@ -2,19 +2,38 @@
 interface Props {
     id: string;
     alt?: string;
-    src: string;
+    image?: string;
+    src?: string;
     class?: string;
 }
 
 import ThemedImage from "../ThemedImage.astro";
-const {id, alt = "", src, class:className} = Astro.props;
+import { getSiteCode } from "../../scripts/getSiteConfig.ts";
+
+const {id, alt = "", image, src, class:className} = Astro.props;
 const portraitId = `${id}-portrait`;
+
+// Determine the image source - prefer image picker over manual src
+let imagePath: string;
+if (image) {
+    // Image from picker - build path
+    const siteCode = getSiteCode();
+    const baseImagePath = `src/assets/images/${siteCode}`;
+    imagePath = image.startsWith('/') || image.startsWith('src/')
+        ? image
+        : `/${baseImagePath}/${image}`;
+} else if (src) {
+    // Legacy manual path
+    imagePath = src;
+} else {
+    throw new Error(`Biography component for "${id}" requires either image or src prop`);
+}
 ---
 
 <div class=`bio` id={id}>
     <ThemedImage id={portraitId}
                  alt={alt}
-                 src={src}
+                 src={imagePath}
                  class="portrait"/>
     <div>
         <slot />
