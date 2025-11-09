@@ -1016,29 +1016,36 @@ const blogComponents = {
 const pageComponents = {
   ...minimalHtmlComponents,
   ...sharedCustomComponents,
-    LightboxImage: createLightboxImageComponent(baseImagePath),
-  // LightboxImage: block({
-  //   label: 'Lightbox Image',
-  //   schema: {
-  //     image: fields.image({
-  //       label: 'Image (Picker)',
-  //       directory: `${baseImagePath}`,
-  //       publicPath: `/${baseImagePath}/`,
-  //     }),
-  //     src: fields.text({
-  //       label: 'Or enter path manually',
-  //       description: 'Legacy support - leave empty if using image picker above',
-  //     }),
-  //     alt: fields.text({ label: 'Alt Text' }),
-  //     description: fields.text({ label: 'Detailed Description' }),
-  //   },
-  //   ContentView: createImageContentView({
-  //     imageDirectory: `/${baseImagePath}`,
-  //     includeCaption: false,
-  //     includeSlugTracking: false,
-  //     defaultAlt: 'Lightbox image',
-  //   }),
-  // }),
+  LightboxImage: createLightboxImageComponent(baseImagePath),
+  Biography: wrapper({
+    label: 'Biography',
+    schema: {
+      id: fields.text({
+        label: 'ID',
+        validation: { isRequired: true },
+      }),
+      alt: fields.text({
+        label: 'Alt Text',
+      }),
+      src: fields.text({
+        label: 'Image Path',
+        description: 'Path to portrait image (e.g., /src/assets/images/hiivelabs.com/about/portrait.png)',
+        validation: { isRequired: true },
+      }),
+    },
+  }),
+  Thanks: wrapper({
+    label: 'Thanks',
+    schema: {
+      name: fields.text({
+        label: 'Name',
+        validation: { isRequired: true },
+      }),
+      url: fields.text({
+        label: 'URL',
+      }),
+    },
+  }),
 };
 
 // ============================================================================

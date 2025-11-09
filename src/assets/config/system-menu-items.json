@@ -17,12 +17,6 @@
       "label": "tags",
       "position": "left",
       "order": 3
-    },
-    {
-      "href": "/about",
-      "label": "About",
-      "position": "right",
-      "order": 3
     }
   ]
 }
