@@ -105,11 +105,18 @@ export const frontmatter = {
     // are removed from the relevant block.
     function checkHiddenBios() {
         const bios = document.querySelectorAll('div.bio'); // Select all bios
-        console.warn('bio-refresh');
-        bios.forEach(bio => {
+        console.warn('bio-refresh - found', bios.length, 'bios');
+        bios.forEach((bio, index) => {
+            console.warn(`Bio ${index}:`, {
+                id: bio.id,
+                classes: Array.from(bio.classList),
+                hasHidden: bio.classList.contains('hidden'),
+                display: window.getComputedStyle(bio).display,
+                visibility: window.getComputedStyle(bio).visibility
+            });
             if (bio.classList.contains('hidden')) {
                 bio.classList.remove('hidden');
-                console.warn('hidden class removed from bio');
+                console.warn('hidden class removed from bio', bio.id);
             }
         });
     }
