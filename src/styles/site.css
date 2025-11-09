@@ -155,7 +155,7 @@
     }
 
     .build-info {
-        @apply text-[0.5rem];
+        @apply text-[0.7rem] opacity-60;
     }
 
 }
