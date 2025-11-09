@@ -34,7 +34,7 @@ blog:
   prefix: blog/
   small_mode: card
   large_mode: card
-  default_author: hiive  # Default author for new blog posts (can also be set via DEFAULT_AUTHOR env var)
+  default_author: hiive
 footer:
   content:
     - hiivelabs and its logo are registered trademarks of hiive.
