@@ -10,10 +10,6 @@ export const frontmatter = {
 
 ---
 <div class="about">
-    <!--This dummy entry needs to be here because of a weird transition bug that sometimes hides the first bio-->
-    <!--BEGIN dummy bio-->
-    <div class="bio" />
-    <!--END dummy bio -->
     <Biography id="hiive"
                alt="hiive"
                class="bio"
@@ -98,27 +94,3 @@ export const frontmatter = {
         </div>
     </div>
 </div>
-
-<script is:inline data-astro-rerun>
-    // this block of script is a workaround for a bizarre Astro quirk/bug that I haven't figured out
-    // sometimes the first bio block is set as hidden, so I'm just making sure that any 'hidden' attributes
-    // are removed from the relevant block.
-    function checkHiddenBios() {
-        const bios = document.querySelectorAll('div.bio'); // Select all bios
-        console.warn('bio-refresh - found', bios.length, 'bios');
-        bios.forEach((bio, index) => {
-            console.warn(`Bio ${index}:`, {
-                id: bio.id,
-                classes: Array.from(bio.classList),
-                hasHidden: bio.classList.contains('hidden'),
-                display: window.getComputedStyle(bio).display,
-                visibility: window.getComputedStyle(bio).visibility
-            });
-            if (bio.classList.contains('hidden')) {
-                bio.classList.remove('hidden');
-                console.warn('hidden class removed from bio', bio.id);
-            }
-        });
-    }
-    checkHiddenBios();
-</script>
