@@ -1,10 +1,12 @@
 ---
 import SitePageContent from '../components/SitePageContent.astro';
+import {getSiteCode} from "../scripts/getSiteConfig.ts";
+const siteCode = getSiteCode();
 
 // Export getStaticPaths for static site generation
 export async function getStaticPaths() {
   // Dynamically discover all page content files in the assets directory
-  const pageFiles = import.meta.glob('../assets/pagecontent/hiivelabs.com/*');
+  const pageFiles = import.meta.glob('../assets/pagecontent/**');
 
   // Extract the filename without extension to get the page slug
   const pages = Object.keys(pageFiles).map(filePath => {
