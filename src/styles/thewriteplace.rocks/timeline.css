@@ -107,6 +107,10 @@
         @apply color-text-secondary;
         @apply mb-3;
     }
+    a {
+        @apply w-fit text-base lg:leading-3 italic lg:py-0;
+        @apply color-text-highlight-color;
+    }
 }
 
 

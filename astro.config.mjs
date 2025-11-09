@@ -8,17 +8,22 @@ import rehypeExternalLinks from 'rehype-external-links'
 import rehypeMathjax from "rehype-mathjax";
 import {remarkReadingTime} from './remark-reading-time.mjs';
 import {remarkPublishDateFromFilename} from "./remark-publish-date-from-filename.mjs";
-import tailwind from '@astrojs/tailwind';
+import {remarkEquationSnippetTransform} from "./remark-equation-snippet-transform.mjs";
 import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
 import pagefind from "astro-pagefind";
 import frontmatter from "/src/scripts/extractPagesFrontMatter.mjs"; // DO NOT DELETE
 import siteLogos from "/src/scripts/extractDateLogoMap.mjs" // DO NOT DELETE
-
+import keystatic from '@keystatic/astro';
+import react from '@astrojs/react';
+import tailwind from '@astrojs/tailwind';
 
 import rehypeLinkDecorator from "./rehype-link-decorator.mjs";
+import rehypeFootnotesToEnd from "./rehype-footnotes-to-end.mjs";
+import {rehypeRenderEquations} from "./rehype-render-equations.mjs";
+import rehypeContentWarningTransform from "./rehype-content-warning-transform.mjs";
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
-
+import menuWatcher from './src/integrations/menuWatcher.ts';
 
 import sitemap from '@astrojs/sitemap';
 
@@ -56,7 +61,16 @@ export default defineConfig({
     site: siteName(),//'https://hiivelabs.com',
     trailingSlash: 'ignore',
 
-    integrations: [mdx(), svelte(), tailwind(), solidJs(), pagefind(), sitemap()],
+    integrations: [
+        react({ include: ['**/react/*'] }),
+        ...(process.env.NODE_ENV === 'development' ? [keystatic(), menuWatcher()] : []),
+        tailwind(),
+        mdx(),
+        svelte(),
+        solidJs({ include: ['**/solid/*', '**/bluesky/*'] }),
+        pagefind(),
+        sitemap()
+    ],
     markdown: {
         shikiConfig: {
             themes: {
@@ -75,6 +89,7 @@ export default defineConfig({
             remarkSmartypants,
             remarkReadingTime,
             remarkPublishDateFromFilename,
+            remarkEquationSnippetTransform, // Must run BEFORE remarkMath
             remarkMath
         ],
         rehypePlugins: [
@@ -181,6 +196,9 @@ export default defineConfig({
                     }
                 }
             ],
+            rehypeRenderEquations, // Render EquationSnippet components with MathJax directly
+            rehypeContentWarningTransform, // Transform ContentWarning to use slots
+            rehypeFootnotesToEnd,
         ],
     },
 })

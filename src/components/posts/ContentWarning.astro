@@ -42,34 +42,53 @@ const hiddenId = `${contentWarningId}-hidden`;
     </div>
 
 </div>
-<script type="module" define:vars={{ warningId, hiddenId }}>
+<script is:inline data-astro-rerun define:vars={{ warningId, hiddenId }}>
+    (function() { // IIFE
+        function refreshDivs() {
+            const toggleDiv = document.getElementById(warningId);
+            const contentDiv = document.getElementById(hiddenId);
 
-    function refreshDivs() {
-        const toggleDiv = document.getElementById(warningId);
-        const contentDiv = document.getElementById(hiddenId);
-
-        if (!toggleDiv || !contentDiv) {
-            console.warn("Can't find toggleDiv or contentDiv");
-            return;
+            if (!toggleDiv || !contentDiv) {
+                console.warn("Can't find toggleDiv or contentDiv");
+                return;
             }
 
-        // match fill to warning color
-        const warningStyle = window?.getComputedStyle(toggleDiv);
-        if (warningStyle?.color) {
-            toggleDiv.style.fill = warningStyle.color;
+            // match fill to warning color
+            const warningStyle = window?.getComputedStyle(toggleDiv);
+            if (warningStyle?.color) {
+                toggleDiv.style.fill = warningStyle.color;
             }
 
-        toggleDiv.addEventListener('click', function() {
-            const isExpanded = toggleDiv.getAttribute('aria-expanded') === 'true';
-            if (!isExpanded) {
-                contentDiv.classList.remove('hidden');
-                toggleDiv.classList.add('hidden');
-                toggleDiv.setAttribute('aria-expanded', 'true');
+            // Click handler function
+            function handleToggleClick() {
+                const isExpanded = toggleDiv.getAttribute('aria-expanded') === 'true';
+                if (!isExpanded) {
+                    contentDiv.classList.remove('hidden');
+                    toggleDiv.classList.add('hidden');
+                    toggleDiv.setAttribute('aria-expanded', 'true');
                 } else {
-                // contentDiv.classList.add('hidden');
-                toggleDiv.setAttribute('aria-expanded', 'false');
+                    // contentDiv.classList.add('hidden');
+                    toggleDiv.setAttribute('aria-expanded', 'false');
                 }
-            });
+            }
+
+            // Initialize global listener storage if needed
+            if (!window.__contentWarningListeners) {
+                window.__contentWarningListeners = {};
+            }
+
+            // Remove old listener if it exists (prevents memory leaks on page transitions)
+            if (window.__contentWarningListeners[warningId]) {
+                toggleDiv.removeEventListener('click', window.__contentWarningListeners[warningId]);
+            }
+
+            // Store listener reference for cleanup on next run
+            window.__contentWarningListeners[warningId] = handleToggleClick;
+
+            // Add listener
+            toggleDiv.addEventListener('click', handleToggleClick);
         }
+
         refreshDivs();
+    })();
 </script>

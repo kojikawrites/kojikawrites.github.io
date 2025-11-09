@@ -2,22 +2,80 @@
 interface Props {
     id: string;
     alt?: string;
-    src: string;
+    image?: string;
+    src?: string;
+    slug?: string;
     class?: string;
 }
 
 import ThemedImage from "../ThemedImage.astro";
-const {id, alt = "", src, class:className} = Astro.props;
+import { getSiteCode } from "../../scripts/getSiteConfig.ts";
+
+const {id, alt = "", image, src, slug, class:className} = Astro.props;
 const portraitId = `${id}-portrait`;
+
+// Determine the image source - prefer image picker over manual src
+let imagePath: string;
+if (image) {
+    // Image from picker - build path with slug subdirectory
+    const siteCode = getSiteCode();
+    const baseImagePath = `src/assets/images/${siteCode}`;
+
+    // If image is already a full path, use it as-is
+    if (image.startsWith('/') || image.startsWith('src/')) {
+        imagePath = image;
+    } else {
+        // Derive slug from URL if not provided as prop
+        const pageSlug = slug || Astro.url.pathname.split('/').filter(Boolean).pop() || '';
+        // Build path with slug subdirectory for organization (like blog posts)
+        imagePath = pageSlug
+            ? `/${baseImagePath}/${pageSlug}/${image}`
+            : `/${baseImagePath}/${image}`;
+    }
+} else if (src) {
+    // Legacy manual path
+    imagePath = src;
+} else {
+    throw new Error(`Biography component for "${id}" requires either image or src prop`);
+}
 ---
 
 <div class=`bio` id={id}>
     <ThemedImage id={portraitId}
                  alt={alt}
-                 src={src}
+                 src={imagePath}
                  class="portrait"/>
     <div>
         <slot />
     </div>
     <hr/>
 </div>
+
+<script is:inline data-astro-rerun>
+    // Singleton pattern - only run once per page even if multiple Biography components exist
+    if (!window.bioHiddenCheckInitialized) {
+        window.bioHiddenCheckInitialized = true;
+
+        // this block of script is a workaround for a bizarre Astro quirk/bug that I haven't figured out
+        // sometimes the first bio block is set as hidden, so I'm just making sure that any 'hidden' attributes
+        // are removed from the relevant block.
+        function checkHiddenBios() {
+            const bios = document.querySelectorAll('div.bio'); // Select all bios
+            console.warn('bio-refresh - found', bios.length, 'bios');
+            bios.forEach((bio, index) => {
+                console.warn(`Bio ${index}:`, {
+                    id: bio.id,
+                    classes: Array.from(bio.classList),
+                    hasHidden: bio.classList.contains('hidden'),
+                    display: window.getComputedStyle(bio).display,
+                    visibility: window.getComputedStyle(bio).visibility
+                });
+                if (bio.classList.contains('hidden')) {
+                    bio.classList.remove('hidden');
+                    console.warn('hidden class removed from bio', bio.id);
+                }
+            });
+        }
+        checkHiddenBios();
+    }
+</script>
