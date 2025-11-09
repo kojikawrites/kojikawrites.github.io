@@ -1,6 +1,10 @@
 import type { AstroIntegration } from 'astro';
 import { execSync } from 'child_process';
 import path from 'path';
+import { config as dotenvConfig } from 'dotenv';
+
+// Load environment variables from .env file
+dotenvConfig();
 
 export default function menuWatcher(): AstroIntegration {
   return {

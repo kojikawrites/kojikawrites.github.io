@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
+import { config as dotenvConfig } from 'dotenv';
+
+// Load environment variables from .env file
+dotenvConfig();
 
 // Get site code from environment variable or use default
 const SITE_CODE = process.env.SITE_CODE || 'hiivelabs.com';
