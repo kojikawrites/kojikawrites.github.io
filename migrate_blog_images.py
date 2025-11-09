@@ -266,71 +266,75 @@ class BlogImageMigrator:
 
             # Get source image path
             source_image = self.get_image_path_from_src(current_src)
-
-            # Check if image already in slug directory
-            if f"/blog/{slug}/" in current_src:
-                print(f"  ✓ Already migrated: {source_image.name}")
-                continue
-
-            # Build new slug-based path
             image_filename = source_image.name
-            new_path = self.build_slug_based_path(slug, image_filename)
 
-            # Create slug directory if needed
-            if not slug_dir_created and not self.dry_run:
-                slug_dir = self.blog_images_dir / slug
-                slug_dir.mkdir(parents=True, exist_ok=True)
-                slug_dir_created = True
+            # Determine if path needs migration
+            already_migrated = f"/blog/{slug}/" in current_src
+            new_path = current_src  # Default to current path
 
-            # Copy image file
-            dest_image = self.root_dir / new_path.lstrip('/')
+            if not already_migrated:
+                # Build new slug-based path
+                new_path = self.build_slug_based_path(slug, image_filename)
 
-            if source_image.exists():
-                if not self.dry_run:
-                    try:
-                        dest_image.parent.mkdir(parents=True, exist_ok=True)
-                        shutil.copy2(source_image, dest_image)
-                        self.copied_images.add(dest_image)
+                # Create slug directory if needed
+                if not slug_dir_created and not self.dry_run:
+                    slug_dir = self.blog_images_dir / slug
+                    slug_dir.mkdir(parents=True, exist_ok=True)
+                    slug_dir_created = True
+
+                # Copy image file
+                dest_image = self.root_dir / new_path.lstrip('/')
+
+                if source_image.exists():
+                    if not self.dry_run:
+                        try:
+                            dest_image.parent.mkdir(parents=True, exist_ok=True)
+                            shutil.copy2(source_image, dest_image)
+                            self.copied_images.add(dest_image)
+                            self.source_images.add(source_image)
+                            print(f"  📋 Copied: {source_image.name} -> {slug}/{image_filename}")
+                        except Exception as e:
+                            error = f"Error copying {source_image} to {dest_image}: {e}"
+                            self.errors.append(error)
+                            print(f"  ❌ {error}")
+                            continue
+                    else:
+                        print(f"  [DRY RUN] Would copy: {source_image.name} -> {slug}/{image_filename}")
                         self.source_images.add(source_image)
-                        print(f"  📋 Copied: {source_image.name} -> {slug}/{image_filename}")
-                    except Exception as e:
-                        error = f"Error copying {source_image} to {dest_image}: {e}"
-                        self.errors.append(error)
-                        print(f"  ❌ {error}")
-                        continue
                 else:
-                    print(f"  [DRY RUN] Would copy: {source_image.name} -> {slug}/{image_filename}")
-                    self.source_images.add(source_image)
+                    warning = f"Source image not found: {source_image}"
+                    print(f"  ⚠️  {warning}")
+                    self.errors.append(warning)
+                    continue
             else:
-                warning = f"Source image not found: {source_image}"
-                print(f"  ⚠️  {warning}")
-                self.errors.append(warning)
-                continue
+                print(f"  ✓ Already migrated: {source_image.name}")
 
-            # Update the component in the body content
-            if self.update_src_to_image:
-                # Replace src= with image=
-                if 'src=' in full_component_text:
-                    new_component = full_component_text.replace(f'src="{current_src}"', f'image="{new_path}"')
+            # Determine if attribute conversion is needed
+            needs_attr_conversion = self.update_src_to_image and 'src' in attributes
+            needs_path_update = not already_migrated
+
+            # Update the component if needed
+            if needs_attr_conversion or needs_path_update:
+                new_component = full_component_text
+
+                if needs_attr_conversion:
+                    # Convert src= to image= and update path
+                    new_component = new_component.replace(f'src="{current_src}"', f'image="{new_path}"')
                     new_component = new_component.replace(f"src='{current_src}'", f"image='{new_path}'")
                     print(f"  ✏️  Updated: src -> image attribute")
-                else:
-                    new_component = full_component_text.replace(f'image="{current_src}"', f'image="{new_path}"')
-                    new_component = new_component.replace(f"image='{current_src}'", f"image='{new_path}'")
-                    print(f"  ✏️  Updated: image path")
-            else:
-                # Just update the path
-                if 'src=' in full_component_text:
-                    new_component = full_component_text.replace(f'src="{current_src}"', f'src="{new_path}"')
-                    new_component = new_component.replace(f"src='{current_src}'", f"src='{new_path}'")
-                else:
-                    new_component = full_component_text.replace(f'image="{current_src}"', f'image="{new_path}"')
-                    new_component = new_component.replace(f"image='{current_src}'", f"image='{new_path}'")
-                print(f"  ✏️  Updated: path to {new_path}")
+                elif needs_path_update:
+                    # Just update the path (keep src or image as-is)
+                    if 'src' in attributes:
+                        new_component = new_component.replace(f'src="{current_src}"', f'src="{new_path}"')
+                        new_component = new_component.replace(f"src='{current_src}'", f"src='{new_path}'")
+                    else:
+                        new_component = new_component.replace(f'image="{current_src}"', f'image="{new_path}"')
+                        new_component = new_component.replace(f"image='{current_src}'", f"image='{new_path}'")
+                    print(f"  ✏️  Updated: path to {new_path}")
 
-            # Replace in body content
-            new_body_content = new_body_content.replace(full_component_text, new_component)
-            changes_made = True
+                # Replace in body content
+                new_body_content = new_body_content.replace(full_component_text, new_component)
+                changes_made = True
 
         # Write updated content
         if changes_made and not self.dry_run:
