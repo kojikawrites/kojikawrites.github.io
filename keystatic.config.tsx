@@ -1,6 +1,6 @@
 /** @jsxImportSource react */
 // @ts-ignore
-import { config, fields, collection } from '@keystatic/core';
+import { config, fields, collection, singleton } from '@keystatic/core';
 // @ts-ignore
 import { wrapper, block, inline } from '@keystatic/core/content-components';
 import { categories } from './src/scripts/onbuild/categories';
@@ -1128,6 +1128,28 @@ export default config({
           label: 'Description',
           validation: { isRequired: true },
         }),
+        showInMenu: fields.checkbox({
+          label: 'Show in Navigation Menu',
+          defaultValue: false,
+        }),
+        menuLabel: fields.text({
+          label: 'Menu Label',
+          description: 'Leave empty to use page title',
+        }),
+        menuPosition: fields.select({
+          label: 'Menu Position',
+          options: [
+            { label: 'None', value: 'none' },
+            { label: 'Left Navigation', value: 'left' },
+            { label: 'Right Navigation', value: 'right' },
+          ],
+          defaultValue: 'none',
+        }),
+        menuOrder: fields.number({
+          label: 'Menu Order',
+          description: 'Lower numbers appear first (e.g., 1, 2, 3...)',
+          defaultValue: 999,
+        }),
         content: fields.mdx({
           label: 'Content',
           options: {
@@ -1138,6 +1160,43 @@ export default config({
           },
           components: pageComponents,
         }),
+      },
+    }),
+  },
+  singletons: {
+    systemMenuItems: singleton({
+      label: 'System Menu Items',
+      path: 'src/assets/config/system-menu-items',
+      format: { data: 'json' },
+      schema: {
+        items: fields.array(
+          fields.object({
+            href: fields.text({
+              label: 'URL',
+              validation: { isRequired: true },
+            }),
+            label: fields.text({
+              label: 'Label',
+              validation: { isRequired: true },
+            }),
+            position: fields.select({
+              label: 'Position',
+              options: [
+                { label: 'Left Navigation', value: 'left' },
+                { label: 'Right Navigation', value: 'right' },
+              ],
+              defaultValue: 'left',
+            }),
+            order: fields.number({
+              label: 'Menu Order',
+              defaultValue: 1,
+            }),
+          }),
+          {
+            label: 'System Menu Items',
+            itemLabel: (props) => props.fields.label.value || 'Menu Item',
+          }
+        ),
       },
     }),
   },

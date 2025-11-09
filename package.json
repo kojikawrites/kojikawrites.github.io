@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev --host",
-    "prebuild": "npx tsx src/scripts/generateKeystaticData.ts",
+    "prebuild": "npx tsx src/scripts/generateKeystaticData.ts && npx tsx src/scripts/generateNavMenu.ts",
     "build": "astro build",
     "preview": "astro preview",
     "preview-host": "astro preview --host",

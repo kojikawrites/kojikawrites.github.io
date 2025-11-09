@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "href": "/blog",
+      "label": "blog",
+      "position": "left",
+      "order": 1
+    },
+    {
+      "href": "/categories",
+      "label": "categories",
+      "position": "left",
+      "order": 2
+    },
+    {
+      "href": "/tags",
+      "label": "tags",
+      "position": "left",
+      "order": 3
+    },
+    {
+      "href": "/about",
+      "label": "About",
+      "position": "right",
+      "order": 3
+    }
+  ]
+}
