@@ -7,8 +7,11 @@ export default function menuWatcher(): AstroIntegration {
     name: 'menu-watcher',
     hooks: {
       'astro:server:setup': ({ server }) => {
+        // Get site code from environment variable or use default
+        const SITE_CODE = process.env.SITE_CODE || 'hiivelabs.com';
+
         const watchPaths = [
-          'src/assets/pagecontent/hiivelabs.com',
+          `src/assets/pagecontent/${SITE_CODE}`,
           'src/assets/config/system-menu-items.json'
         ];
 

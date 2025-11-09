@@ -121,7 +121,9 @@ function extractKeys(postFiles: string[]): { categories: Set<string>, tags: Set<
 }
 
 // Main execution
-const postsDir = path.join(__dirname, '../assets/posts/hiivelabs.com');
+// Get site code from environment variable or use default
+const SITE_CODE = process.env.SITE_CODE || 'hiivelabs.com';
+const postsDir = path.join(__dirname, `../assets/posts/${SITE_CODE}`);
 const postFiles = getAllPostFiles(postsDir);
 const { categories, tags } = extractKeys(postFiles);
 

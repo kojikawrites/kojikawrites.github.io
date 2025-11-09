@@ -10,7 +10,7 @@ import { getSiteConfig } from "../../scripts/getSiteConfig";
 const siteConfig = await getSiteConfig();
 const fbAppId = siteConfig.facebook.app_id;
 const href = import.meta.env.DEV
-    ? 'https://hiivelabs.com/test/'
+    ? `${import.meta.env.SITE}/test/`
     : Astro.request.url.toString();
 console.log("FB-URL:", href);
 
