@@ -253,7 +253,9 @@ class BlogImageMigrator:
         Returns (new_thumbnail_path, slug_dir_created)
         """
         # Check if already migrated
-        if f"/blog/{slug}/" in thumbnail_path:
+        already_migrated = f"/blog/{slug}/" in thumbnail_path
+
+        if already_migrated:
             print(f"  ✓ Thumbnail already migrated")
             return None, slug_dir_created
 
@@ -323,6 +325,21 @@ class BlogImageMigrator:
         changes_made = False
         slug_dir_created = False
         frontmatter_modified = False
+
+        # Check if frontmatter needs normalization (space-separated strings to arrays)
+        needs_normalization = False
+        if frontmatter_dict:
+            if 'tags' in frontmatter_dict and isinstance(frontmatter_dict['tags'], str):
+                needs_normalization = True
+                print(f"  📝 Will normalize space-separated tags to array")
+            if 'categories' in frontmatter_dict and isinstance(frontmatter_dict['categories'], str):
+                needs_normalization = True
+                print(f"  📝 Will normalize space-separated categories to array")
+
+        # Mark that we need to rewrite if format is JSON or needs normalization
+        if format_type == 'json' or needs_normalization:
+            frontmatter_modified = True
+            changes_made = True
 
         # Process thumbnail in frontmatter
         if frontmatter_dict and 'thumbnail' in frontmatter_dict:
@@ -430,7 +447,7 @@ class BlogImageMigrator:
                 # Reassemble MDX file with updated frontmatter and body
                 if frontmatter_dict:
                     # Serialize frontmatter to YAML (converts JSON to YAML if needed)
-                    if frontmatter_modified or format_type == 'json':
+                    if frontmatter_modified:
                         # Serialize the modified frontmatter dict to YAML
                         try:
                             new_frontmatter_str = self.serialize_frontmatter(frontmatter_dict, 'yaml')
@@ -438,6 +455,8 @@ class BlogImageMigrator:
                             new_frontmatter_str = new_frontmatter_str.rstrip('\n')
                             if format_type == 'json':
                                 print(f"  🔄 Converted JSON frontmatter to YAML")
+                            if needs_normalization:
+                                print(f"  🔄 Normalized frontmatter fields")
                         except Exception as e:
                             error = f"Error serializing frontmatter: {e}"
                             self.errors.append(error)
