@@ -1,6 +1,25 @@
 ---
 import {getSiteConfig} from "../scripts/getSiteConfig";
+import { execSync } from 'child_process';
+
 const siteConfig = await getSiteConfig();
+
+// Get build metadata at build time
+let gitCommit = '';
+let buildTime = new Date().toISOString();
+
+try {
+  // Get short git commit hash (7 characters)
+  gitCommit = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim();
+  if (gitCommit || '' !== '') {
+    gitCommit = ' • ' + gitCommit;
+  }
+} catch (error) {
+  console.warn('Could not get git commit hash:', error);
+}
+
+// Format build time as YYYY-MM-DD HH:MM:ss UTC
+const buildDate = buildTime.replace('T', ' ').replace(/\.\d{3}Z$/, '') + ' UTC';
 ---
 
 <footer>
@@ -12,5 +31,9 @@ const siteConfig = await getSiteConfig();
 
   <div class="page-footer">
     Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>.
+  </div>
+
+  <div class="page-footer build-info">
+      ({buildDate}{gitCommit})
   </div>
 </footer>

@@ -154,6 +154,10 @@
         /*@apply color-text-secondary !important;*/
     }
 
+    .build-info {
+        @apply text-[0.7rem] opacity-60;
+    }
+
 }
 
 
