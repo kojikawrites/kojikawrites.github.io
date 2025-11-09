@@ -1,10 +1,17 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
+import { config as dotenvConfig } from 'dotenv';
 
-const PAGES_DIR = 'src/assets/pagecontent/hiivelabs.com';
+// Load environment variables from .env file
+dotenvConfig();
+
+// Get site code from environment variable or use default
+const SITE_CODE = process.env.SITE_CODE || 'hiivelabs.com';
+
+const PAGES_DIR = `src/assets/pagecontent/${SITE_CODE}`;
 const SYSTEM_MENU_FILE = 'src/assets/config/system-menu-items.json';
-const OUTPUT_FILE = 'src/assets/config/hiivelabs.com.yml';
+const OUTPUT_FILE = `src/assets/config/${SITE_CODE}.yml`;
 
 interface PageFrontmatter {
   title: string;

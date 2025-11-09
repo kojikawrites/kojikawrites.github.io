@@ -30,6 +30,7 @@
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.6",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
     "is-absolute-url": "^4.0.1",
     "js-yaml": "^4.1.0",
     "mathjax": "^3.2.2",

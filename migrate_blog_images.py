@@ -4,10 +4,12 @@ Migrate blog images to slug-based directory structure.
 
 This script:
 1. Scans blog posts for thumbnails in frontmatter and LightboxImage/GalleryImage components
-2. Copies images to slug-based subdirectories (e.g., blog/2024-07-11-post/image.png)
-3. Updates thumbnail paths in frontmatter and component attributes in body
-4. Optionally converts src attributes to image attributes
-5. Removes original source images after successful migration
+2. Handles both JSON and YAML frontmatter formats (converts to YAML when writing)
+3. Copies images to slug-based subdirectories (e.g., blog/2024-07-11-post/image.png)
+4. Updates thumbnail paths in frontmatter and component attributes in body
+5. Optionally converts src attributes to image attributes
+6. Removes original source images after successful migration
+7. Moves MDX files from non-underscore subdirectories to parent directory
 
 Usage:
     python migrate_blog_images.py [--dry-run] [--update-src-to-image] [--site-code SITE_CODE]
@@ -31,6 +33,12 @@ try:
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
+
+try:
+    import json
+    JSON_AVAILABLE = True
+except ImportError:
+    JSON_AVAILABLE = False
 
 
 def load_site_code_from_env() -> str:
@@ -130,32 +138,114 @@ class BlogImageMigrator:
         """Build new slug-based path for image"""
         return f"/src/assets/images/{self.site_code}/blog/{slug}/{image_filename}"
 
-    def parse_frontmatter(self, content: str) -> Tuple[Optional[Dict], str, str]:
+    def parse_frontmatter(self, content: str) -> Tuple[Optional[Dict], str, str, str]:
         """
         Parse MDX file into frontmatter and body.
-        Returns (frontmatter_dict, frontmatter_str, body_content)
+        Supports both YAML and JSON frontmatter formats.
+        Returns (frontmatter_dict, frontmatter_str, body_content, format_type)
+        format_type will be 'yaml', 'json', or 'unknown'
         """
         # MDX files have frontmatter between --- markers
         if not content.startswith('---'):
-            return None, '', content
+            return None, '', content, 'unknown'
 
         # Find the end of frontmatter
         parts = content.split('---', 2)
         if len(parts) < 3:
-            return None, '', content
+            return None, '', content, 'unknown'
 
         frontmatter_str = parts[1].strip()
         body_content = parts[2]
 
-        # Parse YAML if available
+        # Detect format and parse frontmatter
         frontmatter_dict = None
-        if YAML_AVAILABLE:
-            try:
-                frontmatter_dict = yaml.safe_load(frontmatter_str)
-            except Exception as e:
-                print(f"  ⚠️  Could not parse YAML frontmatter: {e}")
+        format_type = 'unknown'
 
-        return frontmatter_dict, frontmatter_str, body_content
+        # Try JSON first (check if it starts with { or [)
+        if frontmatter_str.strip().startswith(('{', '[')):
+            format_type = 'json'
+            if JSON_AVAILABLE:
+                try:
+                    frontmatter_dict = json.loads(frontmatter_str)
+                    print(f"  📋 Detected JSON frontmatter")
+                except Exception as e:
+                    print(f"  ⚠️  Could not parse JSON frontmatter: {e}")
+                    format_type = 'unknown'
+            else:
+                print(f"  ⚠️  JSON frontmatter detected but json module not available")
+        else:
+            # Try YAML
+            format_type = 'yaml'
+            if YAML_AVAILABLE:
+                try:
+                    frontmatter_dict = yaml.safe_load(frontmatter_str)
+                    if frontmatter_dict is None:
+                        frontmatter_dict = {}
+                except Exception as e:
+                    print(f"  ⚠️  Could not parse YAML frontmatter: {e}")
+                    format_type = 'unknown'
+            else:
+                print(f"  ⚠️  YAML frontmatter detected but yaml module not available")
+
+        return frontmatter_dict, frontmatter_str, body_content, format_type
+
+    def normalize_frontmatter(self, frontmatter_dict: Dict) -> Dict:
+        """
+        Normalize frontmatter fields to proper format.
+        Converts space-separated tags/categories to arrays.
+        """
+        normalized = frontmatter_dict.copy()
+
+        # Convert space-separated tags to array
+        if 'tags' in normalized and isinstance(normalized['tags'], str):
+            normalized['tags'] = [tag.strip() for tag in normalized['tags'].split() if tag.strip()]
+
+        # Convert space-separated categories to array
+        if 'categories' in normalized and isinstance(normalized['categories'], str):
+            normalized['categories'] = [cat.strip() for cat in normalized['categories'].split() if cat.strip()]
+
+        return normalized
+
+    def serialize_frontmatter(self, frontmatter_dict: Dict, format_type: str) -> str:
+        """
+        Serialize frontmatter dictionary back to string format (JSON or YAML).
+        For YAML, uses proper formatting with folded block scalars for long text.
+        Returns the serialized frontmatter string.
+        """
+        if format_type == 'json':
+            if JSON_AVAILABLE:
+                return json.dumps(frontmatter_dict, indent=2, ensure_ascii=False)
+            else:
+                raise Exception("JSON module not available")
+        elif format_type == 'yaml':
+            if YAML_AVAILABLE:
+                # Normalize frontmatter (convert space-separated strings to arrays)
+                normalized_dict = self.normalize_frontmatter(frontmatter_dict)
+
+                # Create custom dumper for proper formatting
+                class CustomDumper(yaml.SafeDumper):
+                    pass
+
+                def represent_str(dumper, data):
+                    # Use folded block scalar (>-) for long strings (> 80 chars) or strings with newlines
+                    if len(data) > 80 or '\n' in data:
+                        # Use >- style (folded, strip final newlines)
+                        return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='>')
+                    return dumper.represent_scalar('tag:yaml.org,2002:str', data)
+
+                CustomDumper.add_representer(str, represent_str)
+
+                return yaml.dump(normalized_dict,
+                               Dumper=CustomDumper,
+                               default_flow_style=False,
+                               allow_unicode=True,
+                               sort_keys=False,
+                               width=80,
+                               indent=2)
+            else:
+                raise Exception("YAML module not available")
+        else:
+            raise Exception(f"Unknown format type: {format_type}")
 
     def process_thumbnail(self, slug: str, thumbnail_path: str, slug_dir_created: bool) -> Tuple[Optional[str], bool]:
         """
@@ -163,7 +253,9 @@ class BlogImageMigrator:
         Returns (new_thumbnail_path, slug_dir_created)
         """
         # Check if already migrated
-        if f"/blog/{slug}/" in thumbnail_path:
+        already_migrated = f"/blog/{slug}/" in thumbnail_path
+
+        if already_migrated:
             print(f"  ✓ Thumbnail already migrated")
             return None, slug_dir_created
 
@@ -228,11 +320,26 @@ class BlogImageMigrator:
             print(f"  ❌ {error}")
             return False
 
-        # Parse frontmatter
-        frontmatter_dict, frontmatter_str, body_content = self.parse_frontmatter(content)
+        # Parse frontmatter (handles both JSON and YAML)
+        frontmatter_dict, frontmatter_str, body_content, format_type = self.parse_frontmatter(content)
         changes_made = False
         slug_dir_created = False
-        new_frontmatter_str = frontmatter_str
+        frontmatter_modified = False
+
+        # Check if frontmatter needs normalization (space-separated strings to arrays)
+        needs_normalization = False
+        if frontmatter_dict:
+            if 'tags' in frontmatter_dict and isinstance(frontmatter_dict['tags'], str):
+                needs_normalization = True
+                print(f"  📝 Will normalize space-separated tags to array")
+            if 'categories' in frontmatter_dict and isinstance(frontmatter_dict['categories'], str):
+                needs_normalization = True
+                print(f"  📝 Will normalize space-separated categories to array")
+
+        # Mark that we need to rewrite if format is JSON or needs normalization
+        if format_type == 'json' or needs_normalization:
+            frontmatter_modified = True
+            changes_made = True
 
         # Process thumbnail in frontmatter
         if frontmatter_dict and 'thumbnail' in frontmatter_dict:
@@ -244,11 +351,9 @@ class BlogImageMigrator:
                     new_thumbnail_path, slug_dir_created = self.process_thumbnail(slug, thumbnail_path, slug_dir_created)
 
                     if new_thumbnail_path:
-                        # Update frontmatter string
-                        # Handle both single-line and multi-line YAML formats
-                        old_thumbnail_line_pattern = rf'thumbnail:\s*>?-?\s*\n?\s*{re.escape(thumbnail_path)}'
-                        new_thumbnail_line = f'thumbnail: {new_thumbnail_path}'
-                        new_frontmatter_str = re.sub(old_thumbnail_line_pattern, new_thumbnail_line, new_frontmatter_str)
+                        # Update frontmatter dict (will be serialized back to YAML later)
+                        frontmatter_dict['thumbnail'] = new_thumbnail_path
+                        frontmatter_modified = True
                         changes_made = True
 
         # Process body content for image components (handles multi-line components)
@@ -340,7 +445,24 @@ class BlogImageMigrator:
         if changes_made and not self.dry_run:
             try:
                 # Reassemble MDX file with updated frontmatter and body
-                if frontmatter_str:
+                if frontmatter_dict:
+                    # Serialize frontmatter to YAML (converts JSON to YAML if needed)
+                    if frontmatter_modified:
+                        # Serialize the modified frontmatter dict to YAML
+                        try:
+                            new_frontmatter_str = self.serialize_frontmatter(frontmatter_dict, 'yaml')
+                            # Remove trailing newline from YAML output if present
+                            new_frontmatter_str = new_frontmatter_str.rstrip('\n')
+                            if format_type == 'json':
+                                print(f"  🔄 Converted JSON frontmatter to YAML")
+                            if needs_normalization:
+                                print(f"  🔄 Normalized frontmatter fields")
+                        except Exception as e:
+                            error = f"Error serializing frontmatter: {e}"
+                            self.errors.append(error)
+                            print(f"  ❌ {error}")
+                            return False
+
                     new_content = f"---\n{new_frontmatter_str}\n---{new_body_content}"
                 else:
                     new_content = new_body_content

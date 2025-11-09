@@ -8,6 +8,10 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import yaml from 'js-yaml';
+import { config as dotenvConfig } from 'dotenv';
+
+// Load environment variables from .env file
+dotenvConfig();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -121,7 +125,9 @@ function extractKeys(postFiles: string[]): { categories: Set<string>, tags: Set<
 }
 
 // Main execution
-const postsDir = path.join(__dirname, '../assets/posts/hiivelabs.com');
+// Get site code from environment variable or use default
+const SITE_CODE = process.env.SITE_CODE || 'hiivelabs.com';
+const postsDir = path.join(__dirname, `../assets/posts/${SITE_CODE}`);
 const postFiles = getAllPostFiles(postsDir);
 const { categories, tags } = extractKeys(postFiles);
 
