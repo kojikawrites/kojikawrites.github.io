@@ -396,6 +396,100 @@ class BlogImageMigrator:
                 except Exception as e:
                     print(f"  ⚠️  Could not remove {dir_path}: {e}")
 
+    def move_mdx_from_subdirectories(self):
+        """
+        Move MDX files from non-underscore subdirectories to parent directory.
+        Ignores subdirectories starting with underscore (e.g., _drafts).
+        Deletes subdirectories after moving files.
+        """
+        print("\n📁 Checking for subdirectories...")
+
+        # Find all subdirectories in blog posts directory
+        subdirs = [d for d in self.blog_posts_dir.iterdir() if d.is_dir()]
+
+        if not subdirs:
+            print("  ℹ️  No subdirectories found")
+            return
+
+        # Separate underscore and non-underscore subdirectories
+        underscore_dirs = [d for d in subdirs if d.name.startswith('_')]
+        target_dirs = [d for d in subdirs if not d.name.startswith('_')]
+
+        if underscore_dirs:
+            print(f"  ℹ️  Ignoring {len(underscore_dirs)} underscore directories: {', '.join(d.name for d in underscore_dirs)}")
+
+        if not target_dirs:
+            print("  ℹ️  No non-underscore subdirectories to process")
+            return
+
+        print(f"  📂 Found {len(target_dirs)} subdirectories to process: {', '.join(d.name for d in target_dirs)}")
+
+        total_moved = 0
+
+        for subdir in target_dirs:
+            # Find all MDX files in this subdirectory
+            mdx_files = list(subdir.glob('*.mdx'))
+
+            if not mdx_files:
+                print(f"\n  📁 {subdir.name}/")
+                print(f"     ℹ️  No MDX files found")
+                if not self.dry_run:
+                    # Still delete empty subdirectory
+                    try:
+                        subdir.rmdir()
+                        print(f"     🗑️  Removed empty subdirectory")
+                    except Exception as e:
+                        print(f"     ⚠️  Could not remove subdirectory: {e}")
+                continue
+
+            print(f"\n  📁 {subdir.name}/ ({len(mdx_files)} files)")
+
+            # Move each MDX file to parent directory
+            for mdx_file in mdx_files:
+                dest_file = self.blog_posts_dir / mdx_file.name
+
+                # Check if destination already exists
+                if dest_file.exists():
+                    warning = f"Destination already exists: {dest_file.name}"
+                    print(f"     ⚠️  {warning}")
+                    self.errors.append(warning)
+                    continue
+
+                if not self.dry_run:
+                    try:
+                        shutil.move(str(mdx_file), str(dest_file))
+                        print(f"     ➡️  Moved: {mdx_file.name}")
+                        total_moved += 1
+                    except Exception as e:
+                        error = f"Error moving {mdx_file.name}: {e}"
+                        print(f"     ❌ {error}")
+                        self.errors.append(error)
+                else:
+                    print(f"     [DRY RUN] Would move: {mdx_file.name}")
+                    total_moved += 1
+
+            # Delete subdirectory after moving files
+            if not self.dry_run:
+                try:
+                    # Remove any remaining files first
+                    remaining_files = list(subdir.glob('*'))
+                    if remaining_files:
+                        print(f"     ⚠️  Subdirectory still contains {len(remaining_files)} files, not deleting")
+                    else:
+                        subdir.rmdir()
+                        print(f"     🗑️  Removed subdirectory")
+                except Exception as e:
+                    warning = f"Could not remove subdirectory {subdir.name}: {e}"
+                    print(f"     ⚠️  {warning}")
+                    self.errors.append(warning)
+            else:
+                print(f"     [DRY RUN] Would remove subdirectory")
+
+        if total_moved > 0:
+            print(f"\n✅ Moved {total_moved} MDX files from subdirectories to parent directory")
+        else:
+            print(f"\n  ℹ️  No files needed to be moved")
+
     def run(self):
         """Main migration process"""
         print("=" * 70)
@@ -417,7 +511,10 @@ class BlogImageMigrator:
             print(f"❌ Blog images directory not found: {self.blog_images_dir}")
             return 1
 
-        # Find all MDX files (excluding _drafts)
+        # Move MDX files from subdirectories to parent directory (excluding underscore directories)
+        self.move_mdx_from_subdirectories()
+
+        # Find all MDX files in parent directory (after moving from subdirectories)
         mdx_files = []
         for mdx_file in self.blog_posts_dir.glob('*.mdx'):
             mdx_files.append(mdx_file)
