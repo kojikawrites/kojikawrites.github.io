@@ -40,20 +40,28 @@ export default function menuWatcher(): AstroIntegration {
           }
         };
 
-        // Use Vite's file watcher
-        server.watcher.on('change', (file) => {
+        // Use Vite's file watcher - watch for both 'change' and 'add' events
+        const handleFileChange = (file: string) => {
           const relativePath = path.relative(process.cwd(), file);
+
+          // Debug: log all changes to config/content directories
+          if (relativePath.includes('assets/config') || relativePath.includes('assets/pagecontent')) {
+            console.log(`[MenuWatcher] File changed: ${relativePath}`);
+          }
 
           // Check if changed file matches our watch paths
           const shouldRegenerate = watchPaths.some(watchPath =>
-            relativePath.startsWith(watchPath)
+            relativePath.startsWith(watchPath) || relativePath === watchPath
           );
 
           if (shouldRegenerate) {
             console.log(`📝 ${relativePath}`);
             regenerateMenu();
           }
-        });
+        };
+
+        server.watcher.on('change', handleFileChange);
+        server.watcher.on('add', handleFileChange);
 
         console.log('👀 Watching menu files for changes\n');
       }
