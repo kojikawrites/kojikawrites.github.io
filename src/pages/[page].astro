@@ -5,8 +5,6 @@ import {getSiteCode} from "../scripts/getSiteConfig.ts";
 
 // Export getStaticPaths for static site generation
 export async function getStaticPaths() {
-  const siteCode = getSiteCode();
-
   // Dynamically discover all page content files in the assets directory
   const pageFiles = import.meta.glob('../assets/pagecontent/**');
   const siteCode = getSiteCode();
