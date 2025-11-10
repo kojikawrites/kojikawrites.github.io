@@ -73,6 +73,94 @@ const siteName = () => {
 };
 console.log('siteName:', siteName());
 
+/**
+ * Process ![DEV-ONLY] markers in source files based on NODE_ENV
+ * - In production: comment out lines containing ![DEV-ONLY]
+ * - In development: uncomment lines containing ![DEV-ONLY]
+ */
+function processDevOnlyMarkers() {
+    const nodeEnv = process.env.NODE_ENV || 'development';
+    const srcDir = path.resolve('src');
+
+    // File extensions to process
+    const extensions = ['.astro', '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue', '.svelte'];
+
+    let filesProcessed = 0;
+    let linesModified = 0;
+
+    console.log(`🔍 Processing ![DEV-ONLY] markers for NODE_ENV=${nodeEnv}...`);
+
+    function processDirectory(dirPath) {
+        const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+
+        for (const entry of entries) {
+            const fullPath = path.join(dirPath, entry.name);
+
+            // Skip node_modules and .git
+            if (entry.name === 'node_modules' || entry.name === '.git') {
+                continue;
+            }
+
+            if (entry.isDirectory()) {
+                processDirectory(fullPath);
+            } else if (entry.isFile()) {
+                const ext = path.extname(entry.name);
+                if (!extensions.includes(ext)) {
+                    continue;
+                }
+
+                try {
+                    const content = fs.readFileSync(fullPath, 'utf-8');
+                    const lines = content.split('\n');
+                    let modified = false;
+
+                    const newLines = lines.map(line => {
+                        if (!line.includes('![DEV-ONLY]')) {
+                            return line;
+                        }
+
+                        const trimmed = line.trimStart();
+                        const indent = line.substring(0, line.length - trimmed.length);
+
+                        if (nodeEnv === 'production') {
+                            // Comment out the entire line if not already commented
+                            if (!trimmed.startsWith('//')) {
+                                modified = true;
+                                linesModified++;
+                                return `${indent}// ${trimmed}`;
+                            }
+                        } else if (nodeEnv === 'development') {
+                            // Uncomment the line if it's commented
+                            if (trimmed.startsWith('// ')) {
+                                modified = true;
+                                linesModified++;
+                                return `${indent}${trimmed.substring(3)}`;
+                            }
+                        }
+
+                        return line;
+                    });
+
+                    if (modified) {
+                        fs.writeFileSync(fullPath, newLines.join('\n'), 'utf-8');
+                        filesProcessed++;
+                    }
+                } catch (error) {
+                    console.warn(`⚠️  Failed to process ${fullPath}: ${error.message}`);
+                }
+            }
+        }
+    }
+
+    processDirectory(srcDir);
+
+    if (filesProcessed > 0) {
+        console.log(`✅ Processed ${filesProcessed} files, modified ${linesModified} lines with ![DEV-ONLY] markers`);
+    } else {
+        console.log(`✅ No ![DEV-ONLY] markers needed processing`);
+    }
+}
+
 // https://astro.build/config
 export default defineConfig({
     experimental: {
@@ -81,6 +169,9 @@ export default defineConfig({
     svg: true,
     hooks: {
         "astro:build:start": async () => {
+            // Process ![DEV-ONLY] markers before build starts
+            processDevOnlyMarkers();
+
             console.log("🔍 Done Extracting frontmatter...");
             const dummy = frontmatter; // to avoid unused import warning.
             const dummy2 = siteLogos // to avoid unused import warning.
@@ -108,38 +199,10 @@ export default defineConfig({
             yaml(),
             ...(process.env.NODE_ENV === 'development' ? [basicSsl()] : []),
             // Exclude dev-only pages from production builds completely
-            // ...(process.env.NODE_ENV === 'production' ? (() => {
-            //     const siteCode = getSiteCode();
-            //     const siteConfig = loadSiteConfig(siteCode);
-            //     const excludeDirs = siteConfig?.build?.exclude_from_production || [];
-            //
-            //     if (excludeDirs.length === 0) {
-            //         return [];
-            //     }
-            //
-            //     console.log(`🚫 Excluding from production build: ${excludeDirs.join(', ')}`);
-            //
-            //     return [{
-            //         name: 'exclude-dev-pages',
-            //         enforce: 'pre',
-            //         resolveId(id) {
-            //             // Check if this file should be excluded
-            //             const normalizedId = id.replace(/\\/g, '/');
-            //
-            //             for (const dir of excludeDirs) {
-            //                 Match both absolute and relative paths
-            //                 if (normalizedId.includes(`/src/pages/${dir}/`) ||
-            //                     normalizedId.includes(`src/pages/${dir}/`) ||
-            //                     normalizedId.match(new RegExp(`[/\\\\]src[/\\\\]pages[/\\\\]${dir}[/\\\\]`))) {
-            //                     console.log(`   Excluding from build: ${path.basename(id)}`);
-            //                     // Mark as external to completely skip processing
-            //                     return { id, external: true };
-            //                 }
-            //             }
-            //             return null;
-            //         }
-            //     }];
-            // })() : [])
+            ...((() => {
+                processDevOnlyMarkers()
+                return [];
+            })())
         ]
     },
 
