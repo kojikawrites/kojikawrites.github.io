@@ -46,6 +46,7 @@ export async function getSiteConfig() {
             prefix: string;
             small_mode: string;
             large_mode: string;
+            default_author: string;
         };
         navbar: {
             logo: ThemedImage,

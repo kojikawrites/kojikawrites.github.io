@@ -30,6 +30,11 @@ const blogImagePath = `${baseImagePath}/blog`;
 const commonCategoriesText = `Common categories: ${categories.join(', ')}. You can also enter a custom category.`;
 const commonTagsText = `Common tags: ${tags.join(', ')}. You can also enter a custom tag.`;
 
+// Default author from environment variable or fallback based on site
+const defaultAuthor = import.meta.env?.DEFAULT_AUTHOR ||
+                      (typeof process !== 'undefined' && process.env?.DEFAULT_AUTHOR) ||
+                      (siteCode === 'hiivelabs.com' ? 'hiive' : 'admin');
+
 // ============================================================================
 // SLUG CONTEXT - Replaces global mutable state
 // ============================================================================
@@ -1160,7 +1165,7 @@ const createPostSchema = (imageDirectory: string) => ({
   }),
   author: fields.text({
     label: 'Author',
-    defaultValue: 'hiive',
+    defaultValue: defaultAuthor,
   }),
   description: fields.text({
     label: 'Description',

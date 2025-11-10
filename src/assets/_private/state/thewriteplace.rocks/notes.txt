@@ -1,0 +1,14 @@
+# git fetch source
+# git merge source/astro --allow-unrelated-histories
+
+# for file in *.md; do mv "$file" "${file%.md}.mdx"; done
+
+# for live updates while you work.
+# npm run start
+
+# if you get an error when running that:
+# npm install
+
+# to test for missing images etc.
+# npm run build
+# npm run preview
