@@ -15,6 +15,7 @@ import pagefind from "astro-pagefind";
 import frontmatter from "/src/scripts/extractPagesFrontMatter.mjs"; // DO NOT DELETE
 import siteLogos from "/src/scripts/extractDateLogoMap.mjs" // DO NOT DELETE
 import keystatic from '@keystatic/astro';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 
@@ -54,7 +55,10 @@ export default defineConfig({
             devSourcemap: true,
             transformer: "postcss",
         },
-        plugins: [yaml()]
+        plugins: [
+            yaml(),
+            ...(process.env.NODE_ENV === 'development' ? [basicSsl()] : [])
+        ]
     },
 
     // site: 'https://hiivelabs.com', //`${siteName}`,//'https://hiivelabs.com',
