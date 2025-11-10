@@ -1,10 +1,22 @@
 import fs from "fs";
 import path from "path";
+import { config as dotenvConfig } from 'dotenv';
+
+// Load environment variables from .env file
+dotenvConfig();
+
 export const getSiteCode = () => {
+    // Try SITE_CODE first (preferred), then fall back to VITE_SITE_NAME
+    const siteCode = process.env.SITE_CODE || import.meta.env?.SITE_CODE;
+    if (siteCode) {
+        return siteCode;
+    }
+
+    // Fall back to VITE_SITE_NAME (legacy)
     try {
         return new URL(import.meta.env.VITE_SITE_NAME ?? process.env.VITE_SITE_NAME).hostname;
     } catch (e) {
-        return undefined;
+        return 'hiivelabs.com'; // Default fallback
     }
 };
 
