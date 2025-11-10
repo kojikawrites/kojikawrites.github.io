@@ -2,6 +2,11 @@ main:
   logo:
     alt: thewriteplace.rocks
     dynamic_dir: /src/assets/images/thewriteplace.rocks/logos/dynamic
+build:
+  exclude_from_production:
+    - admin
+    - api
+    - edit
 navbar:
   logo:
     dark: /src/assets/images/thewriteplace.rocks/logos/menu-dark.png

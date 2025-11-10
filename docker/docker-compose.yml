@@ -1,0 +1,58 @@
+services:
+  blog:
+    build:
+      context: ..
+      dockerfile: docker/astro.Dockerfile
+    container_name: hiive-blog-dev
+    ports:
+      - "8642:4321"  # Astro dev server
+    volumes:
+      # Mount source code from host - all edits persist on server
+      - ..:/app
+      # Exclude node_modules and other important directories - use container's version
+      - hiive-dev-workspace:/app/node_modules
+      # Shared volume for build operations
+      - hiive-build-workspace:/tmp/build-workspace
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ../.env
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    networks:
+      - hiive-network
+
+  build-service:
+    build:
+      context: ..
+      dockerfile: docker/build-service.Dockerfile
+    container_name: hiive-build-service
+    ports:
+      - "8643:8000"  # FastAPI build service
+    volumes:
+      # Access to source code (for copying and git)
+      - ..:/source
+      # Shared volume for build operations
+      - hiive-build-workspace:/tmp/build-workspace
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ../.env
+    restart: unless-stopped
+    networks:
+      - hiive-network
+
+volumes:
+  hiive-dev-workspace:
+    driver: local
+  hiive-build-workspace:
+    driver: local
+    driver_opts:
+      type: "tmpfs"
+      device: "tmpfs"
+      o: "size=8g,uid=1000"
+
+networks:
+  hiive-network:
+    driver: bridge

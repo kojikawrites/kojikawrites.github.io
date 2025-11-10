@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { config as dotenvConfig } from 'dotenv';
+import yaml from 'js-yaml';
 
 // Load environment variables from .env file
 dotenvConfig();
@@ -19,6 +20,21 @@ export const getSiteCode = () => {
         return 'hiivelabs.com'; // Default fallback
     }
 };
+
+/**
+ * Load site configuration from YAML file
+ * @param {string} siteCode - The site code (e.g., 'hiivelabs.com')
+ * @returns {object} - The site configuration object
+ */
+function loadSiteConfig(siteCode) {
+    const configPath = path.resolve(`src/assets/config/${siteCode}.yml`);
+    if (!fs.existsSync(configPath)) {
+        console.warn(`No config found for ${siteCode}, using defaults`);
+        return {};
+    }
+    const yamlString = fs.readFileSync(configPath, 'utf8');
+    return yaml.load(yamlString);
+}
 
 function extractSlug(entry) {
     // Compute the path relative to the given directory.
@@ -49,9 +65,10 @@ function extractSlug(entry) {
  * Recursively scans a directory and returns an array of file paths.
  * @param {string} rootDir - The base directory of this search.
  * @param {string} dir - The directory to scan.
+ * @param {string[]} excludeDirs - List of directory names to exclude from src/pages.
  * @returns {Record<string, string>[]} - List of file paths.
  */
-function getAllFiles(rootDir, dir) {
+function getAllFiles(rootDir, dir, excludeDirs = []) {
     let results = [];
     if (!fs.existsSync(dir)) return results; // Prevent errors if directory doesn't exist
 
@@ -60,7 +77,11 @@ function getAllFiles(rootDir, dir) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
         if (stat && stat.isDirectory()) {
-            results = results.concat(getAllFiles(rootDir, filePath));
+            // Skip excluded directories under src/pages
+            if (rootDir.includes('src/pages') && excludeDirs.includes(file)) {
+                return;
+            }
+            results = results.concat(getAllFiles(rootDir, filePath, excludeDirs));
         } else if (file.endsWith(".md") || file.endsWith(".astro") || file.endsWith(".mdx")) {
             results.push({
                 directory: rootDir,
@@ -142,6 +163,9 @@ function extractTitleFromFrontmatter(filePath) {
 
 // Define the directories to check
 const siteCode = getSiteCode();
+const siteConfig = loadSiteConfig(siteCode);
+const excludeDirs = siteConfig?.build?.exclude_from_production || [];
+
 const directories = [
     path.resolve("src/pages"),
     path.resolve(`src/assets/pagecontent/${siteCode}`),
@@ -151,7 +175,7 @@ const directories = [
 
 // console.log(directories);
 // Scan all directories
-let allFiles = directories.flatMap(directory => getAllFiles(directory, directory));
+let allFiles = directories.flatMap(directory => getAllFiles(directory, directory, excludeDirs));
 // console.log('allFiles', allFiles);
 let frontmatterData = extractFrontmatter(allFiles);
 
