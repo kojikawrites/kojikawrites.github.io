@@ -18,6 +18,13 @@ import keystatic from '@keystatic/astro';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
+import fs from 'fs';
+import path from 'path';
+import jsYaml from 'js-yaml';
+import { config as dotenvConfig } from 'dotenv';
+
+// Load environment variables for config reading
+dotenvConfig();
 
 import rehypeLinkDecorator from "./rehype-link-decorator.mjs";
 import rehypeFootnotesToEnd from "./rehype-footnotes-to-end.mjs";
@@ -28,6 +35,34 @@ import menuWatcher from './src/integrations/menuWatcher.ts';
 import excludeDevPages from './src/integrations/excludeDevPages.ts';
 
 import sitemap from '@astrojs/sitemap';
+
+/**
+ * Get site code from environment variables
+ */
+function getSiteCode() {
+    const siteCode = process.env.SITE_CODE;
+    if (siteCode) {
+        return siteCode;
+    }
+    try {
+        return new URL(process.env.VITE_SITE_NAME || '').hostname;
+    } catch (e) {
+        return 'hiivelabs.com';
+    }
+}
+
+/**
+ * Load site configuration from YAML file
+ */
+function loadSiteConfig(siteCode) {
+    const configPath = path.resolve(`src/assets/config/${siteCode}.yml`);
+    if (!fs.existsSync(configPath)) {
+        console.warn(`No config found for ${siteCode}, using defaults`);
+        return {};
+    }
+    const yamlString = fs.readFileSync(configPath, 'utf8');
+    return jsYaml.load(yamlString);
+}
 
 const siteName = () => {
     try {
@@ -58,7 +93,36 @@ export default defineConfig({
         },
         plugins: [
             yaml(),
-            ...(process.env.NODE_ENV === 'development' ? [basicSsl()] : [])
+            ...(process.env.NODE_ENV === 'development' ? [basicSsl()] : []),
+            // Exclude dev-only pages from production builds completely
+            ...(process.env.NODE_ENV === 'production' ? (() => {
+                const siteCode = getSiteCode();
+                const siteConfig = loadSiteConfig(siteCode);
+                const excludeDirs = siteConfig?.build?.exclude_from_production || [];
+
+                if (excludeDirs.length === 0) {
+                    return [];
+                }
+
+                console.log(`🚫 Excluding from production build: ${excludeDirs.join(', ')}`);
+
+                return [{
+                    name: 'exclude-dev-pages',
+                    enforce: 'pre',
+                    load(id) {
+                        // Skip dev-only pages entirely during production builds
+                        const normalizedId = id.replace(/\\/g, '/');
+                        for (const dir of excludeDirs) {
+                            if (normalizedId.includes(`/src/pages/${dir}/`)) {
+                                console.log(`   Skipping: ${path.relative(process.cwd(), id)}`);
+                                // Return empty export to prevent Astro from processing this file
+                                return 'export default {};';
+                            }
+                        }
+                        return null;
+                    }
+                }];
+            })() : [])
         ]
     },
 
@@ -74,7 +138,21 @@ export default defineConfig({
         svelte(),
         solidJs({ include: ['**/solid/*', '**/bluesky/*'] }),
         pagefind(),
-        sitemap()
+        sitemap({
+            filter: (page) => {
+                // Exclude dev-only pages from sitemap
+                const siteCode = getSiteCode();
+                const siteConfig = loadSiteConfig(siteCode);
+                const excludeDirs = siteConfig?.build?.exclude_from_production || [];
+
+                for (const dir of excludeDirs) {
+                    if (page.includes(`/${dir}/`)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        })
     ],
     markdown: {
         shikiConfig: {
