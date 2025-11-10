@@ -94,9 +94,7 @@ export default defineConfig({
         plugins: [
             yaml(),
             ...(process.env.NODE_ENV === 'development' ? [basicSsl()] : []),
-            // Exclude dev-only pages from production builds to prevent server-render errors
-            // Note: This plugin attempts early exclusion, but Astro may still discover routes
-            // The main exclusion happens in the excludeDevPages integration (astro:build:done hook)
+            // Exclude dev-only pages from production builds completely
             ...(process.env.NODE_ENV === 'production' ? (() => {
                 const siteCode = getSiteCode();
                 const siteConfig = loadSiteConfig(siteCode);
@@ -106,13 +104,19 @@ export default defineConfig({
                     return [];
                 }
 
+                console.log(`🚫 Excluding from production build: ${excludeDirs.join(', ')}`);
+
                 return [{
-                    name: 'exclude-dev-pages-early',
-                    resolveId(id) {
-                        // Check if the path includes any of the excluded directories
+                    name: 'exclude-dev-pages',
+                    enforce: 'pre',
+                    load(id) {
+                        // Skip dev-only pages entirely during production builds
+                        const normalizedId = id.replace(/\\/g, '/');
                         for (const dir of excludeDirs) {
-                            if (id.includes(`src/pages/${dir}/`)) {
-                                return { id, external: true };
+                            if (normalizedId.includes(`/src/pages/${dir}/`)) {
+                                console.log(`   Skipping: ${path.relative(process.cwd(), id)}`);
+                                // Return empty export to prevent Astro from processing this file
+                                return 'export default {};';
                             }
                         }
                         return null;
