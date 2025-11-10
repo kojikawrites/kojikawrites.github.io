@@ -65,6 +65,8 @@ const title = 'Deploy to GitHub';
       padding: 0.25rem 0;
       font-family: monospace;
       font-size: 0.9rem;
+      word-break: break-all;
+      overflow-wrap: break-word;
     }
 
     .file-status {
@@ -145,13 +147,20 @@ const title = 'Deploy to GitHub';
 
     .message {
       padding: 1rem;
+      padding-right: 3rem;
       border-radius: 4px;
       margin-bottom: 1rem;
       display: none;
+      position: relative;
     }
 
     .message.show {
       display: block;
+    }
+
+    #message-text {
+      display: block;
+      word-break: break-word;
     }
 
     .message.success {
@@ -164,6 +173,23 @@ const title = 'Deploy to GitHub';
       background: #f8d7da;
       color: #721c24;
       border: 1px solid #f5c6cb;
+    }
+
+    .message-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      opacity: 0.6;
+      color: inherit;
+    }
+
+    .message-close:hover {
+      opacity: 1;
     }
 
     .loading {
@@ -190,18 +216,78 @@ const title = 'Deploy to GitHub';
       color: #28a745;
       font-weight: 500;
     }
+
+    .build-section {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    .build-section h2 {
+      font-size: 1.1rem;
+      color: #495057;
+      margin-bottom: 0.5rem;
+    }
+
+    .build-output {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 4px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.85rem;
+      max-height: 400px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      display: none;
+    }
+
+    .build-output.show {
+      display: block;
+    }
+
+    .build-output.success {
+      border-left: 4px solid #28a745;
+    }
+
+    .build-output.error {
+      border-left: 4px solid #dc3545;
+    }
+
+    .btn-info {
+      background: #17a2b8;
+      color: white;
+    }
+
+    .btn-info:hover:not(:disabled) {
+      background: #138496;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🚀 Deploy to GitHub</h1>
 
-    <div id="message" class="message"></div>
+    <div id="message" class="message">
+      <button class="message-close" onclick="document.getElementById('message').classList.remove('show')">✕</button>
+      <span id="message-text"></span>
+    </div>
+
+    <div class="build-section"> <!--  hiive-blog-dev -->
+      <h2>Test Build</h2>
+      <button type="button" id="testBuildBtn" class="btn-info">Run Test Build</button>
+      <div id="loading-build" class="loading">
+        <p>Building project... This may take up to 2 minutes.</p>
+      </div>
+      <div id="build-output" class="build-output"></div>
+    </div>
 
     <div class="status-section">
       <h2>Git Status</h2>
       <div id="branch-info" class="branch-info">Loading...</div>
-      <div id="status-content">Loading git status...</div>
+      <div id="status-content" >Loading git status...</div> <!-- style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" -->
     </div>
 
     <div id="deploy-form" style="display: none;">
@@ -283,22 +369,23 @@ const title = 'Deploy to GitHub';
       loading.classList.add('show');
 
       try {
-        const response = await fetch('/api/git/push', {
+        const request_url = '/api/git/push';
+        const response = await fetch(request_url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message })
+          body: JSON.stringify({'message': message}),
         });
 
         const data = await response.json();
 
-        if (data.error) {
-          showMessage('error', `Error: ${data.error}\n${data.details || ''}`);
-        } else {
+        if (data.success) {
           showMessage('success', `✓ Successfully pushed to ${data.branch}!`);
           document.getElementById('commitMessage').value = '';
           setTimeout(() => window.location.reload(), 2000);
+        } else {
+          showMessage('error', `Error: ${data.error || 'Push failed'}\n${data.output || ''}`);
         }
       } catch (error) {
         showMessage('error', `Failed to push: ${error.message}`);
@@ -308,14 +395,63 @@ const title = 'Deploy to GitHub';
       }
     });
 
-    function showMessage(type, text) {
+    function showMessage(type, text, autoHide = true) {
       const messageEl = document.getElementById('message');
-      messageEl.textContent = text;
+      const messageText = document.getElementById('message-text');
+      messageText.textContent = text;
       messageEl.className = `message ${type} show`;
-      setTimeout(() => {
-        messageEl.classList.remove('show');
-      }, 5000);
+
+      // Only auto-hide if requested (don't auto-hide build messages)
+      if (autoHide) {
+        setTimeout(() => {
+          messageEl.classList.remove('show');
+        }, 10000); // 10 seconds for regular messages
+      }
     }
+
+    // Handle test build button
+    document.getElementById('testBuildBtn').addEventListener('click', async () => {
+      const buildBtn = document.getElementById('testBuildBtn');
+      const loadingBuild = document.getElementById('loading-build');
+      const buildOutput = document.getElementById('build-output');
+
+      // Disable button and show loading
+      buildBtn.disabled = true;
+      loadingBuild.classList.add('show');
+      buildOutput.classList.remove('show', 'success', 'error');
+      buildOutput.textContent = '';
+
+      try {
+        // Call the local API which coordinates with the build service
+        const response = await fetch('/api/git/build', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        const data = await response.json();
+
+        // Show build output
+        buildOutput.textContent = data.output || '';
+        buildOutput.classList.add('show');
+
+        if (data.success) {
+          buildOutput.classList.add('success');
+          showMessage('success', data.message, false);
+        } else {
+          buildOutput.classList.add('error');
+          showMessage('error', data.error || 'Build failed', false);
+        }
+      } catch (error) {
+        buildOutput.textContent = `Failed to run build: ${error.message}`;
+        buildOutput.classList.add('show', 'error');
+        showMessage('error', `Failed to run build: ${error.message}`, false);
+      } finally {
+        buildBtn.disabled = false;
+        loadingBuild.classList.remove('show');
+      }
+    });
 
     // Load status on page load
     loadGitStatus();

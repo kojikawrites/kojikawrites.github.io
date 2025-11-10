@@ -18,5 +18,5 @@ EXPOSE 4321
 # Set environment to development
 ENV NODE_ENV=development
 
-# Start the development server with network access
+# Start Astro dev server
 CMD ["npm", "run", "start"]
