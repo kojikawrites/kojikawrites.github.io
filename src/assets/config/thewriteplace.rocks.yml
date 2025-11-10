@@ -4,6 +4,7 @@ main:
     dynamic_dir: /src/assets/images/thewriteplace.rocks/logos/dynamic
 build:
   exclude_from_production:
+    - admin
     - api
     - edit
 navbar:
