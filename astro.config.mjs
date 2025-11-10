@@ -18,6 +18,13 @@ import keystatic from '@keystatic/astro';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
+import fs from 'fs';
+import path from 'path';
+import jsYaml from 'js-yaml';
+import { config as dotenvConfig } from 'dotenv';
+
+// Load environment variables for config reading
+dotenvConfig();
 
 import rehypeLinkDecorator from "./rehype-link-decorator.mjs";
 import rehypeFootnotesToEnd from "./rehype-footnotes-to-end.mjs";
@@ -28,6 +35,34 @@ import menuWatcher from './src/integrations/menuWatcher.ts';
 import excludeDevPages from './src/integrations/excludeDevPages.ts';
 
 import sitemap from '@astrojs/sitemap';
+
+/**
+ * Get site code from environment variables
+ */
+function getSiteCode() {
+    const siteCode = process.env.SITE_CODE;
+    if (siteCode) {
+        return siteCode;
+    }
+    try {
+        return new URL(process.env.VITE_SITE_NAME || '').hostname;
+    } catch (e) {
+        return 'hiivelabs.com';
+    }
+}
+
+/**
+ * Load site configuration from YAML file
+ */
+function loadSiteConfig(siteCode) {
+    const configPath = path.resolve(`src/assets/config/${siteCode}.yml`);
+    if (!fs.existsSync(configPath)) {
+        console.warn(`No config found for ${siteCode}, using defaults`);
+        return {};
+    }
+    const yamlString = fs.readFileSync(configPath, 'utf8');
+    return jsYaml.load(yamlString);
+}
 
 const siteName = () => {
     try {
@@ -58,7 +93,32 @@ export default defineConfig({
         },
         plugins: [
             yaml(),
-            ...(process.env.NODE_ENV === 'development' ? [basicSsl()] : [])
+            ...(process.env.NODE_ENV === 'development' ? [basicSsl()] : []),
+            // Exclude dev-only pages from production builds to prevent server-render errors
+            // Note: This plugin attempts early exclusion, but Astro may still discover routes
+            // The main exclusion happens in the excludeDevPages integration (astro:build:done hook)
+            ...(process.env.NODE_ENV === 'production' ? (() => {
+                const siteCode = getSiteCode();
+                const siteConfig = loadSiteConfig(siteCode);
+                const excludeDirs = siteConfig?.build?.exclude_from_production || [];
+
+                if (excludeDirs.length === 0) {
+                    return [];
+                }
+
+                return [{
+                    name: 'exclude-dev-pages-early',
+                    resolveId(id) {
+                        // Check if the path includes any of the excluded directories
+                        for (const dir of excludeDirs) {
+                            if (id.includes(`src/pages/${dir}/`)) {
+                                return { id, external: true };
+                            }
+                        }
+                        return null;
+                    }
+                }];
+            })() : [])
         ]
     },
 
