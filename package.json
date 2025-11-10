@@ -1,6 +1,7 @@
 {
   "name": "hiivelabs-blog-template",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
     "predev": "npx tsx src/scripts/generateKeystaticData.ts && npx tsx src/scripts/generateNavMenu.ts",
     "dev": "astro dev",
@@ -59,6 +60,7 @@
     "@keystatic/core": "^0.5.48",
     "@rollup/plugin-yaml": "^4.1.2",
     "@shikijs/transformers": "^3.0.0",
+    "@vitejs/plugin-basic-ssl": "^2.1.0",
     "postcss": "^8.5.2",
     "postcss-lighten-darken": "^0.9.0",
     "react": "^19.2.0",
