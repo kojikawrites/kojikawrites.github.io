@@ -112,6 +112,27 @@ for (const folder of folders) {
     }
 }
 
+// Step 2.5: Ensure default logos exist for each theme
+// If no dynamic logos found, or if a theme is missing a default, use navbar.logo values
+const navbarLogo = config?.navbar?.logo;
+if (navbarLogo) {
+    const themes = ['dark', 'light'];
+    for (const theme of themes) {
+        if (!logoMap[theme]) {
+            logoMap[theme] = {};
+        }
+
+        // If no default logo exists for this theme, add it from navbar config
+        if (!logoMap[theme].default && navbarLogo[theme]) {
+            logoMap[theme].default = {
+                src: navbarLogo[theme],
+                alt: navbarLogo.alt || config.main.logo.alt || 'Logo'
+            };
+            console.log(`ℹ️  Added default ${theme} logo from navbar config`);
+        }
+    }
+}
+
 // Step 3: Write JSON file
 fs.writeFileSync(outputPath, JSON.stringify(logoMap, null, 2));
 console.log(`✅ Logo map written to: ${outputPath}`);

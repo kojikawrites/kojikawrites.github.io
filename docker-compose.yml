@@ -1,0 +1,31 @@
+services:
+  blog:
+    build: .
+    container_name: hiive-blog-dev
+    ports:
+      - "8642:4321"
+    volumes:
+      # Mount source code from host - all edits persist on server
+      - .:/app
+      # Exclude node_modules - use container's version
+      - /app/node_modules
+      # Optional: Mount SSH keys for GitHub authentication
+      # Uncomment and adjust path to your SSH directory
+      # - ~/.ssh:/root/.ssh:ro
+    environment:
+      - NODE_ENV=development
+      - VITE_SITE_NAME=${VITE_SITE_NAME:-https://localhost:4321}
+      - SITE_CODE=${SITE_CODE:-hiivelabs.com}
+      - DEFAULT_AUTHOR=${DEFAULT_AUTHOR:-hiive}
+      # Git configuration
+      - GIT_AUTHOR_NAME=${GIT_AUTHOR_NAME:-hiive}
+      - GIT_AUTHOR_EMAIL=${GIT_AUTHOR_EMAIL:-your-email@example.com}
+      - GIT_COMMITTER_NAME=${GIT_COMMITTER_NAME:-hiive}
+      - GIT_COMMITTER_EMAIL=${GIT_COMMITTER_EMAIL:-your-email@example.com}
+      # Optional: GitHub Personal Access Token for HTTPS auth
+      # - GITHUB_TOKEN=${GITHUB_TOKEN}
+    env_file:
+      - .env
+    restart: unless-stopped
+    stdin_open: true
+    tty: true

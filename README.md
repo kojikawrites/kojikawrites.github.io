@@ -43,6 +43,28 @@ SITE_CODE=hiivelabs.com
 DEFAULT_AUTHOR=hiive
 ```
 
+## Site Configuration
+
+Site-specific settings are configured in `src/assets/config/[site-code].yml`. This includes navigation, build settings, and more.
+
+### Build Exclusions
+
+To exclude directories from production builds, add them to the build configuration:
+
+```yaml
+build:
+  exclude_from_production:
+    - api      # Development API endpoints
+    - edit     # Development admin pages
+```
+
+These directories will:
+- Be excluded from frontmatter extraction
+- Be removed from the production build output
+- Remain fully functional in development mode
+
+This is useful for admin interfaces, API routes, or other development-only pages that shouldn't be deployed to production.
+
 ## Development
 
 ### Local Development
@@ -77,6 +99,148 @@ In development mode, Keystatic CMS is available at `/keystatic` for editing cont
 **Requirements:**
 - HTTPS connection (automatically enabled in development)
 - Only available when `NODE_ENV=development`
+
+### Deploy UI (Development)
+
+A web-based deploy interface is available at `/edit/deploy` in development mode. This allows you to:
+- View git status and changed files
+- Commit and push changes to GitHub
+- Manage deployments from any device on your network
+
+**Requirements:**
+- Development mode only (automatically redirects to 404 in production)
+- Git configured with proper credentials
+- Access to GitHub repository
+
+## Docker Development Setup
+
+Run the blog in a Docker container on your local server for network-wide access.
+
+### Prerequisites
+
+- Docker and Docker Compose installed on your server
+- Git credentials configured (SSH keys or Personal Access Token)
+
+### Initial Setup
+
+1. **Clone the repository on your server:**
+```bash
+git clone https://github.com/hiive/hiive.github.io.git
+cd hiive.github.io
+```
+
+2. **Configure environment:**
+```bash
+cp .env.example .env
+# Edit .env with your settings
+```
+
+3. **Configure Git credentials:**
+
+**Option A: SSH Keys (Recommended)**
+
+Uncomment the SSH volume mount in `docker-compose.yml`:
+```yaml
+volumes:
+  - ~/.ssh:/root/.ssh:ro
+```
+
+**Option B: Personal Access Token**
+
+Add to your `.env` file:
+```env
+GITHUB_TOKEN=ghp_your_token_here
+```
+
+4. **Update Git configuration in `.env`:**
+```env
+GIT_AUTHOR_NAME=Your Name
+GIT_AUTHOR_EMAIL=your-email@example.com
+GIT_COMMITTER_NAME=Your Name
+GIT_COMMITTER_EMAIL=your-email@example.com
+```
+
+### Running with Docker
+
+**Start the container:**
+```bash
+docker-compose up -d
+```
+
+**View logs:**
+```bash
+docker-compose logs -f
+```
+
+**Stop the container:**
+```bash
+docker-compose down
+```
+
+**Restart after changes:**
+```bash
+docker-compose restart
+```
+
+### Accessing the Blog
+
+- **Local server:** `https://localhost:4321`
+- **From other devices:** `https://your-server-ip:4321`
+- **Keystatic CMS:** `https://your-server-ip:4321/keystatic`
+- **Deploy UI:** `https://your-server-ip:4321/admin/deploy`
+
+**Note:** Accept the self-signed SSL certificate on first visit.
+
+### Workflow
+
+1. **Edit content** from any device using Keystatic at `/keystatic`
+2. **Review changes** at `/edit/deploy` to see what files changed
+3. **Commit and push** directly from the deploy UI when ready
+4. **GitHub Pages** automatically rebuilds your site
+
+### How It Works
+
+- **Volume mounting:** Source code is mounted from the server, not copied into the container
+- **Persistence:** All edits are saved to the server's filesystem
+- **Git operations:** Can commit and push directly from the web UI
+- **Hot reload:** Changes to files trigger automatic browser refresh
+
+### Editing Files Directly
+
+Since the code is volume-mounted, you can also edit files directly on the server:
+
+```bash
+cd /path/to/hiive.github.io
+# Edit files with your favorite editor
+# Changes appear immediately in the dev server
+```
+
+### Troubleshooting
+
+**Port already in use:**
+```bash
+# Stop any existing containers
+docker-compose down
+# Or change the port in docker-compose.yml
+```
+
+**Git authentication fails:**
+```bash
+# Check SSH key permissions
+ls -la ~/.ssh/
+
+# Or verify GitHub token has repo permissions
+```
+
+**Container won't start:**
+```bash
+# View logs
+docker-compose logs
+
+# Rebuild container
+docker-compose build --no-cache
+docker-compose up -d
+```
 
 ## Production Build
 

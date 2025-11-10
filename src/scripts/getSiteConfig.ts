@@ -37,8 +37,13 @@ export async function getSiteConfig() {
 
     const yamlGlobs = import.meta.glob<{
         main: {
-            alt: string;
-            dynamic_dir: string;
+            logo: {
+                alt: string;
+                dynamic_dir: string;
+            }
+        }
+        build : {
+            exclude_from_production: string[];
         }
         blog: {
             pagination_size: number;

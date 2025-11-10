@@ -2,6 +2,10 @@ main:
   logo:
     alt: hiivelabs.com
     dynamic_dir: /src/assets/images/hiivelabs.com/logos/dynamic
+build:
+  exclude_from_production:
+    - api
+    - edit
 navbar:
   logo:
     dark: /src/assets/images/hiivelabs.com/logos/hiivelabs-dot-com-dark.svg

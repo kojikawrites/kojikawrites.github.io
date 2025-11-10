@@ -25,6 +25,7 @@ import {rehypeRenderEquations} from "./rehype-render-equations.mjs";
 import rehypeContentWarningTransform from "./rehype-content-warning-transform.mjs";
 import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/transformers';
 import menuWatcher from './src/integrations/menuWatcher.ts';
+import excludeDevPages from './src/integrations/excludeDevPages.ts';
 
 import sitemap from '@astrojs/sitemap';
 
@@ -67,7 +68,7 @@ export default defineConfig({
 
     integrations: [
         react({ include: ['**/react/*'] }),
-        ...(process.env.NODE_ENV === 'development' ? [keystatic(), menuWatcher()] : []),
+        ...(process.env.NODE_ENV === 'development' ? [keystatic(), menuWatcher()] : [excludeDevPages()]),
         tailwind(),
         mdx(),
         svelte(),
