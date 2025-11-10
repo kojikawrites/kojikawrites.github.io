@@ -39,6 +39,9 @@ def load_site_config(site_code):
     with open(config_path, 'r') as f:
         return yaml.safe_load(f) or {}
 
+def get_output(result):
+    (result.stdout + result.stderr)[-2048:]
+
 @app.get("/ping")
 async def ping():
     return JSONResponse({
@@ -56,6 +59,8 @@ async def run_build():
     start_time = time.time()
     source_dir = Path('/source')
     build_dir = Path('/tmp/build-workspace/build')
+
+
 
     try:
         # Check if source directory exists and has content
@@ -108,11 +113,12 @@ async def run_build():
             timeout=180,
         )
 
+
         if install_result.returncode != 0:
             return JSONResponse({
                 'success': False,
                 'error': 'npm ci failed',
-                'output': install_result.stdout + install_result.stderr
+                'output': get_output(install_result)
             }, status_code=500)
 
         # Run the build
@@ -129,16 +135,17 @@ async def run_build():
         duration = round(time.time() - start_time, 2)
 
         if result.returncode == 0:
+
             return JSONResponse({
                 'success': True,
                 'message': f'Build completed successfully in {duration}s',
-                'output': result.stdout + result.stderr
+                'output': get_output(result)
             })
         else:
             return JSONResponse({
                 'success': False,
                 'error': 'Build failed',
-                'output': result.stdout + result.stderr
+                'output': get_output(result)
             }, status_code=500)
 
     except subprocess.TimeoutExpired:
@@ -196,7 +203,7 @@ async def git_push(request: Request):
         if result.returncode != 0:
             return JSONResponse({
                 'error': 'Failed to get current branch',
-                'output': result.stdout + result.stderr
+                'output': get_output(result)
             }, status_code=500)
 
         branch = result.stdout.strip()
@@ -214,7 +221,7 @@ async def git_push(request: Request):
         if result.returncode != 0:
             return JSONResponse({
                 'error': 'Failed to check git status',
-                'output': result.stdout + result.stderr
+                'output': get_output(result)
             }, status_code=500)
 
         status = result.stdout.strip()
@@ -238,7 +245,7 @@ async def git_push(request: Request):
         if result.returncode != 0:
             return JSONResponse({
                 'error': 'Failed to add changes',
-                'output': result.stdout + result.stderr
+                'output': get_output(result)
             }, status_code=500)
 
         # Create commit
@@ -254,7 +261,7 @@ async def git_push(request: Request):
         if result.returncode != 0:
             return JSONResponse({
                 'error': 'Failed to create commit',
-                'output': result.stdout + result.stderr
+                'output': get_output(result)
             }, status_code=500)
 
         # Configure git to use token if available
@@ -275,7 +282,7 @@ async def git_push(request: Request):
             if result.returncode != 0:
                 return JSONResponse({
                     'error': 'Failed to get remote URL',
-                    'output': result.stdout + result.stderr
+                    'output': get_output(result)
                 }, status_code=500)
 
             remote_url = result.stdout.strip()
@@ -333,14 +340,14 @@ async def git_push(request: Request):
                 'success': True,
                 'message': 'Changes committed and pushed successfully',
                 'branch': branch,
-                'output': push_result.stdout + push_result.stderr
+                'output': get_output(push_result)
             })
         else:
             print(f'[PUSH] Push failed', flush=True)
             return JSONResponse({
                 'success': False,
                 'error': 'Failed to push to GitHub',
-                'output': push_result.stdout + push_result.stderr
+                'output': get_output(push_result)
             }, status_code=500)
 
     except subprocess.TimeoutExpired:
