@@ -138,7 +138,21 @@ export default defineConfig({
         svelte(),
         solidJs({ include: ['**/solid/*', '**/bluesky/*'] }),
         pagefind(),
-        sitemap()
+        sitemap({
+            filter: (page) => {
+                // Exclude dev-only pages from sitemap
+                const siteCode = getSiteCode();
+                const siteConfig = loadSiteConfig(siteCode);
+                const excludeDirs = siteConfig?.build?.exclude_from_production || [];
+
+                for (const dir of excludeDirs) {
+                    if (page.includes(`/${dir}/`)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        })
     ],
     markdown: {
         shikiConfig: {
