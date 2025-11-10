@@ -22,5 +22,8 @@ EXPOSE 8000
 # Set environment to production (for builds)
 #ENV NODE_ENV=production
 
+# Configure git
+RUN git config --global --add safe.directory /source
+
 # Start FastAPI build service
 CMD ["uv", "run", "build-service.py"]

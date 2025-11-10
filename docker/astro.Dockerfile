@@ -6,6 +6,9 @@ RUN apk add --no-cache git git-lfs openssh-client
 # Set working directory
 WORKDIR /app
 
+# Configure git
+RUN git config --global --add safe.directory /app
+
 # Copy package files
 COPY package*.json ./
 
