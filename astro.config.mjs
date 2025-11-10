@@ -91,38 +91,55 @@ export default defineConfig({
             devSourcemap: true,
             transformer: "postcss",
         },
+        server: {
+            watch: {
+                // Ignore build artifacts and generated files to prevent unnecessary reloads
+                ignored: [
+                    '**/dist/**',
+                    '**/.astro/**',
+                    '**/node_modules/**',
+                    '**/.building',
+                    '**/src/assets/_private/state/**',
+                    '**/src/scripts/onbuild/**'
+                ]
+            }
+        },
         plugins: [
             yaml(),
             ...(process.env.NODE_ENV === 'development' ? [basicSsl()] : []),
             // Exclude dev-only pages from production builds completely
-            ...(process.env.NODE_ENV === 'production' ? (() => {
-                const siteCode = getSiteCode();
-                const siteConfig = loadSiteConfig(siteCode);
-                const excludeDirs = siteConfig?.build?.exclude_from_production || [];
-
-                if (excludeDirs.length === 0) {
-                    return [];
-                }
-
-                console.log(`🚫 Excluding from production build: ${excludeDirs.join(', ')}`);
-
-                return [{
-                    name: 'exclude-dev-pages',
-                    enforce: 'pre',
-                    load(id) {
-                        // Skip dev-only pages entirely during production builds
-                        const normalizedId = id.replace(/\\/g, '/');
-                        for (const dir of excludeDirs) {
-                            if (normalizedId.includes(`/src/pages/${dir}/`)) {
-                                console.log(`   Skipping: ${path.relative(process.cwd(), id)}`);
-                                // Return empty export to prevent Astro from processing this file
-                                return 'export default {};';
-                            }
-                        }
-                        return null;
-                    }
-                }];
-            })() : [])
+            // ...(process.env.NODE_ENV === 'production' ? (() => {
+            //     const siteCode = getSiteCode();
+            //     const siteConfig = loadSiteConfig(siteCode);
+            //     const excludeDirs = siteConfig?.build?.exclude_from_production || [];
+            //
+            //     if (excludeDirs.length === 0) {
+            //         return [];
+            //     }
+            //
+            //     console.log(`🚫 Excluding from production build: ${excludeDirs.join(', ')}`);
+            //
+            //     return [{
+            //         name: 'exclude-dev-pages',
+            //         enforce: 'pre',
+            //         resolveId(id) {
+            //             // Check if this file should be excluded
+            //             const normalizedId = id.replace(/\\/g, '/');
+            //
+            //             for (const dir of excludeDirs) {
+            //                 Match both absolute and relative paths
+            //                 if (normalizedId.includes(`/src/pages/${dir}/`) ||
+            //                     normalizedId.includes(`src/pages/${dir}/`) ||
+            //                     normalizedId.match(new RegExp(`[/\\\\]src[/\\\\]pages[/\\\\]${dir}[/\\\\]`))) {
+            //                     console.log(`   Excluding from build: ${path.basename(id)}`);
+            //                     // Mark as external to completely skip processing
+            //                     return { id, external: true };
+            //                 }
+            //             }
+            //             return null;
+            //         }
+            //     }];
+            // })() : [])
         ]
     },
 

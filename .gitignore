@@ -27,3 +27,4 @@ pnpm-debug.log*
 /src/assets/_private/state/**/published_posts*.json
 /public/favicons/*/external/
 .env
+/docker/uv.lock
