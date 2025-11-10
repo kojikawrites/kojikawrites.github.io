@@ -1,47 +1,195 @@
-# thewriteplace.rocks
+# kojikawrites.github.io
 
-This is the initial design of thewriteplace.rocks, based on the redesign of hiivelabs.com by Joe Hall for Andrew Rollings.
+A modern blog platform built with Astro, featuring math rendering, multi-framework support, and content management capabilities.
 
-## Running the Site Locally
+## Tech Stack
 
-This site is built on the [Jekyll](https://jekyllrb.com/) platform, with many [GitHub-Pages](https://pages.github.com/)-friendly customizations via a project known as [JekyllFaces](http://jekyllfaces.com/), developed by [Joe Hall](https://stimulus/groundh0g). With Jekyll as its base, the documentation for Jekyll and the [GitHub Pages gem](https://github.com/github/pages-gem) should be applicable here.
+- **[Astro](https://astro.build/)** - Static site generator with component islands architecture
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[Keystatic](https://keystatic.com/)** - Git-based content management (development mode)
+- **[MDX](https://mdxjs.com/)** - Markdown with component support
+- **[MathJax](https://www.mathjax.org/)** - Mathematical equation rendering
+- **[Pagefind](https://pagefind.app/)** - Fast static search
+- **Multiple Frameworks**: Svelte, SolidJS, and React integrations
 
-On your first local build, you'll need to install the required Ruby gems from the `docs` folder.
+## Prerequisites
 
-```shell script
-bundle install
+- **Node.js** (v18 or higher recommended)
+- **npm** (comes with Node.js)
+
+## Getting Started
+
+### Initial Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/kojikawrites/kojikawrites.github.io.git
+cd kojikawrites.github.io
 ```
 
-Now, whenever you want to kick off a local instance of your site, run the jekyll server from the `docs` folder.
-
-```shell script
-bundle exec jekyll server
+2. Install dependencies:
+```bash
+npm install
 ```
 
-With recent versions of Jekyll, live reloads are supported. This is especially handy when making quick tweaks or content edits. No more refreshing your browser manually.
-
-```shell script
-bundle exec jekyll server --livereload
+3. Configure your site:
+```bash
+cp .env.example .env
 ```
 
-When you're ready to hit the localhost instance from another machine on your LAN, use the following command to expose the services and accept incoming connections.
-
-```shell script
-bundle exec jekyll server --livereload --host 0.0.0.0
+Edit the `.env` file to set your site configuration:
+```env
+SITE_CODE=thewriteplace.rocks
+DEFAULT_AUTHOR=K°
 ```
 
-At this point, your site should be running on [localhost:4000](http://localhost:4000/). Marvel at its glory. When you're done admiring your work, you can make edits to your site and see them appear in the browser, in realtime.
+## Development
 
-When you're ready to release the site into the wild, be sure to edit the `_config.yml` from this ...
+### Local Development
 
-```yaml
-url: "https://groundh0g.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-baseurl: "/thewriteplace.rocks" # the subpath of your site, e.g. /blog
+Start the development server with live reload:
+```bash
+npm run dev
 ```
 
-... to this ...
+Your site will be available at [https://localhost:4321](https://localhost:4321)
 
-```yaml
-url: "https://thewriteplace.rocks" # the base hostname & protocol for your site, e.g. http://example.com
-baseurl: "" # the subpath of your site, e.g. /blog
+**Note:** Development mode uses HTTPS with a self-signed certificate. You'll see a browser security warning on first visit - this is expected and safe to bypass for local development.
+
+### Development with Network Access
+
+To access the development server from other devices on your network (e.g., testing on mobile):
+```bash
+npm run start
 ```
+
+This runs the dev server with `--host` flag, making it accessible via HTTPS using your local IP address (e.g., `https://192.168.1.x:4321`).
+
+**Important for Mobile Testing:**
+- Accept the self-signed certificate warning on your mobile device
+- HTTPS is required for Keystatic CMS to work properly (uses Web Crypto API)
+- On iOS Safari: Tap "Show Details" → "visit this website" to bypass the warning
+
+### Content Management (Development)
+
+In development mode, Keystatic CMS is available at `/keystatic` for editing content through a visual interface.
+
+**Requirements:**
+- HTTPS connection (automatically enabled in development)
+- Only available when `NODE_ENV=development`
+
+## Production Build
+
+### Build the Site
+
+```bash
+npm run build
+```
+
+The build process will:
+1. Generate navigation menu data
+2. Extract frontmatter from posts
+3. Build static pages to the `dist/` directory
+4. Generate search index with Pagefind
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+Or with network access:
+```bash
+npm run preview-host
+```
+
+## Project Structure
+
+```
+kojikawrites.github.io/
+├── src/
+│   ├── assets/
+│   │   ├── posts/           # Blog posts organized by site
+│   │   ├── images/          # Image assets
+│   │   └── config/          # Configuration files
+│   ├── components/          # Reusable components (Astro, Svelte, etc.)
+│   ├── layouts/             # Page layouts
+│   ├── pages/               # Route pages
+│   │   ├── blog/            # Blog routes
+│   │   ├── [page].astro     # Dynamic pages
+│   │   └── index.astro      # Home page
+│   ├── scripts/             # Build and utility scripts
+│   └── styles/              # Global styles
+├── public/                  # Static assets
+├── astro.config.mjs         # Astro configuration
+├── tailwind.config.mjs      # Tailwind configuration
+├── keystatic.config.tsx     # Keystatic CMS configuration
+└── package.json             # Dependencies and scripts
+```
+
+## Key Features
+
+### Markdown Enhancements
+- **Math equations**: Inline `$...$` and display `$$...$$` math with MathJax
+- **GitHub Flavored Markdown**: Tables, task lists, strikethrough
+- **Smartypants**: Smart quotes and dashes
+- **Reading time**: Automatically calculated for posts
+- **Syntax highlighting**: Powered by Shiki with dark/light themes
+
+### Content Features
+- RSS feed generation
+- Sitemap generation
+- Category and tag organization
+- Full-text search with Pagefind
+- External link decoration with icons
+- Footnote support
+- YouTube embeds
+
+### Developer Experience
+- TypeScript support
+- Hot module replacement
+- Pre-build hooks for data generation
+- Multi-site configuration support
+
+## Publishing
+
+### GitHub Pages Deployment
+
+1. Ensure your `.env` is configured correctly for production:
+```env
+SITE_CODE=yourdomain.com  # or username.github.io
+```
+
+2. Build the site:
+```bash
+npm run build
+```
+
+3. The `dist/` directory contains your static site ready for deployment.
+
+For GitHub Pages, the site configuration in `astro.config.mjs` uses the `VITE_SITE_NAME` environment variable to set the base URL.
+
+## Content Organization
+
+Blog posts are stored in `src/assets/posts/[site-name]/` as MDX files. Each post includes:
+
+- Frontmatter with metadata (title, date, author, tags, etc.)
+- MDX content with support for components
+- Automatic reading time calculation
+- Date extraction from filename (YYYY-MM-DD format)
+
+## Scripts
+
+- `npm run dev` - Start development server
+- `npm run start` - Start development server with network access
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build locally
+- `npm run preview-host` - Preview production build with network access
+
+## License
+
+See repository for license information.
+
+## Contributing
+
+This is a personal blog platform. For issues or suggestions, please open an issue on GitHub.
