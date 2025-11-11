@@ -9,12 +9,18 @@ import React from 'react';
 import { getSiteCode } from "./src/scripts/getSiteConfig.ts";
 import pre = $effect.pre;
 
-
+// ============================================================================
+// LOGO MAP - Load synchronously at module level
+// ============================================================================
+const siteCode = getSiteCode();
+// Import logo-map.json dynamically
+const logoMapGlob = import.meta.glob<{ default: any }>('/src/assets/_private/state/**/*.json', { eager: true });
+const logoMapKey = Object.keys(logoMapGlob).find(key => key.includes(siteCode) && key.includes('logo-map.json'));
+const logoMap = logoMapKey ? logoMapGlob[logoMapKey].default : null;
 
 // ============================================================================
 // CONFIGURATION DIRECTORIES
 // ============================================================================
-const siteCode = getSiteCode();
 const baseDir = 'src';
 
 const basePostPath = `${baseDir}/assets/posts/${siteCode}`;
@@ -670,27 +676,35 @@ const sharedCustomComponents = {
     label: 'Main Logo',
     schema: {},
     ContentView: () => {
+      // Get logo sources from logo-map.json
+      const lightLogoSrc = logoMap?.light?.default?.src || `/${baseImagePath}/logos/default-logo-light.svg`;
+      const darkLogoSrc = logoMap?.dark?.default?.src || `/${baseImagePath}/logos/default-logo-dark.svg`;
+      const lightLogoAlt = logoMap?.light?.default?.alt || 'Main logo (light)';
+      const darkLogoAlt = logoMap?.dark?.default?.alt || 'Main logo (dark)';
+
       return (
         <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
           <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
-            🏢 Main Logo (Dated)
+            🏢 Main Logo ({siteCode})
           </div>
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '9px', color: 'var(--ks-color-scale-slate11)', marginBottom: '4px' }}>Light Theme:</div>
-              <img
-                src="/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-light.svg"
-                alt="Main logo (light)"
-                style={{ maxWidth: '100%', maxHeight: '150px', height: 'auto', display: 'block', backgroundColor: '#fff', padding: '8px', border: '1px solid var(--ks-color-scale-slate6)' }}
-              />
+              <div style={{ fontSize: '11px', fontWeight: '600', marginBottom: '4px', color: '#666' }}>Light theme</div>
+                <img
+                  src={lightLogoSrc}
+                  alt={lightLogoAlt}
+                  style={{ maxWidth: '100%', height: 'auto', display: 'block', backgroundColor: '#fff', padding: '8px' }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                />
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '9px', color: 'var(--ks-color-scale-slate11)', marginBottom: '4px' }}>Dark Theme:</div>
-              <img
-                src="/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-dark.svg"
-                alt="Main logo (dark)"
-                style={{ maxWidth: '100%', maxHeight: '150px', height: 'auto', display: 'block', backgroundColor: '#222', padding: '8px', border: '1px solid var(--ks-color-scale-slate6)' }}
-              />
+              <div style={{ fontSize: '11px', fontWeight: '600', marginBottom: '4px', color: '#666' }}>Dark theme</div>
+                <img
+                  src={darkLogoSrc}
+                  alt={darkLogoAlt}
+                  style={{ maxWidth: '100%', height: 'auto', display: 'block', backgroundColor: '#000', padding: '8px' }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                />
             </div>
           </div>
         </div>
@@ -740,7 +754,7 @@ const sharedCustomComponents = {
               <img
                 src={lightSrc}
                 alt={alt || 'Themed image (light)'}
-                style={{ maxWidth: '100%', height: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#ddd', padding: '8px' }}
+                style={{ maxWidth: '100%', height: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#fff', padding: '8px' }}
                 onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
               />
             </div>
@@ -751,7 +765,7 @@ const sharedCustomComponents = {
               <img
                 src={darkSrc}
                 alt={alt || 'Themed image (dark)'}
-                style={{ maxWidth: '100%', height: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#2220', padding: '8px' }}
+                style={{ maxWidth: '100%', height: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#000', padding: '8px' }}
                 onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
               />
             </div>
