@@ -3,7 +3,7 @@ services:
     build:
       context: ..
       dockerfile: docker/astro.Dockerfile
-    container_name: ${BLOG_CODE}-blog-dev
+    container_name: ${DOCKER_BLOG_CODE}-blog-dev
     ports:
       - "8642:4321"  # Astro dev server
     volumes:
@@ -26,8 +26,8 @@ services:
   build-service:
     build:
       context: ..
-      dockerfile: docker/${BUILD_MODE}/build-service.Dockerfile
-    container_name: ${BLOG_CODE}-build-service
+      dockerfile: docker/${DOCKER_BUILD_MODE}/build-service.Dockerfile
+    container_name: ${DOCKER_BLOG_CODE}-build-service
     volumes:
       # Access to source code (for copying and git)
       - ..:/source
@@ -44,12 +44,12 @@ services:
 volumes:
   blog-dev-workspace:
     external: true
-    name: ${BLOG_CODE}-dev-workspace
+    name: ${DOCKER_BLOG_CODE}-dev-workspace
   blog-build-workspace:
     external: true
-    name: ${BLOG_CODE}-build-workspace
+    name: ${DOCKER_BLOG_CODE}-build-workspace
 
 networks:
   blog-network:
     external: true
-    name: ${BLOG_CODE}-network
+    name: ${DOCKER_BLOG_CODE}-network
