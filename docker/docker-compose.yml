@@ -5,7 +5,7 @@ services:
       dockerfile: docker/astro.Dockerfile
     container_name: ${DOCKER_BLOG_CODE}-blog-dev
     ports:
-      - "8642:4321"  # Astro dev server
+      - ${DOCKER_BLOG_PORT}:4321  # Astro dev server
     volumes:
       # Mount source code from host - all edits persist on server
       - ..:/app
