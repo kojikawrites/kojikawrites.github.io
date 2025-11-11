@@ -1,2 +1,1 @@
-docker-compose down
-BUILD_MODE=pip docker-compose up --build -d
+DOCKER_BUILD_MODE=pip ./docker_build.sh
