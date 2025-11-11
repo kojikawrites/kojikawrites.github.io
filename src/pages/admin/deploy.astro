@@ -5,6 +5,7 @@ if (import.meta.env.PROD) {
 }
 
 const title = 'Deploy to GitHub';
+const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.env.SHOW_TEST_BUILD === true;
 ---
 
 <!DOCTYPE html>
@@ -275,19 +276,24 @@ const title = 'Deploy to GitHub';
       <span id="message-text"></span>
     </div>
 
-    <div class="build-section"> <!--  hiive-blog-dev -->
-      <h2>Test Build</h2>
-      <button type="button" id="testBuildBtn" class="btn-info">Run Test Build</button>
-      <div id="loading-build" class="loading">
-        <p>Building project... This may take up to 2 minutes.</p>
+    {showTestBuild && (
+      <div class="build-section">
+        <h2>Test Build</h2>
+        <button type="button" id="testBuildBtn" class="btn-info">Run Test Build</button>
+        <div id="loading-build" class="loading">
+          <p>Building project... This may take up to 2 minutes.</p>
+        </div>
+        <div id="build-output" class="build-output"></div>
       </div>
-      <div id="build-output" class="build-output"></div>
-    </div>
+    )}
 
     <div class="status-section">
       <h2>Git Status</h2>
       <div id="branch-info" class="branch-info">Loading...</div>
-      <div id="status-content" >Loading git status...</div> <!-- style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" -->
+      <div id="status-content" >Loading git status...</div>
+      <div style="margin-top: 1rem;">
+        <button type="button" class="btn-secondary" onclick="window.location.reload()">Refresh Status</button>
+      </div>
     </div>
 
     <div id="deploy-form" style="display: none;">
@@ -299,12 +305,11 @@ const title = 'Deploy to GitHub';
             name="message"
             placeholder="Enter a commit message describing your changes..."
             required
-          ></textarea>
+          >Update content</textarea>
         </div>
 
         <div class="button-group">
           <button type="submit" class="btn-primary">Commit & Push</button>
-          <button type="button" class="btn-secondary" onclick="window.location.reload()">Refresh Status</button>
         </div>
       </form>
 
@@ -409,49 +414,52 @@ const title = 'Deploy to GitHub';
       }
     }
 
-    // Handle test build button
-    document.getElementById('testBuildBtn').addEventListener('click', async () => {
-      const buildBtn = document.getElementById('testBuildBtn');
-      const loadingBuild = document.getElementById('loading-build');
-      const buildOutput = document.getElementById('build-output');
+    // Handle test build button (only if it exists)
+    const testBuildBtn = document.getElementById('testBuildBtn');
+    if (testBuildBtn) {
+      testBuildBtn.addEventListener('click', async () => {
+        const buildBtn = document.getElementById('testBuildBtn');
+        const loadingBuild = document.getElementById('loading-build');
+        const buildOutput = document.getElementById('build-output');
 
-      // Disable button and show loading
-      buildBtn.disabled = true;
-      loadingBuild.classList.add('show');
-      buildOutput.classList.remove('show', 'success', 'error');
-      buildOutput.textContent = '';
+        // Disable button and show loading
+        buildBtn.disabled = true;
+        loadingBuild.classList.add('show');
+        buildOutput.classList.remove('show', 'success', 'error');
+        buildOutput.textContent = '';
 
-      try {
-        // Call the local API which coordinates with the build service
-        const response = await fetch('/api/git/build', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+        try {
+          // Call the local API which coordinates with the build service
+          const response = await fetch('/api/git/build', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+
+          const data = await response.json();
+
+          // Show build output
+          buildOutput.textContent = data.output || '';
+          buildOutput.classList.add('show');
+
+          if (data.success) {
+            buildOutput.classList.add('success');
+            showMessage('success', data.message, false);
+          } else {
+            buildOutput.classList.add('error');
+            showMessage('error', data.error || 'Build failed', false);
           }
-        });
-
-        const data = await response.json();
-
-        // Show build output
-        buildOutput.textContent = data.output || '';
-        buildOutput.classList.add('show');
-
-        if (data.success) {
-          buildOutput.classList.add('success');
-          showMessage('success', data.message, false);
-        } else {
-          buildOutput.classList.add('error');
-          showMessage('error', data.error || 'Build failed', false);
+        } catch (error) {
+          buildOutput.textContent = `Failed to run build: ${error.message}`;
+          buildOutput.classList.add('show', 'error');
+          showMessage('error', `Failed to run build: ${error.message}`, false);
+        } finally {
+          buildBtn.disabled = false;
+          loadingBuild.classList.remove('show');
         }
-      } catch (error) {
-        buildOutput.textContent = `Failed to run build: ${error.message}`;
-        buildOutput.classList.add('show', 'error');
-        showMessage('error', `Failed to run build: ${error.message}`, false);
-      } finally {
-        buildBtn.disabled = false;
-        loadingBuild.classList.remove('show');
-      }
-    });
+      });
+    }
 
     // Load status on page load
     loadGitStatus();
