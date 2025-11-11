@@ -1,7 +1,9 @@
+# suitable for most machines
+
 FROM node:20-alpine
 
 # Install rsync, Python, and curl for build operations
-RUN apk add --no-cache rsync python3 curl git git-lfs
+RUN apk add --no-cache rsync python3 py3-pip curl git git-lfs
 
 # Install uv for fast Python package management (static binary for Alpine)
 RUN curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/uv-x86_64-unknown-linux-musl.tar.gz | tar xz -C /usr/local/bin --strip-components=1
@@ -11,10 +13,14 @@ WORKDIR /build-service
 
 # Copy Python service files
 COPY docker/build-service.py /build-service/
-COPY docker/pyproject.toml /build-service/
+COPY docker/uv/pyproject.toml /build-service/
 
 # Install Python dependencies
-RUN cd /build-service && uv sync
+RUN uv venv
+RUN uv add fastapi pyyaml uvicorn
+
+# Configure git
+RUN git config --global --add safe.directory /source
 
 # Expose FastAPI port
 EXPOSE 8000
@@ -24,3 +30,4 @@ EXPOSE 8000
 
 # Start FastAPI build service
 CMD ["uv", "run", "build-service.py"]
+
