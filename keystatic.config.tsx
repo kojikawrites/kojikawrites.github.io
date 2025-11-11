@@ -9,6 +9,9 @@ import React from 'react';
 import { getSiteCode } from "./src/scripts/getSiteConfig.ts";
 import pre = $effect.pre;
 
+const github_author = import.meta.env?.PUBLIC_GITHUB_REPO_OWNER || 'unknown';
+const github_repo = import.meta.env?.PUBLIC_GITHUB_REPO || 'unknown';
+
 // ============================================================================
 // LOGO MAP - Load synchronously at module level
 // ============================================================================
@@ -1231,8 +1234,8 @@ export default config({
   storage: {
     kind: process.env.NODE_ENV === 'development' ? 'local' : 'github',
     repo: {
-      owner: 'hiive',
-      name: 'hiive.github.io',
+      owner: github_author,
+      name: github_repo,
     },
   },
 
