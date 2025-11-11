@@ -1,17 +1,7 @@
 import type { APIRoute } from 'astro';
 import { execSync } from 'child_process';
 
-// Note: This endpoint can be prerendered (static) in production since it will
-// always return a 403 error. In development it works as a dynamic endpoint.
 export const GET: APIRoute = async () => {
-  // Only allow in development mode
-  if (import.meta.env.PROD) {
-    return new Response(JSON.stringify({ error: 'Not available in production' }), {
-      status: 403,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
   try {
     // Get git status
     const status = execSync('git status --porcelain', { encoding: 'utf-8' });

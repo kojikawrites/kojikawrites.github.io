@@ -6,6 +6,9 @@ RUN apk add --no-cache git git-lfs openssh-client
 # Set working directory
 WORKDIR /app
 
+# Configure git
+RUN git config --global --add safe.directory /app
+
 # Copy package files
 COPY package*.json ./
 
@@ -18,5 +21,5 @@ EXPOSE 4321
 # Set environment to development
 ENV NODE_ENV=development
 
-# Start the development server with network access
+# Start Astro dev server
 CMD ["npm", "run", "start"]
