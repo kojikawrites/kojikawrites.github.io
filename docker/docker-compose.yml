@@ -3,16 +3,16 @@ services:
     build:
       context: ..
       dockerfile: docker/astro.Dockerfile
-    container_name: hiive-blog-dev
+    container_name: ${BLOG_CODE}-blog-dev
     ports:
       - "8642:4321"  # Astro dev server
     volumes:
       # Mount source code from host - all edits persist on server
       - ..:/app
       # Exclude node_modules and other important directories - use container's version
-      - hiive-dev-workspace:/app/node_modules
+      - blog-dev-workspace:/app/node_modules
       # Shared volume for build operations
-      - hiive-build-workspace:/tmp/build-workspace
+      - blog-build-workspace:/tmp/build-workspace
     environment:
       - NODE_ENV=development
     env_file:
@@ -21,36 +21,35 @@ services:
     stdin_open: true
     tty: true
     networks:
-      - hiive-network
+      - blog-network
 
   build-service:
     build:
       context: ..
       dockerfile: docker/${BUILD_MODE}/build-service.Dockerfile
-    container_name: hiive-build-service
+    container_name: ${BLOG_CODE}-build-service
     volumes:
       # Access to source code (for copying and git)
       - ..:/source
       # Shared volume for build operations
-      - hiive-build-workspace:/tmp/build-workspace
+      - blog-build-workspace:/tmp/build-workspace
     environment:
       - NODE_ENV=production
     env_file:
       - ../.env
     restart: unless-stopped
     networks:
-      - hiive-network
+      - blog-network
 
 volumes:
-  hiive-dev-workspace:
-    driver: local
-  hiive-build-workspace:
-    driver: local
-    driver_opts:
-      type: "tmpfs"
-      device: "tmpfs"
-      o: "size=8g,uid=1000"
+  blog-dev-workspace:
+    external: true
+    name: ${BLOG_CODE}-dev-workspace
+  blog-build-workspace:
+    external: true
+    name: ${BLOG_CODE}-build-workspace
 
 networks:
-  hiive-network:
-    driver: bridge
+  blog-network:
+    external: true
+    name: ${BLOG_CODE}-network
