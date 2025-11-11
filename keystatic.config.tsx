@@ -1262,7 +1262,7 @@ export default config({
     pages: collection({
       label: 'Pages',
       slugField: 'title',
-      path: `${basePagePath}/*`,
+      path: `${basePagePath}/**`,
       format: { contentField: 'content' },
       entryLayout: 'content',
       schema: {
