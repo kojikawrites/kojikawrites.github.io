@@ -26,10 +26,8 @@ services:
   build-service:
     build:
       context: ..
-      dockerfile: docker/build-service.Dockerfile
+      dockerfile: docker/${BUILD_MODE}/build-service.Dockerfile
     container_name: hiive-build-service
-    ports:
-      - "8643:8000"  # FastAPI build service
     volumes:
       # Access to source code (for copying and git)
       - ..:/source

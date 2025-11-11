@@ -81,11 +81,18 @@ async def run_build():
                 config = yaml.safe_load(f) or {}
                 exclude_dirs = config.get('build', {}).get('exclude_from_production', [])
 
-        # Clean build directory
+        # Clean build directory (except node_modules)
         if build_dir.exists():
-            print(f"Cleaning existing build directory...", flush=True)
-            shutil.rmtree(build_dir)
-        build_dir.mkdir(parents=True, exist_ok=True)
+            print(f"Cleaning build directory (preserving node_modules)...", flush=True)
+            for item in build_dir.iterdir():
+                print(f".. Removing {item.name}", flush=True)
+                if item.name != 'node_modules':
+                    if item.is_dir():
+                        shutil.rmtree(item)
+                    else:
+                        item.unlink()
+        else:
+            build_dir.mkdir(parents=True, exist_ok=True)
 
         # Copy source to build directory
         print(f"Copying {source_dir} to {build_dir}...", flush=True)
@@ -104,9 +111,9 @@ async def run_build():
                 shutil.rmtree(exclude_path)
 
         # Install dependencies natively for Linux
-        print(f"Installing dependencies with npm ci...", flush=True)
+        print(f"Installing dependencies with npm...", flush=True)
         install_result = subprocess.run(
-            ['npm', 'ci', '--include=dev'],
+            ['npm', 'install', '--include=dev'],
             cwd=str(build_dir),
             capture_output=True,
             text=True,
@@ -117,8 +124,25 @@ async def run_build():
         if install_result.returncode != 0:
             return JSONResponse({
                 'success': False,
-                'error': 'npm ci failed',
+                'error': 'npm dependency install failed',
                 'output': get_output(install_result)
+            }, status_code=500)
+
+        print(f"Pruning unneeded dependencies with npm...", flush=True)
+        prune_result = subprocess.run(
+            ['npm', 'prune'],
+            cwd=str(build_dir),
+            capture_output=True,
+            text=True,
+            timeout=180,
+            env={**os.environ, 'NODE_ENV': 'development'} # run the prune ONLY in development mode to keep dev dependencies.
+        )
+
+        if prune_result.returncode != 0:
+            return JSONResponse({
+                'success': False,
+                'error': 'npm dependency prune failed',
+                'output': get_output(prune_result)
             }, status_code=500)
 
         # Run the build
@@ -170,13 +194,6 @@ async def git_push(request: Request):
     Expects JSON body with 'message' field containing the commit message.
     """
     try:
-        print('/push invoked')
-#                     return JSONResponse({
-#                         'success': True,
-#                         'message': 'Changes committed and pushed successfully',
-#                         'branch': branch,
-#                         'output': push_result.stdout + push_result.stderr
-#                     })
         body = await request.json()
         message = body.get('message')
 
