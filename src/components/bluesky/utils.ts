@@ -93,6 +93,7 @@ function addThreadUIData(
             .filter((x): x is ThreadViewPostUI => x !== undefined);
     }
 
+    // @ts-ignore
     return { ...threadViewPost, parent, replies };
 }
 
