@@ -9,13 +9,13 @@ import {
   For,
 } from "solid-js";
 import { formatDistance } from "date-fns";
-import { VsComment, VsHeart, VsHeartFilled, VsLink } from "solid-icons/vs";
 import {
   type ThreadViewPostUI,
   enrichThreadWithUIData,
   flatten, replaceHashtagsAndAutoPostText,
 } from "./utils";
 import { Reply } from "./Reply";
+import { VsComment, VsEmptyHeart, VsFilledHeart, VsLink } from "./icons";
 
 interface ThreadProps {
   agent: Accessor<AtpAgent | undefined>;
@@ -79,6 +79,7 @@ export const Thread: Component<ThreadProps> = ({ atprotoURI, agent, categories }
         showEditor={showEditor}
         setShowEditor={setShowEditor}
         refetch={refetch}
+        rootPostURI={atprotoURI}
       />
     </>
   );
@@ -108,10 +109,36 @@ const Post = ({
     createdAt: string;
   };
 
+  // Optimistic UI state for likes
+  const [isLiked, setIsLiked] = createSignal(!!post.post.viewer?.like);
+  const [likeCount, setLikeCount] = createSignal(post.post.likeCount ?? 0);
+
   const showContinueThread =
     (post.post?.replyCount ?? 0) > 0 &&
     (post.replies?.length ?? 0) === 0 &&
     post.showChildReplyLine === false;
+
+  const handleLikeClick = async () => {
+    // Optimistic UI update
+    const wasLiked = isLiked();
+    setIsLiked(!wasLiked);
+    setLikeCount(wasLiked ? likeCount() - 1 : likeCount() + 1);
+
+    // Perform API call
+    try {
+      if (wasLiked) {
+        await agent()?.deleteLike(post.post.viewer!.like!);
+      } else {
+        await agent()?.like(post.post.uri, post.post.cid);
+      }
+      // Delay refetch to allow server to process the change
+      setTimeout(() => refetch(), 1000);
+    } catch (error) {
+      // Revert optimistic update on error
+      setIsLiked(wasLiked);
+      setLikeCount(wasLiked ? likeCount() + 1 : likeCount() - 1);
+    }
+  };
 
   return (
     <li
@@ -164,17 +191,11 @@ const Post = ({
               type="button"
               class="comments-thread-post-button"
               aria-label="Like"
-              onClick={async () => {
-                if (post.post.viewer?.like) {
-                  await agent()?.deleteLike(post.post.viewer.like);
-                  refetch();
-                } else {
-                  await agent()?.like(post.post.uri, post.post.cid);
-                  refetch();
-                }
-              }} >
-              {post.post.viewer?.like ? <VsHeartFilled /> : <VsHeart />}
-              <span class="ml-1 text-sm">{post.post.likeCount}</span>
+              onClick={handleLikeClick} >
+              {isLiked() ?
+                  <VsFilledHeart /> :
+                  <VsEmptyHeart />}
+              <span class="ml-1 text-sm">{likeCount()}</span>
             </button>
             <a
               class="comments-thread-post-button"
@@ -184,7 +205,7 @@ const Post = ({
               target="_blank"
               rel="noopener noreferrer"
               aria-label="View on Bsky" >
-              <VsLink />{" "}
+                <VsLink />{" "}
               <span class="ml-1 text-xs">View on Bsky</span>
             </a>
           </div>

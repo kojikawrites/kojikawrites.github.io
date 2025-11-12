@@ -1,6 +1,7 @@
 import {AppBskyFeedDefs} from "@atproto/api";
 import type {BlockedPost, NotFoundPost, ThreadViewPost,} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import {getSiteConfig} from "../../scripts/getSiteConfig";
+import DOMPurify from "isomorphic-dompurify";
 
 export interface ThreadViewPostUI extends ThreadViewPost {
     showParentReplyLine: boolean;
@@ -93,6 +94,7 @@ function addThreadUIData(
             .filter((x): x is ThreadViewPostUI => x !== undefined);
     }
 
+    // @ts-ignore
     return { ...threadViewPost, parent, replies };
 }
 
@@ -130,15 +132,23 @@ export function replaceHashtagsAndAutoPostText(inputText: string, allCategories:
     const postText = replaceAutoPostText(inputText);
     if (!siteConfig.bluesky.hashtag_link)
     {
-        return postText;
+        // Sanitize plain text to prevent XSS
+        return DOMPurify.sanitize(postText, { ALLOWED_TAGS: [] });
     }
 
-    return postText.replace(/#([\w-]+)/g, (_, category) => {
+    const htmlWithHashtags = postText.replace(/#([\w-]+)/g, (_, category) => {
 
         const categoryLink = siteConfig.bluesky.hashtag_link.replace("[HASHTAG]", category?.toLowerCase()); // /category/#[HASHTAG]
 
         return allCategories.includes(category.toLowerCase())
             ? `<a class="color-text-highlight-color" href="${categoryLink}">#${category}</a>`
             : '';
+    });
+
+    // Sanitize the HTML output to prevent XSS attacks from malicious Bluesky posts
+    // Allow only anchor tags with href and class attributes
+    return DOMPurify.sanitize(htmlWithHashtags, {
+        ALLOWED_TAGS: ['a'],
+        ALLOWED_ATTR: ['href', 'class']
     });
 }
