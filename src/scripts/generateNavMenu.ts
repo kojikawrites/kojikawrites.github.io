@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 import { config as dotenvConfig } from 'dotenv';
+import { getSiteStatePath } from './getSiteConfig.ts';
 
 // Load environment variables from .env file
 dotenvConfig();
@@ -10,7 +11,7 @@ dotenvConfig();
 const SITE_CODE = process.env.SITE_CODE || 'hiivelabs.com';
 
 const PAGES_DIR = `src/assets/pagecontent/${SITE_CODE}`;
-const SYSTEM_MENU_FILE = 'src/assets/config/system-menu-items.json';
+const SYSTEM_MENU_FILE = getSiteStatePath('system-menu-items.json', SITE_CODE);
 const OUTPUT_FILE = `src/assets/config/${SITE_CODE}.yml`;
 
 interface PageFrontmatter {

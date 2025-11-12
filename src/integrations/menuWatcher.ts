@@ -2,6 +2,7 @@ import type { AstroIntegration } from 'astro';
 import { execSync } from 'child_process';
 import path from 'path';
 import { config as dotenvConfig } from 'dotenv';
+import { getSiteStatePath } from '../scripts/getSiteConfig.ts';
 
 // Load environment variables from .env file
 dotenvConfig();
@@ -16,7 +17,7 @@ export default function menuWatcher(): AstroIntegration {
 
         const watchPaths = [
           `src/assets/pagecontent/${SITE_CODE}`,
-          'src/assets/config/system-menu-items.json'
+          getSiteStatePath('system-menu-items.json', SITE_CODE)
         ];
 
         let regenerating = false;

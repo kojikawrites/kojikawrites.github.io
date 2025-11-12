@@ -4,6 +4,7 @@ import {getSiteCode} from "./extractPagesFrontMatter.mjs";
 import yaml from 'js-yaml';
 
 import {getJson} from "./getJson";
+import {getSiteStatePath} from "./getSiteConfig.ts";
 //import yaml from "js-yaml";
 //
 // const config = yaml.load(fs.readFileSync(yamlPath, "utf8"));
@@ -44,10 +45,8 @@ console.log(`logo dynamic_dir: ${dynamic_dir}...`);
 
 // const logoDir = path.resolve(`src/assets/images/${siteName}/logos/dynamic`);
 const logoDir = path.resolve(dynamic_dir);
-const outputDir = path.resolve(`src/assets/_private/state/${siteCode}`);
-const outputPath = path.join(outputDir, "logo-map.json");
-
-
+const outputPath = getSiteStatePath("logo-map.json", siteCode);
+const outputDir = path.dirname(outputPath);
 
 // Ensure output path exists
 fs.mkdirSync(outputDir, { recursive: true });
