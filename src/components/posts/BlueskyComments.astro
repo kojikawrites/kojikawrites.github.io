@@ -52,7 +52,6 @@ function getBlueskyPostId(originalFilename: string) : string {
         return null;
     }
     const thisId = trimPathToBlog(originalFilename);
-    // console.log('bluesky-id', thisId);
     // Convert the array to a dictionary mapping post_id to post_uri
     const postIdToUriMap: Record<string, string> = blueskyJson.reduce(
         (accumulator: Record<string, string>, entry: BlueskyPostEntry) => {
@@ -65,14 +64,14 @@ function getBlueskyPostId(originalFilename: string) : string {
 }
 const blueskyPostId = getBlueskyPostId(filename);
 ---
-{blueskyPostId != null &&
+{siteConfig.bluesky.include &&
 <hr />
 <div>
     <!--{ getBlueskyPostId(filename) }-->
     <Comments
             client:load
             client:only="solid-js"
-            atprotoURI={ getBlueskyPostId(filename) }
+            atprotoURI={ blueskyPostId }
             handle="kojika.bsky.social"
             categories={allCategories}
     />

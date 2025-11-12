@@ -1174,7 +1174,7 @@ export default config({
   singletons: {
     systemMenuItems: singleton({
       label: 'System Menu Items',
-      path: 'src/assets/config/system-menu-items',
+      path: `src/assets/_private/state/${siteCode}/system-menu-items`,
       format: { data: 'json' },
       schema: {
         items: fields.array(

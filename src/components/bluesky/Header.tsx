@@ -1,6 +1,7 @@
 import type { AtpSessionData, AtpAgent } from "@atproto/api";
 import type { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import { Popover } from "@kobalte/core/popover";
+
 import {
   createSignal,
   type Accessor,
@@ -33,24 +34,26 @@ export const Header: Component<HeaderProps> = ({ agent, session, signOut }) => {
       <h2>Comments</h2>
       <div>
         {profile()?.avatar ?
-        <Popover>
-          <Popover.Anchor>
-            <Popover.Trigger class="comments-popover-trigger">
-                  <img
-                    class="comments-popover-avatar"
-                    src={profile()?.avatar}
-                    alt="avatar"
-                  />
-            </Popover.Trigger>
-          </Popover.Anchor>
-          <Popover.Content
-            class='comments-popover-content'>
-            <span class="comments-popover-display-name">{profile()?.displayName}</span>
-            <button type="button" onClick={signOut} class="comments-popover-button">
-              Sign out
-            </button>
-          </Popover.Content>
-        </Popover>
+            <Popover>
+                <Popover.Trigger class="popover__trigger">
+                    <Popover.Trigger class="comments-popover-trigger">
+                        <img
+                            class="comments-popover-avatar"
+                            src={profile()?.avatar}
+                            alt="avatar"
+                        />
+                    </Popover.Trigger>
+                </Popover.Trigger>
+                <Popover.Portal>
+                    <Popover.Content
+                        class='comments-popover-content'>
+                        <span class="comments-popover-display-name">{profile()?.displayName}</span>
+                        <button type="button" onClick={signOut} class="comments-popover-button">
+                            Sign out
+                        </button>
+                    </Popover.Content>
+                </Popover.Portal>
+            </Popover>
             : null
         }
       </div>
