@@ -1,4 +1,5 @@
 import {getJson} from "./getJson.ts";
+import path from "path";
 
 export function getSiteCode(): string {
     // Try import.meta.env.SITE first (Astro runtime)
@@ -20,6 +21,20 @@ export function getSiteCode(): string {
 
     // Default fallback
     return 'hiivelabs.com';
+}
+
+/**
+ * Get the absolute path to a file in the site-specific state directory.
+ * This directory stores generated/dynamic files like logo-map.json and system-menu-items.json.
+ *
+ * @param filename - The name of the file (e.g., 'logo-map.json', 'system-menu-items.json')
+ * @param siteCode - Optional site code. If not provided, will use getSiteCode()
+ * @returns Absolute path to the file in src/assets/_private/state/{siteCode}/
+ */
+export function getSiteStatePath(filename: string, siteCode?: string): string {
+    const site = siteCode || getSiteCode();
+    const stateDir = path.resolve(`src/assets/_private/state/${site}`);
+    return path.join(stateDir, filename);
 }
 
 export async function getSiteConfig() {
