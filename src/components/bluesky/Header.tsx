@@ -35,14 +35,12 @@ export const Header: Component<HeaderProps> = ({ agent, session, signOut }) => {
       <div>
         {profile()?.avatar ?
             <Popover>
-                <Popover.Trigger class="popover__trigger">
-                    <Popover.Trigger class="comments-popover-trigger">
-                        <img
-                            class="comments-popover-avatar"
-                            src={profile()?.avatar}
-                            alt="avatar"
-                        />
-                    </Popover.Trigger>
+                <Popover.Trigger class="comments-popover-trigger">
+                    <img
+                        class="comments-popover-avatar"
+                        src={profile()?.avatar}
+                        alt="avatar"
+                    />
                 </Popover.Trigger>
                 <Popover.Portal>
                     <Popover.Content
