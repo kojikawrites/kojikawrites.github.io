@@ -328,7 +328,7 @@ export default defineConfig({
                             },
                             {
                                 iconName: "bsky.app",
-                                iconFile: "./src/assets/images/shared/links/bluesky.svg",
+                                iconFile: "./src/assets/images/shared/bluesky/bluesky.svg",
                                 properties: { className: ["inline", "relative", "-top-0.5"] },
                                 contentProperties: {
                                     className: ["bluesky-link"],
