@@ -15,7 +15,10 @@
         }
 
         .comments-popover-trigger {
-            /*@apply ui-disabled:bg-slate-100;*/
+            @apply cursor-pointer;
+            @apply border-0 bg-transparent p-0;
+            @apply focus-visible:outline-2 focus-visible:outline-offset-2;
+            @apply focus-visible:outline-[var(--secondary-color)];
         }
 
         .comments-popover-avatar {
@@ -27,7 +30,13 @@
             @apply font-family-sans;
             @apply bg-color-background-feature;
             @apply border border-background-mid;
-            @apply mt-2 py-2 pl-2 pr-6;
+            @apply rounded-lg shadow-lg;
+            @apply py-2 pl-2 pr-6;
+        }
+
+        .comments-popover-content[popover] {
+            /* Remove default popover positioning */
+            inset: unset;
         }
         .comments-popover-display-name {
             @apply font-family-sans;

@@ -33,6 +33,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",
     "is-absolute-url": "^4.0.1",
+    "isomorphic-dompurify": "^2.31.0",
     "js-yaml": "^4.1.0",
     "mathjax": "^3.2.2",
     "mdast-util-to-string": "^4.0.0",
