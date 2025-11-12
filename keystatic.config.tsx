@@ -9,12 +9,21 @@ import React from 'react';
 import { getSiteCode } from "./src/scripts/getSiteConfig.ts";
 import pre = $effect.pre;
 
+const github_author = import.meta.env?.PUBLIC_GITHUB_REPO_OWNER || 'unknown';
+const github_repo = import.meta.env?.PUBLIC_GITHUB_REPO || 'unknown';
 
+// ============================================================================
+// LOGO MAP - Load synchronously at module level
+// ============================================================================
+const siteCode = getSiteCode();
+// Import logo-map.json dynamically
+const logoMapGlob = import.meta.glob<{ default: any }>('/src/assets/_private/state/**/*.json', { eager: true });
+const logoMapKey = Object.keys(logoMapGlob).find(key => key.includes(siteCode) && key.includes('logo-map.json'));
+const logoMap = logoMapKey ? logoMapGlob[logoMapKey].default : null;
 
 // ============================================================================
 // CONFIGURATION DIRECTORIES
 // ============================================================================
-const siteCode = getSiteCode();
 const baseDir = 'src';
 
 const basePostPath = `${baseDir}/assets/posts/${siteCode}`;
@@ -670,27 +679,35 @@ const sharedCustomComponents = {
     label: 'Main Logo',
     schema: {},
     ContentView: () => {
+      // Get logo sources from logo-map.json
+      const lightLogoSrc = logoMap?.light?.default?.src || `/${baseImagePath}/logos/default-logo-light.svg`;
+      const darkLogoSrc = logoMap?.dark?.default?.src || `/${baseImagePath}/logos/default-logo-dark.svg`;
+      const lightLogoAlt = logoMap?.light?.default?.alt || 'Main logo (light)';
+      const darkLogoAlt = logoMap?.dark?.default?.alt || 'Main logo (dark)';
+
       return (
         <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
           <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
-            🏢 Main Logo (Dated)
+            🏢 Main Logo ({siteCode})
           </div>
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '9px', color: 'var(--ks-color-scale-slate11)', marginBottom: '4px' }}>Light Theme:</div>
-              <img
-                src="/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-light.svg"
-                alt="Main logo (light)"
-                style={{ maxWidth: '100%', maxHeight: '150px', height: 'auto', display: 'block', backgroundColor: '#fff', padding: '8px', border: '1px solid var(--ks-color-scale-slate6)' }}
-              />
+              <div style={{ fontSize: '11px', fontWeight: '600', marginBottom: '4px', color: '#666' }}>Light theme</div>
+                <img
+                  src={lightLogoSrc}
+                  alt={lightLogoAlt}
+                  style={{ maxWidth: '100%', height: 'auto', display: 'block', backgroundColor: '#fff', padding: '8px' }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                />
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '9px', color: 'var(--ks-color-scale-slate11)', marginBottom: '4px' }}>Dark Theme:</div>
-              <img
-                src="/src/assets/images/hiivelabs.com/logos/dynamic/hiive-logo-dark.svg"
-                alt="Main logo (dark)"
-                style={{ maxWidth: '100%', maxHeight: '150px', height: 'auto', display: 'block', backgroundColor: '#222', padding: '8px', border: '1px solid var(--ks-color-scale-slate6)' }}
-              />
+              <div style={{ fontSize: '11px', fontWeight: '600', marginBottom: '4px', color: '#666' }}>Dark theme</div>
+                <img
+                  src={darkLogoSrc}
+                  alt={darkLogoAlt}
+                  style={{ maxWidth: '100%', height: 'auto', display: 'block', backgroundColor: '#000', padding: '8px' }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                />
             </div>
           </div>
         </div>
@@ -740,7 +757,7 @@ const sharedCustomComponents = {
               <img
                 src={lightSrc}
                 alt={alt || 'Themed image (light)'}
-                style={{ maxWidth: '100%', height: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#ddd', padding: '8px' }}
+                style={{ maxWidth: '100%', height: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#fff', padding: '8px' }}
                 onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
               />
             </div>
@@ -751,7 +768,7 @@ const sharedCustomComponents = {
               <img
                 src={darkSrc}
                 alt={alt || 'Themed image (dark)'}
-                style={{ maxWidth: '100%', height: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#2220', padding: '8px' }}
+                style={{ maxWidth: '100%', height: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#000', padding: '8px' }}
                 onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
               />
             </div>
@@ -760,257 +777,233 @@ const sharedCustomComponents = {
       );
     },
   }),
+  ContentWarning: wrapper({
+        label: 'Content Warning',
+        schema: {
+            warning: fields.text({
+                label: 'Warning Text',
+                description: 'Warning message to display',
+                validation: { isRequired: true },
+            }),
+        },
+        ContentView: (props) => {
+            const ref = React.useRef<HTMLDivElement>(null);
+
+            React.useEffect(() => {
+                if (ref.current) {
+                    // Navigate DOM to update header
+                    const warningHeader = ref.current.parentElement?.parentElement?.firstElementChild?.firstElementChild as HTMLDivElement;
+                    if (warningHeader && props.value.warning?.length || 0 > 0) {
+                        const prefix =
+                            (props.value.warning?.toUpperCase().startsWith("CONTENT WARNING:") || false)
+                                ? ""
+                                : "CONTENT WARNING: ";
+                        warningHeader.innerText = `${prefix}${props.value.warning || '(no warning text)'}`;
+                    }
+                }
+            }, [props.value.warning]);
+
+            return (
+                <div ref={ref} style={{
+                    padding: '12px',
+                    color: 'var(--ks-color-scale-slate12)',
+                    paddingLeft: '20px',
+                    borderLeft: '3px solid var(--ks-color-scale-orange9)',
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)'
+                }}>
+                    <div style={{ paddingLeft: '8px', borderLeft: '2px solid var(--ks-color-scale-slate6)' }}>
+                        {props.children}
+                    </div>
+                </div>
+            );
+        },
+    }),
+  LightboxGallery: simpleWrapper('Lightbox Gallery', {
+        caption: fields.text({ label: 'Caption' })
+    }),
+  FormattedDate: inline({
+        label: 'Formatted Date',
+        schema: {
+            date: fields.date({ label: 'Date' }),
+        },
+        ContentView: (props) => {
+            const dateStr = 'Formatted Date: ' + props.value.date
+                ? new Date(props.value.date).toLocaleDateString()
+                : '(no date)';
+            return (
+                <span style={{
+                    padding: '2px 6px',
+                    backgroundColor: 'var(--ks-color-scale-slate3)',
+                    borderRadius: '3px',
+                    fontFamily: 'monospace',
+                    fontSize: '0.9em'
+                }}>
+          📅 {dateStr}
+        </span>
+            );
+        },
+    }),
+  LightboxImage: createLightboxImageComponent(blogImagePath),
+  GalleryImage: createGalleryImageComponent(blogImagePath),
+  LightboxVideo: block({
+        label: 'Lightbox Video',
+        schema: {
+            video: fields.file({
+                label: 'Video File',
+                description: 'Select video file (mp4, webm, etc.)',
+                directory: blogImagePath,
+                publicPath: `/${blogImagePath}/`,
+                validation: { isRequired: true },
+            }),
+            inlineImg: fields.image({
+                label: 'Inline Thumbnail',
+                description: 'Thumbnail image shown inline in the post',
+                directory: blogImagePath,
+                publicPath: `/${blogImagePath}/`,
+                validation: { isRequired: true },
+            }),
+            previewImg: fields.image({
+                label: 'Preview Image',
+                description: 'Preview image shown in lightbox before video plays',
+                directory: blogImagePath,
+                publicPath: `/${blogImagePath}/`,
+                validation: { isRequired: true },
+            }),
+            alt: fields.text({
+                label: 'Alt Text',
+                description: 'Descriptive text for accessibility',
+                validation: { isRequired: true },
+            }),
+            id: fields.text({
+                label: 'ID',
+                description: 'Optional HTML ID for the video element',
+            }),
+            description: fields.text({
+                label: 'Description',
+                description: 'Detailed description shown in lightbox',
+                multiline: true,
+            }),
+            caption: fields.text({
+                label: 'Caption',
+                description: 'Caption shown below the inline image',
+            }),
+            class: fields.text({
+                label: 'CSS Class',
+                description: 'Optional CSS classes for styling',
+            }),
+        },
+        ContentView: (props) => {
+            const { video, inlineImg, previewImg, alt, caption } = props.value;
+            const currentSlug = React.useContext(SlugContext);
+
+            // Extract video source
+            let videoSrc: string | null = null;
+            if (video) {
+                if (typeof video === 'string') {
+                    videoSrc = video;
+                } else if (video.filename) {
+                    videoSrc = buildImagePath(video.filename, `/${blogImagePath}`, currentSlug);
+                }
+            }
+
+            // Extract inline image source
+            let inlineImageSrc: string | null = null;
+            let inlinePreviewSrc: string | null = null;
+            let inlineIsNew = false;
+
+            if (inlineImg) {
+                const extracted = extractImageData(inlineImg);
+                inlineIsNew = extracted.isNewlySelected;
+                inlinePreviewSrc = extracted.previewSrc;
+                if (extracted.filename) {
+                    inlineImageSrc = buildImagePath(extracted.filename, `/${blogImagePath}`, currentSlug);
+                }
+            }
+
+            // Extract preview image source
+            let previewImageSrc: string | null = null;
+            let previewPreviewSrc: string | null = null;
+
+            if (previewImg) {
+                const extracted = extractImageData(previewImg);
+                previewPreviewSrc = extracted.previewSrc;
+                if (extracted.filename) {
+                    previewImageSrc = buildImagePath(extracted.filename, `/${blogImagePath}`, currentSlug);
+                }
+            }
+
+            // Cleanup blob URLs
+            React.useEffect(() => {
+                return () => {
+                    if (inlinePreviewSrc && inlinePreviewSrc.startsWith('blob:')) {
+                        URL.revokeObjectURL(inlinePreviewSrc);
+                    }
+                    if (previewPreviewSrc && previewPreviewSrc.startsWith('blob:')) {
+                        URL.revokeObjectURL(previewPreviewSrc);
+                    }
+                };
+            }, [inlinePreviewSrc, previewPreviewSrc]);
+
+            if (!videoSrc || !inlineImageSrc || !previewImageSrc || !alt) {
+                return (
+                    <div style={{ padding: '12px', border: '1px dashed #ccc', borderRadius: '4px' }}>
+                        <p>⚠️ Missing required fields. Please fill in:</p>
+                        <ul style={{ marginLeft: '20px', marginTop: '8px' }}>
+                            {!videoSrc && <li>Video File</li>}
+                            {!inlineImageSrc && <li>Inline Thumbnail</li>}
+                            {!previewImageSrc && <li>Preview Image</li>}
+                            {!alt && <li>Alt Text</li>}
+                        </ul>
+                    </div>
+                );
+            }
+
+            const displayInlineSrc = inlineIsNew && inlinePreviewSrc ? inlinePreviewSrc : inlineImageSrc;
+
+            return (
+                <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
+                    <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
+                        🎥 Lightbox Video: {videoSrc.split('/').pop()}
+                    </div>
+
+                    {/* Show inline image preview */}
+                    <img
+                        src={displayInlineSrc}
+                        alt={alt}
+                        style={{ maxWidth: '100%', maxHeight: '200px', height: 'auto', display: 'block', border: '2px solid currentColor' }}
+                        onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                    />
+
+
+                    <div style={{ display: 'grid', gap: '6px', fontSize: '11px', color: 'var(--ks-color-scale-slate11)' }}>
+                        <div>
+                            <strong>Video:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{videoSrc}</code>
+                        </div>
+                        <div>
+                            <strong>Inline:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{inlineImageSrc}</code>
+                        </div>
+                        <div>
+                            <strong>Preview:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{previewImageSrc}</code>
+                        </div>
+                        <div>
+                            <strong>Alt:</strong> {alt}
+                        </div>
+                        {caption && (
+                            <div>
+                                <strong>Caption:</strong> {caption}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        },
+    }),
 };
 
 // ============================================================================
 // BLOG-SPECIFIC CUSTOM COMPONENTS
 // ============================================================================
 const blogSpecificComponents = {
-  ContentWarning: wrapper({
-    label: 'Content Warning',
-    schema: {
-      warning: fields.text({
-        label: 'Warning Text',
-        description: 'Warning message to display',
-        validation: { isRequired: true },
-      }),
-    },
-    ContentView: (props) => {
-      const ref = React.useRef<HTMLDivElement>(null);
-
-      React.useEffect(() => {
-        if (ref.current) {
-          // Navigate DOM to update header
-          const warningHeader = ref.current.parentElement?.parentElement?.firstElementChild?.firstElementChild as HTMLDivElement;
-          if (warningHeader && props.value.warning?.length || 0 > 0) {
-            const prefix =
-                (props.value.warning?.toUpperCase().startsWith("CONTENT WARNING:") || false)
-                    ? ""
-                    : "CONTENT WARNING: ";
-            warningHeader.innerText = `${prefix}${props.value.warning || '(no warning text)'}`;
-          }
-        }
-      }, [props.value.warning]);
-
-      return (
-        <div ref={ref} style={{
-          padding: '12px',
-          color: 'var(--ks-color-scale-slate12)',
-          paddingLeft: '20px',
-          borderLeft: '3px solid var(--ks-color-scale-orange9)',
-          backgroundColor: 'rgba(255, 0, 0, 0.1)'
-        }}>
-          <div style={{ paddingLeft: '8px', borderLeft: '2px solid var(--ks-color-scale-slate6)' }}>
-            {props.children}
-          </div>
-        </div>
-      );
-    },
-  }),
-  LightboxGallery: simpleWrapper('Lightbox Gallery', {
-    caption: fields.text({ label: 'Caption' })
-  }),
-  FormattedDate: inline({
-    label: 'Formatted Date',
-    schema: {
-      date: fields.date({ label: 'Date' }),
-    },
-    ContentView: (props) => {
-      const dateStr = 'Formatted Date: ' + props.value.date
-        ? new Date(props.value.date).toLocaleDateString()
-        : '(no date)';
-      return (
-        <span style={{
-          padding: '2px 6px',
-          backgroundColor: 'var(--ks-color-scale-slate3)',
-          borderRadius: '3px',
-          fontFamily: 'monospace',
-          fontSize: '0.9em'
-        }}>
-          📅 {dateStr}
-        </span>
-      );
-    },
-  }),
-  LightboxImage: createLightboxImageComponent(blogImagePath),
-  // LightboxImage: block({
-  //   label: 'Lightbox Image',
-  //   schema: {
-  //     image: fields.image({
-  //       label: 'Image (Picker)',
-  //       directory: blogImagePath,
-  //       publicPath: `/${blogImagePath}/`,
-  //     }),
-  //     src: fields.text({
-  //       label: 'Or enter path manually',
-  //       description: 'Legacy support - leave empty if using image picker above',
-  //     }),
-  //     id: fields.text({ label: 'Optional ID' }),
-  //     alt: fields.text({ label: 'Alt Text' }),
-  //     caption: fields.text({ label: 'Caption' }),
-  //     description: fields.text({ label: 'Detailed Description' }),
-  //   },
-  //   ContentView: createImageContentView({
-  //     imageDirectory: `/${blogImagePath}`,
-  //     includeCaption: true,
-  //     includeSlugTracking: true,
-  //     defaultAlt: 'Lightbox image',
-  //   }),
-  // }),
-  GalleryImage: createGalleryImageComponent(blogImagePath),
-  LightboxVideo: block({
-    label: 'Lightbox Video',
-    schema: {
-      video: fields.file({
-        label: 'Video File',
-        description: 'Select video file (mp4, webm, etc.)',
-        directory: blogImagePath,
-        publicPath: `/${blogImagePath}/`,
-        validation: { isRequired: true },
-      }),
-      inlineImg: fields.image({
-        label: 'Inline Thumbnail',
-        description: 'Thumbnail image shown inline in the post',
-        directory: blogImagePath,
-        publicPath: `/${blogImagePath}/`,
-        validation: { isRequired: true },
-      }),
-      previewImg: fields.image({
-        label: 'Preview Image',
-        description: 'Preview image shown in lightbox before video plays',
-        directory: blogImagePath,
-        publicPath: `/${blogImagePath}/`,
-        validation: { isRequired: true },
-      }),
-      alt: fields.text({
-        label: 'Alt Text',
-        description: 'Descriptive text for accessibility',
-        validation: { isRequired: true },
-      }),
-      id: fields.text({
-        label: 'ID',
-        description: 'Optional HTML ID for the video element',
-      }),
-      description: fields.text({
-        label: 'Description',
-        description: 'Detailed description shown in lightbox',
-        multiline: true,
-      }),
-      caption: fields.text({
-        label: 'Caption',
-        description: 'Caption shown below the inline image',
-      }),
-      class: fields.text({
-        label: 'CSS Class',
-        description: 'Optional CSS classes for styling',
-      }),
-    },
-    ContentView: (props) => {
-      const { video, inlineImg, previewImg, alt, caption } = props.value;
-      const currentSlug = React.useContext(SlugContext);
-
-      // Extract video source
-      let videoSrc: string | null = null;
-      if (video) {
-        if (typeof video === 'string') {
-          videoSrc = video;
-        } else if (video.filename) {
-          videoSrc = buildImagePath(video.filename, `/${blogImagePath}`, currentSlug);
-        }
-      }
-
-      // Extract inline image source
-      let inlineImageSrc: string | null = null;
-      let inlinePreviewSrc: string | null = null;
-      let inlineIsNew = false;
-
-      if (inlineImg) {
-        const extracted = extractImageData(inlineImg);
-        inlineIsNew = extracted.isNewlySelected;
-        inlinePreviewSrc = extracted.previewSrc;
-        if (extracted.filename) {
-          inlineImageSrc = buildImagePath(extracted.filename, `/${blogImagePath}`, currentSlug);
-        }
-      }
-
-      // Extract preview image source
-      let previewImageSrc: string | null = null;
-      let previewPreviewSrc: string | null = null;
-
-      if (previewImg) {
-        const extracted = extractImageData(previewImg);
-        previewPreviewSrc = extracted.previewSrc;
-        if (extracted.filename) {
-          previewImageSrc = buildImagePath(extracted.filename, `/${blogImagePath}`, currentSlug);
-        }
-      }
-
-      // Cleanup blob URLs
-      React.useEffect(() => {
-        return () => {
-          if (inlinePreviewSrc && inlinePreviewSrc.startsWith('blob:')) {
-            URL.revokeObjectURL(inlinePreviewSrc);
-          }
-          if (previewPreviewSrc && previewPreviewSrc.startsWith('blob:')) {
-            URL.revokeObjectURL(previewPreviewSrc);
-          }
-        };
-      }, [inlinePreviewSrc, previewPreviewSrc]);
-
-      if (!videoSrc || !inlineImageSrc || !previewImageSrc || !alt) {
-        return (
-          <div style={{ padding: '12px', border: '1px dashed #ccc', borderRadius: '4px' }}>
-            <p>⚠️ Missing required fields. Please fill in:</p>
-            <ul style={{ marginLeft: '20px', marginTop: '8px' }}>
-              {!videoSrc && <li>Video File</li>}
-              {!inlineImageSrc && <li>Inline Thumbnail</li>}
-              {!previewImageSrc && <li>Preview Image</li>}
-              {!alt && <li>Alt Text</li>}
-            </ul>
-          </div>
-        );
-      }
-
-      const displayInlineSrc = inlineIsNew && inlinePreviewSrc ? inlinePreviewSrc : inlineImageSrc;
-
-      return (
-        <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
-          <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
-            🎥 Lightbox Video: {videoSrc.split('/').pop()}
-          </div>
-
-          {/* Show inline image preview */}
-          <img
-            src={displayInlineSrc}
-            alt={alt}
-            style={{ maxWidth: '100%', maxHeight: '200px', height: 'auto', display: 'block', border: '2px solid currentColor' }}
-            onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
-          />
-
-
-          <div style={{ display: 'grid', gap: '6px', fontSize: '11px', color: 'var(--ks-color-scale-slate11)' }}>
-            <div>
-              <strong>Video:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{videoSrc}</code>
-            </div>
-            <div>
-              <strong>Inline:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{inlineImageSrc}</code>
-            </div>
-            <div>
-              <strong>Preview:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{previewImageSrc}</code>
-            </div>
-            <div>
-              <strong>Alt:</strong> {alt}
-            </div>
-            {caption && (
-              <div>
-                <strong>Caption:</strong> {caption}
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    },
-  }),
 };
 
 // ============================================================================
@@ -1019,127 +1012,11 @@ const blogSpecificComponents = {
 const blogComponents = {
   ...minimalHtmlComponents,
   ...sharedCustomComponents,
-  ...blogSpecificComponents,
 };
 
 const pageComponents = {
   ...minimalHtmlComponents,
   ...sharedCustomComponents,
-  LightboxImage: createLightboxImageComponent(baseImagePath, true),
-  Biography: wrapper({
-    label: 'Biography',
-    schema: {
-      id: fields.text({
-        label: 'ID',
-        validation: { isRequired: true },
-      }),
-      alt: fields.text({
-        label: 'Alt Text',
-      }),
-      image: fields.image({
-        label: 'Portrait Image',
-        directory: baseImagePath,
-        publicPath: `/${baseImagePath}/`,
-      }),
-      src: fields.text({
-        label: 'Or enter path manually',
-        description: 'Legacy support - leave empty if using image picker above',
-      }),
-    },
-    ContentView: (props) => {
-      // Inner component that uses slug context
-      const BiographyContentViewInner: React.FC<{ value: any; children: React.ReactNode }> = ({ value, children }) => {
-        const { id, alt, image, src } = value;
-        const currentSlug = React.useContext(SlugContext);
-
-        // Determine image source
-        let imageSrc: string | null = null;
-        let previewSrc: string | null = null;
-        let sourceInfo = '';
-        let isNewlySelected = false;
-
-        if (image) {
-          const extracted = extractImageData(image);
-          isNewlySelected = extracted.isNewlySelected;
-          previewSrc = extracted.previewSrc;
-
-          if (extracted.filename) {
-            sourceInfo = `Picker: ${extracted.filename}${currentSlug ? ` (slug: ${currentSlug})` : ''}`;
-            imageSrc = buildImagePath(extracted.filename, `/${baseImagePath}`, currentSlug);
-          }
-        } else if (src) {
-          sourceInfo = `Manual: ${src}`;
-          imageSrc = src.startsWith('/') || src.startsWith(`${baseDir}/`)
-            ? src
-            : `/${baseImagePath}/${src}`;
-        }
-
-        // Clean up blob URLs when component unmounts or previewSrc changes
-        React.useEffect(() => {
-          return () => {
-            if (previewSrc && previewSrc.startsWith('blob:')) {
-              URL.revokeObjectURL(previewSrc);
-            }
-          };
-        }, [previewSrc]);
-
-        const displaySrc = isNewlySelected && previewSrc ? previewSrc : imageSrc;
-
-        return (
-          <div style={{ marginBottom: '12px' }}>
-            <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
-              <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
-                👤 Biography: {id || 'Untitled'}
-              </div>
-              {displaySrc ? (
-                <div style={{ marginBottom: '8px' }}>
-                  <div style={{ fontSize: '9px', color: 'var(--ks-color-scale-slate11)', marginBottom: '4px', fontFamily: 'monospace' }}>
-                    {sourceInfo}{isNewlySelected && previewSrc ? ' (preview)' : ` → ${imageSrc}`}
-                  </div>
-                  <img
-                    src={displaySrc}
-                    alt={alt || id || 'Portrait'}
-                    style={{ maxWidth: '200px', maxHeight: '200px', height: 'auto', display: 'block', border: '2px solid currentColor', color: 'var(--ks-color-scale-slate11)' }}
-                    onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
-                  />
-                </div>
-              ) : (
-                <div style={{ padding: '40px', textAlign: 'center', backgroundColor: 'var(--ks-color-scale-slate3)', borderRadius: '4px', marginBottom: '8px' }}>
-                  <p style={{ margin: '0', color: 'var(--ks-color-scale-slate11)', fontSize: '14px' }}>📷 No portrait image selected</p>
-                </div>
-              )}
-              <div style={{ fontSize: '11px', color: 'var(--ks-color-scale-slate11)' }}>
-                <div><strong>ID:</strong> {id || '(none)'}</div>
-                {alt && <div><strong>Alt:</strong> {alt}</div>}
-                {imageSrc && <div><strong>Image:</strong> <code style={{ backgroundColor: 'var(--ks-color-scale-slate3)', color: 'var(--ks-color-scale-slate12)', padding: '2px 4px', borderRadius: '2px', fontSize: '10px' }}>{imageSrc}</code></div>}
-              </div>
-            </div>
-            <div style={{ marginTop: '8px' }}>
-              {children}
-            </div>
-          </div>
-        );
-      };
-
-      return (
-        <SlugProvider enabled={true}>
-          <BiographyContentViewInner value={props.value} children={props.children} />
-        </SlugProvider>
-      );
-    },
-  }),
-  Thanks: wrapper({
-    label: 'Thanks',
-    schema: {
-      name: fields.text({
-        label: 'Name',
-        validation: { isRequired: true },
-      }),
-      url: fields.text({
-        label: 'URL',
-      }),
-    },
-  }),
 };
 
 // ============================================================================
@@ -1217,8 +1094,8 @@ export default config({
   storage: {
     kind: process.env.NODE_ENV === 'development' ? 'local' : 'github',
     repo: {
-      owner: 'hiive',
-      name: 'hiive.github.io',
+      owner: github_author,
+      name: github_repo,
     },
   },
 
@@ -1245,7 +1122,7 @@ export default config({
     pages: collection({
       label: 'Pages',
       slugField: 'title',
-      path: `${basePagePath}/*`,
+      path: `${basePagePath}/**`,
       format: { contentField: 'content' },
       entryLayout: 'content',
       schema: {
