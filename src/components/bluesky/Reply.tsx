@@ -15,6 +15,7 @@ interface DialogProps {
   setShowEditor: Setter<ThreadViewPostUI | undefined>;
   agent: Accessor<AtpAgent | undefined>;
   refetch: () => void;
+  rootPostURI: string;
 }
 
 export const Reply = ({
@@ -22,10 +23,31 @@ export const Reply = ({
   showEditor,
   setShowEditor,
   refetch,
+  rootPostURI,
 }: DialogProps) => {
   const [editorText, setEditorText] = createSignal(new RichText({ text: "" }));
   const [dialog, setDialog] = createSignal<HTMLDialogElement | null>(null);
-  const isSubmitDisabled = () => editorText().text.trim() === '';
+
+  // Validation helpers
+  const isSubmitDisabled = () => {
+    const text = editorText().text.trim();
+    return text === '' || editorText().length > 300;
+  };
+  const isOverLimit = () => editorText().length > 300;
+  const isNearLimit = () => editorText().length > 280 && editorText().length <= 300;
+
+  // Helper function to find the root post by walking up the parent chain
+  const findRootPost = (post: ThreadViewPostUI): { uri: string; cid: string } => {
+    let current = post;
+    // Walk up the parent chain until we find the root (no parent)
+    while (current.parent && typeof current.parent === 'object' && 'post' in current.parent) {
+      current = current.parent as ThreadViewPostUI;
+    }
+    return {
+      uri: current.post.uri,
+      cid: current.post.cid
+    };
+  };
 
   createEffect(() => {
     if (showEditor()) {
@@ -58,6 +80,7 @@ export const Reply = ({
             e.preventDefault();
             if (agent() && showEditor() !== null) {
               const post = showEditor();
+              const root = findRootPost(post);
               await agent()?.post({
                 text: editorText().text,
                 langs: ["en"],
@@ -67,8 +90,8 @@ export const Reply = ({
                     uri: post?.post.uri ?? "",
                   },
                   root: {
-                    cid: post?.post.cid ?? "",
-                    uri: post?.post.uri ?? "",
+                    cid: root.cid,
+                    uri: root.uri,
                   },
                 },
               });
@@ -77,9 +100,20 @@ export const Reply = ({
             }
           }}
         >
-          <span class="comments-reply-editor-text-length">
+          <span
+            class="comments-reply-editor-text-length"
+            classList={{
+              'text-yellow-600': isNearLimit(),
+              'text-red-600': isOverLimit()
+            }}
+          >
             {editorText().length} / 300
           </span>
+          {isOverLimit() && (
+            <div class="text-red-600 text-sm mt-1">
+              Comment is too long. Please shorten it to 300 characters or less.
+            </div>
+          )}
           <textarea
             class="comments-reply-editor"
             name="text"

@@ -16,8 +16,39 @@ export const LoginForm: Component<LoginFormProps> = ({
 }) => {
   const postId = atprotoURI.split("/").pop();
   const [error, setError] = createSignal<string>();
+  const [handleError, setHandleError] = createSignal<string>();
   const [loginProvided, setLoginProvided] = createSignal<boolean>();
   const [passwordProvided, setPasswordProvided] = createSignal<boolean>();
+
+  // Validation helper
+  const isValidHandle = (handle: string): boolean => {
+    if (!handle || handle.trim() === '') return false;
+    // Must contain a dot and no spaces
+    if (!handle.includes('.') || handle.includes(' ')) return false;
+    // Basic format: username.domain
+    const handleRegex = /^[a-zA-Z0-9][a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/;
+    return handleRegex.test(handle);
+  };
+
+  // Error formatter for user-friendly messages
+  const formatError = (error: any): string => {
+    const errorStr = error?.toString() || '';
+
+    if (errorStr.includes('AuthenticationRequired') || errorStr.includes('Invalid identifier or password')) {
+      return 'Invalid handle or password. Please check your credentials.';
+    }
+    if (errorStr.includes('AccountNotFound')) {
+      return 'Account not found. Please check your handle.';
+    }
+    if (errorStr.includes('RateLimitExceeded')) {
+      return 'Too many login attempts. Please wait a moment and try again.';
+    }
+    if (errorStr.includes('Network') || errorStr.includes('fetch')) {
+      return 'Network error. Please check your connection and try again.';
+    }
+
+    return 'Login failed. Please try again.';
+  };
 
   return (
     <div class="flex flex-col items-center justify-center">
@@ -46,8 +77,7 @@ export const LoginForm: Component<LoginFormProps> = ({
                   // console.warn('response', response);
               }
               catch(err) {
-                  // console.warn(err);
-                  setError(err.toString());
+                  setError(formatError(err));
               }
           }
         }}
@@ -68,9 +98,21 @@ export const LoginForm: Component<LoginFormProps> = ({
                        onInput={(e) => {
                            setLoginProvided(e.currentTarget.value?.length > 0);
                            setError(undefined);
+                           setHandleError(undefined);
+                       }}
+                       onBlur={(e) => {
+                           const value = e.currentTarget.value;
+                           if (value && !isValidHandle(value)) {
+                               setHandleError('Invalid handle format. Must be username.domain (e.g., user.bsky.social)');
+                           } else {
+                               setHandleError(undefined);
+                           }
                        }}
                        placeholder="handle.bsky.social"/>
             </div>
+            {handleError() && (
+                <div class="comments-login-error text-sm">{handleError()}</div>
+            )}
         </label>
 
           <label class="flex flex-col" for="password">
