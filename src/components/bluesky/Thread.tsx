@@ -20,7 +20,6 @@ import { VsComment, VsEmptyHeart, VsFilledHeart, VsLink } from "./icons";
 interface ThreadProps {
   agent: Accessor<AtpAgent | undefined>;
   atprotoURI: string;
-  handle: string;
   categories: string[];
 }
 

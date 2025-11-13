@@ -82,6 +82,7 @@ export async function getSiteConfig() {
         };
         bluesky: {
             include: boolean;
+            handle: string;
             hashtag_link: string;
             auto_post_text: string;
         };
@@ -93,7 +94,7 @@ export async function getSiteConfig() {
             aliases: any;
         };
         search : {
-           include: boolean;
+            include: boolean;
         };
         rss: {
             include: boolean;

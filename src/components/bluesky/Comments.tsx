@@ -10,11 +10,11 @@ import { Thread } from "./Thread";
 
 interface CommentsProps {
   atprotoURI: string;
-  handle: string;
+  postUrl?: string;
   categories: string[];
 }
 
-export const Comments: Component<CommentsProps> = ({ atprotoURI, handle, categories }) => {
+export const Comments: Component<CommentsProps> = ({ atprotoURI, postUrl, categories }) => {
   const [session, setSession] = createSignal<AtpSessionData>();
   const [agent, setAgent] = createSignal<AtpAgent>();
 
@@ -67,10 +67,10 @@ export const Comments: Component<CommentsProps> = ({ atprotoURI, handle, categor
       <main>
         {!session() ? (
           // User is not logged in, show login form
-          <LoginForm agent={agent} handle={handle} atprotoURI={atprotoURI} />
+          <LoginForm agent={agent} postUrl={postUrl} atprotoURI={atprotoURI} />
         ) : null}
         {session() ? (
-          <Thread agent={agent} atprotoURI={atprotoURI} handle={handle} categories={categories} />
+          <Thread agent={agent} atprotoURI={atprotoURI} categories={categories} />
         ) : null}
       </main>
     </div>

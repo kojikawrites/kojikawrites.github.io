@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from atproto import Client, models, client_utils
 import re
 from urllib.parse import quote_plus
+import requests
 import markdown
 import random
 from bs4 import BeautifulSoup
@@ -17,6 +18,79 @@ import pprint
 
 load_dotenv()
 site_code = os.environ["SITE_CODE"]
+
+
+# Cache for DID → handle mappings to avoid repeated API calls
+_did_cache = {}
+
+
+def get_handle_from_did(did):
+    """
+    Query the PLC directory to get the handle for a given DID.
+    Results are cached to avoid repeated API calls.
+
+    Args:
+        did (str): The DID (e.g., "did:plc:uxb4wvzgll6c47yxxpyqlib7")
+
+    Returns:
+        str: The handle (e.g., "thewriteplace.rocks") or None if not found
+    """
+    # Check cache first
+    if did in _did_cache:
+        return _did_cache[did]
+
+    plc_url = f"https://plc.directory/{did}"
+
+    try:
+        response = requests.get(plc_url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        also_known_as = data.get('alsoKnownAs', [])
+        if also_known_as and len(also_known_as) > 0:
+            # Extract handle from "at://handle" format
+            first_entry = also_known_as[0]
+            if first_entry.startswith('at://'):
+                handle = first_entry[5:]  # Remove "at://" prefix
+                # Cache the result
+                _did_cache[did] = handle
+                return handle
+        # Cache None result to avoid retrying failed lookups
+        _did_cache[did] = None
+        return None
+    except requests.RequestException as e:
+        print(f"Error querying PLC directory for {did}: {e}")
+        # Cache None result to avoid retrying on network errors
+        _did_cache[did] = None
+        return None
+
+
+def create_post_url_from_uri(post_uri):
+    """
+    Create a Bluesky web URL from an ATProto URI and extract the profile_id.
+
+    Args:
+        post_uri (str): ATProto URI (e.g., "at://did:plc:xxx/app.bsky.feed.post/rkey")
+
+    Returns:
+        tuple: (post_url, profile_id) or (None, None) if creation fails
+    """
+    # Parse the post_uri to extract DID and rkey
+    match = re.match(r'^at://(did:plc:[^/]+)/app\.bsky\.feed\.post/([^/]+)$', post_uri)
+    if not match:
+        print(f"Failed to parse post_uri: {post_uri}")
+        return None, None
+
+    did = match.group(1)
+    rkey = match.group(2)
+
+    # Get the handle from the DID
+    handle = get_handle_from_did(did)
+    if not handle:
+        print(f"Failed to get handle for DID: {did}")
+        return None, None
+
+    post_url = f"https://bsky.app/profile/{handle}/post/{rkey}"
+    return post_url, handle
 
 
 def process_thumbnail(image_path, testrun = False):
@@ -496,14 +570,27 @@ def main():
                 # Extract embedding info
                 post_uri = response.uri  # The unique identifier of the post
                 post_cid = response.cid   # The content ID
-                # Use the embedding info as needed
-                # For example, update the blog post with the embed code
-                # TODO
-                posted_posts.append( {
+
+                # Create the Bluesky web URL from the ATProto URI and extract profile_id
+                post_url, profile_id = create_post_url_from_uri(post_uri)
+
+                # Build the entry
+                entry = {
                     "post_id": post_id,
                     "post_uri": post_uri,
                     "post_cid": post_cid,
-                })
+                }
+
+                # Add post_url and profile_id if we successfully created them
+                if post_url and profile_id:
+                    entry["post_url"] = post_url
+                    entry["profile_id"] = profile_id
+                    print(f"Created post URL: {post_url}")
+                    print(f"Profile ID: {profile_id}")
+                else:
+                    print(f"Warning: Could not create post_url and profile_id for {post_id}")
+
+                posted_posts.append(entry)
 
                 file_path = os.path.join(args.assets_dir, post_id)
                 replace_in_file(file_path, post_uri)

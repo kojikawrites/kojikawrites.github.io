@@ -2,19 +2,21 @@ import type { AtpAgent } from "@atproto/api";
 import {type Accessor, type Component, createSignal} from "solid-js";
 import { Button } from "./Button";
 import { Input } from "./Input";
-
+import { BlueskyLink, ExternalLink } from "./icons"
 interface LoginFormProps {
   agent: Accessor<AtpAgent | undefined>;
-  handle: string;
+  postUrl?: string;
   atprotoURI: string;
 }
 
 export const LoginForm: Component<LoginFormProps> = ({
   agent,
-  handle,
+  postUrl,
   atprotoURI,
 }) => {
+  // Fallback: construct URL from atprotoURI if postUrl not provided
   const postId = atprotoURI.split("/").pop();
+  const fallbackUrl = postUrl || `https://bsky.app/profile/unknown/post/${postId}`;
   const [error, setError] = createSignal<string>();
   const [handleError, setHandleError] = createSignal<string>();
   const [loginProvided, setLoginProvided] = createSignal<boolean>();
@@ -54,8 +56,10 @@ export const LoginForm: Component<LoginFormProps> = ({
     <div class="flex flex-col items-center justify-center">
       <p class="comments-login-info">
         Login or go to{" "}
-        <a href={`https://bsky.app/profile/${handle}/post/${postId}`}>
+        <a href={fallbackUrl} class="bluesky-link" target="_blank">
           Bsky.app
+            <BlueskyLink class="p-1 relative top-2"/>
+            <ExternalLink class="relative top-0.5"/>
         </a>{" "}
         to comment.
       </p>
