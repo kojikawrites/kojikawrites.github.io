@@ -20,18 +20,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python 3
-        uses: actions/setup-python@v5
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v7
         with:
-          python-version: '3.x'
+          enable-cache: true
 
       - name: Install Required Python Packages
         run: |
-          pip install -r requirements.txt
+          uv sync
 
       - name: Run Python Script to Manage Posts and Drafts
         run: |
-          python manage_posts.py
+          uv run manage_posts.py
 
       - name: Post to Bluesky
         if: always()
@@ -39,7 +39,7 @@ jobs:
           BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
           BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
         run: |
-          python post_to_bluesky.py \
+          uv run post_to_bluesky.py \
             --root-url "${{ env.ROOT_URL }}" \
             --announce-start-date "${{ env.ANNOUNCE_START_DATE }}"
 
