@@ -1,29 +1,13 @@
 ---
 import SitePageContent from '../components/SitePageContent.astro';
-import {getSiteCode} from "../scripts/getSiteConfig.ts";
+import getPages from "../scripts/getPages";
 
 // Export getStaticPaths for static site generation
 export async function getStaticPaths() {
-    // Dynamically discover all page content files in the assets directory
-    const pageFiles = import.meta.glob('../assets/pagecontent/**');
-    const siteCode = getSiteCode();
-    const splitter = `${siteCode}/`;
-    // Extract the filename without extension to get the page slug
-    // Filter to only include paths containing the current siteCode
-    const pages = Object.keys(pageFiles)
-        .filter(filePath => filePath.includes(`/pagecontent/${splitter}`))
-        .map(filePath => {
-            // Extract filename from path: ../assets/pagecontent/hiivelabs.com/about.astro -> about
-
-            const parts = filePath.split(splitter);
-            const filename = parts.slice(1).join(splitter); // In case siteCode appears multiple times
-            const pageSlug = filename.replace(/\.(astro|mdx|md)$/, '');
-            // console.log('PAGE_SLUG: ', pageSlug);
-            return pageSlug;
-        });
+    const pages = getPages();
 
     return pages.map(page => ({
-        params: { page },
+        params: { page: page.slug },
     }));
 }
 
