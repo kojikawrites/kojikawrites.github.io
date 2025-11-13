@@ -5,7 +5,8 @@ import getPosts from "../../scripts/getPosts";
 
 const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
 // Find the index of the current post in the sorted array
-const postIndex = allPosts.findIndex((p) => p === Astro.props.post);
+// Compare by file path since object identity may differ between getPosts() calls
+const postIndex = allPosts.findIndex((p) => p.file === Astro.props.post.file);
 
 // In a descending list, the "prior" (older) post will be at index + 1
 const prevPost = postIndex < allPosts.length - 1 ? allPosts[postIndex + 1] : null;
