@@ -94,10 +94,11 @@ async def run_build():
         else:
             build_dir.mkdir(parents=True, exist_ok=True)
 
-        # Copy source to build directory
+        # Copy source to build directory (excluding node_modules and lock file - we'll install fresh)
         print(f"Copying {source_dir} to {build_dir}...", flush=True)
         subprocess.run(
-            ['rsync', '-a', str(source_dir) + '/', str(build_dir) + '/'],
+            ['rsync', '-a', '--exclude=node_modules', '--exclude=.git', '--exclude=package-lock.json',
+             str(source_dir) + '/', str(build_dir) + '/'],
             check=True,
             capture_output=True,
             text=True
@@ -110,7 +111,7 @@ async def run_build():
                 print(f"Removing {exclude_path}...", flush=True)
                 shutil.rmtree(exclude_path)
 
-        # Install dependencies natively for Linux
+        # Install dependencies natively for Linux (generates Linux-specific lock file)
         print(f"Installing dependencies with npm...", flush=True)
         install_result = subprocess.run(
             ['npm', 'install', '--include=dev'],
