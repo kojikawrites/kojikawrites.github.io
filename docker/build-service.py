@@ -281,7 +281,7 @@ async def git_push(request: Request):
                 'output': get_output(result)
             }, status_code=500)
 
-        # Configure git to use token if available
+        # Configure git credentials before any remote operations
         github_token = os.getenv('GITHUB_TOKEN')
 
         if github_token:
@@ -337,6 +337,71 @@ async def git_push(request: Request):
             )
         else:
             print('[PUSH] No GITHUB_TOKEN found', flush=True)
+
+        # Fetch remote changes to check for updates
+        print(f'[PUSH] Fetching remote changes...', flush=True)
+        fetch_result = subprocess.run(
+            ['git', 'fetch', 'origin', branch],
+            cwd=str(source_dir),
+            capture_output=True,
+            text=True,
+            timeout=30,
+            env={**os.environ, 'GIT_TERMINAL_PROMPT': '0'}
+        )
+
+        if fetch_result.returncode != 0:
+            print(f'[PUSH] Fetch failed: {get_output(fetch_result)}', flush=True)
+            return JSONResponse({
+                'success': False,
+                'error': 'Failed to fetch remote changes',
+                'output': get_output(fetch_result)
+            }, status_code=500)
+
+        # Check if local is behind remote
+        result = subprocess.run(
+            ['git', 'rev-list', '--count', f'HEAD..origin/{branch}'],
+            cwd=str(source_dir),
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+
+        if result.returncode == 0:
+            commits_behind = int(result.stdout.strip() or '0')
+            if commits_behind > 0:
+                print(f'[PUSH] Local branch is {commits_behind} commit(s) behind remote. Rebasing...', flush=True)
+
+                # Pull with rebase to apply local commits on top of remote
+                pull_result = subprocess.run(
+                    ['git', 'pull', '--rebase', 'origin', branch],
+                    cwd=str(source_dir),
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                    env={**os.environ, 'GIT_TERMINAL_PROMPT': '0'}
+                )
+
+                if pull_result.returncode != 0:
+                    print(f'[PUSH] Rebase failed: {get_output(pull_result)}', flush=True)
+
+                    # Try to abort the rebase to leave repo in clean state
+                    subprocess.run(
+                        ['git', 'rebase', '--abort'],
+                        cwd=str(source_dir),
+                        capture_output=True,
+                        text=True
+                    )
+
+                    return JSONResponse({
+                        'success': False,
+                        'error': 'Failed to rebase onto remote changes. Manual intervention required.',
+                        'output': get_output(pull_result),
+                        'hint': 'The remote repository has changes that conflict with your local changes. Please resolve conflicts manually or discard local changes.'
+                    }, status_code=409)
+
+                print('[PUSH] Rebase successful', flush=True)
+            else:
+                print('[PUSH] Local branch is up to date with remote', flush=True)
 
         # Push to origin with timeout
         print(f'[PUSH] Pushing to origin {branch}...', flush=True)
