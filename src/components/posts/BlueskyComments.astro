@@ -46,7 +46,6 @@ interface BlueskyPostEntry {
     post_uri: string;
     post_cid: string;
     post_url?: string;
-    profile_id?: string;
 }
 
 function getBlueskyPostData(originalFilename: string): { post_uri: string; post_url?: string } | null {
