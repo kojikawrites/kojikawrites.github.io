@@ -1,4 +1,4 @@
-# used for initial blog migration
+# used for post migration and publishing scheduled posts
 
 import os
 import shutil
@@ -8,6 +8,54 @@ import json
 from dotenv import load_dotenv
 load_dotenv()
 site_code = os.environ["SITE_CODE"]
+
+# Track file moves for updating bluesky_posted.json
+path_migrations = []
+
+def load_bluesky_posted():
+    """Load the bluesky_posted.json file"""
+    path = f'./src/assets/_private/state/{site_code}/bluesky_posted.json'
+    if os.path.exists(path):
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return []
+
+def save_bluesky_posted(data):
+    """Save the bluesky_posted.json file"""
+    path = f'./src/assets/_private/state/{site_code}/bluesky_posted.json'
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+def normalize_path(path):
+    """Normalize a path to use forward slashes and be relative to project root"""
+    return path.replace('\\', '/').replace('./', '')
+
+def track_migration(old_path, new_path):
+    """Track a file migration for later updating bluesky_posted.json"""
+    old_normalized = normalize_path(old_path)
+    new_normalized = normalize_path(new_path)
+    path_migrations.append((old_normalized, new_normalized))
+
+def update_bluesky_posted_paths():
+    """Update post_id paths in bluesky_posted.json based on tracked migrations"""
+    if not path_migrations:
+        return
+
+    bluesky_data = load_bluesky_posted()
+    updates_made = 0
+
+    for entry in bluesky_data:
+        old_post_id = entry['post_id']
+        for old_path, new_path in path_migrations:
+            if old_post_id == old_path:
+                entry['post_id'] = new_path
+                updates_made += 1
+                print(f"  Updated bluesky post tracking: {old_path} -> {new_path}")
+                break
+
+    if updates_made > 0:
+        save_bluesky_posted(bluesky_data)
+        print(f"Updated {updates_made} path(s) in bluesky_posted.json")
 
 def parse_date_from_filename(filename):
     match = re.match(r'(\d{4})-(\d{2})-(\d{2})-(.*)\.md$', filename)
@@ -42,7 +90,9 @@ def move_future_posts_to_drafts():
                         target_dir = os.path.join(drafts_dir, relative_path)
                         os.makedirs(target_dir, exist_ok=True)
                         # Move file
-                        shutil.move(file_path, os.path.join(target_dir, file))
+                        target_path = os.path.join(target_dir, file)
+                        track_migration(file_path, target_path)
+                        shutil.move(file_path, target_path)
                         print(f"Moved future post {file} to drafts.")
 
 def publish_due_drafts():
@@ -66,6 +116,7 @@ def publish_due_drafts():
                         os.makedirs(target_dir, exist_ok=True)
                         # Move file
                         target_file_path = os.path.join(target_dir, file)
+                        track_migration(file_path, target_file_path)
                         shutil.move(file_path, target_file_path)
                         print(f"Published draft {file} to posts.")
 
@@ -120,3 +171,4 @@ def construct_post_url(date, slug):
 if __name__ == "__main__":
     move_future_posts_to_drafts()
     publish_due_drafts()
+    update_bluesky_posted_paths()
