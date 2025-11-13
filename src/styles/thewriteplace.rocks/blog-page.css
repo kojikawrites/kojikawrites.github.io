@@ -50,9 +50,6 @@
             a, .highlight-link {
                 @apply color-text-highlight-color;
             }
-            .bluesky-link {
-                @apply color-text-highlight-color-alt-blue;
-            }
             .github-link {
                 @apply color-text-highlight-color-alt-purple;
             }
@@ -62,6 +59,9 @@
             .steam-link {
                 @apply color-text-highlight-color-alt-green;
             }
+        }
+        .bluesky-link {
+            @apply color-text-highlight-color-alt-blue;
         }
         h2:has(code:first-of-type) {
             /* different for mobile */

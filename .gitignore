@@ -32,3 +32,4 @@ docs/content
 /public/favicons/*/external/
 .env
 /docker/uv.lock
+/uv.lock
