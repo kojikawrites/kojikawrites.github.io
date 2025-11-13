@@ -45,34 +45,36 @@ interface BlueskyPostEntry {
     post_id: string;
     post_uri: string;
     post_cid: string;
+    post_url?: string;
+    profile_id?: string;
 }
 
-function getBlueskyPostId(originalFilename: string) : string {
+function getBlueskyPostData(originalFilename: string): { post_uri: string; post_url?: string } | null {
     if (!siteConfig.bluesky.include) {
         return null;
     }
     const thisId = trimPathToBlog(originalFilename);
-    // Convert the array to a dictionary mapping post_id to post_uri
-    const postIdToUriMap: Record<string, string> = blueskyJson.reduce(
-        (accumulator: Record<string, string>, entry: BlueskyPostEntry) => {
-            accumulator[entry.post_id] = entry.post_uri;
-            return accumulator;
-        },
-        {}
-    );
-    return thisId in postIdToUriMap ? postIdToUriMap[thisId] : null;
+    // Find the matching entry
+    const entry = blueskyJson.find((entry: BlueskyPostEntry) => entry.post_id === thisId);
+    if (entry) {
+        return {
+            post_uri: entry.post_uri,
+            post_url: entry.post_url
+        };
+    }
+    return null;
 }
-const blueskyPostId = getBlueskyPostId(filename);
+const blueskyPostData = getBlueskyPostData(filename);
 ---
-{siteConfig.bluesky.include && blueskyPostId &&
+{siteConfig.bluesky.include && blueskyPostData &&
 <hr />
 <div>
-    <!--{ getBlueskyPostId(filename) }-->
+    <!--{ blueskyPostData }-->
     <Comments
             client:load
             client:only="solid-js"
-            atprotoURI={ blueskyPostId }
-            handle="kojika.bsky.social"
+            atprotoURI={blueskyPostData.post_uri}
+            postUrl={blueskyPostData.post_url}
             categories={allCategories}
     />
 </div>}

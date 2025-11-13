@@ -93,7 +93,7 @@ export async function getSiteConfig() {
             aliases: any;
         };
         search : {
-           include: boolean;
+            include: boolean;
         };
         rss: {
             include: boolean;
