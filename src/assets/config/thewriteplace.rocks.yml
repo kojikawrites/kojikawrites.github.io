@@ -42,6 +42,7 @@ footer:
     - All content © 2005-[CURRENT_YEAR] by kojika.
 bluesky:
   include: true
+  handle: thewriteplace.rocks
   hashtag_link: /categories/#[HASHTAG]
   auto_post_text: (This is an automated post.)
 facebook:

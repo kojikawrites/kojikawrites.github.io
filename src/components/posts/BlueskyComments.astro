@@ -72,7 +72,7 @@ const blueskyPostId = getBlueskyPostId(filename);
             client:load
             client:only="solid-js"
             atprotoURI={ blueskyPostId }
-            handle="kojika.bsky.social"
+            handle={siteConfig.bluesky.handle}
             categories={allCategories}
     />
 </div>}
