@@ -178,6 +178,17 @@ export default defineConfig({
         },
     },
     vite: {
+        resolve: {
+            alias: {
+                // Redirect lodash to lodash-es for ESM compatibility (needed for keystatic)
+                'lodash': 'lodash-es',
+                'lodash/': 'lodash-es/',
+            }
+        },
+        optimizeDeps: {
+            // Pre-bundle lodash-es for faster loading
+            include: ['lodash-es'],
+        },
         css: {
             devSourcemap: true,
             transformer: "postcss",
@@ -193,6 +204,12 @@ export default defineConfig({
                     '**/src/assets/_private/state/**',
                     '**/src/scripts/onbuild/**'
                 ]
+            },
+            hmr: {
+                // Configure HMR for docker environment
+                // Check if we're running in docker by looking for HOSTNAME env var or docker-specific indicators
+                clientPort: process.env.VITE_HMR_PORT ? parseInt(process.env.VITE_HMR_PORT) : undefined,
+                host: process.env.VITE_HMR_HOST || undefined,
             }
         },
         plugins: [
