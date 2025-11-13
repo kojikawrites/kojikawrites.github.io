@@ -3,101 +3,87 @@ import { Breadcrumbs } from "astro-breadcrumbs";
 import "../styles/breadcrumbs.scss";
 
 import {matchUrlToPattern} from "../scripts/matchUrlToPattern";
-import {getSiteConfig} from "../scripts/getSiteConfig";
+import {getSiteConfig, getSiteCode} from "../scripts/getSiteConfig";
 import getPosts from "../scripts/getPosts";
+import getPages from "../scripts/getPages";
 import getPostData from "../scripts/getPostData";
 
 const siteConfig = await getSiteConfig();
+
+// Build unified title mapping for all content (blog posts + pages)
 const allPosts = getPosts().map((p: any) => getPostData(p));
-const slugsToTitles = allPosts.reduce((acc: Record<string, string>, post: { slug: string; title: string }) => {
-    acc[post.slug] = post.title;
+const blogTitles = allPosts.reduce((acc: Record<string, string>, post: { path: string; title: string }) => {
+    acc[`/blog/${post.path}`] = post.title;
     return acc;
 }, {});
 
-const matchedSlugs = matchUrlToPattern(Astro.routePattern, Astro.url.pathname);
-// console.log('matchUrlToPattern', Astro.routePattern, Astro.url.pathname);
-const customCrumbs = buildCustomCrumbs(matchedSlugs, siteConfig.navbar, slugsToTitles);
+const siteCode = getSiteCode();
+const frontmatterData = await import(`../assets/_private/state/${siteCode}/frontmatter.json`);
+const pageTitles: Record<string, string> = frontmatterData.default || {};
+
+// Merge all titles into one mapping, including common section pages
+const allTitles = {
+    '/blog': 'BLOG',
+    ...pageTitles,
+    ...blogTitles
+};
+
+const customCrumbs = buildCustomCrumbs(siteConfig.navbar, allTitles, Astro.url.pathname, Astro.routePattern);
 
 // console.log('Astro.routePattern, Astro.url.pathname', Astro.routePattern, Astro.url);
 // console.log('customCrumbs', customCrumbs);
 
 // Function to build custom crumbs
 function buildCustomCrumbs(
-    matchedDict: Record<string, string>,
-    reference: Record<string, any>,
-    slugsToTitles: Record<string, string>,
+    navbar: Record<string, any>,
+    allTitles: Record<string, string>,
+    currentPath: string,
+    routePattern: string,
 ): { text: string; href: string }[] {
     const crumbs: { text: string; href: string }[] = [];
-    if (!reference.breadcrumbs.include)
-    {
-        return crumbs
+
+    if (!navbar.breadcrumbs.include) {
+        return crumbs;
     }
-    // Helper to find a nav item by code in left/right/breadcrumbs
-    const findNavItem = (href: string): Record<string, string> | undefined => {
-        return [...reference.left, ...reference.right].find(item => item.href === href);
-    };
 
-    // Iterate in original pattern order
-    const patternOrder = Object.keys(matchedDict);
-    for (const key of patternOrder) {
-        // Check if key exists in left/right
-        const navItem = findNavItem(`/${key}`);
-        if (navItem) {
+    // Start with HOME
+    crumbs.push({ text: 'HOME', href: '/' });
+
+    // If this is a 404 page, only show HOME
+    if (routePattern === '/404' || currentPath === '/404') {
+        return crumbs;
+    }
+
+    // Parse the URL path into segments
+    const pathname = currentPath.replace(/^\/+|\/+$/g, ''); // Remove leading/trailing slashes
+    if (!pathname) {
+        return crumbs; // Just HOME for root path
+    }
+
+    const segments = pathname.split('/');
+
+    // Build up paths progressively and check each one
+    for (let i = 0; i < segments.length; i++) {
+        const partialPath = '/' + segments.slice(0, i + 1).join('/');
+        const isLastSegment = (i === segments.length - 1);
+
+        // Check if this path has a title (meaning it's an actual page/post)
+        if (partialPath in allTitles) {
             crumbs.push({
-                text: navItem.label,
-                href: navItem.href
+                text: allTitles[partialPath],
+                href: isLastSegment ? '#' : partialPath
             });
-            continue;
-        }
-
-        // Check if key is in valid_breadcrumbs
-        const findBreadcrumb = (href: string): Record<string, string> | undefined => {
-
-            // console.log(slugsToTitles);
-            const v = reference.breadcrumbs.valid_breadcrumbs;
-            const astroPath = Astro.url.pathname.replace(/\/$/, '');
-            // console.log('findBreadcrumbURL', astroPath);
-            // console.log('findBreadcrumbURL:v', v);
-            // look via full pathname first, then via href
-            const customBreadcrumb = v.find(item => item.href === astroPath) ?? v.find(item => item.href === href);
-            return customBreadcrumb;
-        };
-
-        const validBreadcrumb = findBreadcrumb(key);
-        // console.warn('findBreadcrumb -> patternOrder :', matchedDict);
-        // console.warn('findBreadcrumb', validBreadcrumb);
-        if (validBreadcrumb?.href && matchedDict[key].length > 0) {
-            const rawText = matchedDict[key];
-            // console.warn(`Found breadcrumb for ${key}: ${key}, ${rawText}, ${validBreadcrumb.label}`);
-            const text = (rawText in slugsToTitles) ? slugsToTitles[rawText] : validBreadcrumb.label;
+        } else if (isLastSegment) {
+            // For the last segment, always add it even if no title exists (fallback to capitalized name)
+            const segmentName = segments[i].charAt(0).toUpperCase() + segments[i].slice(1);
             crumbs.push({
-                text: text,
+                text: segmentName,
                 href: '#'
             });
-            continue;
         }
-
-        // If key is a splat or something else that isn't in left/right or valid_breadcrumbs,
-        // we can split it and check if any part is valid. For the example, let's break down splats:
-        if (key.startsWith('[...') && key.endsWith(']')) {
-            const segments = matchedDict[key].split('/');
-            for (const seg of segments) {
-                // Check if segment matches something in left/right
-                const navSeg = findNavItem(seg);
-                if (navSeg) {
-                    crumbs.push({
-                        text: navSeg.label,
-                        href: navSeg.href
-                    });
-                } else {
-                    // If segment isn't in left/right, check valid_breadcrumbs for any generic rule
-                    // Here, if none match, we skip. Or you could add a generic crumb.
-                }
-            }
-        }
+        // Skip intermediate segments that don't have titles (they're not real pages)
     }
-    // Prepend the HOME crumb
-    crumbs.unshift({ text: 'HOME', href: '/' });
+
     return crumbs;
 }
 
