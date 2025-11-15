@@ -1,0 +1,21 @@
+---
+import SitePageContent from "../components/SitePageContent.astro";
+import getPages from "../lib/content/getPages";
+
+// Export getStaticPaths for static site generation
+export async function getStaticPaths() {
+    const pages = getPages();
+
+    return pages.map(page => ({
+        params: { page: page.slug },
+    }));
+}
+
+// Get the page slug from the URL
+const { page } = Astro.params;
+
+// Construct the current path
+const current = `/${page}`;
+---
+<!--<div class="top-bump" />-->
+<SitePageContent file={page} current={current} />

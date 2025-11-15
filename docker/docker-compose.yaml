@@ -1,0 +1,59 @@
+services:
+  blog:
+    build:
+      context: ..
+      dockerfile: docker/astro.Dockerfile
+    container_name: ${DOCKER_BLOG_CODE}-blog-dev
+    ports:
+      - ${DOCKER_BLOG_PORT}:4321  # Astro dev server
+    volumes:
+      # Mount source code from host - all edits persist on server
+      - ..:/app
+      # Exclude node_modules and other important directories - use container's version
+      - blog-dev-workspace:/app/node_modules
+      # Shared volume for build operations
+      - blog-build-workspace:/tmp/build-workspace
+    cap_add:
+      # Required for mount --bind in entrypoint (even though container runs as root)
+      # Docker restricts mount syscall by default, requiring CAP_SYS_ADMIN
+      - SYS_ADMIN
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ../.env
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    networks:
+      - blog-network
+
+  build-service:
+    build:
+      context: ..
+      dockerfile: docker/${DOCKER_BUILD_MODE}/build-service.Dockerfile
+    container_name: ${DOCKER_BLOG_CODE}-build-service
+    volumes:
+      # Access to source code (for copying and git)
+      - ..:/source
+      # Shared volume for build operations
+      - blog-build-workspace:/tmp/build-workspace
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ../.env
+    restart: unless-stopped
+    networks:
+      - blog-network
+
+volumes:
+  blog-dev-workspace:
+    external: true
+    name: ${DOCKER_BLOG_CODE}-dev-workspace
+  blog-build-workspace:
+    external: true
+    name: ${DOCKER_BLOG_CODE}-build-workspace
+
+networks:
+  blog-network:
+    external: true
+    name: ${DOCKER_BLOG_CODE}-network

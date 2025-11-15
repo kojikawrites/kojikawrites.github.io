@@ -1,0 +1,31 @@
+---
+
+interface Props {
+	post: any,
+}
+
+import { components } from '../../lib/components/autoImportComponents';
+
+import BlueskyComments from "./BlueskyComments.astro";
+import FacebookComments from "./FacebookComments.astro";
+import Signature from "../Signature.astro";
+
+import getPostData from "../../lib/content/getPostData";
+
+
+const post = Astro.props.post;
+const { Content, frontmatter } = post;
+const { originalFilename } = getPostData(post);
+---
+
+<article class="content" data-pagefind-body>
+    <Content components={components} />
+</article>
+{
+    frontmatter.author != null && frontmatter.author != '' &&
+    <Signature signature={frontmatter.author} />
+}
+
+<BlueskyComments filename={originalFilename} />
+<FacebookComments />
+<hr />

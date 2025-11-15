@@ -1,0 +1,76 @@
+---
+import {cleanUrl} from "../lib/utils/urlUtils";
+const { length, currentUrl, currentPage, firstUrl, prevUrl, nextUrl, lastUrl } = Astro.props;
+const paginationList = [...Array(length)].map((_, i) => 1 + i);
+
+function buildPaginationUrl(url:string, ix:number = null) {
+    return ix
+        ? `${cleanUrl(firstUrl)}${ix == 1 ? "" : '/'+(ix)}/#pagination`
+        : `${cleanUrl(url)}/#pagination`;
+
+}
+
+---
+<nav aria-label="Blog pages" class="pagination pagination-default">
+    <a id="pagination" />
+    { firstUrl == currentUrl ? (
+            <div class="pagination-link disabled">
+                <div>❮❮</div>
+            </div>
+    ) : (
+            <div class="pagination-link">
+                <a href={buildPaginationUrl(firstUrl)}>❮❮</a>
+            </div>
+    )}
+
+    { prevUrl ? (
+            <div class="pagination-link">
+                <a href={buildPaginationUrl(prevUrl)}>❮</a>
+            </div>
+    ) : (
+            <div class="pagination-link disabled">
+                <div>❮</div>
+            </div>
+    )}
+
+    {
+        paginationList.map((num) => (
+                <div class={`pagination-link ${currentPage == num ? "disabled active" : ""}`}>
+                    <a href={`${buildPaginationUrl(firstUrl, num)}`}>
+                        {num}
+                    </a>
+                </div>
+        ))
+    }
+
+    { !nextUrl ? (
+            <div class="pagination-link disabled">
+                <div>❯</div>
+            </div>
+    ) : (
+            <div class="pagination-link">
+                <a href={buildPaginationUrl(nextUrl)}>❯</a>
+            </div>
+    )}
+
+    { lastUrl == currentUrl ? (
+            <div class="pagination-link disabled">
+                <div>❯❯</div>
+            </div>
+    ) : (
+            <div class="pagination-link">
+                <a href={buildPaginationUrl(lastUrl)}>❯❯</a>
+            </div>
+    )}
+
+</nav>
+<script is:inline data-astro-rerun>
+    // clear any '/#blah' anchor refs off the end of the url to make it look nice.
+    (function() {
+        const { pathname, search } = window.location;
+        // Remove trailing slash from pathname if it's not the root "/"
+        const newPath = (pathname.length > 1 && pathname.endsWith('/')) ? pathname.slice(0, -1) : pathname;
+        // Update the URL without the hash and without the trailing slash
+        window.history.replaceState(null, '', newPath + search);
+    })();
+</script>

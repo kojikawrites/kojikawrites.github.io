@@ -1,0 +1,28 @@
+---
+interface Props {
+    postCount: number,
+    postsPerPage?: number,
+    class?: string,
+    archiveHref?: string,
+}
+
+const { postCount,
+    postsPerPage=Number.MAX_VALUE,
+    class:className="post-count",
+    archiveHref = "/blog/archive"} = Astro.props;
+
+---
+<div class={className}>
+    {postCount <= postsPerPage &&
+        <div>
+            All {postCount} posts are listed below.
+        </div>
+    }
+    {postCount > postsPerPage &&
+        <div>
+            The most recent {postsPerPage} posts are listed below.
+            To view the complete archive of {postCount} posts, click
+            <a class="blog-archive-link inline relative" href={archiveHref}>here</a>.
+        </div>
+    }
+</div>

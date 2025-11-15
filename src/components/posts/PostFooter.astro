@@ -1,0 +1,30 @@
+---
+
+import buildPostHref  from '../../lib/utils/urlUtils';
+import getPosts from "../../lib/content/getPosts";
+
+const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
+// Find the index of the current post in the sorted array
+// Compare by file path since object identity may differ between getPosts() calls
+const postIndex = allPosts.findIndex((p) => p.file === Astro.props.post.file);
+
+// In a descending list, the "prior" (older) post will be at index + 1
+const prevPost = postIndex < allPosts.length - 1 ? allPosts[postIndex + 1] : null;
+// The "next" (newer) post will be at index - 1
+const nextPost = postIndex > 0 ? allPosts[postIndex - 1] : null;
+
+---
+
+
+<div class="flex flex-row pb-6 space-x-10">
+    <div class="w-1/2">
+        {prevPost &&
+                <a href={buildPostHref(prevPost)} class="post-navigation text-left ">« {prevPost.frontmatter.title}</a>
+        }
+    </div>
+    <div class="w-1/2">
+        {nextPost &&
+                <a href={buildPostHref(nextPost)} class="post-navigation text-right float-right">{nextPost.frontmatter.title} »</a>
+        }
+    </div>
+</div>

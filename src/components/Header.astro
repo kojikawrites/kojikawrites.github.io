@@ -1,0 +1,42 @@
+---
+// import Logo from './Logo.astro'
+import Nav from './Nav.astro'
+import SiteBreadcrumbs from "./SiteBreadcrumbs.astro";
+import SiteSearchButton from "./search/SiteSearchButton.astro";
+import SiteSearchBar from "./search/SiteSearchBar.astro";
+
+const { current = '' } = Astro.props;
+const searchBarId = 'search-bar';
+---
+
+<style>
+  header {
+    display: flex;
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 2em;
+    width: 100%;
+  }
+
+  @media screen and (max-width: 520px) {
+    header {
+      padding: 2em 0;
+    }
+  }
+</style>
+
+<header>
+  <!--<Logo />-->
+  <Nav current={current}>
+    <div class="flex w-full">
+      <div class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
+        <SiteBreadcrumbs />
+      </div>
+      <div class="flex-none">
+        <SiteSearchButton searchBarId={searchBarId}/>
+      </div>
+    </div>
+    <SiteSearchBar id={searchBarId} />
+    <div class="navbar-bottom-fader" />
+  </Nav>
+</header>

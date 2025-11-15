@@ -1,0 +1,76 @@
+---
+interface Props {
+    filename: string;
+}
+
+import { getSiteConfig, getSiteCode } from "../../lib/config/getSiteConfig";
+import {getAllKeys} from "../../lib/utils/keyUtils";
+import {KeyType} from "../../lib/utils/enums";
+import { Comments } from "../bluesky/Comments";
+import { getJson} from "../../lib/config/getJson";
+
+const blueskyJson = await getJson(getSiteCode(), 'bluesky_posted.json');
+// console.log('blueskyJson', blueskyJson);
+
+const { filename } = Astro.props;
+const siteConfig = await getSiteConfig();
+const allCategories = getAllKeys(KeyType.Categories);
+// console.log(allCategories);
+function trimPathToBlog(path: string): string {
+    // Remove leading and trailing slashes for consistent splitting
+    const trimmedPath = path.replace(/^\/+|\/+$/g, '');
+    // Split the path into components using '/' as the separator
+    const components = trimmedPath.split('/');
+
+    // Find the index of 'blog' in the components array
+    const blogIndex = components.indexOf(siteConfig.blog.path);
+
+
+    if (blogIndex !== -1) {
+        // Slice the array from 'blog' onwards and join back into a path
+        const newPathComponents = components.slice(blogIndex);
+        // console.log('newPath', newPathComponents.join('/'));
+        return newPathComponents.join('/');
+    } else {
+        // If 'blog' is not found, return the original path or handle as needed
+        return trimmedPath;
+    }
+}
+
+
+interface BlueskyPostEntry {
+    post_id: string;
+    post_uri: string;
+    post_cid: string;
+    post_url?: string;
+}
+
+function getBlueskyPostData(originalFilename: string): { post_uri: string; post_url?: string } | null {
+    if (!siteConfig.bluesky.include) {
+        return null;
+    }
+    const thisId = trimPathToBlog(originalFilename);
+    // Find the matching entry
+    const entry = blueskyJson.find((entry: BlueskyPostEntry) => entry.post_id === thisId);
+    if (entry) {
+        return {
+            post_uri: entry.post_uri,
+            post_url: entry.post_url
+        };
+    }
+    return null;
+}
+const blueskyPostData = getBlueskyPostData(filename);
+---
+{siteConfig.bluesky.include && blueskyPostData &&
+<hr />
+<div>
+    <!--{ blueskyPostData }-->
+    <Comments
+            client:load
+            client:only="solid-js"
+            atprotoURI={blueskyPostData.post_uri}
+            postUrl={blueskyPostData.post_url}
+            categories={allCategories}
+    />
+</div>}

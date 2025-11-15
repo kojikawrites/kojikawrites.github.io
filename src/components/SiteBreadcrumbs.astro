@@ -1,0 +1,127 @@
+---
+import { Breadcrumbs } from "astro-breadcrumbs";
+import "astro-breadcrumbs/breadcrumbs.css";
+import "../styles/breadcrumbs.css";
+
+import {matchUrlToPattern} from "../lib/utils/matchUrlToPattern";
+import {getSiteConfig, getSiteCode} from "../lib/config/getSiteConfig";
+import getPosts from "../lib/content/getPosts";
+import getPages from "../lib/content/getPages";
+import getPostData from "../lib/content/getPostData";
+
+const siteConfig = await getSiteConfig();
+
+// Build unified title mapping for all content (blog posts + pages)
+const allPosts = getPosts().map((p: any) => getPostData(p));
+const blogTitles = allPosts.reduce((acc: Record<string, string>, post: { path: string; title: string }) => {
+    acc[`/blog/${post.path}`] = post.title;
+    return acc;
+}, {});
+
+const siteCode = getSiteCode();
+const frontmatterData = await import(`../.sites/${siteCode}/state/frontmatter.json`);
+const pageTitles: Record<string, string> = frontmatterData.default || {};
+
+// Merge all titles into one mapping, including common section pages
+const allTitles = {
+    '/blog': 'BLOG',
+    ...pageTitles,
+    ...blogTitles
+};
+
+const customCrumbs = buildCustomCrumbs(siteConfig.navbar, allTitles, Astro.url.pathname, Astro.routePattern);
+
+// console.log('Astro.routePattern, Astro.url.pathname', Astro.routePattern, Astro.url);
+// console.log('customCrumbs', customCrumbs);
+
+// Function to build custom crumbs
+function buildCustomCrumbs(
+    navbar: Record<string, any>,
+    allTitles: Record<string, string>,
+    currentPath: string,
+    routePattern: string,
+): { text: string; href: string }[] {
+    const crumbs: { text: string; href: string }[] = [];
+
+    if (!navbar.breadcrumbs.include) {
+        return crumbs;
+    }
+
+    // Start with HOME
+    crumbs.push({ text: 'HOME', href: '/' });
+
+    // If this is a 404 page, only show HOME
+    if (routePattern === '/404' || currentPath === '/404') {
+        return crumbs;
+    }
+
+    // Parse the URL path into segments
+    const pathname = currentPath.replace(/^\/+|\/+$/g, ''); // Remove leading/trailing slashes
+    if (!pathname) {
+        return crumbs; // Just HOME for root path
+    }
+
+    const segments = pathname.split('/');
+
+    // Build up paths progressively and check each one
+    for (let i = 0; i < segments.length; i++) {
+        const partialPath = '/' + segments.slice(0, i + 1).join('/');
+        const isLastSegment = (i === segments.length - 1);
+
+        // Check if this path has a title (meaning it's an actual page/post)
+        if (partialPath in allTitles) {
+            crumbs.push({
+                text: allTitles[partialPath],
+                href: isLastSegment ? '#' : partialPath
+            });
+        } else if (isLastSegment) {
+            // For the last segment, always add it even if no title exists (fallback to capitalized name)
+            const segmentName = segments[i].charAt(0).toUpperCase() + segments[i].slice(1);
+            crumbs.push({
+                text: segmentName,
+                href: '#'
+            });
+        }
+        // Skip intermediate segments that don't have titles (they're not real pages)
+    }
+
+    return crumbs;
+}
+
+const {...rest} = Astro.props;
+---
+{siteConfig.navbar.breadcrumbs.include &&
+<Breadcrumbs truncated={true} crumbs={customCrumbs} {...rest}>
+    <!-- home page -->
+    <div slot="index" class="crumb-index flex flex-row flex-nowrap">
+        <svg class="crumb-index-img"
+             aria-label="Home Page"
+             xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+        ><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"> </path><polyline
+                points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span class="pl-1"></span>
+    </div>
+    <!-- separator -->
+    <svg    slot="separator"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+    ><polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+</Breadcrumbs>
+    }
