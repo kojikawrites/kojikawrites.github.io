@@ -1,0 +1,51 @@
+---
+import {getSiteCode} from "../lib/config/getSiteConfig.ts"
+
+interface Props {
+    filePath: string;
+    text?: string;
+    class?: string;
+}
+
+const {
+    filePath,
+    text,
+    class:className = "",
+    ...rest } = Astro.props;
+
+function createDownloadLink(filePath: string) {
+    // Already has /files/ prefix - return as-is
+    if (filePath.startsWith('/files/')) {
+        return filePath;
+    }
+
+    const siteCode = getSiteCode();
+
+    // Handle /src/.sites/[site-code]/_public/files/slug/file.txt → /files/slug/file.txt
+    const sitePublicFilesPattern = `/src/.sites/${siteCode}/_public/files/`;
+    if (filePath.includes(sitePublicFilesPattern)) {
+        const pathAfterFiles = filePath.split(sitePublicFilesPattern)[1];
+        if (pathAfterFiles) {
+            return '/files/' + pathAfterFiles;
+        }
+    }
+
+    // Handle relative paths from Keystatic (e.g., "slug/filename.pdf")
+    // Prepend /files/ to create the full URL
+    if (!filePath.startsWith('/')) {
+        return '/files/' + filePath;
+    }
+
+    return filePath;
+}
+
+const downloadLink = createDownloadLink(filePath);
+const encodedDownloadLink = downloadLink ? encodeURI(downloadLinkWithSpaceChar) : null;
+// Keep spaces in filename for nice download name
+const filename = filePath.split('/').pop() || "";
+const displayText = text || filename || "Download";
+---
+
+{(encodedDownloadLink && encodedDownloadLink.trim().length > 0) &&
+<a href={encodedDownloadLink} class={className} download={filename} {...rest}>{displayText}</a>
+}

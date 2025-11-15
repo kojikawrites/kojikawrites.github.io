@@ -647,6 +647,67 @@ const sharedCustomComponents = {
             }),
         },
     }),
+  PublicDownloadLink: inline({
+      label: 'Download Link',
+      schema: {
+          filePath: fields.file({
+              label: 'File to Download',
+              description: 'Select the file to make downloadable.',
+              directory: `${baseDir}/.sites/${siteCode}/_public/files`,
+              publicPath: `/files/`,
+          }),
+          text: fields.text({
+              label: 'Link Text',
+              description: 'Text to display for the download link',
+          }),
+          class: classField(),
+      },
+      ContentView: (props) => {
+          const PublicDownloadLinkInner: React.FC<{ value: any }> = ({ value }) => {
+              const { filePath, text } = value;
+
+              let fileName = '';
+
+              if (filePath) {
+                  if (typeof filePath === 'string') {
+                      fileName = filePath.split('/').pop() || '';
+                  } else if (filePath.filename) {
+                      fileName = filePath.filename;
+                  }
+              }
+
+              const hasFile = !!fileName;
+              const displayText = text
+                  ? hasFile
+                      ? `${text} (${fileName})`
+                      : `${text} (No File Selected!)})`
+                  : (fileName || 'No file selected');
+
+
+              return (
+                  <span style={{
+                      padding: '2px 6px',
+                      textDecoration: hasFile ? 'underline' : 'none',
+                      backgroundColor: 'var(--ks-color-scale-slate2)',
+                      borderRadius: '3px',
+                      color: 'var(--ks-color-scale-slate12)',
+                      border: hasFile ? '1px solid var(--ks-color-se-blue6)' : '2px solid red',
+                      fontFamily: 'monospace',
+                      fontSize: '0.85em',
+                      cursor: 'pointer'
+                  }}>
+                      {hasFile ? '📎' : '⚠️'} {displayText}
+                  </span>
+              );
+          };
+
+          return (
+              <SlugProvider enabled={true}>
+                  <PublicDownloadLinkInner value={props.value} />
+              </SlugProvider>
+          );
+      },
+  }),
   Timeline: simpleWrapper('Timeline'),
   TimelineEntry: wrapper({
       label: 'Timeline Entry',

@@ -62,18 +62,20 @@ export default function multiPublicPlugin(): Plugin {
                     }
 
                     // Construct the file path in site-specific _public directory
-                    const relativePath = cleanPath.startsWith('/') ? cleanPath.slice(1) : cleanPath;
+                    // Decode URL
+                    let relativePath = cleanPath.startsWith('/') ? cleanPath.slice(1) : cleanPath;
+                    relativePath = decodeURIComponent(relativePath);
                     const filePath = path.join(sitePublicDir, relativePath);
 
-                    // Debug logging
-                    if (relativePath.includes('hiive-interpretation') || relativePath.includes('notes/')) {
-                        console.log(`[multi-public] Request: ${cleanPath}`);
-                        console.log(`[multi-public] Checking: ${filePath}`);
-                        console.log(`[multi-public] Exists: ${fs.existsSync(filePath)}`);
-                        if (fs.existsSync(filePath)) {
-                            console.log(`[multi-public] Is file: ${fs.statSync(filePath).isFile()}`);
-                        }
-                    }
+                    // // Debug logging
+                    // if (relativePath.includes('hiive-interpretation') || relativePath.includes('notes/')) {
+                    //     console.log(`[multi-public] Request: ${cleanPath}`);
+                    //     console.log(`[multi-public] Checking: ${filePath}`);
+                    //     console.log(`[multi-public] Exists: ${fs.existsSync(filePath)}`);
+                    //     if (fs.existsSync(filePath)) {
+                    //         console.log(`[multi-public] Is file: ${fs.statSync(filePath).isFile()}`);
+                    //     }
+                    // }
 
                     // Check if file exists in site-specific _public
                     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {

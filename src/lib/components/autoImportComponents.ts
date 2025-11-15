@@ -8,7 +8,7 @@
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 
 // Common components available to all sites
-
+import PublicDownloadLink from "/src/components/PublicDownloadLink.astro"
 import GalleryImage from "/src/components/gallery/GalleryImage.astro";
 import LightboxGallery from "/src/components/gallery/LightboxGallery.astro";
 import LightboxImage from "/src/components/gallery/LightboxImage.astro";
@@ -37,6 +37,7 @@ type GlobModule = {
 
 // Common components object
 const commonComponents: ComponentMap = {
+    PublicDownloadLink,
     GalleryImage,
     // GalleryVideo,
     LightboxGallery,

@@ -17,7 +17,8 @@ export default function menuWatcher(): AstroIntegration {
 
         const watchPaths = [
           `src/.sites/${SITE_CODE}/content/pagecontent`,
-          getSiteStatePath('system-menu-items.json', SITE_CODE)
+          getSiteStatePath('system-menu-items.json', SITE_CODE),
+          getSiteStatePath('logo-map.json', SITE_CODE)
         ];
 
         let regenerating = false;
