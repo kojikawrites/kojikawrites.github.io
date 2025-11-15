@@ -49,6 +49,7 @@ import menuWatcher from './src/integrations/menuWatcher.ts';
 import excludeDevPages from './src/integrations/excludeDevPages.ts';
 import copyPublicFilesIntegration from './src/integrations/copyPublicFiles.ts';
 import multiPublicPlugin from './plugins/vite-plugin-multi-public.ts';
+import excludeNonMatchingSites from './plugins/vite-plugin-exclude-sites.ts';
 
 import sitemap from '@astrojs/sitemap';
 
@@ -218,6 +219,13 @@ export default defineConfig({
                         warning.message?.includes('@astrojs/internal-helpers')) {
                         return;
                     }
+
+                    // Suppress warnings about our virtual empty-site-file module
+                    // This is intentional - we want all excluded site files to resolve to the same empty module
+                    if (warning.message?.includes('virtual:empty-site-file')) {
+                        return;
+                    }
+
                     // Let other warnings through
                     warn(warning);
                 },
@@ -279,6 +287,22 @@ export default defineConfig({
 
         },
         server: {
+            fs: {
+                // Deny access to .sites directories that don't match the current site code
+                deny: (() => {
+                    const currentSiteCode = getSiteCode();
+                    const sitesDir = path.resolve('src/.sites');
+                    if (!fs.existsSync(sitesDir)) return [];
+
+                    const allSites = fs.readdirSync(sitesDir, { withFileTypes: true })
+                        .filter(d => d.isDirectory())
+                        .map(d => d.name);
+
+                    return allSites
+                        .filter(site => site !== currentSiteCode)
+                        .map(site => `**/.sites/${site}/**`);
+                })(),
+            },
             watch: {
                 // Ignore build artifacts and generated files to prevent unnecessary reloads
                 ignored: [
@@ -298,6 +322,7 @@ export default defineConfig({
             }
         },
         plugins: [
+            excludeNonMatchingSites(getSiteCode()), // Exclude non-matching .sites directories
             multiPublicPlugin(), // Must be first to intercept requests before Astro routing
             yaml(),
             ...(process.env.NODE_ENV === 'development' ? [basicSsl()] : []),

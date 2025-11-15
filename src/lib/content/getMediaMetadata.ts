@@ -22,7 +22,7 @@ export default function getMediaMetadata(src: string, excludeVideo: boolean = fa
             Object.entries(allMediaGlobs).filter(([key, _]) => {
                 // If the key contains ".sites/", it must also contain the current siteCode
                 if (key.includes('.sites/')) {
-                    return key.includes(`${siteCode}/`);
+                    return key.includes(`.sites/${siteCode}/`);
                 }
                 // If it doesn't contain ".sites/", keep it (shared assets)
                 return true;

@@ -18,7 +18,7 @@ const github_repo = import.meta.env?.PUBLIC_GITHUB_REPO || 'unknown';
 const siteCode = getSiteCode();
 // Import logo-map.json dynamically
 const logoMapGlob = import.meta.glob<{ default: any }>('/src/.sites/**/state/*.json', { eager: true });
-const logoMapKey = Object.keys(logoMapGlob).find(key => key.includes(siteCode) && key.includes('logo-map.json'));
+const logoMapKey = Object.keys(logoMapGlob).find(key => key.includes(`.sites/${siteCode}`) && key.includes('logo-map.json'));
 const logoMap = logoMapKey ? logoMapGlob[logoMapKey].default : null;
 
 // ============================================================================

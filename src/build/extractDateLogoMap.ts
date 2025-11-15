@@ -39,7 +39,7 @@ const siteCode = getSiteCode();
 
 const yamlGlobs = import.meta.glob('/src/.sites/**/config/*.yaml');
 const yamlKeys = Object.keys(yamlGlobs);
-let matchingKey = yamlKeys.find(key => key.includes(siteCode));
+let matchingKey = yamlKeys.find(key => key.includes(`.sites/${siteCode}`));
 
 if (!matchingKey) {
     console.warn(`No yaml found for ${matchingKey}...`);

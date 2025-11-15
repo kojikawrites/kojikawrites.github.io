@@ -8,6 +8,7 @@ import {getSiteConfig, getSiteCode} from "../lib/config/getSiteConfig";
 import getPosts from "../lib/content/getPosts";
 import getPages from "../lib/content/getPages";
 import getPostData from "../lib/content/getPostData";
+import {getJson} from "../lib/config/getJson";
 
 const siteConfig = await getSiteConfig();
 
@@ -19,8 +20,7 @@ const blogTitles = allPosts.reduce((acc: Record<string, string>, post: { path: s
 }, {});
 
 const siteCode = getSiteCode();
-const frontmatterData = await import(`../.sites/${siteCode}/state/frontmatter.json`);
-const pageTitles: Record<string, string> = frontmatterData.default || {};
+const pageTitles: Record<string, string> = await getJson(siteCode, 'frontmatter.json') || {};
 
 // Merge all titles into one mapping, including common section pages
 const allTitles = {

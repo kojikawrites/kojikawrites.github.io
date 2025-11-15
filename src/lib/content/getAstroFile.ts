@@ -7,7 +7,7 @@ export async function getAstroFile(filename: string) : Promise<any> {
     }>('/src/.sites/**/content/pagecontent/**/*.{mdx,astro}');
 
     const keys = Object.keys(globs);
-    const matchingKey = keys.find(key => key.includes(site) && key.includes(filename + '.'));
+    const matchingKey = keys.find(key => key.includes(`.sites/${site}`) && key.includes(filename + '.'));
     if (!matchingKey) {
         console.warn(`No astro file ${filename} found for ${site}`);
         return null;

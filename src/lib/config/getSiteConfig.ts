@@ -91,7 +91,7 @@ export async function getSiteConfig() {
         default: any
     }>('/src/.sites/**/config/site.yaml');
     const yamlKeys = Object.keys(yamlGlobs);
-    const matchingKey = yamlKeys.find(key => key.includes(site));
+    const matchingKey = yamlKeys.find(key => key.includes(`.sites/${site}`));
 
     if (!matchingKey) {
         console.warn(`No yaml found for ${site}...`);

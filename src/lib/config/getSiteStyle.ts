@@ -23,7 +23,7 @@ export async function getSiteStyle(): Promise<string> {
 
     const cssKeys = Object.keys(cssGlobs);
 
-    const matchingKey = cssKeys.find(key => key.includes(site));
+    const matchingKey = cssKeys.find(key => key.includes(`.sites/${site}`));
     // console.log(cssKeys, matchingKey);
     if (!matchingKey) {
         console.warn(`No css found for ${site}...`);
