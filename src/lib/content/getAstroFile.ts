@@ -4,7 +4,7 @@ export async function getAstroFile(filename: string) : Promise<any> {
     const site = getSiteCode();
     const globs = import.meta.glob<{
         default: any
-    }>('/src/.sites/**/content/pagecontent/*.{mdx,astro}');
+    }>('/src/.sites/**/content/pagecontent/**/*.{mdx,astro}');
 
     const keys = Object.keys(globs);
     const matchingKey = keys.find(key => key.includes(site) && key.includes(filename + '.'));

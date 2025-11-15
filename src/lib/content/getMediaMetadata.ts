@@ -20,11 +20,11 @@ export default function getMediaMetadata(src: string, excludeVideo: boolean = fa
         // Filter by site - exclude entries from other sites
         cachedImageGlobs = Object.fromEntries(
             Object.entries(allMediaGlobs).filter(([key, _]) => {
-                // If the key contains ".site/", it must also contain the current siteCode
-                if (key.includes('.site/')) {
+                // If the key contains ".sites/", it must also contain the current siteCode
+                if (key.includes('.sites/')) {
                     return key.includes(`${siteCode}/`);
                 }
-                // If it doesn't contain ".site/", keep it (shared assets)
+                // If it doesn't contain ".sites/", keep it (shared assets)
                 return true;
             })
         );

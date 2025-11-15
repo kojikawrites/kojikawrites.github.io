@@ -60,13 +60,13 @@ def validate_structure():
 
 def create_post_url_from_uri(post_uri):
     """
-    Create a Bluesky web URL from an ATProto URI using DID directly.
+    Create a Bluesky web URL from an ATProto URI and extract the profile_id.
 
     Args:
         post_uri (str): ATProto URI (e.g., "at://did:plc:xxx/app.bsky.feed.post/rkey")
 
     Returns:
-        str: Bluesky web URL or None if creation fails
+        tuple: (post_url, profile_id) or (None, None) if creation fails
     """
     # Parse the post_uri to extract DID and rkey
     match = re.match(r'^at://(did:plc:[^/]+)/app\.bsky\.feed\.post/([^/]+)$', post_uri)

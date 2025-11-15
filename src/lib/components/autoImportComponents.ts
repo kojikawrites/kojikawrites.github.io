@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Auto-import components for MDX
  * This file imports common components and dynamically discovers site-specific components
@@ -9,7 +10,6 @@ import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 // Common components available to all sites
 
 import GalleryImage from "/src/components/gallery/GalleryImage.astro";
-// import GalleryVideo from "/src/components/gallery/GalleryVideo.astro";
 import LightboxGallery from "/src/components/gallery/LightboxGallery.astro";
 import LightboxImage from "/src/components/gallery/LightboxImage.astro";
 import LightboxVideo from "/src/components/gallery/LightboxVideo.astro";
@@ -92,7 +92,7 @@ function getSiteSpecificComponents(): ComponentMap {
                 const fileName = path.split('/').pop();
                 if (!fileName) continue;
 
-                const componentName = fileName.replace(/\.astro$/, '');
+            const componentName = fileName.replace(/\.astro$/, '');
 
                 // Add to site components using the default export
                 siteComponents[componentName] = module.default;

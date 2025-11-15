@@ -3,7 +3,7 @@ import {filterContent} from "./getContent";
 export default function getPages() {
     // Glob all page content files
     const globResult = import.meta.glob(
-        '/src/.sites/**/content/pagecontent/*.{md,mdx,astro}',
+        '/src/.sites/**/content/pagecontent/**/*.{md,mdx,astro}',
         {eager: true}
     );
 

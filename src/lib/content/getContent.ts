@@ -19,7 +19,8 @@ export function filterContent(
     let filtered = Object.entries(globResult)
         .filter(([filePath]) => {
             // Check if path contains our base path and site code
-            if (!filePath.includes(options.basePath) && !filePath.includes(siteCode)) return false;
+            // if (!filePath.includes(options.basePath) && !filePath.includes(siteCode)) return false;
+            if (!filePath.includes(siteCode)) return false;
 
             // Filter out drafts if requested
             if (options.filterDrafts && filePath.includes('/_drafts/')) return false;
