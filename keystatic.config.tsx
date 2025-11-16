@@ -253,7 +253,11 @@ const createImageComponent = (type: 'Lightbox' | 'Gallery', imagePath: string, i
         description: 'Legacy support - leave empty if using image picker above',
       }),
       id: fields.text({ label: 'Id'}),
-      alt: fields.text({ label: 'Alt Text' }),
+      alt: fields.text(
+          {
+              label: 'Alt Text',
+              validation: { isRequired: true },
+          }),
       description: fields.text({ label: 'Detailed Description' }),
       caption: fields.text({ label: 'Caption' })
     },
