@@ -9,7 +9,7 @@ interface Props {
 }
 
 import ThemedImage from "../ThemedImage.astro";
-import { getSiteCode } from "../../lib/config/getSiteConfig.ts";
+import { getSiteCode } from "../../lib/config/getSiteCode.ts";
 
 const {id, alt = "", image, src, slug, class:className} = Astro.props;
 const portraitId = `${id}-portrait`;

@@ -1,7 +1,7 @@
 import type { Plugin } from 'vite';
 import fs from 'fs';
 import path from 'path';
-import { getSiteCode } from '../src/lib/config/getSiteConfig.ts';
+import { getSiteCode } from '../src/lib/config/getSiteCode.ts';
 
 /**
  * Vite plugin to serve files from site-specific _public directory as an overlay during development.

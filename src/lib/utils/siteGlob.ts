@@ -3,7 +3,13 @@
  * Handles all glob operations with automatic site code filtering
  */
 
+// Cache for glob results
+const globCache = new Map<string, any>();
+
 export type GlobType = 'json' | 'yaml' | 'css' | 'pages' | 'posts' | 'media' | 'components' | 'custom';
+
+// Type for glob results when returning multiple files (loaders)
+export type GlobResult<T> = Record<string, (() => Promise<{ default: T }>) | { default: T }>;
 
 export interface SiteGlobOptions {
     /** The site code to filter by */
@@ -14,6 +20,8 @@ export interface SiteGlobOptions {
     customPattern?: string;
     /** Custom glob patterns array (for multiple paths like media) */
     customPatterns?: string[];
+    /** Custom glob function that returns the import.meta.glob result */
+    globFilter?: (eager) => Record<string, any>;
     /** Eagerly load all matching files */
     eager?: boolean;
     /** Additional filter function */
@@ -22,28 +30,30 @@ export interface SiteGlobOptions {
     filename?: string;
     /** File extensions to exclude (e.g., ['.mp4', '.avi']) */
     excludeExtensions?: string[];
+    /** Optional post-processing function to run on loaded content before caching */
+    postProcess?: (content: any) => Promise<any> | any;
+}
+
+/**
+ * Generate a cache key for the given options
+ */
+function getCacheKey(options: SiteGlobOptions): string {
+    const { siteCode, type, filename, excludeExtensions = [], customPattern, customPatterns } = options;
+    const parts = [
+        siteCode,
+        type,
+        filename || '',
+        excludeExtensions.sort().join(','),
+        customPattern || '',
+        Array.isArray(customPatterns) ? customPatterns.join(',') : ''
+    ];
+    return parts.join('|');
 }
 
 /**
  * Get the glob pattern(s) for a given type
  */
-function getPatternForType(type: GlobType): string | string[] {
-    const patterns: Record<GlobType, string | string[]> = {
-        json: '/src/.sites/**/state/*.json',
-        yaml: '/src/.sites/**/config/*.yaml',
-        css: '/src/.sites/**/styles/*.css',
-        pages: '/src/.sites/**/content/pagecontent/**/*.{md,mdx,astro}',
-        posts: '/src/.sites/**/content/posts/**/*.{md,mdx}',
-        // Media includes both shared assets and site-specific assets
-        media: [
-            '/src/assets/**/*.{jpeg,jpg,png,gif,svg,webp,mp4}',
-            '/src/.sites/**/*.{jpeg,jpg,png,gif,svg,webp,mp4}'
-        ],
-        components: '/src/.sites/*/components/*.astro',
-        custom: '' // Must provide customPattern or customPatterns
-    };
-    return patterns[type] || '';
-}
+
 
 /**
  * Universal site-aware glob function
@@ -57,35 +67,88 @@ function getPatternForType(type: GlobType): string | string[] {
  * });
  *
  * @example
- * // Get all pages for a site
- * const pages = await siteGlob({
+ * // Get all pages for a site with type safety
+ * const pages = await siteGlob<PageType>({
  *   siteCode: 'hiivelabs.com',
  *   type: 'pages',
  *   eager: true
  * });
  */
-export async function siteGlob(options: SiteGlobOptions): Promise<any> {
-    const { siteCode, type, customPattern, customPatterns, eager = false, filter, filename, excludeExtensions = [] } = options;
+export async function siteGlob<T = any>(options: SiteGlobOptions): Promise<T | GlobResult<T> | null> {
+    const { siteCode, type, customPattern, customPatterns, globFilter, eager = false, filter, filename, excludeExtensions = [], postProcess } = options;
 
-    // Get the glob pattern(s)
-    let pattern: string | string[];
-    if (customPattern) {
-        pattern = customPattern;
-    } else if (customPatterns) {
-        pattern = customPatterns;
-    } else {
-        pattern = getPatternForType(type);
+    // Check cache (skip if in dev mode)
+    const isDev = typeof import.meta !== 'undefined' && import.meta.env?.DEV;
+    const cacheKey = getCacheKey(options);
+
+    if (!isDev && globCache.has(cacheKey)) {
+        console.log(`Using cached glob result for ${type}/${filename || 'all'} (${siteCode})`);
+        return globCache.get(cacheKey);
     }
 
-    if (!pattern || (Array.isArray(pattern) && pattern.length === 0)) {
-        throw new Error(`No pattern found for type '${type}'. Provide a customPattern or customPatterns.`);
-    }
+    // Perform the glob - Vite requires literal patterns, so we use switch/case
+    // Must use literal patterns because Vite statically analyzes import.meta.glob
+    let globResult: Record<string, any>;
 
-    // Perform the glob - eager must be a literal boolean, not a variable
-    // Handle all combinations: string/array × eager/lazy
-    const globResult = eager
-        ? import.meta.glob<{ default: any }>(pattern, { eager: true })
-        : import.meta.glob<{ default: any }>(pattern);
+    // If custom glob function provided, use it
+    if (globFilter) {
+        globResult = globFilter(eager);
+    } else { //else if (customPattern || customPatterns) {
+        throw new Error('Must provide glob filter.');
+    } //else {
+        // Use built-in glob types
+        // switch (type) {
+        // case 'json':
+        //     globResult = eager
+        //         ? import.meta.glob<{ default: T }>('/src/.sites/**/state/*.json', { eager: true })
+        //         : import.meta.glob<{ default: T }>('/src/.sites/**/state/*.json');
+        //     break;
+        // case 'yaml': REMOVED - use inline import.meta.glob in getSiteConfig instead
+        //     // YAML files must be loaded inline to avoid config-time loading issues
+        //     globResult = eager
+        //         ? import.meta.glob<T>('/src/.sites/**/config/*.yaml', { eager: true })
+        //         : import.meta.glob<T>('/src/.sites/**/config/*.yaml');
+        //     break;
+        // case 'customcss':
+        //     // Only match custom.css to avoid Vite processing all CSS files
+        //     // Use <any> type like the old code - CSS doesn't have { default: } wrapper
+        //     globResult = eager //  '../../.sites/**/styles/custom.css',
+        //         ? import.meta.glob<any>('/src/.sites/**/styles/custom.css', { eager: true })
+        //         : import.meta.glob<any>('/src/.sites/**/styles/custom.css');
+        //     break;
+        // case 'pages':
+        //     globResult = eager
+        //         ? import.meta.glob<{ default: T }>('/src/.sites/**/content/pagecontent/**/*.{md,mdx,astro}', { eager: true })
+        //         : import.meta.glob<{ default: T }>('/src/.sites/**/content/pagecontent/**/*.{md,mdx,astro}');
+        //     break;
+        // case 'posts':
+        //     globResult = eager
+        //         ? import.meta.glob<{ default: T }>('/src/.sites/**/content/posts/**/*.{md,mdx}', { eager: true })
+        //         : import.meta.glob<{ default: T }>('/src/.sites/**/content/posts/**/*.{md,mdx}');
+        //     break;
+        // case 'media':
+        //     globResult = eager
+        //         ? import.meta.glob<{ default: T }>([
+        //             '/src/assets/**/*.{jpeg,jpg,png,gif,svg,webp,mp4}',
+        //             '/src/.sites/**/*.{jpeg,jpg,png,gif,svg,webp,mp4}'
+        //         ], { eager: true })
+        //         : import.meta.glob<{ default: T }>([
+        //             '/src/assets/**/*.{jpeg,jpg,png,gif,svg,webp,mp4}',
+        //             '/src/.sites/**/*.{jpeg,jpg,png,gif,svg,webp,mp4}'
+        //         ]);
+        //     break;
+        // case 'components':
+        //     globResult = eager
+        //         ? import.meta.glob<{ default: T }>('/src/.sites/*/components/*.astro', { eager: true })
+        //         : import.meta.glob<{ default: T }>('/src/.sites/*/components/*.astro');
+        //     break;
+        // case 'custom':
+        //     // Custom type requires customGlobFn
+        //     throw new Error('Custom type requires customGlobFn parameter');
+        // default:
+        //     throw new Error(`Unknown glob type: ${type}. Supported types: json, yaml, customcss, pages, posts, media, components, custom`);
+        // }
+    //}
 
     // Filter by site code and optional filters
     const filteredEntries = Object.entries(globResult).filter(([path]) => {
@@ -119,15 +182,39 @@ export async function siteGlob(options: SiteGlobOptions): Promise<any> {
             return null;
         }
         const [, loader] = filteredEntries[0];
+        let result;
         if (eager) {
-            return (loader as any).default;
+            // For YAML and css, result is the content directly (not wrapped in { default: })
+            // For other types, it's wrapped in { default: }
+            result = (type === 'yaml' || type === 'css' || type == 'components') ? (loader as any) : (loader as any).default;
+        } else {
+            const loaded = await (loader as Function)();
+            // For YAML and css, loaded IS the content; for others, extract .default
+            result = (type === 'yaml' || type === 'css' || type == 'components') ? loaded : loaded.default;
         }
-        const result = await (loader as Function)();
-        return result.default;
+
+        // Apply post-processing if provided
+        if (postProcess) {
+            result = await postProcess(result);
+        }
+
+        // Cache the result (if not in dev mode)
+        if (!isDev) {
+            globCache.set(cacheKey, result);
+            console.log(`Cached ${postProcess ? 'processed ' : ''}glob result for ${type}/${filename} (${siteCode})`);
+        }
+
+        return result;
     }
 
     // Return filtered entries
     const filtered = Object.fromEntries(filteredEntries);
+
+    // Cache the result (if not in dev mode)
+    if (!isDev) {
+        globCache.set(cacheKey, filtered);
+        console.log(`Cached glob result for ${type}/${filename || 'all'} (${siteCode})`);
+    }
 
     // If eager, entries are already loaded, just return them
     if (eager) {
@@ -140,21 +227,37 @@ export async function siteGlob(options: SiteGlobOptions): Promise<any> {
 
 /**
  * Shorthand functions for common glob types
+ * All support generic type parameters for type safety
+ *
+ * @example
+ * interface MyConfig { name: string; version: number; }
+ * const config = await getSiteYaml<MyConfig>('hiivelabs.com', 'site.yaml');
+ * // config.name is typed as string, config.version as number
  */
-export const getSiteJson = (siteCode: string, filename: string) =>
-    siteGlob({ siteCode, type: 'json', filename });
+// export const getSiteJson = <T = any>(siteCode: string, filename: string) =>
+//     siteGlob<T>({ siteCode, type: 'json', filename });
 
-export const getSiteYaml = (siteCode: string, filename: string) =>
-    siteGlob({ siteCode, type: 'yaml', filename });
+// getSiteYaml removed - use inline import.meta.glob in getSiteConfig instead to avoid config-time issues
 
-export const getSiteCss = (siteCode: string, filename: string) =>
-    siteGlob({ siteCode, type: 'css', filename });
+// getSiteCss removed - use getSiteCustomCSS for custom.css
 
-export const getSitePages = (siteCode: string) =>
-    siteGlob({ siteCode, type: 'pages', eager: true });
+// export const getSitePages = <T = any>(siteCode: string) =>
+//     siteGlob<T>({ siteCode, type: 'pages', eager: true });
 
-export const getSitePosts = (siteCode: string) =>
-    siteGlob({ siteCode, type: 'posts', eager: true });
+// export const getSitePosts = <T = any>(siteCode: string) =>
+//     siteGlob<T>({ siteCode, type: 'posts', eager: true });
 
-export const getSiteMedia = (siteCode: string, excludeExtensions: string[] = []) =>
-    siteGlob({ siteCode, type: 'media', eager: false, excludeExtensions });
+// export const getSiteMedia = <T = any>(siteCode: string, excludeExtensions: string[] = []) =>
+//     siteGlob<T>({ siteCode, type: 'media', eager: false, excludeExtensions });
+
+/**
+ * Get and process custom.css for a site with Tailwind and cssnano
+ * This helper ensures only custom.css is globbed, preventing Vite from processing all CSS files
+ */
+// export const getSiteCustomCSS = async (siteCode: string, postProcess?: (css: any) => Promise<any> | any) =>
+//     siteGlob<string>({
+//         siteCode,
+//         type: 'customcss',
+//         filename: 'custom.css',
+//         postProcess
+//     });

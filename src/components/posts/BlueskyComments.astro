@@ -3,7 +3,8 @@ interface Props {
     filename: string;
 }
 
-import { getSiteConfig, getSiteCode } from "../../lib/config/getSiteConfig";
+import { getSiteConfig } from "../../lib/config/getSiteConfig";
+import { getSiteCode } from "../../lib/config/getSiteCode";
 import {getAllKeys} from "../../lib/utils/keyUtils";
 import {KeyType} from "../../lib/utils/enums";
 import { Comments } from "../bluesky/Comments";
@@ -14,7 +15,7 @@ const blueskyJson = await getJson(getSiteCode(), 'bluesky_posted.json');
 
 const { filename } = Astro.props;
 const siteConfig = await getSiteConfig();
-const allCategories = getAllKeys(KeyType.Categories);
+const allCategories = await getAllKeys(KeyType.Categories);
 // console.log(allCategories);
 function trimPathToBlog(path: string): string {
     // Remove leading and trailing slashes for consistent splitting

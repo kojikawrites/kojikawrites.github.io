@@ -12,7 +12,7 @@ import buildPostHref  from '../../../../../../lib/utils/urlUtils';
 
 export async function getStaticPaths() {
   // Fetch all the posts from the collection 'blog'
-  const posts = getPosts();
+  const posts = await getPosts();
   // Iterate over the posts, generating the tokens and
   // setting them inside the `params` key.
   // Astro will use anything inside `params` as the token

@@ -4,7 +4,8 @@ import "astro-breadcrumbs/breadcrumbs.css";
 import "../styles/breadcrumbs.css";
 
 import {matchUrlToPattern} from "../lib/utils/matchUrlToPattern";
-import {getSiteConfig, getSiteCode} from "../lib/config/getSiteConfig";
+import {getSiteConfig} from "../lib/config/getSiteConfig";
+import {getSiteCode} from "../lib/config/getSiteCode";
 import getPosts from "../lib/content/getPosts";
 import getPages from "../lib/content/getPages";
 import getPostData from "../lib/content/getPostData";
@@ -13,7 +14,7 @@ import {getJson} from "../lib/config/getJson";
 const siteConfig = await getSiteConfig();
 
 // Build unified title mapping for all content (blog posts + pages)
-const allPosts = getPosts().map((p: any) => getPostData(p));
+const allPosts = (await getPosts()).map((p: any) => getPostData(p));
 const blogTitles = allPosts.reduce((acc: Record<string, string>, post: { path: string; title: string }) => {
     acc[`/blog/${post.path}`] = post.title;
     return acc;

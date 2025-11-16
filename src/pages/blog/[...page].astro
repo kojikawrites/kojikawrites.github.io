@@ -9,7 +9,7 @@ import {getSiteConfig} from "../../lib/config/getSiteConfig";
 import {buildPermalink} from "../../lib/utils/urlUtils";
 // import getPostData from '../../lib/content/getPostData";
 
-const allPostsCount = getPosts().length;
+const allPostsCount = (await getPosts()).length;
 const siteConfig = await getSiteConfig();
 const paginationSize = siteConfig.blog.pagination_size;
 const smallMode = siteConfig.blog.small_mode;
@@ -24,7 +24,7 @@ export async function getStaticPaths({ paginate }) {
   const siteConfig = await getSiteConfig();
   const paginationSize = siteConfig.blog.pagination_size;
 
-  const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
+  const allPosts = (await getPosts()).sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
 
   return paginate(allPosts, {
     pageSize: paginationSize,

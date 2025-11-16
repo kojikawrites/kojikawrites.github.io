@@ -7,7 +7,7 @@ import getPosts from "../../lib/content/getPosts";
 import {buildPermalink} from "../../lib/utils/urlUtils";
 import {getSiteConfig} from "../../lib/config/getSiteConfig";
 
-const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
+const allPosts = (await getPosts()).sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
 const siteConfig = await getSiteConfig();
 const smallMode = siteConfig.blog.small_mode;
 const largeMode = siteConfig.blog.large_mode;

@@ -1,4 +1,4 @@
-import {getSiteCode} from "../config/getSiteConfig";
+import {getSiteCode} from "../config/getSiteCode";
 
 type ContentFilterOptions = {
     basePath: string;          // e.g., 'posts', 'blog', 'pagecontent'

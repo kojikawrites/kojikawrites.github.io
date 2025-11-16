@@ -26,9 +26,9 @@ function sortKeysUngroupedAware(keys) {
     });
 }
 
-function getKeyToPostsDictionary(keyType: string) {
+async function getKeyToPostsDictionary(keyType: string) {
     const tcDictionary = {};
-    const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
+    const allPosts = (await getPosts()).sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
 
     const allKeyedPosts = allPosts.map(p => (
         { post: p, keys: extractKeyList(p.frontmatter[keyType]) }
@@ -58,7 +58,7 @@ function getKeyToPostsDictionary(keyType: string) {
 }
 
 
-const tcDict = getKeyToPostsDictionary(keyType);
+const tcDict = await getKeyToPostsDictionary(keyType);
 const tcKeys = sortKeysUngroupedAware(Object.keys(tcDict));
 
 const title = "Posts grouped by " + (keyType == KeyType.Tags ? "Tag" : "Category");

@@ -19,7 +19,7 @@ export async function GET(context) {
         });
     }
 
-    const posts = getPosts();
+    const posts = await getPosts();
 
     // console.log('context', context);
     return rss({

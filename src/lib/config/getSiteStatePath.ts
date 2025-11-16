@@ -1,5 +1,5 @@
 import path from "path";
-import {getSiteCode} from "./getSiteConfig.ts";
+import {getSiteCode} from "./getSiteCode.ts";
 
 /**
  * Get the absolute path to a file in the site-specific state directory.

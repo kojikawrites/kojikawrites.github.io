@@ -1,7 +1,7 @@
 import type { AstroIntegration } from 'astro';
 import fs from 'fs';
 import path from 'path';
-import { getSiteCode } from '../lib/config/getSiteConfig.ts';
+import { getSiteCode } from '../lib/config/getSiteCode.ts';
 
 /**
  * Astro integration to copy site-specific public files to dist directory.

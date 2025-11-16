@@ -226,6 +226,13 @@ export default defineConfig({
                         return;
                     }
 
+                    // Suppress warnings about files being both dynamically and statically imported
+                    // This happens with siteGlob using import.meta.glob for media files
+                    if (warning.message?.includes('is dynamically imported by') &&
+                        warning.message?.includes('but also statically imported by')) {
+                        return;
+                    }
+
                     // Let other warnings through
                     warn(warning);
                 },

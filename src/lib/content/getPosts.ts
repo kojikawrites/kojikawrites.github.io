@@ -1,12 +1,14 @@
 import {getSiteConfig} from "../config/getSiteConfig";
 import {filterContent} from "./getContent";
+import {siteGlob} from "../utils/siteGlob";
+import {getSiteCode} from "../config/getSiteCode";
 
 const siteConfig = await getSiteConfig();
 const blog_path = siteConfig.blog.path;
 
-export default function getPosts() {
-    // Glob all blog posts (posts and blog folders)
-    const globResult = import.meta.glob(
+export default async function getPosts() {
+    // Glob function for posts - MUST stay exactly as is to avoid breaking everything
+    const postFilter = (eager:boolean) => import.meta.glob(
         [
             '/src/.sites/**/content/posts/**/*.{md,mdx}',
             '/src/.sites/**/content/blog/**/*.{md,mdx}',
@@ -15,16 +17,21 @@ export default function getPosts() {
         ],
         {eager: true}
     );
-    // console.log('globResult', globResult);
-    // console.log('blog_path', blog_path);
-    // Use shared content filter
-    const filteredContent = filterContent(globResult, {
+
+    // Use siteGlob with the glob function (for caching and filtering)
+    const globResult = await siteGlob({
+        siteCode: getSiteCode(),
+        type: 'posts',
+        globFilter: postFilter
+    });
+
+    // Use shared content filter for additional processing (drafts, test, slugs)
+    const filteredContent = filterContent(globResult as Record<string, any>, {
         basePath: blog_path,
         pathToIgnore: '/content/pagecontent/',
         filterDrafts: true,
         filterTest: true,
-
     });
-    // console.log('filteredContent', filteredContent);
+
     return filteredContent;
 }

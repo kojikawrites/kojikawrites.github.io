@@ -23,8 +23,8 @@ export function getKeyId(keyType: KeyType, key:string) : string {
     return `${keyType}-${toSafeKey(key, '')}`
 }
 
-export function getAllKeys(keyType:KeyType) : string[] {
-    const allPosts = getPosts();
+export async function getAllKeys(keyType:KeyType) : Promise<string[]> {
+    const allPosts = await getPosts();
     const allKeys = allPosts.map(p => (
         extractKeyList(p.frontmatter[keyType])
     )).filter(p => p);

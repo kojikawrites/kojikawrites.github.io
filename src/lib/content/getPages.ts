@@ -1,19 +1,28 @@
+import {getSiteCode} from "../config/getSiteCode";
 import {filterContent} from "./getContent";
+import {siteGlob} from "../utils/siteGlob";
 
 export default function getPages() {
-    // Glob all page content files
-    const globResult = import.meta.glob(
-        '/src/.sites/**/content/pagecontent/**/*.{md,mdx,astro}',
-        {eager: true}
-    );
+    // Glob function for pages - MUST stay exactly as is to avoid breaking everything
+    const pagesFilter = (eager) => eager
+        ? import.meta.glob<{ default: T }>('/src/.sites/**/content/pagecontent/**/*.{md,mdx,astro}', { eager: true })
+        : import.meta.glob<{ default: T }>('/src/.sites/**/content/pagecontent/**/*.{md,mdx,astro}');
 
-    // Use shared content filter
-    const filteredContent = filterContent(globResult, {
+
+    // Use siteGlob with the glob function (for caching and filtering)
+    const globResult = siteGlob({
+        siteCode: getSiteCode(),
+        type: 'custom',
+        globFilter: pagesFilter
+    });
+
+    // Use shared content filter for additional processing (slugs)
+    const filteredContent = filterContent(globResult as Record<string, any>, {
         basePath: '.sites',
         pathToIgnore: 'content/pagecontent',
         filterDrafts: false,
         filterTest: false,
     });
-    // console.log('filteredContent', filteredContent);
+
     return filteredContent;
 }
