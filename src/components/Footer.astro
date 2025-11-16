@@ -1,23 +1,39 @@
 ---
-import {getSiteConfig} from "../lib/config/getSiteConfig";
+import {getSiteConfig, getSiteCode} from "../lib/config/getSiteConfig";
 import { execSync } from 'child_process';
 
 const siteConfig = await getSiteConfig();
+const siteCode = getSiteCode();
 
 // Get build metadata at build time
 let gitCommit = '';
+let submoduleCommit = '';
 let buildTime = new Date().toISOString();
 
+// Get main repo commit hash
 try {
-  // Get short git commit hash (7 characters)
   gitCommit = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim();
-  if (gitCommit || '' !== '') {
-    gitCommit = ' • ' + gitCommit;
-  }
 } catch (error) {
-  console.warn('Could not get git commit hash:', error);
+  console.warn('Could not get main repo git commit hash:', error);
 }
 
+// Get submodule commit hash for the active site
+try {
+  const submodulePath = `src/.sites/${siteCode}`;
+  submoduleCommit = execSync(`git -C ${submodulePath} rev-parse --short HEAD`, { encoding: 'utf-8' }).trim();
+} catch (error) {
+  console.warn(`Could not get submodule git commit hash for ${siteCode}:`, error);
+}
+
+// Format commit info: "mainCommit/submoduleCommit • " or just "mainCommit • " if no submodule
+let commitInfo = '';
+if (gitCommit) {
+  commitInfo = gitCommit;
+  if (submoduleCommit) {
+    commitInfo = `${commitInfo}/${submoduleCommit}`;
+  }
+  commitInfo = `[${commitInfo}] • `;
+}
 // Format build time as YYYY-MM-DD HH:MM:ss UTC
 const buildDate = buildTime.replace('T', ' ').replace(/\.\d{3}Z$/, '') + ' UTC';
 ---
@@ -34,6 +50,6 @@ const buildDate = buildTime.replace('T', ' ').replace(/\.\d{3}Z$/, '') + ' UTC';
   </div>
 
   <div class="page-footer build-info">
-      ({buildDate}{gitCommit})
+      Build: {commitInfo}{buildDate}
   </div>
 </footer>
