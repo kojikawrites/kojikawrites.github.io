@@ -40,7 +40,7 @@ function createDownloadLink(filePath: string) {
 }
 
 const downloadLink = createDownloadLink(filePath);
-const encodedDownloadLink = downloadLink ? encodeURI(downloadLinkWithSpaceChar) : null;
+const encodedDownloadLink = downloadLink ? encodeURI(downloadLink) : null;
 // Keep spaces in filename for nice download name
 const filename = filePath.split('/').pop() || "";
 const displayText = text || filename || "Download";
