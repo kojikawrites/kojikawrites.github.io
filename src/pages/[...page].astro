@@ -4,7 +4,7 @@ import getPages from "../lib/content/getPages";
 
 // Export getStaticPaths for static site generation
 export async function getStaticPaths() {
-    const pages = getPages();
+    const pages = await getPages();
 
     return pages.map(page => ({
         params: { page: page.slug },

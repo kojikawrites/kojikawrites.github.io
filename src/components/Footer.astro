@@ -1,6 +1,7 @@
 ---
 import {getSiteConfig} from "../lib/config/getSiteConfig";
 import {getSiteCode} from "../lib/config/getSiteCode";
+import {formatBuildCode} from "../lib/utils/buildUtils";
 import { execSync } from 'child_process';
 
 const siteConfig = await getSiteConfig();
@@ -26,15 +27,10 @@ try {
   console.warn(`Could not get submodule git commit hash for ${siteCode}:`, error);
 }
 
-// Format commit info: "mainCommit/submoduleCommit • " or just "mainCommit • " if no submodule
-let commitInfo = '';
-if (gitCommit) {
-  commitInfo = gitCommit;
-  if (submoduleCommit) {
-    commitInfo = `${commitInfo}/${submoduleCommit}`;
-  }
-  commitInfo = `[${commitInfo}] • `;
-}
+// Format commit info using shared utility
+const buildCode = formatBuildCode(gitCommit, submoduleCommit);
+const commitInfo = buildCode ? `${buildCode} • ` : '';
+
 // Format build time as YYYY-MM-DD HH:MM:ss UTC
 const buildDate = buildTime.replace('T', ' ').replace(/\.\d{3}Z$/, '') + ' UTC';
 ---

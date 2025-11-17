@@ -59,9 +59,9 @@ Both lock files are maintained separately. Commit whichever version you prefer (
 **How it works:**
 
 1. On startup, creates bind mount overlay for `package-lock.json`
-   - Initializes container's lock from host's (first time only)
-   - Mounts container's lock at `/app/package-lock.json`
-   - Host's file is hidden but unmodified
+    - Initializes container's lock from host's (first time only)
+    - Mounts container's lock at `/app/package-lock.json`
+    - Host's file is hidden but unmodified
 2. Checks if `package.json` is newer than `/app/node_modules/.install-timestamp`
 3. If dependencies changed, runs `npm install` (reads/writes container's lock)
 4. Creates timestamp marker
@@ -159,7 +159,7 @@ docker-compose up -d
 
 2. If changed, restart the container to trigger automatic npm ci:
    ```bash
-   docker-compose restart blog
+   docker-compose -f docker/docker-compose.yaml restart blog
    ```
 
 3. If still failing, force rebuild node_modules (see above)
@@ -200,31 +200,48 @@ If seeing "does not provide an export named 'default'" for lodash:
 2. Clear Vite cache:
    ```bash
    docker exec -it ${DOCKER_BLOG_CODE}-blog-dev rm -rf /app/node_modules/.vite
-   docker-compose restart blog
+   docker-compose -f docker/docker-compose.yaml restart blog
    ```
 
 ## Environment Variables
 
-Required in `.env` file:
+The project uses a **two-level environment configuration**:
+
+### Root `.env` file
+
+Contains only the site selector:
 
 ```bash
-# Docker configuration
+SITE_CODE=hiivelabs.com
+```
+
+### Site-specific `.env` file
+
+Located at `src/.sites/[SITE_CODE]/.env`, contains all site-specific configuration:
+
+```bash
+# Site configuration
+VITE_SITE_NAME=https://hiivelabs.com
+DEFAULT_AUTHOR=hiive
+
+# Git credentials (for build-service push and /admin/deploy)
+GIT_AUTHOR_NAME=Your Name
+GIT_AUTHOR_EMAIL=your-email@example.com
+GIT_COMMITTER_NAME=Your Name
+GIT_COMMITTER_EMAIL=your-email@example.com
+GITHUB_TOKEN=ghp_xxxxx
+
+# Docker configuration (optional, only if using Docker)
 DOCKER_BLOG_CODE=mysite        # Prefix for container/volume names
 DOCKER_BLOG_PORT=8462          # External port for dev server
 DOCKER_BUILD_MODE=pip          # or 'uv' for alternative build image
 
-# HMR configuration (for docker)
+# HMR configuration for Docker (enables hot reload from other devices)
 VITE_HMR_HOST=silverfish.local # External hostname
 VITE_HMR_PORT=8462            # External port (same as DOCKER_BLOG_PORT)
-
-# Site configuration
-SITE_CODE=hiivelabs.com
-VITE_SITE_NAME=https://hiivelabs.com
-ROOT_URL=https://hiivelabs.com
-
-# Git credentials (for build-service push)
-GITHUB_TOKEN=ghp_xxxxx
 ```
+
+**Note**: Both files are loaded by astro.config.mjs, with site-specific values overriding root values.
 
 ## Architecture Decisions
 

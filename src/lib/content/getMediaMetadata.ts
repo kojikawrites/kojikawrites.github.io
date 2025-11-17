@@ -25,10 +25,10 @@ export default async function getMediaMetadata(src: string, excludeVideo: boolea
         excludeExtensions: excludeVideo ? ['.mp4'] : []
 
     });
-    console.log('mediaGlobs', mediaGlobs);
+    // console.log('mediaGlobs', mediaGlobs);
 
     const value = mediaGlobs[src];
-    console.log(value)
+    // console.log(value)
     if (!value) {
         console.warn(`No media glob found for ${src}`);
         return null;

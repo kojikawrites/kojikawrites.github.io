@@ -1,5 +1,5 @@
 import {getSiteConfig} from "../config/getSiteConfig";
-import {filterContent} from "./getContent";
+import {filterContent} from "./filterContent";
 import {siteGlob} from "../utils/siteGlob";
 import {getSiteCode} from "../config/getSiteCode";
 
@@ -8,7 +8,7 @@ const blog_path = siteConfig.blog.path;
 
 export default async function getPosts() {
     // Glob function for posts - MUST stay exactly as is to avoid breaking everything
-    const postFilter = (eager:boolean) => import.meta.glob(
+    const postFilter = (eager:boolean) => import.meta.glob<{ default: T }>(
         [
             '/src/.sites/**/content/posts/**/*.{md,mdx}',
             '/src/.sites/**/content/blog/**/*.{md,mdx}',

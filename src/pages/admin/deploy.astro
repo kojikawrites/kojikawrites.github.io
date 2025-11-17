@@ -162,6 +162,7 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     #message-text {
       display: block;
       word-break: break-word;
+      white-space: pre-line;
     }
 
     .message.success {
@@ -320,6 +321,8 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
   </div>
 
   <script>
+    import { formatBuildCode } from '../../lib/utils/buildUtils';
+
     // Fetch git status on page load
     async function loadGitStatus() {
       try {
@@ -386,7 +389,26 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
         const data = await response.json();
 
         if (data.success) {
-          showMessage('success', `✓ Successfully pushed to ${data.branch}!`);
+          let successMsg;
+
+          // Format build code using shared utility
+          const buildCode = formatBuildCode(data.main_commit, data.submodule_commit);
+
+          // Prioritize submodule message - that's the main content being deployed
+          if (data.submodule_pushed && data.site_code) {
+            successMsg = `✓ Successfully deployed ${data.site_code} content!\n📦 Pushed to branch: ${data.branch}`;
+            if (buildCode) {
+              successMsg += `\n🏗️  Build code: ${buildCode}`;
+            }
+          } else {
+            // Main repo only changes (less common)
+            successMsg = `✓ Successfully pushed to ${data.branch}`;
+            if (buildCode) {
+              successMsg += `\n🏗️  Build code: ${buildCode}`;
+            }
+          }
+
+          showMessage('success', successMsg);
           document.getElementById('commitMessage').value = '';
           setTimeout(() => window.location.reload(), 2000);
         } else {

@@ -35,19 +35,6 @@ export async function getSiteStyle(): Promise<string> {
         globFilter: siteCssFilter,
         postProcess: siteCssPostProcessor
     });
-    // Load custom.css and process with postcss/tailwind/cssnano (cached in siteGlob)
-    // const _processedCSS = await getSiteCustomCSS(site, async (css) => {
-    //     // Process with Tailwind and cssnano
-    //     const result = await postcss([
-    //         tailwindcss({
-    //             content: [{raw: css, extension: "css"}],
-    //         }),
-    //         cssnano({preset: defaultPreset}),
-    //     ]).process(`@tailwind base;@tailwind components;@tailwind utilities;`, {
-    //         from: undefined,
-    //     });
-    //     return result.css;
-    // });
 
     if (!processedCSS) {
         console.warn(`No CSS found for ${site}`);

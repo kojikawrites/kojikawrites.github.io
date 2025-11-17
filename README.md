@@ -1,5 +1,3 @@
-# hiive.github.io
-
 A modern blog platform built with Astro, featuring math rendering, multi-framework support, and content management capabilities.
 
 ## Tech Stack
@@ -33,19 +31,54 @@ npm install
 ```
 
 3. Configure your site:
+
+The project uses a two-level environment configuration:
+
+**Root level** (sets which site to use):
 ```bash
 cp .env.example .env
 ```
 
-Edit the `.env` file to set your site configuration:
+Edit the root `.env` file to set your site code:
 ```env
 SITE_CODE=hiivelabs.com
-DEFAULT_AUTHOR=hiive
+```
+
+**Site level** (site-specific configuration):
+
+**Note**: Site directories (`src/.sites/[site-name]`) are git submodules - separate repositories for each site.
+
+Create `src/.sites/[site-name]/.env` with your site-specific configuration:
+
+```env
+# Site URL with protocol (used for sitemap, RSS, and canonical URLs)
+VITE_SITE_NAME=https://yoursitename.com
+
+# Default author for new blog posts
+DEFAULT_AUTHOR=Your Name
+
+# Git configuration (for /admin/deploy page)
+GIT_AUTHOR_NAME=Your Name
+GIT_AUTHOR_EMAIL=your-email@example.com
+GIT_COMMITTER_NAME=Your Name
+GIT_COMMITTER_EMAIL=your-email@example.com
+
+# Optional: GitHub Personal Access Token (if not using SSH keys)
+# GITHUB_TOKEN=ghp_your_token_here
+
+# Optional: Docker configuration (only if using Docker)
+# DOCKER_BLOG_CODE=mysite
+# DOCKER_BLOG_PORT=4321
+# DOCKER_BUILD_MODE=pip
+# VITE_HMR_HOST=your-server.local
+# VITE_HMR_PORT=4321
 ```
 
 ## Site Configuration
 
-Site-specific settings are configured in `src/.sites/[site-name]/config/site.yml`. This includes navigation, build settings, and more.
+Site-specific settings are configured in multiple places:
+- **Environment variables**: `src/.sites/[site-name]/.env` - URLs, authors, git credentials
+- **YAML configuration**: `src/.sites/[site-name]/config/site.yaml` - Navigation, build settings, and more
 
 ### Build Exclusions
 
@@ -102,7 +135,7 @@ In development mode, Keystatic CMS is available at `/keystatic` for editing cont
 
 ### Deploy UI (Development)
 
-A web-based deploy interface is available at `/edit/deploy` in development mode. This allows you to:
+A web-based deploy interface is available at `/admin/deploy` in development mode. This allows you to:
 - View git status and changed files
 - Commit and push changes to GitHub
 - Manage deployments from any device on your network
@@ -130,16 +163,24 @@ cd hiive.github.io
 ```
 
 2. **Configure environment:**
+
+Set up both root and site-specific environment files:
+
 ```bash
+# Root .env - sets which site to use
 cp .env.example .env
-# Edit .env with your settings
+# Edit: SITE_CODE=yoursitename
+
+# Site-specific .env - all other configuration
+cp src/.sites/yoursitename/.env.example src/.sites/yoursitename/.env
+# Edit: VITE_SITE_NAME, DEFAULT_AUTHOR, GIT_*, etc.
 ```
 
 3. **Configure Git credentials:**
 
 **Option A: SSH Keys (Recommended)**
 
-Uncomment the SSH volume mount in `docker-compose.yml`:
+Uncomment the SSH volume mount in `docker/docker-compose.yaml`:
 ```yaml
 volumes:
   - ~/.ssh:/root/.ssh:ro
@@ -147,12 +188,12 @@ volumes:
 
 **Option B: Personal Access Token**
 
-Add to your `.env` file:
+Add to your site-specific `.env` file (`src/.sites/[site-name]/.env`):
 ```env
 GITHUB_TOKEN=ghp_your_token_here
 ```
 
-4. **Update Git configuration in `.env`:**
+Git configuration should already be set in your site-specific `.env` file:
 ```env
 GIT_AUTHOR_NAME=Your Name
 GIT_AUTHOR_EMAIL=your-email@example.com
@@ -164,22 +205,22 @@ GIT_COMMITTER_EMAIL=your-email@example.com
 
 **Start the container:**
 ```bash
-docker-compose up -d
+docker-compose -f docker/docker-compose.yaml up -d
 ```
 
 **View logs:**
 ```bash
-docker-compose logs -f
+docker-compose -f docker/docker-compose.yaml logs -f
 ```
 
 **Stop the container:**
 ```bash
-docker-compose down
+docker-compose -f docker/docker-compose.yaml down
 ```
 
 **Restart after changes:**
 ```bash
-docker-compose restart
+docker-compose -f docker/docker-compose.yaml restart
 ```
 
 ### Accessing the Blog
@@ -194,7 +235,7 @@ docker-compose restart
 ### Workflow
 
 1. **Edit content** from any device using Keystatic at `/keystatic`
-2. **Review changes** at `/edit/deploy` to see what files changed
+2. **Review changes** at `/admin/deploy` to see what files changed
 3. **Commit and push** directly from the deploy UI when ready
 4. **GitHub Pages** automatically rebuilds your site
 
@@ -220,8 +261,8 @@ cd /path/to/hiive.github.io
 **Port already in use:**
 ```bash
 # Stop any existing containers
-docker-compose down
-# Or change the port in docker-compose.yaml
+docker-compose -f docker/docker-compose.yaml down
+# Or change the port in docker/docker-compose.yaml
 ```
 
 **Git authentication fails:**
@@ -235,11 +276,11 @@ ls -la ~/.ssh/
 **Container won't start:**
 ```bash
 # View logs
-docker-compose logs
+docker-compose -f docker/docker-compose.yaml logs
 
 # Rebuild container
-docker-compose build --no-cache
-docker-compose up -d
+docker-compose -f docker/docker-compose.yaml build --no-cache
+docker-compose -f docker/docker-compose.yaml up -d
 ```
 
 ## Production Build
@@ -319,9 +360,16 @@ hiive.github.io/
 
 ### GitHub Pages Deployment
 
-1. Ensure your `.env` is configured correctly for production:
+1. Ensure your environment is configured correctly for production:
+
+**Root `.env`:**
 ```env
 SITE_CODE=yourdomain.com  # or username.github.io
+```
+
+**Site-specific `.env`** (`src/.sites/[site-code]/.env`):
+```env
+VITE_SITE_NAME=https://yourdomain.com
 ```
 
 2. Build the site:

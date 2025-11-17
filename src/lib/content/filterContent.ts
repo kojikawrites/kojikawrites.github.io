@@ -7,6 +7,7 @@ type ContentFilterOptions = {
     pathToIgnore?: string;   // a string to remove from the path
 };
 
+
 /**
  * Generic content filter that handles site-filtering and slug extraction
  * Takes the result of import.meta.glob and filters/processes it

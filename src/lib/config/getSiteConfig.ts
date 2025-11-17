@@ -1,5 +1,6 @@
 import {getJson} from "./getJson.ts";
 import {getSiteCode} from "./getSiteCode.ts";
+import {siteGlob} from "../utils/siteGlob.ts";
 
 // Type definitions for site config
 interface ThemedImage {
@@ -71,17 +72,16 @@ interface SiteConfig {
 export async function getSiteConfig() {
     const site = getSiteCode();
 
-    // Load YAML config using inline import.meta.glob (to avoid config-time loading issues)
-    const yamlGlobs = import.meta.glob<SiteConfig>('/src/.sites/**/config/site.yaml');
-    const yamlKeys = Object.keys(yamlGlobs);
-    const matchingKey = yamlKeys.find(key => key.includes(`.sites/${site}`));
+    const siteYamlFilter = (eager:boolean) => eager //  '../../.sites/**/styles/custom.css',
+        ? import.meta.glob<SiteConfig>('/src/.sites/**/config/site.yaml', { eager: true })
+        : import.meta.glob<SiteConfig>('/src/.sites/**/config/site.yaml'); // <-- usual case
 
-    if (!matchingKey) {
-        console.warn(`No yaml found for ${site}...`);
-        return null;
-    }
-
-    const config = await yamlGlobs[matchingKey]();
+    const config = await siteGlob<SiteConfig>({
+        siteCode: site,
+        type: 'yaml',
+        filename: 'site.yaml',
+        globFilter: siteYamlFilter,
+    }) as SiteConfig;
 
     // Process breadcrumbs
     if (config.navbar && config.navbar.breadcrumbs) {

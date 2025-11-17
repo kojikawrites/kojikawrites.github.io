@@ -3,6 +3,8 @@
 # Export all variables from .env
 set -a
 source ../.env
+# shellcheck disable=SC1090
+source "../src/.sites/${SITE_CODE}/.env"
 set +a
 
 # Check if DOCKER_BUILD_MODE is set

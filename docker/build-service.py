@@ -39,6 +39,32 @@ def load_site_config(site_code):
     with open(config_path, 'r') as f:
         return yaml.safe_load(f) or {}
 
+def get_submodule_path(site_code):
+    """Get the path to the site's submodule."""
+    return f'src/.sites/{site_code}'
+
+def is_submodule_initialized(submodule_path, source_dir):
+    """Check if a submodule is initialized."""
+    result = subprocess.run(
+        ['git', 'submodule', 'status', submodule_path],
+        cwd=str(source_dir),
+        capture_output=True,
+        text=True
+    )
+    # If output starts with '-', submodule is not initialized
+    return result.returncode == 0 and not result.stdout.startswith('-')
+
+def has_submodule_changes(submodule_path, source_dir):
+    """Check if submodule has uncommitted changes."""
+    result = subprocess.run(
+        ['git', 'status', '--porcelain'],
+        cwd=str(source_dir / submodule_path),
+        capture_output=True,
+        text=True,
+        timeout=10
+    )
+    return result.returncode == 0 and bool(result.stdout.strip())
+
 def get_output(result):
     (result.stdout + result.stderr)[-2048:]
 
@@ -95,14 +121,39 @@ async def run_build():
             build_dir.mkdir(parents=True, exist_ok=True)
 
         # Copy source to build directory (excluding node_modules and lock file - we'll install fresh)
-        print(f"Copying {source_dir} to {build_dir}...", flush=True)
+        # Only copy the site directory for the current site_code to save space and time
+        print(f"Copying {source_dir} to {build_dir} (site: {site_code})...", flush=True)
         subprocess.run(
-            ['rsync', '-a', '--exclude=node_modules', '--exclude=.git', '--exclude=package-lock.json',
+            ['rsync', '-a',
+             '--exclude=node_modules',
+             '--exclude=.git',
+             '--exclude=package-lock.json',
+             f'--include=src/.sites/{site_code}/',
+             f'--include=src/.sites/{site_code}/**',
+             '--exclude=src/.sites/*',
              str(source_dir) + '/', str(build_dir) + '/'],
             check=True,
             capture_output=True,
             text=True
         )
+
+        # Initialize and update submodule for the active site
+        submodule_path = get_submodule_path(site_code)
+        print(f"[BUILD] Initializing submodule for {site_code} at {submodule_path}...", flush=True)
+
+        init_result = subprocess.run(
+            ['git', 'submodule', 'update', '--init', submodule_path],
+            cwd=str(build_dir),
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+
+        if init_result.returncode != 0:
+            print(f"[BUILD] Warning: Failed to initialize submodule: {get_output(init_result)}", flush=True)
+            # Don't fail the build - submodule might not exist or be needed
+        else:
+            print(f"[BUILD] Submodule initialized successfully", flush=True)
 
         # Remove excluded directories to prevent Astro from discovering them
         for dir_name in exclude_dirs:
@@ -250,8 +301,85 @@ async def git_push(request: Request):
                 'error': 'No changes to commit'
             }, status_code=400)
 
-        # Add all changes
-        print(f"[PUSH] Adding all changes...", flush=True)
+        # Check if submodule has changes and handle them first
+        site_code = get_site_code()
+        submodule_path = get_submodule_path(site_code)
+        submodule_full_path = source_dir / submodule_path
+        submodule_has_changes = False
+
+        if submodule_full_path.exists():
+            submodule_has_changes = has_submodule_changes(submodule_path, source_dir)
+
+            if submodule_has_changes:
+                print(f"[PUSH] Submodule {site_code} has changes, committing and pushing submodule first...", flush=True)
+
+                # Add all changes in submodule
+                result = subprocess.run(
+                    ['git', 'add', '-A'],
+                    cwd=str(submodule_full_path),
+                    capture_output=True,
+                    text=True,
+                    timeout=10
+                )
+
+                if result.returncode != 0:
+                    return JSONResponse({
+                        'error': 'Failed to add submodule changes',
+                        'output': get_output(result)
+                    }, status_code=500)
+
+                # Commit in submodule
+                submodule_commit = subprocess.run(
+                    ['git', 'commit', '-m', f"[submodule] {message}"],
+                    cwd=str(submodule_full_path),
+                    capture_output=True,
+                    text=True,
+                    timeout=10
+                )
+
+                if submodule_commit.returncode != 0:
+                    return JSONResponse({
+                        'error': 'Failed to commit submodule changes',
+                        'output': get_output(submodule_commit)
+                    }, status_code=500)
+
+                print(f"[PUSH] Submodule committed, now pushing to remote...", flush=True)
+
+                # Push submodule changes
+                submodule_push = subprocess.run(
+                    ['git', 'push', 'origin', 'HEAD'],
+                    cwd=str(submodule_full_path),
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                    env={**os.environ, 'GIT_TERMINAL_PROMPT': '0'}
+                )
+
+                if submodule_push.returncode != 0:
+                    return JSONResponse({
+                        'error': 'Failed to push submodule changes',
+                        'output': get_output(submodule_push)
+                    }, status_code=500)
+
+                print(f"[PUSH] Submodule pushed successfully", flush=True)
+
+                # Add the updated submodule reference to main repo staging area
+                result = subprocess.run(
+                    ['git', 'add', submodule_path],
+                    cwd=str(source_dir),
+                    capture_output=True,
+                    text=True,
+                    timeout=10
+                )
+
+                if result.returncode != 0:
+                    return JSONResponse({
+                        'error': 'Failed to stage submodule reference',
+                        'output': get_output(result)
+                    }, status_code=500)
+
+        # Add all changes in main repo
+        print(f"[PUSH] Adding all changes in main repo...", flush=True)
         result = subprocess.run(
             ['git', 'add', '-A'],
             cwd=str(source_dir),
@@ -266,8 +394,8 @@ async def git_push(request: Request):
                 'output': get_output(result)
             }, status_code=500)
 
-        # Create commit
-        print(f"[PUSH] Creating commit...", flush=True)
+        # Create commit in main repo
+        print(f"[PUSH] Creating commit in main repo...", flush=True)
         result = subprocess.run(
             ['git', 'commit', '-m', message],
             cwd=str(source_dir),
@@ -419,10 +547,46 @@ async def git_push(request: Request):
 
         if push_result.returncode == 0:
             print('[PUSH] Success!', flush=True)
+
+            # Get commit IDs for build code display
+            main_commit = None
+            submodule_commit = None
+
+            try:
+                result = subprocess.run(
+                    ['git', 'rev-parse', '--short', 'HEAD'],
+                    cwd=str(source_dir),
+                    capture_output=True,
+                    text=True,
+                    timeout=5
+                )
+                if result.returncode == 0:
+                    main_commit = result.stdout.strip()
+            except Exception as e:
+                print(f'[PUSH] Could not get main commit ID: {e}', flush=True)
+
+            if submodule_has_changes:
+                try:
+                    result = subprocess.run(
+                        ['git', 'rev-parse', '--short', 'HEAD'],
+                        cwd=str(submodule_full_path),
+                        capture_output=True,
+                        text=True,
+                        timeout=5
+                    )
+                    if result.returncode == 0:
+                        submodule_commit = result.stdout.strip()
+                except Exception as e:
+                    print(f'[PUSH] Could not get submodule commit ID: {e}', flush=True)
+
             return JSONResponse({
                 'success': True,
                 'message': 'Changes committed and pushed successfully',
                 'branch': branch,
+                'submodule_pushed': submodule_has_changes,
+                'site_code': site_code if submodule_has_changes else None,
+                'main_commit': main_commit,
+                'submodule_commit': submodule_commit,
                 'output': get_output(push_result)
             })
         else:
