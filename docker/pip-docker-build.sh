@@ -1,1 +1,1 @@
-DOCKER_BUILD_MODE=pip ./docker-build.sh
+DOCKER_BUILD_MODE=pip ./scripts/os/docker-build.sh

@@ -12,7 +12,7 @@ import {remarkEquationSnippetTransform} from "./plugins/remark-equation-snippet-
 import solidJs from '@astrojs/solid-js';
 import yaml from '@rollup/plugin-yaml';
 import pagefind from "astro-pagefind";
-import frontmatter from "/src/build/extractPagesFrontMatter.ts"; // DO NOT DELETE
+// import frontmatter from "/src/build/extractPagesFrontMatter.ts"; // DO NOT DELETE
 import siteLogos from "/src/build/extractDateLogoMap.ts" // DO NOT DELETE
 import keystatic from '@keystatic/astro';
 import basicSsl from '@vitejs/plugin-basic-ssl';
@@ -205,6 +205,14 @@ export default defineConfig({
         optimizeDeps: {
             // Pre-bundle lodash-es for faster loading
             include: ['lodash-es'],
+            // Exclude dev-only editor components from pre-bundling
+            // These are manually imported only in Keystatic context and should not be optimized
+            exclude: [
+                './src/components/editor/ContextMenu',
+                './src/components/editor/LLMOperationModal',
+                './src/components/editor/guards',
+                './src/components/editor/hooks/useTextSelection',
+            ],
         },
         css: {
             devSourcemap: true,

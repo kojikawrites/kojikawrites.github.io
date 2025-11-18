@@ -1,1 +1,1 @@
-DOCKER_BUILD_MODE=uv ./docker-build.sh
+DOCKER_BUILD_MODE=uv ./scripts/os/docker-build.sh

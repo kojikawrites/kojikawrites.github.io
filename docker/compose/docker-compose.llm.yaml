@@ -1,0 +1,51 @@
+# Docker Compose overlay for LLM/Docker Model Runner support
+# This file is only used when LLM_ENABLED=true and Docker Model Runner is available
+#
+# Usage: docker compose -f docker-compose.yaml -f docker-compose.llm.yaml up
+
+services:
+  blog:
+    # Docker Model Runner integration
+    # Blog service can use both text and vision models
+    models:
+      llm-text:
+        endpoint_var: LLM_TEXT_URL
+        model_var: LLM_TEXT_MODEL
+      llm-vision:
+        endpoint_var: LLM_VISION_URL
+        model_var: LLM_VISION_MODEL
+
+  build-service:
+    # Docker Model Runner integration for build service
+    # Build service primarily uses text model for commit messages
+    models:
+      llm-text:
+        endpoint_var: LLM_URL
+        model_var: LLM_MODEL
+
+# Docker Model Runner - Native AI Model Support
+# Defines both text and vision models from .env configuration
+#
+# Text Model: Used for commit messages, text generation, content assistance
+# Vision Model: Used for image analysis, OCR, visual content understanding
+#
+# Docker Model Runner injects these environment variables per model:
+#   LLM_TEXT_URL / LLM_VISION_URL - endpoint URLs for the models
+#   LLM_TEXT_MODEL / LLM_VISION_MODEL - model names
+
+models:
+  llm-text:
+    # Text-only model for general LLM tasks (faster, smaller)
+    model: ${LLM_DOCKER_TEXT_MODEL:-ai/llama3.1:8B-F16}
+    context_size: 8192 #${LLM_CONTEXT_SIZE:-8192}
+    runtime_flags:
+      - "--temp"
+      - ${LLM_TEMPERATURE:-0.7}
+
+  llm-vision:
+    # Vision-language model for image analysis and multimodal tasks
+    model: ${LLM_DOCKER_VISION_MODEL:-ai/qwen3-vl:8B-UD-Q4_K_XL}
+    context_size: 8192 #${LLM_CONTEXT_SIZE:-8192}
+    runtime_flags:
+      - "--temp"
+      - ${LLM_TEMPERATURE:-0.7}

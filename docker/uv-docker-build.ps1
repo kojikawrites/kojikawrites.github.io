@@ -1,2 +1,2 @@
 $env:DOCKER_BUILD_MODE = "uv"
-& "$PSScriptRoot\docker-build.ps1"
+& "$PSScriptRoot\scripts\os\docker-build.ps1"

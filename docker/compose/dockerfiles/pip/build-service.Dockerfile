@@ -9,14 +9,12 @@ RUN apk add --no-cache rsync python3 py3-pip curl git git-lfs
 WORKDIR /build-service
 
 # Copy Python service files
-COPY docker/build-service.py /build-service/
-COPY docker/pip/requirements.txt /build-service/
+COPY docker/scripts/container/build-service.py /build-service/
+COPY docker/scripts/container/pip/requirements.txt /build-service/
 
-# Install Python dependencies
+# Install Python dependencies from requirements.txt
 RUN python3 -m venv /build-service/.venv
-RUN . /build-service/.venv/bin/activate
-RUN /build-service/.venv/bin/pip install fastapi pyyaml uvicorn
-# RUN /build-service/.venv/bin/pip install  -r requirements.txt
+RUN /build-service/.venv/bin/pip install -r requirements.txt
 
 # Configure git
 RUN git config --global --add safe.directory /source

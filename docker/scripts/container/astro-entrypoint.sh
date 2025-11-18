@@ -87,6 +87,13 @@ if [ "$should_install" = true ]; then
     echo "✅ npm install completed"
 fi
 
+# Clear Vite cache on every container start to prevent stale cache issues
+if [ -d "/app/node_modules/.vite" ]; then
+    echo "🧹 Clearing Vite cache..."
+    rm -rf /app/node_modules/.vite
+    echo "✅ Vite cache cleared"
+fi
+
 # Execute the main command
 echo "🎬 Starting: $*"
 exec "$@"

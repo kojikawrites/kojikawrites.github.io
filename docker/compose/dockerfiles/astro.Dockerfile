@@ -16,7 +16,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Copy and set up entrypoint script
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/scripts/container/astro-entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Expose Astro dev server port
@@ -29,4 +29,6 @@ ENV NODE_ENV=development
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Start Astro dev server
+# CMD ["npm", "run", "start", "--", "--force"]
+RUN rm -rf node_modules/vite
 CMD ["npm", "run", "start"]

@@ -7,7 +7,84 @@ import { categories } from './src/build/generators/categories';
 import { tags } from './src/build/generators/tags';
 import React from 'react';
 import { getSiteCode } from "./src/lib/config/getSiteCode.ts";
+import { ContextMenu, type ContextMenuItem } from './src/components/editor/ContextMenu';
+import { LLMOperationModal, type LLMOperationStatus } from './src/components/editor/LLMOperationModal';
+import { EditorToolbar } from './src/components/editor/EditorToolbar';
+import { createPortal } from 'react-dom';
 import pre = $effect.pre;
+
+// Hook to load editor styles on component mount
+const useEditorStyles = () => {
+    React.useEffect(() => {
+        if (!document.querySelector('link[href="/css/editor-styles.css"]')) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = '/css/editor-styles.css';
+            document.head.appendChild(link);
+        }
+    }, []);
+};
+
+// Singleton flag to ensure only one toolbar instance
+let toolbarInitialized = false;
+
+// Component to inject toolbar into Keystatic editor
+const EditorToolbarInjector: React.FC = () => {
+    const [toolbarContainer, setToolbarContainer] = React.useState<HTMLElement | null>(null);
+    const [isActiveInstance, setIsActiveInstance] = React.useState(false);
+
+    useEditorStyles();
+
+    React.useEffect(() => {
+        // Only the first instance should render the toolbar
+        if (toolbarInitialized) {
+            return;
+        }
+
+        toolbarInitialized = true;
+        setIsActiveInstance(true);
+
+        // Find the Keystatic editor container
+        const findEditorContainer = () => {
+            // Look for the main content area in Keystatic
+            const main = document.querySelector('main') || document.querySelector('[role="main"]');
+            if (main) {
+                // Create a container for the toolbar at the top of main
+                let container = document.getElementById('llm-toolbar-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'llm-toolbar-container';
+                    main.insertBefore(container, main.firstChild);
+                }
+                setToolbarContainer(container);
+                return true;
+            }
+            return false;
+        };
+
+        if (!findEditorContainer()) {
+            // Retry after a delay if not found immediately
+            const interval = setInterval(() => {
+                if (findEditorContainer()) {
+                    clearInterval(interval);
+                }
+            }, 100);
+
+            return () => {
+                clearInterval(interval);
+                toolbarInitialized = false;
+            };
+        }
+
+        return () => {
+            toolbarInitialized = false;
+        };
+    }, []);
+
+    if (!isActiveInstance || !toolbarContainer) return null;
+
+    return createPortal(<EditorToolbar />, toolbarContainer);
+};
 
 const github_author = import.meta.env?.PUBLIC_GITHUB_REPO_OWNER || 'unknown';
 const github_repo = import.meta.env?.PUBLIC_GITHUB_REPO || 'unknown';
@@ -150,8 +227,28 @@ const createImageContentView = (options: {
 }) => {
     // Inner component that consumes the slug context
     const ImageContentViewInner: React.FC<{ value: any }> = ({ value }) => {
-        const { image, src, alt, caption } = value;
+        // Load editor styles and toolbar
+        useEditorStyles();
+
+        const { image, src, alt, caption, description} = value;
         const currentSlug = React.useContext(SlugContext); // Get slug from context instead of global
+
+        // LLM integration state
+        const [contextMenuVisible, setContextMenuVisible] = React.useState(false);
+        const [contextMenuPos, setContextMenuPos] = React.useState({ x: 0, y: 0 });
+        const [modalVisible, setModalVisible] = React.useState(false);
+        const [modalStatus, setModalStatus] = React.useState<LLMOperationStatus>('idle');
+        const [llmOperation, setLlmOperation] = React.useState('');
+        const [llmResult, setLlmResult] = React.useState('');
+        const [llmError, setLlmError] = React.useState('');
+        const [llmContext, setLlmContext] = React.useState('');
+        const [llmMode, setLlmMode] = React.useState<'alt' | 'description' | 'caption'>('alt');
+
+        // Memoize extracted image data to prevent creating new blob URLs on every render
+        const extractedData = React.useMemo(() => {
+            if (!image) return null;
+            return extractImageData(image);
+        }, [image]);
 
         // Determine image source
         let imageSrc: string | null = null;
@@ -159,15 +256,14 @@ const createImageContentView = (options: {
         let sourceInfo = '';
         let isNewlySelected = false;
 
-        if (image) {
-            const extracted = extractImageData(image);
-            isNewlySelected = extracted.isNewlySelected;
-            previewSrc = extracted.previewSrc;
+        if (extractedData) {
+            isNewlySelected = extractedData.isNewlySelected;
+            previewSrc = extractedData.previewSrc;
 
-            if (extracted.filename) {
-                sourceInfo = `Picker: ${extracted.filename}${currentSlug && options.includeSlugTracking ? ` (slug: ${currentSlug})` : ''}`;
+            if (extractedData.filename) {
+                sourceInfo = `Picker: ${extractedData.filename}${currentSlug && options.includeSlugTracking ? ` (slug: ${currentSlug})` : ''}`;
                 imageSrc = buildImagePath(
-                    extracted.filename,
+                    extractedData.filename,
                     options.imageDirectory,
                     options.includeSlugTracking ? currentSlug : undefined
                 );
@@ -178,6 +274,129 @@ const createImageContentView = (options: {
                 ? src
                 : `${options.imageDirectory}/${src}`;
         }
+
+        const displaySrc = isNewlySelected && previewSrc ? previewSrc : imageSrc;
+
+        // Helper function to get selected text and strip HTML/JSX/Astro tags
+        const getSelectedTextStripped = (): string => {
+            const selection = window.getSelection();
+            if (!selection || selection.rangeCount === 0) return '';
+
+            const selectedText = selection.toString();
+            // Strip HTML/JSX/Astro/MDX tags but keep the text content
+            // Remove tags like <Component>, <div>, {variable}, {% component %}, etc.
+            return selectedText
+                .replace(/<[^>]+>/g, '')           // Remove HTML/JSX tags
+                .replace(/\{%[^%]*%\}/g, '')       // Remove MDX component tags {% ... %}
+                .replace(/\{[^}]+\}/g, '')         // Remove JSX expressions
+                .replace(/\s+/g, ' ')              // Normalize whitespace
+                .trim();
+        };
+
+        // LLM API call function
+        const callLLMImageAPI = async () => {
+            if (!displaySrc) return;
+
+            setModalStatus('loading');
+
+            try {
+                // Convert image to base64 if it's a blob URL
+                let imageData = displaySrc;
+                if (displaySrc.startsWith('blob:')) {
+                    const response = await fetch(displaySrc);
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    imageData = await new Promise<string>((resolve) => {
+                        reader.onloadend = () => resolve(reader.result as string);
+                        reader.readAsDataURL(blob);
+                    });
+                }
+
+                const apiResponse = await fetch('/api/llm/image-alt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        image: imageData,
+                        mode: llmMode,
+                        context: llmContext
+                    })
+                });
+
+                const data = await apiResponse.json();
+
+                if (data.success) {
+                    setLlmResult(data.altText || data.result || '');
+                    setModalStatus('success');
+                } else {
+                    throw new Error(data.error || 'Unknown error');
+                }
+            } catch (error: any) {
+                setLlmError(error.message || 'Failed to generate text');
+                setModalStatus('error');
+            }
+        };
+
+        // Handle right-click on image
+        const handleImageContextMenu = (e: React.MouseEvent) => {
+            e.preventDefault();
+            setContextMenuPos({ x: e.clientX, y: e.clientY });
+            setContextMenuVisible(true);
+        };
+
+        // Handler to show modal with context input
+        const handleShowContextModal = (mode: 'alt' | 'description' | 'caption') => {
+            setContextMenuVisible(false);
+            setLlmMode(mode);
+            setLlmOperation(`Generate ${mode === 'alt' ? 'Alt Text' : mode === 'description' ? 'Description' : 'Caption'}`);
+
+            // Capture selected text and strip tags
+            const selectedText = getSelectedTextStripped();
+            const defaultContext = selectedText
+                ? `${selectedText}\n\n(Image in web page${currentSlug ? ` - ${currentSlug}` : ''})`
+                : `Image in web page${currentSlug ? ` (${currentSlug})` : ''}`;
+
+            setLlmContext(defaultContext);
+            setModalStatus('idle');
+            setModalVisible(true);
+        };
+
+        // Context menu items
+        const contextMenuItems: ContextMenuItem[] = [
+            {
+                label: 'Generate Alt Text',
+                icon: <span>🤖</span>,
+                onClick: () => handleShowContextModal('alt')
+            },
+            {
+                label: 'Generate Description',
+                icon: <span>📝</span>,
+                onClick: () => handleShowContextModal('description')
+            },
+            {
+                label: 'Generate Caption',
+                icon: <span>💬</span>,
+                onClick: () => handleShowContextModal('caption')
+            },
+            {
+                separator: true,
+                label: ""
+            },
+            {
+                label: 'Cancel',
+                onClick: () => setContextMenuVisible(false)
+            }
+        ];
+
+        // Handle modal approval
+        const handleApprove = async (result: string) => {
+            // Copy to clipboard
+            try {
+                await navigator.clipboard.writeText(result);
+                alert('Copied to clipboard! Paste it into the appropriate field above.');
+            } catch (e) {
+                alert(`Result: ${result}\n\nManually copy this text to the field above.`);
+            }
+        };
 
         // Clean up blob URLs when component unmounts or previewSrc changes
         // Must be called unconditionally (Rules of Hooks)
@@ -210,21 +429,63 @@ const createImageContentView = (options: {
             );
         }
 
-        const displaySrc = isNewlySelected && previewSrc ? previewSrc : imageSrc;
-
         return (
-            <div style={{ padding: '12px', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
-                <div style={{ fontSize: '10px', color: '#999', marginBottom: '8px', fontFamily: 'monospace' }}>
-                    {sourceInfo}{isNewlySelected && previewSrc ? ' (preview)' : ` → ${imageSrc}`}
+            <>
+                {/* Toolbar injector (singleton - only first instance renders) */}
+                <EditorToolbarInjector />
+
+                <div style={{ padding: '12px', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
+                    <div style={{ fontSize: '10px', color: '#999', marginBottom: '8px', fontFamily: 'monospace' }}>
+                        {sourceInfo}{isNewlySelected && previewSrc ? ' (preview)' : ` → ${imageSrc}`}
+                    </div>
+                    <div style={{ position: 'relative' }}>
+                        <img
+                            src={displaySrc}
+                            alt={alt || options.defaultAlt || 'Image'}
+                            style={{ maxWidth: '100%', height: 'auto', display: 'block', cursor: 'context-menu' }}
+                            onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                            onContextMenu={handleImageContextMenu}
+                        />
+                        <div style={{
+                            position: 'absolute',
+                            top: '8px',
+                            right: '8px',
+                            backgroundColor: 'rgba(0,0,0,0.7)',
+                            color: 'white',
+                            padding: '4px 8px',
+                            borderRadius: '4px',
+                            fontSize: '11px',
+                            opacity: 0.7
+                        }}>
+                            Right-click for AI options
+                        </div>
+                    </div>
+                    {options.includeCaption && caption && <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>{caption}</p>}
                 </div>
-                <img
-                    src={displaySrc}
-                    alt={alt || options.defaultAlt || 'Image'}
-                    style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
-                    onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+
+                {/* Context Menu */}
+                <ContextMenu
+                    visible={contextMenuVisible}
+                    x={contextMenuPos.x}
+                    y={contextMenuPos.y}
+                    items={contextMenuItems}
+                    onClose={() => setContextMenuVisible(false)}
                 />
-                {options.includeCaption && caption && <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>{caption}</p>}
-            </div>
+
+                {/* LLM Operation Modal */}
+                <LLMOperationModal
+                    visible={modalVisible}
+                    status={modalStatus}
+                    operation={llmOperation}
+                    result={llmResult}
+                    error={llmError}
+                    context={llmContext}
+                    onApprove={handleApprove}
+                    onContextChange={setLlmContext}
+                    onClose={() => setModalVisible(false)}
+                    onRetry={callLLMImageAPI}
+                />
+            </>
         );
     };
 
@@ -563,20 +824,25 @@ const sharedCustomComponents = {
                 const { id, alt, image, src } = value;
                 const currentSlug = React.useContext(SlugContext);
 
+                // Memoize extracted image data to prevent creating new blob URLs on every render
+                const extractedData = React.useMemo(() => {
+                    if (!image) return null;
+                    return extractImageData(image);
+                }, [image]);
+
                 // Determine image source
                 let imageSrc: string | null = null;
                 let previewSrc: string | null = null;
                 let sourceInfo = '';
                 let isNewlySelected = false;
 
-                if (image) {
-                    const extracted = extractImageData(image);
-                    isNewlySelected = extracted.isNewlySelected;
-                    previewSrc = extracted.previewSrc;
+                if (extractedData) {
+                    isNewlySelected = extractedData.isNewlySelected;
+                    previewSrc = extractedData.previewSrc;
 
-                    if (extracted.filename) {
-                        sourceInfo = `Picker: ${extracted.filename}${currentSlug ? ` (slug: ${currentSlug})` : ''}`;
-                        imageSrc = buildImagePath(extracted.filename, `/${baseImagePath}`, currentSlug);
+                    if (extractedData.filename) {
+                        sourceInfo = `Picker: ${extractedData.filename}${currentSlug ? ` (slug: ${currentSlug})` : ''}`;
+                        imageSrc = buildImagePath(extractedData.filename, `/${baseImagePath}`, currentSlug);
                     }
                 } else if (src) {
                     sourceInfo = `Manual: ${src}`;
@@ -1075,17 +1341,27 @@ const sharedCustomComponents = {
                 }
             }
 
+            // Memoize extracted image data to prevent creating new blob URLs on every render
+            const inlineExtracted = React.useMemo(() => {
+                if (!inlineImg) return null;
+                return extractImageData(inlineImg);
+            }, [inlineImg]);
+
+            const previewExtracted = React.useMemo(() => {
+                if (!previewImg) return null;
+                return extractImageData(previewImg);
+            }, [previewImg]);
+
             // Extract inline image source
             let inlineImageSrc: string | null = null;
             let inlinePreviewSrc: string | null = null;
             let inlineIsNew = false;
 
-            if (inlineImg) {
-                const extracted = extractImageData(inlineImg);
-                inlineIsNew = extracted.isNewlySelected;
-                inlinePreviewSrc = extracted.previewSrc;
-                if (extracted.filename) {
-                    inlineImageSrc = buildImagePath(extracted.filename, `/${blogImagePath}`, currentSlug);
+            if (inlineExtracted) {
+                inlineIsNew = inlineExtracted.isNewlySelected;
+                inlinePreviewSrc = inlineExtracted.previewSrc;
+                if (inlineExtracted.filename) {
+                    inlineImageSrc = buildImagePath(inlineExtracted.filename, `/${blogImagePath}`, currentSlug);
                 }
             }
 
@@ -1093,11 +1369,10 @@ const sharedCustomComponents = {
             let previewImageSrc: string | null = null;
             let previewPreviewSrc: string | null = null;
 
-            if (previewImg) {
-                const extracted = extractImageData(previewImg);
-                previewPreviewSrc = extracted.previewSrc;
-                if (extracted.filename) {
-                    previewImageSrc = buildImagePath(extracted.filename, `/${blogImagePath}`, currentSlug);
+            if (previewExtracted) {
+                previewPreviewSrc = previewExtracted.previewSrc;
+                if (previewExtracted.filename) {
+                    previewImageSrc = buildImagePath(previewExtracted.filename, `/${blogImagePath}`, currentSlug);
                 }
             }
 

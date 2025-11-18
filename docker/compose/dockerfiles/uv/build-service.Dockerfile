@@ -12,12 +12,11 @@ RUN curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/uv-x86_6
 WORKDIR /build-service
 
 # Copy Python service files
-COPY docker/build-service.py /build-service/
-COPY docker/uv/pyproject.toml /build-service/
+COPY docker/scripts/container/build-service.py /build-service/
+COPY docker/scripts/container/uv/pyproject.toml /build-service/
 
-# Install Python dependencies
-RUN uv venv
-RUN uv add fastapi pyyaml uvicorn
+# Install Python dependencies from pyproject.toml
+RUN uv sync
 
 # Configure git
 RUN git config --global --add safe.directory /source
