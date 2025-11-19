@@ -16,10 +16,10 @@ export interface SiteGlobOptions {
     siteCode: string;
     /** Type of files to glob (determines pattern) */
     type: GlobType;
-    /** Custom glob pattern (overrides type-based pattern) */
-    customPattern?: string;
-    /** Custom glob patterns array (for multiple paths like media) */
-    customPatterns?: string[];
+    // /** Custom glob pattern (overrides type-based pattern) */
+    // customPattern?: string;
+    // /** Custom glob patterns array (for multiple paths like media) */
+    // customPatterns?: string[];
     /** Custom glob function that returns the import.meta.glob result */
     globFilter?: (eager) => Record<string, any>;
     /** Eagerly load all matching files */
@@ -38,14 +38,12 @@ export interface SiteGlobOptions {
  * Generate a cache key for the given options
  */
 function getCacheKey(options: SiteGlobOptions): string {
-    const { siteCode, type, filename, excludeExtensions = [], customPattern, customPatterns } = options;
+    const { siteCode, type, filename, excludeExtensions = [] } = options;
     const parts = [
         siteCode,
         type,
         filename || '',
         excludeExtensions.sort().join(','),
-        customPattern || '',
-        Array.isArray(customPatterns) ? customPatterns.join(',') : ''
     ];
     return parts.join('|');
 }
@@ -75,14 +73,14 @@ function getCacheKey(options: SiteGlobOptions): string {
  * });
  */
 export async function siteGlob<T = any>(options: SiteGlobOptions): Promise<T | GlobResult<T> | null> {
-    const { siteCode, type, customPattern, customPatterns, globFilter, eager = false, filter, filename, excludeExtensions = [], postProcess } = options;
+    const { siteCode, type, globFilter, eager = false, filter, filename, excludeExtensions = [], postProcess } = options;
 
     // Check cache (skip if in dev mode)
     const isDev = typeof import.meta !== 'undefined' && import.meta.env?.DEV;
     const cacheKey = getCacheKey(options);
 
     if (!isDev && globCache.has(cacheKey)) {
-        console.log(`Using cached glob result for ${type}/${filename || 'all'} (${siteCode})`);
+        // console.debug(`Using cached glob result for ${type}/${filename || 'all'} (${siteCode})`);
         return globCache.get(cacheKey);
     }
 

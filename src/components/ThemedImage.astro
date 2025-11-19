@@ -100,7 +100,7 @@ console.log(themedImgId);
             function setThemedImage()   {
                 var themedImgs = document.querySelectorAll(`[id='${themedImgId}']`);
                 const theme = getActiveTheme();
-                console.log('ThemedImage.setThemedImage', theme);
+                // console.log('ThemedImage.setThemedImage', theme);
                 // alert(theme, themedImgId);
                 themedImgs.forEach((img: HTMLElement) => {
 
@@ -130,7 +130,7 @@ console.log(themedImgId);
             const darkModeMediaQueryTI = window.matchMedia('(prefers-color-scheme: dark)');
             darkModeMediaQueryTI.addEventListener('change', () => {
                 const themeSet = localStorage.getItem('themeSet');
-                console.log('ThemedImage: themeSet', themeSet);
+                // console.log('ThemedImage: themeSet', themeSet);
                 if (!themeSet) {
                     setThemedImage();
                 }

@@ -13,6 +13,8 @@ services:
       - blog-dev-workspace:/app/node_modules
       # Shared volume for build operations
       - blog-build-workspace:/tmp/build-workspace
+      # Shared SSL certificates (one cert for all sites on this machine)
+      - blog-ssl-certs:/app/.ssl
     cap_add:
       # Required for mount --bind in entrypoint (even though container runs as root)
       # Docker restricts mount syscall by default, requiring CAP_SYS_ADMIN
@@ -102,6 +104,9 @@ volumes:
   blog-build-workspace:
     external: true
     name: ${DOCKER_BLOG_CODE}-build-workspace
+  blog-ssl-certs:
+    external: true
+    name: blog-ssl-certs  # Shared across all sites on this machine
   ollama-models:
     external: true
     name: blog-ollama-models  # Shared across all sites

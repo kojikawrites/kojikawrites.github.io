@@ -1,6 +1,6 @@
-import {getJson} from "./getJson.ts";
 import {getSiteCode} from "./getSiteCode.ts";
 import {siteGlob} from "../utils/siteGlob.ts";
+import {getAllPageTitles} from '../content/getAllPageTitles';
 
 // Type definitions for site config
 interface ThemedImage {
@@ -87,12 +87,10 @@ export async function getSiteConfig() {
     if (config.navbar && config.navbar.breadcrumbs) {
         // Retrieve the current valid_breadcrumbs array
         const validBreadcrumbs: NavbarEntry[] = config.navbar.breadcrumbs.valid_breadcrumbs || [];
-        const frontmatterData = await getJson(site, 'frontmatter.json');
+        const pageTitles = await getAllPageTitles();
 
-        // Iterate over each entry in the frontmatter JSON
-        for (const entry of Object.entries(frontmatterData)) {
-            const href = entry[0];
-            const label = entry[1];
+        // Iterate over each page title
+        for (const [href, label] of Object.entries(pageTitles)) {
             // Add a new NavbarEntry only if an entry with the same href is not already present
             if (!validBreadcrumbs.some(entry => entry.href === href)) {
                 validBreadcrumbs.push({ href, label });

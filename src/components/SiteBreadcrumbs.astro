@@ -7,9 +7,8 @@ import {matchUrlToPattern} from "../lib/utils/matchUrlToPattern";
 import {getSiteConfig} from "../lib/config/getSiteConfig";
 import {getSiteCode} from "../lib/config/getSiteCode";
 import getPosts from "../lib/content/getPosts";
-import getPages from "../lib/content/getPages";
 import getPostData from "../lib/content/getPostData";
-import {getJson} from "../lib/config/getJson";
+import {getAllPageTitles} from "../lib/content/getAllPageTitles";
 
 const siteConfig = await getSiteConfig();
 
@@ -20,8 +19,7 @@ const blogTitles = allPosts.reduce((acc: Record<string, string>, post: { path: s
     return acc;
 }, {});
 
-const siteCode = getSiteCode();
-const pageTitles: Record<string, string> = await getJson(siteCode, 'frontmatter.json') || {};
+const pageTitles = await getAllPageTitles();
 
 // Merge all titles into one mapping, including common section pages
 const allTitles = {

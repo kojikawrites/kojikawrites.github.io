@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
-import {getSiteCode} from "./extractPagesFrontMatter.ts";
+// import {getSiteCode} from "./extractPagesFrontMatter.ts";
+import {getSiteCode} from "../lib/config/getSiteCode.ts";
 import yaml from 'js-yaml';
 
 import {getJson} from "../lib/config/getJson.ts";

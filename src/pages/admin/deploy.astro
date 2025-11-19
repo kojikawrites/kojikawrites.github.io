@@ -1,20 +1,22 @@
 ---
+import BaseHead from '../../components/BaseHead.astro';
+
 // Only render in development mode
 if (import.meta.env.PROD) {
   return Astro.redirect('/404');
 }
 
 const title = 'Deploy to GitHub';
+const description = 'Deploy changes to GitHub';
+const permalink = Astro.url.pathname;
 const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.env.SHOW_TEST_BUILD === true;
 ---
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title}</title>
-  <style>
+  <BaseHead title={title} description={description} permalink={permalink} />
+  <style is:global>
     * {
       margin: 0;
       padding: 0;
@@ -23,7 +25,8 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: #f5f5f5;
+      background: rgb(var(--background-body));
+      color: rgb(var(--text-main));
       padding: 2rem;
       line-height: 1.6;
     }
@@ -31,21 +34,21 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     .container {
       max-width: 800px;
       margin: 0 auto;
-      background: white;
+      background: rgb(var(--background-feature));
       padding: 2rem;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     h1 {
-      color: #333;
+      color: rgb(var(--heading-color));
       margin-bottom: 1.5rem;
-      border-bottom: 2px solid #007bff;
+      border-bottom: 2px solid rgb(var(--primary-color));
       padding-bottom: 0.5rem;
     }
 
     .status-section {
-      background: #f8f9fa;
+      background: rgb(var(--background-body));
       padding: 1rem;
       border-radius: 4px;
       margin-bottom: 1.5rem;
@@ -53,32 +56,84 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
 
     .status-section h2 {
       font-size: 1.1rem;
-      color: #495057;
+      color: rgb(var(--text-main));
       margin-bottom: 0.5rem;
     }
 
+    .status-content-wrapper {
+      position: relative;
+      max-height: 300px;
+    }
+
+    .status-content-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1.5rem;
+      background: linear-gradient(to top, transparent, rgb(var(--background-body)));
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1;
+    }
+
+    .status-content-wrapper.show-top-fade::before {
+      opacity: 1;
+    }
+
+    .status-content-wrapper::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1.5rem;
+      background: linear-gradient(to bottom, transparent, rgb(var(--background-body)));
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .status-content-wrapper.show-bottom-fade::after {
+      opacity: 1;
+    }
+
+    #status-content {
+      max-height: 300px;
+      overflow-y: scroll;
+    }
+
     .file-list {
+      background: rgb(var(--background-mid) / 0.2);
       list-style: none;
       margin-top: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 4px;
     }
 
     .file-list li {
-      padding: 0.25rem 0;
+      /*padding: 0.05rem 0;*/
       font-family: monospace;
       font-size: 0.9rem;
       word-break: break-all;
       overflow-wrap: break-word;
+      line-height: 0.9;
     }
 
     .file-status {
       display: inline-block;
       width: 2rem;
       font-weight: bold;
+      cursor: help;
     }
 
     .status-modified { color: #ffc107; }
     .status-added { color: #28a745; }
     .status-deleted { color: #dc3545; }
+    .status-untracked { color: #17a2b8; }
+    .status-renamed { color: #6f42c1; }
 
     .form-group {
       margin-bottom: 1.5rem;
@@ -87,25 +142,27 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     label {
       display: block;
       margin-bottom: 0.5rem;
-      color: #495057;
+      color: rgb(var(--text-secondary));
       font-weight: 500;
     }
 
     textarea {
       width: 100%;
       padding: 0.75rem;
-      border: 1px solid #ced4da;
+      border: 1px solid rgb(var(--background-mid));
       border-radius: 4px;
       font-family: inherit;
       font-size: 1rem;
       resize: vertical;
       min-height: 100px;
+      background: rgb(var(--background-feature));
+      color: rgb(var(--text-main));
     }
 
     textarea:focus {
       outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+      border-color: rgb(var(--primary-color));
+      box-shadow: 0 0 0 3px rgba(var(--primary-color), 0.1);
     }
 
     .button-group {
@@ -124,21 +181,21 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     }
 
     .btn-primary {
-      background: #007bff;
-      color: white;
+      background: rgb(var(--primary-color));
+      color: rgb(var(--primary-color-contrast));
     }
 
     .btn-primary:hover:not(:disabled) {
-      background: #0056b3;
+      background: rgb(var(--primary-color-alt));
     }
 
     .btn-secondary {
-      background: #6c757d;
-      color: white;
+      background: rgb(var(--background-mid));
+      color: rgb(var(--text-main));
     }
 
     .btn-secondary:hover:not(:disabled) {
-      background: #545b62;
+      background: rgb(var(--primary-color-alt));
     }
 
     button:disabled {
@@ -166,15 +223,15 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     }
 
     .message.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
+      background: rgba(var(--hiive-green), 0.15);
+      color: rgb(var(--hiive-green));
+      border: 1px solid rgba(var(--hiive-green), 0.3);
     }
 
     .message.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
+      background: rgba(var(--secondary-color), 0.15);
+      color: rgb(var(--secondary-color));
+      border: 1px solid rgba(var(--secondary-color), 0.3);
     }
 
     .message-close {
@@ -198,7 +255,7 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       display: none;
       margin-top: 1rem;
       text-align: center;
-      color: #6c757d;
+      color: rgb(var(--text-secondary));
     }
 
     .loading.show {
@@ -206,21 +263,20 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     }
 
     .branch-info {
-      background: #e7f3ff;
-      padding: 0.5rem 1rem;
+      background: rgba(var(--primary-color), 0.1);
+      padding: 0.5rem 0.5rem;
       border-radius: 4px;
       font-family: monospace;
-      color: #004085;
-      margin-bottom: 1rem;
+      color: rgb(var(--text-highlight-color));
     }
 
     .no-changes {
-      color: #28a745;
+      color: rgb(var(--hiive-green));
       font-weight: 500;
     }
 
     .build-section {
-      background: #f8f9fa;
+      background: rgb(var(--background-body));
       padding: 1rem;
       border-radius: 4px;
       margin-bottom: 1.5rem;
@@ -228,14 +284,15 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
 
     .build-section h2 {
       font-size: 1.1rem;
-      color: #495057;
+      color: rgb(var(--text-main));
       margin-bottom: 0.5rem;
     }
 
     .build-output {
-      background: #2d2d2d;
-      color: #f8f8f2;
+      background: rgb(var(--background-mid));
+      color: rgb(var(--text-main));
       padding: 1rem;
+      padding-right: 3rem;
       border-radius: 4px;
       font-family: 'Courier New', Courier, monospace;
       font-size: 0.85rem;
@@ -244,6 +301,26 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       white-space: pre-wrap;
       word-break: break-word;
       display: none;
+      position: relative;
+    }
+
+    .build-output-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(var(--background-body), 0.8);
+      border: 1px solid rgb(var(--text-secondary));
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      opacity: 0.7;
+      color: rgb(var(--text-main));
+      border-radius: 4px;
+    }
+
+    .build-output-close:hover {
+      opacity: 1;
+      background: rgb(var(--background-body));
     }
 
     .build-output.show {
@@ -251,20 +328,22 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     }
 
     .build-output.success {
-      border-left: 4px solid #28a745;
+      border-left: 4px solid rgb(var(--hiive-green));
     }
 
     .build-output.error {
-      border-left: 4px solid #dc3545;
+      border-left: 4px solid rgb(var(--secondary-color));
     }
 
     .btn-info {
-      background: #17a2b8;
-      color: white;
+      background: rgb(var(--background-mid));
+      color: rgb(var(--text-main));
+      /*border: 2px solid rgb(var(--text-highlight-color));*/
     }
 
     .btn-info:hover:not(:disabled) {
-      background: #138496;
+      background: rgb(var(--primary-color-alt));
+      /*border-color: rgb(var(--text-highlight-color));*/
     }
   </style>
 </head>
@@ -285,13 +364,18 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
           <p>Building project... This may take up to 2 minutes.</p>
         </div>
         <div id="build-output" class="build-output"></div>
+        <div id="build-log-download" style="display: none; margin-top: 1rem;">
+          <a id="build-log-link" href="#" class="btn-secondary" style="display: inline-block; text-decoration: none;">Download Full Build Log</a>
+        </div>
       </div>
     )}
 
     <div class="status-section">
       <h2>Git Status</h2>
       <div id="branch-info" class="branch-info">Loading...</div>
-      <div id="status-content" >Loading git status...</div>
+      <div class="status-content-wrapper">
+        <div id="status-content">Loading git status...</div>
+      </div>
       <div style="margin-top: 1rem;">
         <button type="button" class="btn-secondary" onclick="window.location.reload()">Refresh Status</button>
       </div>
@@ -301,12 +385,18 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       <form id="pushForm">
         <div class="form-group">
           <label for="commitMessage">Commit Message</label>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <button type="button" id="suggestMessageBtn" class="btn-secondary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+              ✨ Suggest Message (AI)
+            </button>
+            <span id="suggest-status" style="display: none; align-self: center; color: rgb(var(--text-secondary)); font-size: 0.9rem;"></span>
+          </div>
           <textarea
             id="commitMessage"
             name="message"
             placeholder="Enter a commit message describing your changes..."
             required
-          >Update content</textarea>
+          ></textarea>
         </div>
 
         <div class="button-group">
@@ -323,41 +413,8 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
   <script>
     import { formatBuildCode } from '../../lib/utils/buildUtils';
 
-    // Fetch git status on page load
-    async function loadGitStatus() {
-      try {
-        const response = await fetch('/api/git/status');
-        const data = await response.json();
-
-        if (data.error) {
-          showMessage('error', data.error);
-          return;
-        }
-
-        // Update branch info
-        document.getElementById('branch-info').textContent = `Branch: ${data.branch}`;
-
-        // Update status content
-        const statusContent = document.getElementById('status-content');
-        if (!data.hasChanges) {
-          statusContent.innerHTML = '<p class="no-changes">✓ No changes to commit</p>';
-          document.getElementById('deploy-form').style.display = 'none';
-        } else {
-          let html = '<ul class="file-list">';
-          data.files.forEach(file => {
-            const statusClass = file.status.includes('M') ? 'status-modified' :
-                               file.status.includes('A') ? 'status-added' :
-                               file.status.includes('D') ? 'status-deleted' : '';
-            html += `<li><span class="file-status ${statusClass}">${file.status}</span> ${file.file}</li>`;
-          });
-          html += '</ul>';
-          statusContent.innerHTML = html;
-          document.getElementById('deploy-form').style.display = 'block';
-        }
-      } catch (error) {
-        showMessage('error', `Failed to load git status: ${error.message}`);
-      }
-    }
+    // Cache files from git status for suggest endpoint
+    let cachedFiles = [];
 
     // Handle form submission
     document.getElementById('pushForm').addEventListener('submit', async (e) => {
@@ -436,6 +493,166 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       }
     }
 
+    // Handle suggest commit message button
+    document.getElementById('suggestMessageBtn').addEventListener('click', async () => {
+      const suggestBtn = document.getElementById('suggestMessageBtn');
+      const statusSpan = document.getElementById('suggest-status');
+      const commitMessageField = document.getElementById('commitMessage');
+
+      // Disable button and show loading
+      suggestBtn.disabled = true;
+      statusSpan.style.display = 'inline';
+      statusSpan.textContent = 'Generating...';
+
+      try {
+        // Call the suggest-commit-message API
+        const response = await fetch('/api/git/suggest-commit-message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ files: cachedFiles })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.message) {
+          // Set the suggested message
+          commitMessageField.value = data.message;
+
+          // Show feedback based on generation method
+          if (data.generated_by === 'llm') {
+            statusSpan.textContent = '✓ Generated by AI';
+            statusSpan.style.color = 'rgb(var(--hiive-green))';
+          } else if (data.generated_by === 'fallback') {
+            statusSpan.textContent = '✓ Generated (LLM unavailable)';
+            statusSpan.style.color = 'rgb(var(--text-secondary))';
+          } else {
+            statusSpan.textContent = '✓ Generated';
+            statusSpan.style.color = 'rgb(var(--hiive-green))';
+          }
+
+          // Hide status after 3 seconds
+          setTimeout(() => {
+            statusSpan.style.display = 'none';
+          }, 3000);
+        } else {
+          statusSpan.textContent = '✗ Failed';
+          statusSpan.style.color = 'rgb(var(--secondary-color))';
+          showMessage('error', data.error || 'Failed to generate commit message');
+        }
+      } catch (error) {
+        statusSpan.textContent = '✗ Error';
+        statusSpan.style.color = 'rgb(var(--secondary-color))';
+        showMessage('error', `Failed to suggest commit message: ${error.message}`);
+      } finally {
+        suggestBtn.disabled = false;
+      }
+    });
+
+    // Modify loadGitStatus to cache files
+    async function loadGitStatus() {
+      try {
+        const response = await fetch('/api/git/status');
+        const data = await response.json();
+
+        if (data.error) {
+          showMessage('error', data.error);
+          return;
+        }
+
+        // Cache files for suggest endpoint
+        cachedFiles = data.files || [];
+
+        // Update branch info
+        document.getElementById('branch-info').textContent = `Branch: ${data.branch}`;
+
+        // Update status content
+        const statusContent = document.getElementById('status-content');
+        if (!data.hasChanges) {
+          statusContent.innerHTML = '<p class="no-changes">✓ No changes to commit</p>';
+          document.getElementById('deploy-form').style.display = 'none';
+        } else {
+          let html = '<ul class="file-list">';
+          data.files.forEach(file => {
+            // Map git status codes to readable indicators and tooltips
+            let statusLabel, statusClass, statusTooltip;
+
+            if (file.status.includes('M')) {
+              statusLabel = 'M';
+              statusClass = 'status-modified';
+              statusTooltip = 'Modified';
+            } else if (file.status.includes('A')) {
+              statusLabel = 'A';
+              statusClass = 'status-added';
+              statusTooltip = 'Added (staged)';
+            } else if (file.status.includes('D')) {
+              statusLabel = 'D';
+              statusClass = 'status-deleted';
+              statusTooltip = 'Deleted';
+            } else if (file.status.includes('R')) {
+              statusLabel = 'R';
+              statusClass = 'status-renamed';
+              statusTooltip = 'Renamed';
+            } else if (file.status.includes('??')) {
+              statusLabel = 'U';
+              statusClass = 'status-untracked';
+              statusTooltip = 'Untracked (new file)';
+            } else {
+              statusLabel = file.status;
+              statusClass = '';
+              statusTooltip = 'Unknown status';
+            }
+
+            html += `<li><span class="file-status ${statusClass}" title="${statusTooltip}">${statusLabel}</span> ${file.file}</li>`;
+          });
+          html += '</ul>';
+          statusContent.innerHTML = html;
+          document.getElementById('deploy-form').style.display = 'block';
+
+          // Update scroll fade indicators after content is loaded
+          updateScrollFades();
+        }
+      } catch (error) {
+        showMessage('error', `Failed to load git status: ${error.message}`);
+      }
+    }
+
+    // Update scroll fade visibility based on scroll position
+    function updateScrollFades() {
+      const statusContent = document.getElementById('status-content');
+      const wrapper = document.querySelector('.status-content-wrapper');
+
+      if (!statusContent || !wrapper) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = statusContent;
+      const isScrollable = scrollHeight > clientHeight;
+      const isAtTop = scrollTop === 0;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      // Show bottom fade if scrollable and not at bottom
+      if (isScrollable && !isAtBottom) {
+        wrapper.classList.add('show-bottom-fade');
+      } else {
+        wrapper.classList.remove('show-bottom-fade');
+      }
+
+      // Show top fade if scrolled down from top
+      if (isScrollable && !isAtTop) {
+        wrapper.classList.add('show-top-fade');
+      } else {
+        wrapper.classList.remove('show-top-fade');
+      }
+    }
+
+    // Listen for scroll events on status content
+    document.addEventListener('DOMContentLoaded', () => {
+      const statusContent = document.getElementById('status-content');
+      if (statusContent) {
+        statusContent.addEventListener('scroll', updateScrollFades);
+      }
+    });
+
     // Handle test build button (only if it exists)
     const testBuildBtn = document.getElementById('testBuildBtn');
     if (testBuildBtn) {
@@ -450,6 +667,12 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
         buildOutput.classList.remove('show', 'success', 'error');
         buildOutput.textContent = '';
 
+        // Hide download link initially
+        const downloadSection = document.getElementById('build-log-download');
+        if (downloadSection) {
+          downloadSection.style.display = 'none';
+        }
+
         try {
           // Call the local API which coordinates with the build service
           const response = await fetch('/api/git/build', {
@@ -461,8 +684,8 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
 
           const data = await response.json();
 
-          // Show build output
-          buildOutput.textContent = data.output || '';
+          // Show build output with close button
+          buildOutput.innerHTML = `<button class="build-output-close" onclick="document.getElementById('build-output').classList.remove('show')">✕</button>${data.output || ''}`;
           buildOutput.classList.add('show');
 
           if (data.success) {
@@ -471,6 +694,15 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
           } else {
             buildOutput.classList.add('error');
             showMessage('error', data.error || 'Build failed', false);
+          }
+
+          // Show download link if log file is available
+          if (data.log_file && downloadSection) {
+            const downloadLink = document.getElementById('build-log-link');
+            if (downloadLink) {
+              downloadLink.href = `/api/git/build-log/${data.log_file}`;
+              downloadSection.style.display = 'block';
+            }
           }
         } catch (error) {
           buildOutput.textContent = `Failed to run build: ${error.message}`;

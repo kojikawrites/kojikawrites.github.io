@@ -2,14 +2,20 @@
 interface Props {
     postCount: number,
     postsPerPage?: number,
+    currentPage?: number,
     class?: string,
     archiveHref?: string,
 }
 
 const { postCount,
     postsPerPage=Number.MAX_VALUE,
+    currentPage=1,
     class:className="post-count",
     archiveHref = "/blog/archive"} = Astro.props;
+
+// Calculate the range of posts shown on this page
+const startPost = (currentPage - 1) * postsPerPage + 1;
+const endPost = Math.min(currentPage * postsPerPage, postCount);
 
 ---
 <div class={className}>
@@ -20,7 +26,10 @@ const { postCount,
     }
     {postCount > postsPerPage &&
         <div>
-            The most recent {postsPerPage} posts are listed below.
+            {currentPage === 1
+                ? `The most recent ${postsPerPage} posts are listed below.`
+                : `Showing posts ${startPost}-${endPost} of ${postCount}.`
+            }
             To view the complete archive of {postCount} posts, click
             <a class="blog-archive-link inline relative" href={archiveHref}>here</a>.
         </div>

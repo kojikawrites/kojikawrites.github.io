@@ -12,7 +12,7 @@ const fbAppId = siteConfig.facebook.app_id;
 const href = import.meta.env.DEV
     ? `${import.meta.env.SITE}/test/`
     : Astro.request.url.toString();
-console.log("FB-URL:", href);
+// console.log("FB-URL:", href);
 
 ---
 { siteConfig.facebook.include &&
@@ -41,7 +41,7 @@ console.log("FB-URL:", href);
             function setTheme()   {
                 const fbComments = document.querySelectorAll('[data-colorscheme]');
                 const theme = getActiveTheme();
-                console.log('FacebookThemeController.setTheme', theme);
+                // console.log('FacebookThemeController.setTheme', theme);
                 fbComments.forEach((fbComment: HTMLElement) => {
                     if (fbComment.dataset.colorscheme !== theme) {
                         fbComment.dataset.colorscheme = theme;
@@ -65,7 +65,7 @@ console.log("FB-URL:", href);
             const darkModeMediaQueryFC = window.matchMedia('(prefers-color-scheme: dark)');
             darkModeMediaQueryFC.addEventListener('change', () => {
                 const themeSet = localStorage.getItem('themeSet');
-                console.log('FacebookThemeController.setTheme', themeSet);
+                // console.log('FacebookThemeController.setTheme', themeSet);
                 if (!themeSet) {
                     setTheme();
                 }

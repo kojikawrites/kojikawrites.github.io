@@ -5,6 +5,7 @@
   "scripts": {
     "predev": "NODE_ENV='production' npx tsx src/build/generateKeystaticData.ts && NODE_ENV='production' npx tsx src/build/generateNavMenu.ts",
     "dev": "NODE_ENV='development' astro dev",
+    "force-dev": "npm run dev -- --force",
     "start": "NODE_ENV='development' astro dev --host",
     "prebuild": "NODE_ENV='production' npx tsx src/build/generateKeystaticData.ts && NODE_ENV='production' npx tsx src/build/generateNavMenu.ts",
     "build": "NODE_ENV='production' astro build",

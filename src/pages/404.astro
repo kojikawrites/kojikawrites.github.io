@@ -69,7 +69,7 @@ const allPostPaths = (await getPosts()).map((p: any) => siteConfig.blog.prefix +
     const dataEl = document.getElementById('all-post-paths');
 
     const allPostPaths:string[] = dataEl.dataset.postPaths.split(',');
-    console.log(allPostPaths);
+    // console.log(allPostPaths);
 
     function checkForRedirect(paths) {
         const url = window.location.href.replace(/^.*?:\/\/[^/]+/, '');

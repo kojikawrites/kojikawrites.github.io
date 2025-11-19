@@ -15,9 +15,10 @@ COPY package*.json ./
 # Install dependencies (these will be in the image as a fallback)
 RUN npm ci
 
-# Copy and set up entrypoint script
+# Copy and set up scripts
 COPY docker/scripts/container/astro-entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY docker/scripts/container/generate-ssl-cert.sh /usr/local/bin/generate-ssl-cert.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/generate-ssl-cert.sh
 
 # Expose Astro dev server port
 EXPOSE 4321

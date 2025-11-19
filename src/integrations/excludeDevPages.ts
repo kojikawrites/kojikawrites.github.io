@@ -37,8 +37,22 @@ function loadSiteConfig(siteCode: string): any {
 }
 
 /**
+ * Framework-level dev-only directories
+ * These are ALWAYS excluded from production builds
+ */
+const FRAMEWORK_DEV_DIRS = [
+  'admin',    // Admin dashboard
+  'api',  // Git operations (build, push, status)
+  'edit',     // Content editing UI
+];
+
+/**
  * Astro integration to exclude dev-only pages from production builds
- * Removes built pages from dist directory after build based on site config
+ * Removes built pages from dist directory after build
+ *
+ * Excludes:
+ * 1. Framework dev directories (always excluded)
+ * 2. Site-specific directories (from site.yaml build.exclude_from_production)
  */
 export default function excludeDevPages(): AstroIntegration {
   return {
@@ -52,19 +66,32 @@ export default function excludeDevPages(): AstroIntegration {
 
         const siteCode = getSiteCode();
         const siteConfig = loadSiteConfig(siteCode);
-        const excludeDirs = siteConfig?.build?.exclude_from_production || [];
+        const siteExcludeDirs = siteConfig?.build?.exclude_from_production || [];
 
-        if (excludeDirs.length === 0) {
+        // Combine framework and site-specific exclusions
+        const allExcludeDirs = [
+          ...FRAMEWORK_DEV_DIRS,
+          ...siteExcludeDirs,
+        ];
+
+        // Remove duplicates
+        const uniqueExcludeDirs = [...new Set(allExcludeDirs)];
+
+        if (uniqueExcludeDirs.length === 0) {
           console.log('ℹ️  No directories configured for exclusion');
           return;
         }
 
         console.log('🚫 Excluding dev-only pages from production build...');
+        console.log(`   Framework exclusions: ${FRAMEWORK_DEV_DIRS.join(', ')}`);
+        if (siteExcludeDirs.length > 0) {
+          console.log(`   Site exclusions: ${siteExcludeDirs.join(', ')}`);
+        }
 
-        for (const dirName of excludeDirs) {
+        for (const dirName of uniqueExcludeDirs) {
           const distPath = path.join(dir.pathname, dirName);
           if (fs.existsSync(distPath)) {
-            console.log(`   Removing: ${path.relative(process.cwd(), distPath)}`);
+            console.log(`   ✓ Removing: ${path.relative(process.cwd(), distPath)}`);
             fs.rmSync(distPath, { recursive: true, force: true });
           }
         }

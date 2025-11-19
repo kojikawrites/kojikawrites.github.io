@@ -2,7 +2,7 @@ export function getActiveTheme(defaultTheme: string = 'light'): string {
     // Check if localStorage is available and retrieve the stored theme
     const storedTheme: string | null = typeof localStorage !== 'undefined' ? localStorage.getItem('theme') : null;
     const isThemeSet: string | null = typeof localStorage !== 'undefined' ? localStorage.getItem('themeSet') : null;
-    console.log('getActiveTheme: ', isThemeSet);
+    // console.log('getActiveTheme: ', isThemeSet);
     if (isThemeSet && storedTheme !== null) {
         return storedTheme;
     }

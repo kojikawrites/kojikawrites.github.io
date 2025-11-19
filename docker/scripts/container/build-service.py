@@ -194,9 +194,9 @@ async def git_status():
 
         branch = branch_result.stdout.strip()
 
-        # Get working tree status
+        # Get working tree status with rename/move detection
         status_result = subprocess.run(
-            ['git', 'status', '--porcelain'],
+            ['git', 'status', '--porcelain', '--find-renames'],
             cwd=str(source_dir),
             capture_output=True,
             text=True,
@@ -218,8 +218,18 @@ async def git_status():
             for line in status_output.split('\n'):
                 if line:
                     status = line[:2]
-                    file = line[2:].strip()
-                    files.append({'status': status, 'file': file})
+                    file_part = line[2:].strip()
+
+                    # Handle renames (R) and copies (C) which have format "old -> new"
+                    if status[0] in ['R', 'C'] and ' -> ' in file_part:
+                        old_file, new_file = file_part.split(' -> ', 1)
+                        files.append({
+                            'status': status,
+                            'file': new_file,
+                            'oldFile': old_file
+                        })
+                    else:
+                        files.append({'status': status, 'file': file_part})
 
         # Check if branch is ahead of remote
         commits_ahead = 0

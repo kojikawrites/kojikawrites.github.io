@@ -1,7 +1,10 @@
 {
   "extends": "astro/tsconfigs/base",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  "exclude": [
+    "dist",
+    "src/components/editor/**/*"
+  ],
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",

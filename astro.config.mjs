@@ -15,7 +15,6 @@ import pagefind from "astro-pagefind";
 // import frontmatter from "/src/build/extractPagesFrontMatter.ts"; // DO NOT DELETE
 import siteLogos from "/src/build/extractDateLogoMap.ts" // DO NOT DELETE
 import keystatic from '@keystatic/astro';
-import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import fs from 'fs';
@@ -331,7 +330,6 @@ export default defineConfig({
             },
             hmr: {
                 // Configure HMR for docker environment
-                // Check if we're running in docker by looking for HOSTNAME env var or docker-specific indicators
                 clientPort: process.env.VITE_HMR_PORT ? parseInt(process.env.VITE_HMR_PORT) : undefined,
                 host: process.env.VITE_HMR_HOST || undefined,
             }
@@ -340,7 +338,30 @@ export default defineConfig({
             excludeNonMatchingSites(getSiteCode()), // Exclude non-matching .sites directories
             multiPublicPlugin(), // Must be first to intercept requests before Astro routing
             yaml(),
-            ...(process.env.NODE_ENV === 'development' ? [basicSsl()] : []),
+            // Use custom SSL certificates in development
+            ...(process.env.NODE_ENV === 'development' ? [{
+                name: 'custom-ssl',
+                config: () => ({
+                    server: {
+                        https: (() => {
+                            const certPath = '.ssl/server.crt';
+                            const keyPath = '.ssl/server.key';
+
+                            // Check if cert files exist
+                            if (fs.existsSync(certPath) && fs.existsSync(keyPath)) {
+                                return {
+                                    cert: fs.readFileSync(certPath),
+                                    key: fs.readFileSync(keyPath)
+                                };
+                            }
+
+                            // Fall back to self-signed if certs don't exist yet
+                            console.warn('⚠️  SSL certificates not found. Container will generate them on startup.');
+                            return true; // Use Vite's built-in self-signed cert as fallback
+                        })()
+                    }
+                })
+            }] : []),
             // Exclude dev-only pages from production builds completely
             ...((() => {
                 processDevOnlyMarkers()

@@ -3,6 +3,11 @@ set -e
 
 echo "🚀 Starting blog-dev container..."
 
+# Generate SSL certificates if they don't exist
+if [ -f /usr/local/bin/generate-ssl-cert.sh ]; then
+    /usr/local/bin/generate-ssl-cert.sh
+fi
+
 # Container maintains its own package-lock.json in the node_modules volume
 # This prevents conflicts between host (macOS) and container (Linux) lock files
 PACKAGE_JSON="/app/package.json"

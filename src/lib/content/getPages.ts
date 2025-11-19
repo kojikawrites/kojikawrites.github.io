@@ -12,10 +12,10 @@ export default async function getPages() {
     // Use siteGlob with the glob function (for caching and filtering)
     const globResult = await siteGlob({
         siteCode: getSiteCode(),
-        type: 'custom',
+        type: 'pages',
         globFilter: pagesFilter,
     });
-    console.log(globResult);
+    // console.log(globResult);
     // Use shared content filter for additional processing (slugs)
     const filteredContent = filterContent(globResult as Record<string, any>, {
         basePath: '.sites',
@@ -23,6 +23,6 @@ export default async function getPages() {
         filterDrafts: false,
         filterTest: false,
     });
-    console.log(filteredContent);
+    // console.log(filteredContent);
     return filteredContent;
 }

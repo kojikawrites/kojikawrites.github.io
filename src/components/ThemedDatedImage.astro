@@ -110,7 +110,7 @@ function getValueOrFirstAltText<T>(dict: {
 const themedImgId = id ?? getSafeId(`themed-image-${className}-${alt}`);
 const themedImageGlobs = buildSrcList(srcList, srcString, ['dark', 'light'])
 // console.log('themedDatedImageGlobs', Object.keys(themedImageGlobs));
-console.log('themedImgId', themedImgId);
+// console.log('themedImgId', themedImgId);
 ---
 
 <themed-dated-image-data-holder id={getSafeId(id)} data-themed-img-id={themedImgId}>
@@ -134,8 +134,8 @@ console.log('themedImgId', themedImgId);
         // Only override in dev mode and if a test date is provided
         const isDev = import.meta.env.DEV;
         const override = import.meta.env.PUBLIC_LOGO_TEST_DATE;
-        console.warn(isDev, override)
-        console.warn("PUBLIC_LOGO_TEST_DATE:", import.meta.env.PUBLIC_LOGO_TEST_DATE);
+        // console.warn(isDev, override)
+        // console.warn("PUBLIC_LOGO_TEST_DATE:", import.meta.env.PUBLIC_LOGO_TEST_DATE);
         if (isDev && override) {
             const [year, month, day] = override.split("-");
             if (year && month && day) {
@@ -185,7 +185,7 @@ console.log('themedImgId', themedImgId);
                         break;
                     }
                 }
-                console.log('themedDataKey', themedDataKey);
+                // console.log('themedDataKey', themedDataKey);
                 // console.log('themedDateKeys', themedDateKeys);
                 // alert(theme, themedImgId);
                 themedImgs.forEach((img: HTMLElement) => {
@@ -215,7 +215,7 @@ console.log('themedImgId', themedImgId);
             const darkModeMediaQueryTI = window.matchMedia('(prefers-color-scheme: dark)');
             darkModeMediaQueryTI.addEventListener('change', () => {
                 const themeSet = localStorage.getItem('themeSet');
-                console.log('ThemedImage: themeSet', themeSet);
+                // console.log('ThemedImage: themeSet', themeSet);
                 if (!themeSet) {
                     setThemedDatedImage();
                 }

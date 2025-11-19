@@ -217,4 +217,5 @@ docker network create "${DOCKER_BLOG_CODE}-network" 2>/dev/null || true
 docker volume create "${DOCKER_BLOG_CODE}-dev-workspace" 2>/dev/null || true
 docker volume create --driver local --opt type=tmpfs --opt device=tmpfs --opt o=size=8g,uid=1000 "${DOCKER_BLOG_CODE}-build-workspace" 2>/dev/null || true
 docker volume create "blog-ollama-models" 2>/dev/null || true
+docker volume create "blog-ssl-certs" 2>/dev/null || true
 docker compose ${COMPOSE_FILES} -p "${DOCKER_BLOG_CODE}" up --build -d
