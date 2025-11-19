@@ -47,12 +47,12 @@ export function getAdminMenuInfo(currentPath: string): DevMenuInfo {
       }
     }
   }
-  // For homepage
+  // For homepage (maps to 'home' in Keystatic)
   else if (currentPath === '/') {
-    const indexFile = resolve(pagesPath, 'index.mdx');
-    if (existsSync(indexFile)) {
+    const homeFile = resolve(pagesPath, 'home.mdx');
+    if (existsSync(homeFile)) {
       hasKeystatic = true;
-      editUrl = '/keystatic/collection/pages/item/index';
+      editUrl = '/keystatic/collection/pages/item/home';
     }
   }
 
