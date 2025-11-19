@@ -24,7 +24,7 @@ export const GET: APIRoute = async () => {
       status: 200,
       headers: {
         'Content-Type': 'application/x-pem-file',
-        'Content-Disposition': 'attachment; filename="astro-blog-ca.crt"'
+        'Content-Disposition': `attachment"`
       }
     });
   } catch (error) {

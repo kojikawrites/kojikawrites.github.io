@@ -1,0 +1,204 @@
+---
+import { getAdminMenuInfo } from '../lib/utils/adminMenuUtils';
+// Admin floating menu for quick access to admin tools
+// Only shown in development mode
+const isDev = import.meta.env.DEV;
+if (!isDev) return null;
+
+// Determine the edit URL based on the current page
+const currentPath = Astro.url.pathname;
+
+const { editUrl, hasKeystatic } = getAdminMenuInfo(currentPath);
+---
+
+{isDev && (
+<div class="admin-menu">
+    <a href={editUrl} class:list={['admin-menu-item', { disabled: !hasKeystatic }]} title={hasKeystatic ? "Edit Content" : "No Keystatic entry for this page"} data-disabled={!hasKeystatic}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+    </a>
+    <a href="/admin/deploy" class="admin-menu-item" title="Deploy">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 16 12 12 8 16"></polyline>
+            <line x1="12" y1="12" x2="12" y2="21"></line>
+            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+        </svg>
+    </a>
+</div>
+    )}
+
+<script is:inline>
+    // Setup function to initialize admin menu behavior
+    function setupAdminMenu() {
+        const adminMenu = document.querySelector('.admin-menu');
+        if (!adminMenu) return;
+
+        let hideTimeout = null;
+
+        const showMenu = () => {
+            if (hideTimeout) {
+                clearTimeout(hideTimeout);
+                hideTimeout = null;
+            }
+            adminMenu.classList.add('show');
+        };
+
+        const scheduleHide = () => {
+            hideTimeout = window.setTimeout(() => {
+                adminMenu.classList.remove('show');
+                hideTimeout = null;
+            }, 500); // 0.5 second delay
+        };
+
+        // Remove any existing listeners (cleanup)
+        const oldListeners = adminMenu._adminMenuListeners;
+        if (oldListeners) {
+            adminMenu.removeEventListener('mouseenter', oldListeners.showMenu);
+            adminMenu.removeEventListener('mouseleave', oldListeners.scheduleHide);
+        }
+
+        // Add new listeners
+        adminMenu.addEventListener('mouseenter', showMenu);
+        adminMenu.addEventListener('mouseleave', scheduleHide);
+
+        // Store listeners for cleanup
+        adminMenu._adminMenuListeners = { showMenu, scheduleHide };
+
+        // Prevent navigation on disabled edit button
+        const editButton = adminMenu.querySelector('[data-disabled="true"]');
+        if (editButton) {
+            editButton.addEventListener('click', (e) => {
+                e.preventDefault();
+            });
+        }
+
+        // Recalculate position to prevent off-screen menu
+        const checkPosition = () => {
+            // Reset inline styles first to get accurate measurements
+            adminMenu.style.bottom = '';
+            adminMenu.style.right = '';
+
+            const rect = adminMenu.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const viewportWidth = window.innerWidth;
+
+            // Check if menu is off-screen vertically
+            if (rect.bottom > viewportHeight) {
+                const overflow = rect.bottom - viewportHeight;
+                adminMenu.style.bottom = `${20 + overflow + 10}px`;
+            }
+
+            // Check if menu is off-screen horizontally (shouldn't happen but just in case)
+            if (rect.right > viewportWidth) {
+                adminMenu.style.right = '20px';
+            }
+        };
+
+        // Check position on load and resize
+        checkPosition();
+        window.addEventListener('resize', checkPosition);
+    }
+
+    // Run on initial load
+    setupAdminMenu();
+
+    // Re-run after view transitions
+    document.addEventListener('astro:after-swap', setupAdminMenu);
+</script>
+
+<style>
+    .admin-menu {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 9999;
+        /* Keep 1/3 visible when hidden (slide away 2/3) */
+        transform: translateX(calc(66.67% + 20px));
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .admin-menu.show {
+        transform: translateX(0);
+    }
+
+    .admin-menu::before {
+        content: '';
+        position: absolute;
+        right: 100%;
+        top: 0;
+        bottom: 0;
+        width: 40px;
+    }
+
+    .admin-menu-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        color: white;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .admin-menu-item:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .admin-menu-item:active {
+        transform: scale(0.95);
+    }
+
+    .admin-menu-item svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Tooltip on hover */
+    .admin-menu-item::after {
+        content: attr(title);
+        position: absolute;
+        right: calc(100% + 12px);
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .admin-menu-item:hover::after {
+        opacity: 1;
+    }
+
+    /* Disabled state */
+    .admin-menu-item.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        background: linear-gradient(135deg, #999 0%, #666 100%);
+    }
+
+    .admin-menu-item.disabled:hover {
+        transform: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .admin-menu-item.disabled:active {
+        transform: none;
+    }
+</style>

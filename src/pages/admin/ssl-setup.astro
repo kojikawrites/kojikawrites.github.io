@@ -7,6 +7,14 @@ const userAgent = Astro.request.headers.get('user-agent') || '';
 const isMac = /Mac|iPhone|iPad/.test(userAgent);
 const isWindows = /Windows/.test(userAgent);
 const isLinux = !isMac && !isWindows;
+
+// Get hostname for display
+const hostname = (import.meta.env.VITE_HMR_HOST || 'localhost')
+  .replace(/^https?:\/\//, '')
+  .replace(/\/.*$/, '')
+  .replace(/:.*$/, '');
+const safeHostname = hostname.replace(/[^a-zA-Z0-9._-]/g, '-');
+const certFilename = `${safeHostname}-ca.crt`;
 ---
 
 <html lang="en">
@@ -169,23 +177,23 @@ const isLinux = !isMac && !isWindows;
     <div class="step">
       <h2>Step 1: Download the Certificate</h2>
       <p>Click the button below to download the CA certificate to your computer:</p>
-      <a href="/api/ssl/ca-certificate" class="download-btn" download>⬇️ Download CA Certificate</a>
-      <p><small>The file will be named <code>astro-blog-ca.crt</code></small></p>
+      <a href="/api/ssl/ca-certificate" class="download-btn" download={certFilename}>⬇️ Download CA Certificate</a>
+      <p><small>The file will be named <code>{certFilename}</code></small></p>
     </div>
 
     <div class="step">
       <h2>Step 2: Trust the Certificate</h2>
 
       <div class="os-tabs">
-        <button class="os-tab {isMac ? 'active' : ''}" data-os="mac">macOS</button>
-        <button class="os-tab {isWindows ? 'active' : ''}" data-os="windows">Windows</button>
-        <button class="os-tab {isLinux ? 'active' : ''}" data-os="linux">Linux</button>
+        <button class:list={['os-tab', { active: isMac }]} data-os="mac">macOS</button>
+        <button class:list={['os-tab', { active: isWindows }]} data-os="windows">Windows</button>
+        <button class:list={['os-tab', { active: isLinux }]} data-os="linux">Linux</button>
       </div>
 
-      <div class="os-content {isMac ? 'active' : ''}" data-os="mac">
+      <div class:list={['os-content', { active: isMac }]} data-os="mac">
         <h3>For macOS:</h3>
         <ol>
-          <li>Double-click the downloaded <code>astro-blog-ca.crt</code> file</li>
+          <li>Double-click the downloaded certificate file, <code>{certFilename}</code></li>
           <li>Keychain Access will open - select "System" keychain</li>
           <li>Click "Add" to import the certificate</li>
           <li>Find the certificate (named "Astro Blog Development CA") in the list</li>
@@ -195,10 +203,10 @@ const isLinux = !isMac && !isWindows;
         </ol>
       </div>
 
-      <div class="os-content {isWindows ? 'active' : ''}" data-os="windows">
+      <div class:list={['os-content', { active: isWindows }]} data-os="windows">
         <h3>For Windows:</h3>
         <ol>
-          <li>Double-click the downloaded <code>astro-blog-ca.crt</code> file</li>
+          <li>Double-click the downloaded certificate file, <code>{certFilename}</code></li>
           <li>Click "Install Certificate..."</li>
           <li>Select "Current User" or "Local Machine" and click "Next"</li>
           <li>Choose "Place all certificates in the following store"</li>
@@ -208,11 +216,11 @@ const isLinux = !isMac && !isWindows;
         </ol>
       </div>
 
-      <div class="os-content {isLinux ? 'active' : ''}" data-os="linux">
+      <div class:list={['os-content', { active: isLinux }]} data-os="linux">
         <h3>For Linux:</h3>
         <p>Open a terminal and run these commands:</p>
         <div class="code-block">
-          <code>sudo cp ~/Downloads/astro-blog-ca.crt /usr/local/share/ca-certificates/</code><br>
+          <code>sudo cp ~/Downloads/{certFilename} /usr/local/share/ca-certificates/</code><br>
           <code>sudo update-ca-certificates</code>
         </div>
         <p>Then restart your browser.</p>

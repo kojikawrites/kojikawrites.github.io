@@ -48,17 +48,19 @@ const FRAMEWORK_DEV_DIRS = [
 
 /**
  * Astro integration to exclude dev-only pages from production builds
- * Removes built pages from dist directory after build
+ * Prevents building and removes pages from dist directory
  *
  * Excludes:
  * 1. Framework dev directories (always excluded)
  * 2. Site-specific directories (from site.yaml build.exclude_from_production)
  */
 export default function excludeDevPages(): AstroIntegration {
+  let excludeDirs: string[] = [];
+
   return {
     name: 'exclude-dev-pages',
     hooks: {
-      'astro:build:done': async ({ dir }) => {
+      'astro:config:setup': ({ config }) => {
         // Only run in production builds
         if (process.env.NODE_ENV !== 'production') {
           return;
@@ -74,11 +76,10 @@ export default function excludeDevPages(): AstroIntegration {
           ...siteExcludeDirs,
         ];
 
-        // Remove duplicates
-        const uniqueExcludeDirs = [...new Set(allExcludeDirs)];
+        // Remove duplicates and store for use in other hooks
+        excludeDirs = [...new Set(allExcludeDirs)];
 
-        if (uniqueExcludeDirs.length === 0) {
-          console.log('ℹ️  No directories configured for exclusion');
+        if (excludeDirs.length === 0) {
           return;
         }
 
@@ -87,11 +88,19 @@ export default function excludeDevPages(): AstroIntegration {
         if (siteExcludeDirs.length > 0) {
           console.log(`   Site exclusions: ${siteExcludeDirs.join(', ')}`);
         }
+      },
 
-        for (const dirName of uniqueExcludeDirs) {
+      'astro:build:done': async ({ dir }) => {
+        // Only run in production builds
+        if (process.env.NODE_ENV !== 'production') {
+          return;
+        }
+
+        // Clean up built files from excluded directories
+        for (const dirName of excludeDirs) {
           const distPath = path.join(dir.pathname, dirName);
           if (fs.existsSync(distPath)) {
-            console.log(`   ✓ Removing: ${path.relative(process.cwd(), distPath)}`);
+            console.log(`   ✓ Removing from dist: ${path.relative(process.cwd(), distPath)}`);
             fs.rmSync(distPath, { recursive: true, force: true });
           }
         }

@@ -12,7 +12,6 @@ const permalink = Astro.url.pathname;
 const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.env.SHOW_TEST_BUILD === true;
 ---
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <BaseHead title={title} description={description} permalink={permalink} />
@@ -291,8 +290,7 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     .build-output {
       background: rgb(var(--background-mid));
       color: rgb(var(--text-main));
-      padding: 1rem;
-      padding-right: 3rem;
+      padding: 1rem 3rem 1rem 1rem;
       border-radius: 4px;
       font-family: 'Courier New', Courier, monospace;
       font-size: 0.85rem;

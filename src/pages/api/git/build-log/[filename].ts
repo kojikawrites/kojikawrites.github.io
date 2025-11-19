@@ -1,8 +1,13 @@
-import type { APIRoute } from 'astro';
+ import type { APIRoute } from 'astro';
 
 // the following line will be automatically commented out
 // by the build process for production builds.
 export const prerender = false; // ![DEV-ONLY]
+
+// Required for static builds - this page is excluded from production anyway
+export async function getStaticPaths() {
+  return [];
+}
 
 export const GET: APIRoute = async ({ params }) => {
   const { filename } = params;
