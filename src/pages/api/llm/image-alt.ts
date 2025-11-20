@@ -21,7 +21,7 @@ import { LLMError } from '../../../lib/services/llm/types';
 
 // the following line will be automatically commented out
 // by the build process for production builds.
-export const prerender = false; // ![DEV-ONLY]
+// export const prerender = false; // ![DEV-ONLY]
 
 const MODE_PROMPTS = {
   alt: `Describe this image concisely for use as HTML alt text. Focus on:

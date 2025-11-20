@@ -168,6 +168,29 @@ async def ping():
     }, status_code=200)
 
 
+@app.get("/deploy-config")
+async def get_deploy_config():
+    """
+    Get deployment configuration from environment variables.
+    Returns deployment target and wisp configuration if applicable.
+    """
+    deploy_target = os.getenv('DEPLOY_TARGET', 'github').lower()
+
+    config = {
+        'target': deploy_target
+    }
+
+    # Add wisp configuration if target is wisp
+    if deploy_target == 'wisp':
+        config['wisp'] = {
+            'handle': os.getenv('WISP_HANDLE', ''),
+            'app_password': os.getenv('WISP_APP_PASSWORD', ''),
+            'site_name': os.getenv('WISP_SITE_NAME', '') or get_site_code()
+        }
+
+    return JSONResponse(config)
+
+
 @app.get("/git-status")
 async def git_status():
     """
@@ -194,6 +217,42 @@ async def git_status():
 
         branch = branch_result.stdout.strip()
 
+        # Get site code and submodule path
+        site_code = get_site_code()
+        submodule_path = get_submodule_path(site_code)
+        submodule_full_path = source_dir / submodule_path
+
+        # Get repo names from git remotes
+        def get_repo_name(repo_path):
+            """Extract just the repo name (without owner) from git remote URL."""
+            try:
+                result = subprocess.run(
+                    ['git', 'remote', 'get-url', 'origin'],
+                    cwd=str(repo_path),
+                    capture_output=True,
+                    text=True,
+                    timeout=5
+                )
+                if result.returncode == 0:
+                    url = result.stdout.strip()
+                    # Extract repo name from URL (e.g., github.com/owner/repo.git -> repo)
+                    # Handle both SSH and HTTPS URLs
+                    import re
+                    # Try to extract owner/repo pattern, then take just the repo part
+                    match = re.search(r'[:/][^/]+/([^/]+?)(\.git)?$', url)
+                    if match:
+                        return match.group(1).replace('.git', '')
+            except Exception as e:
+                print(f"[GIT-STATUS] Error getting repo name for {repo_path}: {e}", flush=True)
+            return None
+
+        main_repo_name = get_repo_name(source_dir) or 'main'
+        submodule_repo_name = site_code  # Default to site_code
+        if submodule_full_path.exists() and (submodule_full_path / '.git').exists():
+            submodule_repo_name = get_repo_name(submodule_full_path) or site_code
+
+        print(f"[GIT-STATUS] Main repo: {main_repo_name}, Submodule repo: {submodule_repo_name}", flush=True)
+
         # Get working tree status with rename/move detection
         status_result = subprocess.run(
             ['git', 'status', '--porcelain', '--find-renames'],
@@ -210,9 +269,8 @@ async def git_status():
             }, status_code=500)
 
         status_output = status_result.stdout.strip()
-        has_changes = bool(status_output)
 
-        # Parse status output
+        # Parse main repo status
         files = []
         if status_output:
             for line in status_output.split('\n'):
@@ -220,16 +278,70 @@ async def git_status():
                     status = line[:2]
                     file_part = line[2:].strip()
 
+                    # Skip the submodule reference itself - we'll get actual submodule files separately
+                    if file_part == submodule_path:
+                        continue
+
                     # Handle renames (R) and copies (C) which have format "old -> new"
                     if status[0] in ['R', 'C'] and ' -> ' in file_part:
                         old_file, new_file = file_part.split(' -> ', 1)
+                        # Check if file is in submodule
+                        is_submodule = new_file.startswith(submodule_path + '/')
                         files.append({
                             'status': status,
                             'file': new_file,
-                            'oldFile': old_file
+                            'oldFile': old_file,
+                            'module': 'submodule' if is_submodule else 'main',
+                            'moduleName': submodule_repo_name if is_submodule else main_repo_name
                         })
                     else:
-                        files.append({'status': status, 'file': file_part})
+                        # Check if file is in submodule
+                        is_submodule = file_part.startswith(submodule_path + '/')
+                        files.append({
+                            'status': status,
+                            'file': file_part,
+                            'module': 'submodule' if is_submodule else 'main',
+                            'moduleName': submodule_repo_name if is_submodule else main_repo_name
+                        })
+
+        # Get submodule status separately if submodule exists
+        if submodule_full_path.exists() and (submodule_full_path / '.git').exists():
+            submodule_status_result = subprocess.run(
+                ['git', 'status', '--porcelain', '--find-renames'],
+                cwd=str(submodule_full_path),
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+
+            if submodule_status_result.returncode == 0 and submodule_status_result.stdout.strip():
+                for line in submodule_status_result.stdout.strip().split('\n'):
+                    if line:
+                        status = line[:2]
+                        file_part = line[2:].strip()
+
+                        # Prepend submodule path to file for full path
+                        full_file_path = f"{submodule_path}/{file_part}"
+
+                        # Handle renames
+                        if status[0] in ['R', 'C'] and ' -> ' in file_part:
+                            old_file, new_file = file_part.split(' -> ', 1)
+                            files.append({
+                                'status': status,
+                                'file': f"{submodule_path}/{new_file}",
+                                'oldFile': f"{submodule_path}/{old_file}",
+                                'module': 'submodule',
+                                'moduleName': submodule_repo_name
+                            })
+                        else:
+                            files.append({
+                                'status': status,
+                                'file': full_file_path,
+                                'module': 'submodule',
+                                'moduleName': submodule_repo_name
+                            })
+
+        has_changes = bool(files)
 
         # Check if branch is ahead of remote
         commits_ahead = 0
@@ -423,7 +535,7 @@ async def run_build():
             cwd=str(build_dir),
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=600,  # 10 minutes timeout
             env={**os.environ, 'NODE_ENV': 'production'}
         )
 
@@ -453,7 +565,7 @@ async def run_build():
         return JSONResponse({
             'success': False,
             'error': 'Build timeout - operation took too long',
-            'output': 'The build operation exceeded 2 minutes.'
+            'output': 'The build operation exceeded 10 minutes.'
         }, status_code=500)
 
     except Exception as e:
@@ -1212,6 +1324,101 @@ async def git_push(request: Request):
         return JSONResponse({
             'success': False,
             'error': 'Failed to commit and push',
+            'output': str(e)
+        }, status_code=500)
+
+
+@app.post("/deploy-wisp")
+async def deploy_wisp(request: Request):
+    """
+    Deploy production build to wisp.place using wisp-cli.
+    Expects JSON body with deployment configuration.
+    """
+    try:
+        body = await request.json()
+        handle = body.get('handle')
+        app_password = body.get('app_password')
+        site_name = body.get('site_name')
+
+        print(f"[WISP] Received deployment request for handle: {handle}, site: {site_name}", flush=True)
+
+        if not handle or not app_password:
+            return JSONResponse({
+                'error': 'Missing required fields: handle and app_password are required'
+            }, status_code=400)
+
+        # Default site name to site code if not provided
+        if not site_name:
+            site_name = get_site_code()
+
+        # Path to the production build output
+        # The build process creates output in /tmp/build-workspace/build/dist
+        build_output_dir = Path('/tmp/build-workspace/build/dist')
+
+        if not build_output_dir.exists():
+            return JSONResponse({
+                'error': 'Production build not found. Please run a test build first.',
+                'hint': 'Run the "Test Build" before deploying to wisp.place'
+            }, status_code=400)
+
+        print(f"[WISP] Deploying from {build_output_dir} to wisp.place...", flush=True)
+
+        # Call wisp-cli to deploy
+        # wisp-cli deploy <handle> --path <build_dir> --site <site_name> --password <app_password>
+        deploy_result = subprocess.run(
+            [
+                '/build-service/wisp-cli',
+                'deploy',
+                handle,
+                '--path', str(build_output_dir),
+                '--site', site_name,
+                '--password', app_password
+            ],
+            capture_output=True,
+            text=True,
+            timeout=120  # 2 minutes timeout for deployment
+        )
+
+        if deploy_result.returncode == 0:
+            # Construct the wisp.place URL
+            # Format: https://{site_name}.wisp.place
+            wisp_url = f"https://{site_name}.wisp.place"
+
+            print(f"[WISP] Deployment successful! Site available at: {wisp_url}", flush=True)
+
+            return JSONResponse({
+                'success': True,
+                'message': f'Successfully deployed to wisp.place',
+                'url': wisp_url,
+                'site_name': site_name,
+                'handle': handle,
+                'output': deploy_result.stdout + deploy_result.stderr
+            })
+        else:
+            # Capture full output for debugging
+            full_output = deploy_result.stdout + deploy_result.stderr
+            print(f"[WISP] Deployment failed with return code {deploy_result.returncode}", flush=True)
+            print(f"[WISP] stdout: {deploy_result.stdout}", flush=True)
+            print(f"[WISP] stderr: {deploy_result.stderr}", flush=True)
+
+            return JSONResponse({
+                'success': False,
+                'error': 'wisp.place deployment failed',
+                'output': full_output,
+                'return_code': deploy_result.returncode
+            }, status_code=500)
+
+    except subprocess.TimeoutExpired:
+        return JSONResponse({
+            'success': False,
+            'error': 'Deployment timeout - operation took too long',
+            'output': 'The deployment operation exceeded 2 minutes.'
+        }, status_code=500)
+    except Exception as e:
+        print(f"[WISP] Deployment error: {e}", flush=True)
+        return JSONResponse({
+            'success': False,
+            'error': f'Deployment error: {str(e)}',
             'output': str(e)
         }, status_code=500)
 

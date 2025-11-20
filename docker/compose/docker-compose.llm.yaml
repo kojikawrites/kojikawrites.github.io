@@ -32,20 +32,32 @@ services:
 # Docker Model Runner injects these environment variables per model:
 #   LLM_TEXT_URL / LLM_VISION_URL - endpoint URLs for the models
 #   LLM_TEXT_MODEL / LLM_VISION_MODEL - model names
+#
+# Context Size Handling:
+#   Docker Compose requires integer values for context_size, not environment variables.
+#   The docker-build.sh script automatically:
+#   1. Detects native context sizes from model metadata (via detect-model-context.sh)
+#   2. Replaces ${LLM_*_CONTEXT_SIZE} placeholders with actual integers
+#   3. Restores placeholders after build completes (via restore-model-context.sh)
+#   This allows version control to track placeholders while Docker gets integers.
 
 models:
   llm-text:
     # Text-only model for general LLM tasks (faster, smaller)
+    # Native context: ~32K tokens (llama3.1:8B-F16)
+    # Auto-replaced by detect-model-context.sh during build
     model: ${LLM_DOCKER_TEXT_MODEL:-ai/llama3.1:8B-F16}
-    context_size: 8192 #${LLM_CONTEXT_SIZE:-8192}
+    context_size: ${LLM_TEXT_CONTEXT_SIZE}
     runtime_flags:
       - "--temp"
       - ${LLM_TEMPERATURE:-0.7}
 
   llm-vision:
     # Vision-language model for image analysis and multimodal tasks
+    # Native context: ~262K tokens (qwen3-vl:8B-UD-Q4_K_XL)
+    # Auto-replaced by detect-model-context.sh during build
     model: ${LLM_DOCKER_VISION_MODEL:-ai/qwen3-vl:8B-UD-Q4_K_XL}
-    context_size: 8192 #${LLM_CONTEXT_SIZE:-8192}
+    context_size: ${LLM_VISION_CONTEXT_SIZE}
     runtime_flags:
       - "--temp"
       - ${LLM_TEMPERATURE:-0.7}

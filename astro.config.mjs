@@ -47,6 +47,7 @@ import {transformerMetaHighlight, transformerNotationHighlight} from '@shikijs/t
 import menuWatcher from './src/integrations/menuWatcher.ts';
 import excludeDevPages from './src/integrations/excludeDevPages.ts';
 import copyPublicFilesIntegration from './src/integrations/copyPublicFiles.ts';
+import cleanupSystemFiles from './src/integrations/cleanupSystemFiles.ts';
 import multiPublicPlugin from './plugins/vite-plugin-multi-public.ts';
 import excludeNonMatchingSites from './plugins/vite-plugin-exclude-sites.ts';
 
@@ -338,29 +339,39 @@ export default defineConfig({
             excludeNonMatchingSites(getSiteCode()), // Exclude non-matching .sites directories
             multiPublicPlugin(), // Must be first to intercept requests before Astro routing
             yaml(),
-            // Use custom SSL certificates in development
+            // Use custom SSL certificates only when accessing via dev site hostname (not localhost/127.0.0.1)
             ...(process.env.NODE_ENV === 'development' ? [{
                 name: 'custom-ssl',
-                config: () => ({
-                    server: {
-                        https: (() => {
-                            const certPath = '.ssl/server.crt';
-                            const keyPath = '.ssl/server.key';
+                config: () => {
+                    const hmrHost = process.env.VITE_HMR_HOST;
+                    const isLocalhost = !hmrHost || hmrHost === 'localhost' || hmrHost === '127.0.0.1';
 
-                            // Check if cert files exist
-                            if (fs.existsSync(certPath) && fs.existsSync(keyPath)) {
-                                return {
-                                    cert: fs.readFileSync(certPath),
-                                    key: fs.readFileSync(keyPath)
-                                };
-                            }
-
-                            // Fall back to self-signed if certs don't exist yet
-                            console.warn('⚠️  SSL certificates not found. Container will generate them on startup.');
-                            return true; // Use Vite's built-in self-signed cert as fallback
-                        })()
+                    // Only use custom SSL for dev site hostnames, not localhost
+                    if (isLocalhost) {
+                        return {}; // Use Vite's default SSL handling for localhost
                     }
-                })
+
+                    return {
+                        server: {
+                            https: (() => {
+                                const certPath = '.ssl/server.crt';
+                                const keyPath = '.ssl/server.key';
+
+                                // Check if cert files exist
+                                if (fs.existsSync(certPath) && fs.existsSync(keyPath)) {
+                                    return {
+                                        cert: fs.readFileSync(certPath),
+                                        key: fs.readFileSync(keyPath)
+                                    };
+                                }
+
+                                // Fall back to self-signed if certs don't exist yet
+                                console.warn('⚠️  SSL certificates not found. Container will generate them on startup.');
+                                return true; // Use Vite's built-in self-signed cert as fallback
+                            })()
+                        }
+                    };
+                }
             }] : []),
             // Exclude dev-only pages from production builds completely
             ...((() => {
@@ -383,6 +394,7 @@ export default defineConfig({
         solidJs({ include: ['**/solid/*', '**/bluesky/*'] }),
         pagefind(),
         copyPublicFilesIntegration(),
+        cleanupSystemFiles(), // Must run after copyPublicFilesIntegration
         sitemap({
             filter: (page) => {
                 // Exclude dev-only pages from sitemap

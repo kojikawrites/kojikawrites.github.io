@@ -27,7 +27,8 @@ export class DockerProvider implements LLMProvider {
   private defaultMaxTokens: number;
   private defaultTemperature: number;
   private timeout: number;
-  private contextSize: number;
+  private textContextSize: number;
+  private visionContextSize: number;
 
   constructor(config: LLMConfig) {
     // Docker Model Runner auto-injects LLM_URL
@@ -37,7 +38,8 @@ export class DockerProvider implements LLMProvider {
     this.defaultMaxTokens = config.maxTokens;
     this.defaultTemperature = config.temperature;
     this.timeout = config.timeout;
-    this.contextSize = config.contextSize;
+    this.textContextSize = config.textContextSize;
+    this.visionContextSize = config.visionContextSize;
 
     // Support both single-model and dual-model configurations
     if (config.dockerTextModel && config.dockerVisionModel) {
@@ -174,7 +176,16 @@ export class DockerProvider implements LLMProvider {
   ): Promise<string> {
     // Get effective max tokens (respects context window)
     const requestedTokens = options?.maxTokens || this.defaultMaxTokens;
-    const effectiveMaxTokens = getEffectiveMaxTokens(this.contextSize, requestedTokens);
+
+    // Determine which context size to use based on the model
+    const isVisionModel = model === this.visionModel;
+    const contextSize = isVisionModel ? this.visionContextSize : this.textContextSize;
+
+    // If contextSize is 0 or not set, use requested tokens directly
+    // (Docker Model Runner handles context window automatically)
+    const effectiveMaxTokens = (!contextSize || contextSize === 0)
+      ? requestedTokens
+      : getEffectiveMaxTokens(contextSize, requestedTokens);
 
     try {
       // baseUrl might already include /v1/ or /engines/v1/ path
@@ -198,8 +209,27 @@ export class DockerProvider implements LLMProvider {
       });
 
       if (!response.ok) {
-        const error = await response.text();
-        throw new Error(`Docker Model Runner API error: ${response.status} - ${error}`);
+        const errorText = await response.text();
+        let errorMessage = `Docker Model Runner API error (${response.status})`;
+
+        try {
+          // Try to parse as JSON for better formatting
+          const errorJson = JSON.parse(errorText);
+          if (errorJson.error) {
+            const err = errorJson.error;
+            errorMessage += `\n  Type: ${err.type || 'unknown'}`;
+            errorMessage += `\n  Message: ${err.message || 'No message'}`;
+            if (err.n_prompt_tokens && err.n_ctx) {
+              errorMessage += `\n  Context: ${err.n_prompt_tokens} tokens requested, ${err.n_ctx} available`;
+              errorMessage += `\n  Solution: Increase context_size in docker-compose.llm.yaml or run: source docker/compose/scripts/detect-model-context.sh`;
+            }
+          }
+        } catch {
+          // Not JSON, use raw text
+          errorMessage += `\n  ${errorText}`;
+        }
+
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();

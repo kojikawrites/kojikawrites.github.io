@@ -23,7 +23,7 @@ import { LLMError } from '../../../lib/services/llm/types';
 
 // the following line will be automatically commented out
 // by the build process for production builds.
-export const prerender = false; // ![DEV-ONLY]
+// export const prerender = false; // ![DEV-ONLY]
 
 const OPERATION_PROMPTS = {
   continue: (text: string) => `Continue the following text naturally, maintaining the same tone, style, and perspective. Write 2-3 additional sentences that flow logically from the existing content.

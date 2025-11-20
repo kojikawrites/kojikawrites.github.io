@@ -61,7 +61,8 @@ export interface LLMConfig {
   maxTokens: number;
   temperature: number;
   timeout: number;
-  contextSize: number;  // Model's context window size (total tokens: prompt + response)
+  textContextSize: number;    // Text model's context window (0 = use model's native max)
+  visionContextSize: number;  // Vision model's context window (0 = use model's native max)
 
   // Docker Model Runner-specific
   dockerUrl?: string;

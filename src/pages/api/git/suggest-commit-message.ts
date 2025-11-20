@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 
 // the following line will be automatically commented out
 // by the build process for production builds.
-export const prerender = false; // ![DEV-ONLY]
+// export const prerender = false; // ![DEV-ONLY]
 
 export const POST: APIRoute = async ({ request }) => {
   try {

@@ -6,8 +6,8 @@ import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async () => {
   try {
-    // Call build-service for git status (all git operations happen there)
-    const response = await fetch('http://build-service:8000/git-status');
+    // Call build-service for deployment configuration
+    const response = await fetch('http://build-service:8000/deploy-config');
 
     if (!response.ok) {
       const error = await response.json();
@@ -25,7 +25,7 @@ export const GET: APIRoute = async () => {
     });
   } catch (error) {
     return new Response(JSON.stringify({
-      error: 'Failed to get git status from build service',
+      error: 'Failed to get deployment config from build service',
       details: error instanceof Error ? error.message : String(error)
     }), {
       status: 500,

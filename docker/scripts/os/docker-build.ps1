@@ -1,3 +1,9 @@
+# Ensure cleanup always runs on exit (success or failure)
+trap {
+    & scripts\os\restore-model-context.ps1
+    exit 1
+}
+
 # Load variables from .env file
 if (Test-Path ..\.env) {
     Get-Content ..\.env | ForEach-Object {
@@ -34,6 +40,9 @@ if (-not $env:DOCKER_BLOG_CODE) {
 }
 
 Write-Host "Building [$env:DOCKER_BUILD_MODE] docker container for [$env:DOCKER_BLOG_CODE] blog."
+
+# Detect and apply model context sizes to compose file
+& scripts\os\detect-model-context.ps1
 
 # Compose file configuration
 $composeFiles = @("-f", "compose/docker-compose.yaml")
@@ -250,3 +259,6 @@ docker volume create "blog-ollama-models" 2>$null
 
 # Start containers
 docker compose @composeFiles -p "$env:DOCKER_BLOG_CODE" up --build -d
+
+# Restore compose file on successful completion
+& scripts\os\restore-model-context.ps1

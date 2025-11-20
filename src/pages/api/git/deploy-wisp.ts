@@ -4,28 +4,28 @@ import type { APIRoute } from 'astro';
 // by the build process for production builds.
 // export const prerender = false; // ![DEV-ONLY]
 
-export const GET: APIRoute = async () => {
+export const POST: APIRoute = async ({ request }) => {
   try {
-    // Call build-service for git status (all git operations happen there)
-    const response = await fetch('http://build-service:8000/git-status');
+    const body = await request.json();
 
-    if (!response.ok) {
-      const error = await response.json();
-      return new Response(JSON.stringify(error), {
-        status: response.status,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+    // Forward the request to build-service
+    const response = await fetch('http://build-service:8000/deploy-wisp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
 
     const data = await response.json();
 
     return new Response(JSON.stringify(data), {
-      status: 200,
+      status: response.status,
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (error) {
     return new Response(JSON.stringify({
-      error: 'Failed to get git status from build service',
+      error: 'Failed to deploy to wisp.place',
       details: error instanceof Error ? error.message : String(error)
     }), {
       status: 500,

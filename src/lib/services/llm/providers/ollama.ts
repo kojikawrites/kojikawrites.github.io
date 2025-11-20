@@ -28,7 +28,8 @@ export class OllamaProvider implements LLMProvider {
   private defaultMaxTokens: number;
   private defaultTemperature: number;
   private timeout: number;
-  private contextSize: number;
+  private textContextSize: number;
+  private visionContextSize: number;
   private textModelCaps: ModelCapabilities | null = null;
   private visionModelCaps: ModelCapabilities | null = null;
 
@@ -38,7 +39,8 @@ export class OllamaProvider implements LLMProvider {
     this.defaultMaxTokens = config.maxTokens;
     this.defaultTemperature = config.temperature;
     this.timeout = config.timeout;
-    this.contextSize = config.contextSize;
+    this.textContextSize = config.textContextSize;
+    this.visionContextSize = config.visionContextSize;
 
     // Support both single-model and dual-model configurations
     if (config.ollamaTextModel && config.ollamaVisionModel) {
@@ -199,9 +201,20 @@ export class OllamaProvider implements LLMProvider {
     const caps = await this.getModelCapabilities(modelName);
     const requestedMax = requestedTokens || this.defaultMaxTokens;
 
-    // Use the shared utility with the actual model's context window
-    // (or fall back to configured contextSize if model info unavailable)
-    const contextWindow = caps.contextWindow || this.contextSize;
+    // Determine which fallback context size to use
+    const isVisionModel = modelName === this.visionModel;
+    const fallbackContextSize = isVisionModel ? this.visionContextSize : this.textContextSize;
+
+    // Use model's actual context window if available
+    // Fall back to configured context size only if model info unavailable
+    const contextWindow = caps.contextWindow || fallbackContextSize;
+
+    // If no context window limit (0 or undefined), just return requested
+    // This allows models to use their native maximum
+    if (!contextWindow || contextWindow === 0) {
+      return requestedMax;
+    }
+
     return getEffectiveMaxTokens(contextWindow, requestedMax);
   }
 

@@ -57,10 +57,10 @@ LLM_OLLAMA_MODEL=llama3.2-vision:11b
 LLM_DOCKER_MODEL="ai/qwen3-vl:8B-UD-Q4_K_XL"
 
 # Common settings
-LLM_CONTEXT_SIZE=8192
-LLM_MAX_TOKENS=2048
-LLM_TEMPERATURE=0.7
-LLM_TIMEOUT=30000
+# LLM_CONTEXT_SIZE removed - providers automatically use model's native context window
+LLM_MAX_TOKENS=2048        # Maximum tokens for responses (can override per request)
+LLM_TEMPERATURE=0.7        # Creativity (0.0-1.0, higher = more creative)
+LLM_TIMEOUT=30000          # Request timeout in milliseconds
 ```
 
 **That's it!** Build scripts automatically detect and use the best available option:

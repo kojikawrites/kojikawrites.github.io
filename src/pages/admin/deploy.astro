@@ -6,8 +6,8 @@ if (import.meta.env.PROD) {
   return Astro.redirect('/404');
 }
 
-const title = 'Deploy to GitHub';
-const description = 'Deploy changes to GitHub';
+const title = 'Deploy';
+const description = 'Deploy your changes';
 const permalink = Astro.url.pathname;
 const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.env.SHOW_TEST_BUILD === true;
 ---
@@ -119,6 +119,28 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       word-break: break-all;
       overflow-wrap: break-word;
       line-height: 0.9;
+    }
+
+    .file-list .module-header {
+      font-weight: bold;
+      color: rgb(var(--text-highlight-color));
+      /*margin-top: 0.75rem;*/
+      margin-top: 0;
+      margin-bottom: 0.25rem;
+      padding-top: 0;
+      border-top: 1px solid rgb(var(--background-mid));
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    .module-header > h6 {
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+
+    .file-list .module-header:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
     }
 
     .file-status {
@@ -300,6 +322,7 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       word-break: break-word;
       display: none;
       position: relative;
+      margin-top: 0.25rem;
     }
 
     .build-output-close {
@@ -347,7 +370,7 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
 </head>
 <body>
   <div class="container">
-    <h1>🚀 Deploy to GitHub</h1>
+    <h1 id="page-title">🚀 Deploy</h1>
 
     <div id="message" class="message">
       <button class="message-close" onclick="document.getElementById('message').classList.remove('show')">✕</button>
@@ -359,7 +382,7 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
         <h2>Test Build</h2>
         <button type="button" id="testBuildBtn" class="btn-info">Run Test Build</button>
         <div id="loading-build" class="loading">
-          <p>Building project... This may take up to 2 minutes.</p>
+          <p>Building project... This may take up to 10 minutes.</p>
         </div>
         <div id="build-output" class="build-output"></div>
         <div id="build-log-download" style="display: none; margin-top: 1rem;">
@@ -398,7 +421,7 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
         </div>
 
         <div class="button-group">
-          <button type="submit" class="btn-primary">Commit & Push</button>
+          <button type="submit" class="btn-primary" id="deploy-button">Deploy</button>
         </div>
       </form>
 
@@ -414,15 +437,15 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     // Cache files from git status for suggest endpoint
     let cachedFiles = [];
 
+    // Deployment configuration
+    let deployConfig = null;
+
+    // Track whether there are changes to commit
+    let hasChanges = false;
+
     // Handle form submission
     document.getElementById('pushForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const message = document.getElementById('commitMessage').value;
-      if (!message.trim()) {
-        showMessage('error', 'Please enter a commit message');
-        return;
-      }
 
       const loading = document.getElementById('loading');
       const buttons = document.querySelectorAll('button');
@@ -432,55 +455,83 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       loading.classList.add('show');
 
       try {
-        const request_url = '/api/git/push';
-        const response = await fetch(request_url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({'message': message}),
-        });
+        // Check if we're in wisp mode with no changes (direct deploy without git push)
+        const isWispDirect = deployConfig && deployConfig.target === 'wisp' && !hasChanges;
 
-        const data = await response.json();
-
-        if (data.success) {
-          let successMsg;
-
-          // Format build code using shared utility
-          const buildCode = formatBuildCode(data.main_commit, data.submodule_commit);
-
-          // Prioritize submodule message - that's the main content being deployed
-          if (data.submodule_pushed && data.site_code) {
-            successMsg = `✓ Successfully deployed ${data.site_code} content!\n📦 Pushed to branch: ${data.branch}`;
-            if (buildCode) {
-              successMsg += `\n🏗️  Build code: ${buildCode}`;
-            }
-          } else {
-            // Main repo only changes (less common)
-            successMsg = `✓ Successfully pushed to ${data.branch}`;
-            if (buildCode) {
-              successMsg += `\n🏗️  Build code: ${buildCode}`;
-            }
+        if (isWispDirect) {
+          // Skip git push and go straight to wisp deployment
+          await deployToWisp();
+        } else {
+          // Normal flow: git push first
+          const message = document.getElementById('commitMessage').value;
+          if (!message.trim()) {
+            showMessage('error', 'Please enter a commit message', false);
+            buttons.forEach(btn => btn.disabled = false);
+            loading.classList.remove('show');
+            return;
           }
 
-          showMessage('success', successMsg);
-          document.getElementById('commitMessage').value = '';
-          setTimeout(() => window.location.reload(), 2000);
-        } else {
-          showMessage('error', `Error: ${data.error || 'Push failed'}\n${data.output || ''}`);
+          const request_url = '/api/git/push';
+          const response = await fetch(request_url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({'message': message}),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            let successMsg;
+
+            // Format build code using shared utility
+            const buildCode = formatBuildCode(data.main_commit, data.submodule_commit);
+
+            // Prioritize submodule message - that's the main content being deployed
+            if (data.submodule_pushed && data.site_code) {
+              successMsg = `✓ Successfully deployed ${data.site_code} content!\n📦 Pushed to branch: ${data.branch}`;
+              if (buildCode) {
+                successMsg += `\n🏗️  Build code: ${buildCode}`;
+              }
+            } else {
+              // Main repo only changes (less common)
+              successMsg = `✓ Successfully pushed to ${data.branch}`;
+              if (buildCode) {
+                successMsg += `\n🏗️  Build code: ${buildCode}`;
+              }
+            }
+
+            showMessage('success', successMsg, false);
+            document.getElementById('commitMessage').value = '';
+
+            // Check if we need to deploy to wisp.place
+            if (deployConfig && deployConfig.target === 'wisp') {
+              await deployToWisp();
+            }
+          } else {
+            showMessage('error', `Error: ${data.error || 'Push failed'}\n${data.output || ''}`, false);
+          }
         }
       } catch (error) {
-        showMessage('error', `Failed to push: ${error.message}`);
+        showMessage('error', `Failed to push: ${error.message}`, false);
       } finally {
         buttons.forEach(btn => btn.disabled = false);
         loading.classList.remove('show');
       }
     });
 
-    function showMessage(type, text, autoHide = true) {
+    function showMessage(type, text, autoHide = true, isHtml = false) {
       const messageEl = document.getElementById('message');
       const messageText = document.getElementById('message-text');
-      messageText.textContent = text;
+
+      // Support both HTML and plain text content
+      if (isHtml) {
+        messageText.innerHTML = text;
+      } else {
+        messageText.textContent = text;
+      }
+
       messageEl.className = `message ${type} show`;
 
       // Only auto-hide if requested (don't auto-hide build messages)
@@ -537,16 +588,190 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
         } else {
           statusSpan.textContent = '✗ Failed';
           statusSpan.style.color = 'rgb(var(--secondary-color))';
-          showMessage('error', data.error || 'Failed to generate commit message');
+          showMessage('error', data.error || 'Failed to generate commit message', false);
         }
       } catch (error) {
         statusSpan.textContent = '✗ Error';
         statusSpan.style.color = 'rgb(var(--secondary-color))';
-        showMessage('error', `Failed to suggest commit message: ${error.message}`);
+        showMessage('error', `Failed to suggest commit message: ${error.message}`, false);
       } finally {
         suggestBtn.disabled = false;
       }
     });
+
+    // Load deployment configuration
+    async function loadDeployConfig() {
+      try {
+        const response = await fetch('/api/git/deploy-config');
+        deployConfig = await response.json();
+        console.log('Deploy config loaded:', deployConfig);
+
+        // Update UI elements based on target
+        const pageTitle = document.getElementById('page-title');
+        const deployButton = document.getElementById('deploy-button');
+
+        if (deployConfig.target === 'wisp') {
+          if (pageTitle) pageTitle.textContent = '🚀 Deploy to Wisp';
+          if (deployButton) deployButton.textContent = 'Deploy to Wisp';
+        } else {
+          if (pageTitle) pageTitle.textContent = '🚀 Deploy to GitHub';
+          if (deployButton) deployButton.textContent = 'Deploy to GitHub';
+        }
+      } catch (error) {
+        console.error('Failed to load deploy config:', error);
+        // Default to GitHub if config loading fails
+        deployConfig = { target: 'github' };
+
+        const pageTitle = document.getElementById('page-title');
+        const deployButton = document.getElementById('deploy-button');
+        if (pageTitle) pageTitle.textContent = '🚀 Deploy to GitHub';
+        if (deployButton) deployButton.textContent = 'Deploy to GitHub';
+      }
+    }
+
+    // Parse wisp-cli output to extract relevant information
+    function parseWispOutput(output) {
+      const lines = output.split('\n');
+      const parsedLines = [];
+      let inJsonBlock = false;
+
+      for (const line of lines) {
+        // Skip empty lines
+        if (!line.trim()) continue;
+
+        // Detect JSON response blocks (they start with "json: {")
+        if (line.trim().startsWith('json:')) {
+          inJsonBlock = true;
+          continue;
+        }
+
+        // Skip lines that are pure JSON (start with { or [)
+        if (line.trim().startsWith('{') || line.trim().startsWith('[')) {
+          inJsonBlock = true;
+          continue;
+        }
+
+        // End of JSON block
+        if (inJsonBlock && (line.trim().endsWith('}') || line.trim().endsWith(']'))) {
+          inJsonBlock = false;
+          continue;
+        }
+
+        // Skip lines inside JSON blocks
+        if (inJsonBlock) {
+          continue;
+        }
+
+        // Extract upload lines with file info
+        const uploadMatch = line.match(/↑\s+Uploading\s+(.+?)\s+\((\d+)\s+bytes/);
+        if (uploadMatch) {
+          const [, filename, bytes] = uploadMatch;
+          const sizeKB = (parseInt(bytes) / 1024).toFixed(1);
+          parsedLines.push(`↑ ${filename} (${sizeKB} KB)`);
+          continue;
+        }
+
+        // Extract reuse lines with file info
+        const reuseMatch = line.match(/✓\s+Reusing blob for\s+(.+?)\s+\(CID:/);
+        if (reuseMatch) {
+          const [, filename] = reuseMatch;
+          parsedLines.push(`✓ ${filename} (reused)`);
+          continue;
+        }
+
+        // Keep important status messages and error indicators
+        if (line.includes('Signed in as') ||
+            line.includes('Deploying site') ||
+            line.includes('Found existing manifest') ||
+            line.includes('Found') && line.includes('subfs records') ||
+            line.includes('Deployment complete') ||
+            line.includes('Successfully deployed') ||
+            line.includes('error') ||
+            line.includes('Error') ||
+            line.includes('failed') ||
+            line.includes('Failed') ||
+            line.includes('invalid') ||
+            line.includes('help:') ||
+            line.includes('×') ||  // Error symbol
+            line.includes('╰─▶') || // Error arrow
+            line.trim().startsWith('help:')) {
+          parsedLines.push(line);
+          continue;
+        }
+      }
+
+      return parsedLines.join('\n');
+    }
+
+    // Deploy to wisp.place
+    async function deployToWisp() {
+      const loading = document.getElementById('loading');
+      const loadingText = loading.querySelector('p');
+      const buttons = document.querySelectorAll('button');
+
+      try {
+        // Update loading message for build
+        loadingText.textContent = 'Building for production... This may take up to 10 minutes.';
+
+        // Run production build
+        const buildResponse = await fetch('/api/git/build', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        const buildData = await buildResponse.json();
+
+        if (!buildData.success) {
+          throw new Error(buildData.error || 'Build failed');
+        }
+
+        // Update loading message for wisp deployment
+        loadingText.textContent = 'Deploying to wisp.place...';
+
+        // Deploy to wisp.place
+        const deployResponse = await fetch('/api/git/deploy-wisp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            handle: deployConfig.wisp.handle,
+            app_password: deployConfig.wisp.app_password,
+            site_name: deployConfig.wisp.site_name
+          })
+        });
+
+        const deployData = await deployResponse.json();
+
+        // Parse and display wisp deployment output
+        const buildOutput = document.getElementById('build-output');
+        if (deployData.output && buildOutput) {
+          const parsedOutput = parseWispOutput(deployData.output);
+          buildOutput.innerHTML = `<button class="build-output-close" onclick="document.getElementById('build-output').classList.remove('show')">✕</button>${parsedOutput}`;
+          buildOutput.classList.remove('success', 'error');
+          if (deployData.success) {
+            buildOutput.classList.add('success');
+          } else {
+            buildOutput.classList.add('error');
+          }
+          buildOutput.classList.add('show');
+        }
+
+        if (deployData.success) {
+          const successHtml = `✓ Successfully deployed to wisp.place!<br>🌐 URL: <a href="${deployData.url}" target="_blank" style="color: inherit; text-decoration: underline;">${deployData.url}</a>`;
+          showMessage('success', successHtml, false, true);
+        } else {
+          throw new Error(deployData.error || 'Deployment failed');
+        }
+      } catch (error) {
+        showMessage('error', `wisp.place deployment failed: ${error.message}`, false);
+      } finally {
+        buttons.forEach(btn => btn.disabled = false);
+        loading.classList.remove('show');
+      }
+    }
 
     // Modify loadGitStatus to cache files
     async function loadGitStatus() {
@@ -555,12 +780,15 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
         const data = await response.json();
 
         if (data.error) {
-          showMessage('error', data.error);
+          showMessage('error', data.error, false);
           return;
         }
 
         // Cache files for suggest endpoint
         cachedFiles = data.files || [];
+
+        // Track whether there are changes
+        hasChanges = data.hasChanges;
 
         // Update branch info
         document.getElementById('branch-info').textContent = `Branch: ${data.branch}`;
@@ -569,50 +797,105 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
         const statusContent = document.getElementById('status-content');
         if (!data.hasChanges) {
           statusContent.innerHTML = '<p class="no-changes">✓ No changes to commit</p>';
-          document.getElementById('deploy-form').style.display = 'none';
-        } else {
-          let html = '<ul class="file-list">';
-          data.files.forEach(file => {
-            // Map git status codes to readable indicators and tooltips
-            let statusLabel, statusClass, statusTooltip;
-
-            if (file.status.includes('M')) {
-              statusLabel = 'M';
-              statusClass = 'status-modified';
-              statusTooltip = 'Modified';
-            } else if (file.status.includes('A')) {
-              statusLabel = 'A';
-              statusClass = 'status-added';
-              statusTooltip = 'Added (staged)';
-            } else if (file.status.includes('D')) {
-              statusLabel = 'D';
-              statusClass = 'status-deleted';
-              statusTooltip = 'Deleted';
-            } else if (file.status.includes('R')) {
-              statusLabel = 'R';
-              statusClass = 'status-renamed';
-              statusTooltip = 'Renamed';
-            } else if (file.status.includes('??')) {
-              statusLabel = 'U';
-              statusClass = 'status-untracked';
-              statusTooltip = 'Untracked (new file)';
-            } else {
-              statusLabel = file.status;
-              statusClass = '';
-              statusTooltip = 'Unknown status';
+          // In wisp mode, always show deploy button to allow redeployment
+          // In GitHub mode, hide deploy form when no changes
+          if (deployConfig && deployConfig.target === 'wisp') {
+            document.getElementById('deploy-form').style.display = 'block';
+            // Hide commit message field when no changes in wisp mode
+            const commitMessageGroup = document.querySelector('.form-group');
+            const commitMessageField = document.getElementById('commitMessage');
+            if (commitMessageGroup) {
+              commitMessageGroup.style.display = 'none';
+              // Remove required attribute to allow form submission without commit message
+              if (commitMessageField) {
+                commitMessageField.removeAttribute('required');
+              }
             }
+          } else {
+            document.getElementById('deploy-form').style.display = 'none';
+          }
+        } else {
+          // Group files by module (submodule vs main)
+          const submoduleFiles = data.files.filter(f => f.module === 'submodule');
+          const mainFiles = data.files.filter(f => f.module === 'main');
 
-            html += `<li><span class="file-status ${statusClass}" title="${statusTooltip}">${statusLabel}</span> ${file.file}</li>`;
-          });
+          function renderFileList(files) {
+            let html = '';
+            files.forEach(file => {
+              // Map git status codes to readable indicators and tooltips
+              let statusLabel, statusClass, statusTooltip;
+
+              if (file.status.includes('M')) {
+                statusLabel = 'M';
+                statusClass = 'status-modified';
+                statusTooltip = 'Modified';
+              } else if (file.status.includes('A')) {
+                statusLabel = 'A';
+                statusClass = 'status-added';
+                statusTooltip = 'Added (staged)';
+              } else if (file.status.includes('D')) {
+                statusLabel = 'D';
+                statusClass = 'status-deleted';
+                statusTooltip = 'Deleted';
+              } else if (file.status.includes('R')) {
+                statusLabel = 'R';
+                statusClass = 'status-renamed';
+                statusTooltip = 'Renamed';
+              } else if (file.status.includes('??')) {
+                statusLabel = 'U';
+                statusClass = 'status-untracked';
+                statusTooltip = 'Untracked (new file)';
+              } else {
+                statusLabel = file.status;
+                statusClass = '';
+                statusTooltip = 'Unknown status';
+              }
+
+              html += `<li><span class="file-status ${statusClass}" title="${statusTooltip}">${statusLabel}</span> ${file.file}</li>`;
+            });
+            return html;
+          }
+
+          let html = '<ul class="file-list">';
+
+          // Show submodule section if there are submodule files and a valid module name
+          if (submoduleFiles.length > 0) {
+            const moduleName = submoduleFiles[0].moduleName;
+            if (moduleName && moduleName !== 'null' && moduleName !== 'undefined') {
+              html += `<li class="module-header"><h6>${moduleName} (submodule)</h6></li>`;
+              html += renderFileList(submoduleFiles);
+            }
+          }
+
+          // Show main module section if there are main files and a valid module name
+          if (mainFiles.length > 0) {
+            const moduleName = mainFiles[0].moduleName;
+            if (moduleName && moduleName !== 'null' && moduleName !== 'undefined') {
+              html += `<li class="module-header"><h6>${moduleName} (main)</h6></li>`;
+              html += renderFileList(mainFiles);
+            }
+          }
+
           html += '</ul>';
           statusContent.innerHTML = html;
           document.getElementById('deploy-form').style.display = 'block';
+
+          // Ensure commit message field is shown when there are changes
+          const commitMessageGroup = document.querySelector('.form-group');
+          const commitMessageField = document.getElementById('commitMessage');
+          if (commitMessageGroup) {
+            commitMessageGroup.style.display = 'block';
+            // Restore required attribute when there are changes
+            if (commitMessageField) {
+              commitMessageField.setAttribute('required', 'required');
+            }
+          }
 
           // Update scroll fade indicators after content is loaded
           updateScrollFades();
         }
       } catch (error) {
-        showMessage('error', `Failed to load git status: ${error.message}`);
+        showMessage('error', `Failed to load git status: ${error.message}`, false);
       }
     }
 
@@ -713,7 +996,8 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       });
     }
 
-    // Load status on page load
+    // Load configuration and status on page load
+    loadDeployConfig();
     loadGitStatus();
   </script>
 </body>

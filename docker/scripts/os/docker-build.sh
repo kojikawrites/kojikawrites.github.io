@@ -7,6 +7,9 @@ source ../.env
 source "../src/.sites/${SITE_CODE}/.env"
 set +a
 
+# Ensure cleanup always runs on exit (success or failure)
+trap 'scripts/os/restore-model-context.sh' EXIT
+
 # Check if DOCKER_BUILD_MODE is set
 if [ -z "${DOCKER_BUILD_MODE}" ]; then
     echo "Error: DOCKER_BUILD_MODE environment variable is not set (valid values: \"pip\" or \"uv\")" >&2
@@ -18,6 +21,9 @@ if [ -z "${DOCKER_BLOG_CODE}" ]; then
 fi
 
 echo "Building [$DOCKER_BUILD_MODE] docker container for [$DOCKER_BLOG_CODE] blog."
+
+# Detect and apply model context sizes to compose file
+scripts/os/detect-model-context.sh
 
 # Compose file configuration
 COMPOSE_FILES="-f compose/docker-compose.yaml"

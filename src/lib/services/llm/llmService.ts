@@ -33,27 +33,30 @@ function loadConfig(): LLMConfig {
   let ollamaUrl = import.meta.env.LLM_TEXT_URL || import.meta.env.LLM_URL || import.meta.env.LLM_OLLAMA_URL;
 
   // Auto-detect Docker Model Runner if not explicitly set
+  const isDockerModelRunner = ollamaUrl?.includes('model-runner.docker.internal');
   if (!provider) {
     const hasDockerTextUrl = !!import.meta.env.LLM_TEXT_URL;
-    const hasDockerUrl = ollamaUrl?.includes('model-runner.docker.internal');
+
     const hasDockerModel = import.meta.env.LLM_TEXT_MODEL?.startsWith('ai/') || import.meta.env.LLM_MODEL?.startsWith('ai/');
-    provider = (hasDockerTextUrl || hasDockerUrl || hasDockerModel) ? 'docker' : 'ollama';
-    console.log(`Auto-detected LLM provider: ${provider}${hasDockerTextUrl ? ' (from LLM_TEXT_URL)' : ''}${hasDockerUrl ? ' (from URL)' : ''}${hasDockerModel ? ' (from MODEL)' : ''}`);
+    provider = (hasDockerTextUrl || isDockerModelRunner || hasDockerModel) ? 'docker' : 'ollama';
+    console.log(`Auto-detected LLM provider: ${provider}${hasDockerTextUrl ? ' (from LLM_TEXT_URL)' : ''}${isDockerModelRunner ? ' (from URL)' : ''}${hasDockerModel ? ' (from MODEL)' : ''}`);
   }
 
   // Build full URL from LLM_OLLAMA_URL and LLM_OLLAMA_PORT if port is specified
   // Skip for Docker Model Runner URLs (they already include the full path)
-  const isDockerModelRunner = ollamaUrl?.includes('model-runner.docker.internal');
   if (!isDockerModelRunner && import.meta.env.LLM_OLLAMA_PORT && ollamaUrl && !ollamaUrl.match(/:\d+$/)) {
     ollamaUrl = `${ollamaUrl}:${import.meta.env.LLM_OLLAMA_PORT}`;
   }
 
   return {
     provider,
-    maxTokens: parseInt(import.meta.env.LLM_MAX_TOKENS || '2048'),
+    maxTokens: parseInt(import.meta.env.LLM_MAX_TOKENS || '8192'),
     temperature: parseFloat(import.meta.env.LLM_TEMPERATURE || '0.7'),
     timeout: parseInt(import.meta.env.LLM_TIMEOUT || '30000'),
-    contextSize: parseInt(import.meta.env.LLM_CONTEXT_SIZE || '8192'),
+    // Context sizes: 0 means "use model's native maximum"
+    // Only set if explicitly configured (for manual override or fallback)
+    textContextSize: parseInt(import.meta.env.LLM_TEXT_CONTEXT_SIZE || '0'),
+    visionContextSize: parseInt(import.meta.env.LLM_VISION_CONTEXT_SIZE || '0'),
 
     // Docker Model Runner config
     // Priority: LLM_TEXT_MODEL (injected by Docker), then LLM_DOCKER_TEXT_MODEL (manual config), then LLM_MODEL (legacy)

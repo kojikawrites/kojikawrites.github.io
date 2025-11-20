@@ -1,6 +1,8 @@
 @echo off
 setlocal enabledelayedexpansion
 
+REM Ensure cleanup always runs on exit (via error handler at end)
+
 REM Load variables from .env file
 if exist ..\.env (
     for /f "usebackq tokens=1,* delims==" %%a in ("..\.env") do (
@@ -18,16 +20,25 @@ if exist "..\src\.sites\%SITE_CODE%\.env" (
 REM Check if DOCKER_BUILD_MODE is set
 if "%DOCKER_BUILD_MODE%"=="" (
     echo Error: DOCKER_BUILD_MODE environment variable is not set (valid values: "pip" or "uv"^) 1>&2
+    call scripts\os\restore-model-context.bat
     exit /b 1
 )
 
 REM Check if DOCKER_BLOG_CODE is set
 if "%DOCKER_BLOG_CODE%"=="" (
     echo Error: DOCKER_BLOG_CODE environment variable is not set (e.g. "hiivelabs"^) 1>&2
+    call scripts\os\restore-model-context.bat
     exit /b 1
 )
 
 echo Building [%DOCKER_BUILD_MODE%] docker container for [%DOCKER_BLOG_CODE%] blog.
+
+REM Detect and apply model context sizes to compose file
+call scripts\os\detect-model-context.bat
+if errorlevel 1 (
+    call scripts\os\restore-model-context.bat
+    exit /b 1
+)
 
 REM Compose file configuration
 set "COMPOSE_FILES=-f compose\docker-compose.yaml"
@@ -229,3 +240,6 @@ docker volume create "blog-ollama-models" 2>nul
 
 REM Start containers
 docker compose %COMPOSE_FILES% -p "%DOCKER_BLOG_CODE%" up --build -d
+
+REM Restore compose file on successful completion
+call scripts\os\restore-model-context.bat
