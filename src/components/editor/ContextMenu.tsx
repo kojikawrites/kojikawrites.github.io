@@ -1,11 +1,10 @@
 /** @jsxImportSource react */
 /**
  * ContextMenu Component - DEV ONLY
- * Used by Keystatic editor for LLM features
+ * Standalone context menu that works without Keystatic React context
  * Automatically excluded from production builds via tree-shaking
  */
 import React, { useEffect, useRef, useState } from 'react';
-import { assertKeystaticContext } from './guards';
 
 export interface ContextMenuItem {
   label: string;
@@ -32,9 +31,6 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   onClose,
   visible,
 }) => {
-  // Runtime guard: Ensure this component only runs in Keystatic context
-  assertKeystaticContext('ContextMenu');
-
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x, y });
   const [selectedIndex, setSelectedIndex] = useState(-1);

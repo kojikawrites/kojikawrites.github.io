@@ -1,0 +1,296 @@
+/**
+ * Theme Framework Base Styles
+ *
+ * This file contains the base styling framework that all themed sites use.
+ * It provides:
+ * - Color utility classes for applying theme colors
+ * - Font family utility classes
+ * - Base HTML element styling (headings, links, body, etc.)
+ * - Background image filtering support
+ * - Common component utilities
+ *
+ * Site-specific customizations should go in the site's custom.css file.
+ */
+
+@layer components {
+    /* ===================================================================
+       COLOR UTILITY CLASSES
+       These classes make theme colors work with Tailwind's opacity modifiers
+       =================================================================== */
+
+    /* Text colors */
+    .color-primary-color {
+        color: rgb(var(--primary-color) / var(--tw-text-opacity));
+    }
+
+    .color-primary-color-alt {
+        color: rgb(var(--primary-color-alt) / var(--tw-text-opacity));
+    }
+
+    .color-hiive-crt {
+        color: rgb(var(--hiive-crt) / var(--tw-text-opacity));
+    }
+
+    .color-secondary-color {
+        color: rgb(var(--secondary-color) / var(--tw-text-opacity));
+    }
+
+    .color-primary-color-contrast {
+        color: rgb(var(--primary-color-contrast) / var(--tw-text-opacity));
+    }
+
+    .color-text-main {
+        color: rgb(var(--text-main) / var(--tw-text-opacity));
+    }
+
+    .color-text-secondary {
+        color: rgb(var(--text-secondary) / var(--tw-text-opacity));
+    }
+
+    .color-text-highlight-color {
+        color: rgb(var(--text-highlight-color) / var(--tw-text-opacity));
+    }
+
+    .color-text-code-color {
+        color: rgb(var(--text-code-color) / var(--tw-text-opacity));
+    }
+
+    .color-text-highlight-color-alt1 {
+        color: rgb(var(--text-highlight-color-alt1) / var(--tw-text-opacity));
+    }
+
+    .color-text-highlight-color-alt2 {
+        color: rgb(var(--text-highlight-color-alt2) / var(--tw-text-opacity));
+    }
+
+    .color-text-highlight-color-alt3 {
+        color: rgb(var(--text-highlight-color-alt3) / var(--tw-text-opacity));
+    }
+
+    .color-heading-color {
+        color: rgb(var(--heading-color) / var(--tw-text-opacity));
+    }
+
+    .color-background-mid {
+        color: rgb(var(--background-mid) / var(--tw-text-opacity));
+    }
+
+    /* Background colors */
+    .bg-color-background-feature {
+        background-color: rgb(var(--background-feature) / var(--tw-bg-opacity));
+    }
+
+    .bg-color-background-body {
+        background-color: rgb(var(--background-body) / var(--tw-bg-opacity));
+    }
+
+    .bg-color-primary-color {
+        background-color: rgb(var(--primary-color) / var(--tw-bg-opacity));
+    }
+
+    .bg-color-primary-color-contrast {
+        background-color: rgb(var(--primary-color-contrast) / var(--tw-bg-opacity));
+    }
+
+    .bg-color-secondary-color {
+        background-color: rgb(var(--secondary-color) / var(--tw-bg-opacity));
+    }
+
+    .bg-color-text-main {
+        background-color: rgb(var(--text-main) / var(--tw-bg-opacity));
+    }
+
+    .bg-color-mid {
+        background-color: rgb(var(--background-mid) / var(--tw-bg-opacity));
+    }
+
+    .bg-color-text-secondary {
+        background-color: rgb(var(--text-secondary) / var(--tw-bg-opacity));
+    }
+
+    /* Border colors */
+    .border-primary-color {
+        border-color: rgb(var(--primary-color) / var(--tw-border-opacity));
+    }
+
+    .border-text-secondary {
+        border-color: rgb(var(--text-secondary) / var(--tw-border-opacity));
+    }
+
+    .border-background-mid {
+        border-color: rgb(var(--background-mid) / var(--tw-border-opacity));
+    }
+
+    /* ===================================================================
+       GENERAL UTILITY CLASSES
+       =================================================================== */
+
+    .highlight {
+        @apply color-secondary-color;
+    }
+
+    /* ===================================================================
+       FONT FAMILY UTILITY CLASSES
+       =================================================================== */
+
+    .font-family-serif {
+        /*noinspection CssNoGenericFontName*/
+        font-family: var(--font-family-serif);
+    }
+
+    .font-family-sans {
+        /*noinspection CssNoGenericFontName*/
+        font-family: var(--font-family-sans);
+    }
+
+    .font-family-sans-alt {
+        /*noinspection CssNoGenericFontName*/
+        font-family: var(--font-family-sans-alt);
+    }
+
+    .font-family-monospace {
+        /*noinspection CssNoGenericFontName*/
+        font-family: var(--font-family-monospace);
+    }
+
+    /* ===================================================================
+       HTML TAG BASE STYLES
+       =================================================================== */
+
+    /* Body */
+    body {
+        @apply text-xs leading-normal;
+        @apply bg-color-background-body color-text-main;
+        @apply font-family-serif;
+        position: relative;
+    }
+
+    /* Background image with filter (using pseudo-element to avoid filtering content) */
+    body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--background-body-image) repeat;
+        filter: var(--background-body-image-filter);
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    /* Headings - common styles */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-bold uppercase leading-tight m-0 mt-5 mb-1;
+        @apply color-heading-color;
+        @apply font-family-sans;
+    }
+
+    /* List markers for headings */
+    li:has(> h1, > h2, > h3, > h4, > h5, > h6)::marker {
+        @apply color-heading-color text-2xl;
+        content: "▪ "; /* Optional: Custom marker content */
+    }
+
+    /* Headings - specific overrides */
+    h1 {
+        @apply text-5xl font-extrabold pt-2;
+    }
+
+    h1 small {
+        @apply text-[0.8rem] font-normal pt-2;
+    }
+
+    h2 {
+        @apply m-0 text-[1.8rem] py-2;
+    }
+
+    h3 {
+        @apply text-[1.6rem] pt-2;
+    }
+
+    h4 {
+        @apply text-[1.4rem];
+    }
+
+    h5 {
+        @apply text-[1.3rem];
+    }
+
+    h6 {
+        @apply text-[1.2rem];
+    }
+
+    /* Links - underline effect */
+    p a, article a {
+        @apply transition-shadow ease-linear delay-150
+               shadow-[inset_0_-0.12em_0_var(--primary-color-alt)]
+               hover:shadow-[inset_0_-1.5em_0_var(--primary-color-alt)]
+    }
+
+    /* Text elements */
+    p,
+    ul,
+    ol {
+        @apply text-base leading-7;
+    }
+
+    p {
+        @apply pb-2;
+    }
+
+    /* Horizontal rule */
+    hr {
+        @apply bg-color-background-feature;
+    }
+
+    /* Navigation */
+    nav {
+        @apply uppercase font-bold w-1/2;
+        @apply font-family-sans;
+    }
+
+    /* Footer */
+    footer {
+        @apply text-[rgb(var(--footer-text-color))];
+    }
+
+    /* Code */
+    pre, code {
+        @apply text-xs p-1;
+    }
+}
+
+@layer components {
+    /* ===================================================================
+       COMMON COMPONENT UTILITIES
+       =================================================================== */
+
+    /* Container padding */
+    div.container {
+        @apply pt-4;
+    }
+
+    /* Underline hover effect for links */
+    .underline-link-hover {
+        @apply content-[''] absolute
+        scale-x-0
+        transition-transform ease-linear delay-150
+        bg-color-secondary-color
+        left-0
+        hover:scale-x-100;
+    }
+
+    /* Favicon link image styling */
+    img.favicon-link-img {
+        @apply rounded border border-[rgb(var(--background-mid))];
+        @apply bg-gradient-to-br from-[rgb(var(--theme-color))] to-[rgb(var(--background-mid))];
+        @apply w-[14px] h-[14px];
+        @apply bg-clip-border;
+    }
+}

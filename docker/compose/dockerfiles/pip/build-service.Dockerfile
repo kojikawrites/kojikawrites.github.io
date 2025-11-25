@@ -3,7 +3,7 @@
 FROM node:20-alpine
 
 # Install rsync, Python, and curl for build operations
-RUN apk add --no-cache rsync python3 py3-pip curl git git-lfs
+RUN apk add --no-cache rsync python3 py3-pip curl git git-lfs cairo
 
 # Set working directory for the build service
 WORKDIR /build-service

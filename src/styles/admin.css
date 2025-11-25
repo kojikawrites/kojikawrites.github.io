@@ -1,0 +1,295 @@
+/**
+ * Shared styles for admin pages
+ * Import this in any admin page for consistent styling
+ */
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: rgb(var(--background-body));
+    color: rgb(var(--text-main));
+    padding: 2rem;
+    line-height: 1.6;
+}
+
+/* Container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgb(var(--background-feature));
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Back link */
+.back-link {
+    display: inline-block;
+    color: rgb(var(--text-secondary));
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.back-link:hover {
+    color: rgb(var(--primary-color));
+}
+
+/* Page title */
+h1 {
+    color: rgb(var(--heading-color));
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid rgb(var(--primary-color));
+    padding-bottom: 0.5rem;
+}
+
+/* Subtitle */
+.subtitle {
+    color: rgb(var(--text-secondary));
+    margin-bottom: 2rem;
+}
+
+/* Buttons */
+button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: 500;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: rgb(var(--primary-color));
+    color: rgb(var(--primary-color-contrast));
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: rgb(var(--primary-color-alt));
+}
+
+.btn-secondary {
+    background: rgb(var(--background-mid));
+    color: rgb(var(--text-main));
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: rgb(var(--primary-color-alt));
+}
+
+.btn-success {
+    background: rgb(var(--hiive-crt));
+    color: rgb(var(--primary-color-contrast));
+}
+
+.btn-success:hover:not(:disabled) {
+    filter: brightness(1.1);
+}
+
+.btn-info {
+    background: rgb(var(--background-mid));
+    color: rgb(var(--text-main));
+}
+
+.btn-info:hover:not(:disabled) {
+    background: rgb(var(--primary-color-alt));
+}
+
+/* Button groups */
+.button-group {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Messages */
+.message {
+    padding: 1rem;
+    padding-right: 3rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    display: none;
+    position: relative;
+}
+
+.message.show {
+    display: block;
+}
+
+.message.success {
+    background: rgba(var(--hiive-crt), 0.15);
+    color: rgb(var(--hiive-crt));
+    border: 1px solid rgba(var(--hiive-crt), 0.3);
+}
+
+.message.error {
+    background: rgba(var(--secondary-color), 0.15);
+    color: rgb(var(--secondary-color));
+    border: 1px solid rgba(var(--secondary-color), 0.3);
+}
+
+.message-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    opacity: 0.6;
+    color: inherit;
+}
+
+.message-close:hover {
+    opacity: 1;
+}
+
+/* Success/Error message boxes (standalone) */
+.error-message {
+    background: rgba(var(--secondary-color), 0.15);
+    border: 1px solid rgba(var(--secondary-color), 0.3);
+    color: rgb(var(--secondary-color));
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.success-message {
+    background: rgba(var(--hiive-crt), 0.15);
+    border: 1px solid rgba(var(--hiive-crt), 0.3);
+    color: rgb(var(--hiive-crt));
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+/* Loading indicator */
+.loading {
+    display: none;
+    margin-top: 1rem;
+    text-align: center;
+    color: rgb(var(--text-secondary));
+}
+
+.loading.show {
+    display: block;
+}
+
+/* Form elements */
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: rgb(var(--text-secondary));
+    font-weight: 500;
+}
+
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgb(var(--background-mid));
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 100px;
+    background: rgb(var(--background-feature));
+    color: rgb(var(--text-main));
+}
+
+textarea:focus {
+    outline: none;
+    border-color: rgb(var(--primary-color));
+    box-shadow: 0 0 0 3px rgba(var(--primary-color), 0.1);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgb(var(--background-mid));
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+    background: rgb(var(--background-feature));
+    color: rgb(var(--text-main));
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: rgb(var(--primary-color));
+    box-shadow: 0 0 0 3px rgba(var(--primary-color), 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Section boxes */
+.section-box {
+    background: rgb(var(--background-body));
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+}
+
+.section-box h2 {
+    font-size: 1.1rem;
+    color: rgb(var(--text-main));
+    margin-bottom: 0.5rem;
+}
+
+/* Admin card grid (for index page) */
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.admin-card {
+    background: rgb(var(--background-body));
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgb(var(--background-mid));
+}
+
+.admin-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-color: rgb(var(--primary-color));
+}
+
+.admin-card h2 {
+    color: rgb(var(--primary-color));
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    border: none;
+    padding: 0;
+}
+
+.admin-card p {
+    color: rgb(var(--text-secondary));
+    margin: 0;
+    font-size: 0.9rem;
+}

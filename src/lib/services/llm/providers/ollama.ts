@@ -74,6 +74,8 @@ export class OllamaProvider implements LLMProvider {
     return this.chat(model, messages, {
       maxTokens: options?.maxTokens,
       temperature: options?.temperature,
+      format: (options as any)?.format, // Pass through format option
+      timeout: options?.timeout, // Pass through timeout option
     });
   }
 
@@ -98,6 +100,7 @@ export class OllamaProvider implements LLMProvider {
     return this.chat(model, messages, {
       maxTokens: options?.maxTokens,
       temperature: options?.temperature,
+      format: (options as any)?.format, // Pass through format option
     });
   }
 
@@ -157,13 +160,37 @@ export class OllamaProvider implements LLMProvider {
 
       const data = await response.json();
 
-      // Parse model info from modelfile or parameters
-      // Ollama returns context window in num_ctx parameter
-      const numCtx = data.modelfile?.match(/num_ctx\s+(\d+)/)?.[1] ||
-                     data.parameters?.match(/num_ctx\s+(\d+)/)?.[1] ||
-                     '2048';  // Default fallback
+      // Parse context window from model_info (preferred) or modelfile/parameters
+      // model_info contains structured data like "qwen3vlmoe.context_length": 262144
+      let contextWindow = 0;
 
-      const contextWindow = parseInt(numCtx, 10);
+      // First, check model_info for context_length (most reliable)
+      if (data.model_info) {
+        // Find any key ending in .context_length
+        for (const key of Object.keys(data.model_info)) {
+          if (key.endsWith('.context_length')) {
+            contextWindow = data.model_info[key];
+            console.log(`[Ollama] Found context_length in model_info[${key}]: ${contextWindow}`);
+            break;
+          }
+        }
+      }
+
+      // Fallback: check num_ctx in modelfile or parameters
+      if (!contextWindow) {
+        const numCtx = data.modelfile?.match(/num_ctx\s+(\d+)/)?.[1] ||
+                       data.parameters?.match(/num_ctx\s+(\d+)/)?.[1];
+        if (numCtx) {
+          contextWindow = parseInt(numCtx, 10);
+          console.log(`[Ollama] Found num_ctx in modelfile/parameters: ${contextWindow}`);
+        }
+      }
+
+      // Final fallback - use a reasonable default
+      if (!contextWindow) {
+        contextWindow = 32768; // Most modern models support at least 32k
+        console.log(`[Ollama] No context length found, using default: ${contextWindow}`);
+      }
 
       // Max tokens should be less than context window (leave room for prompt)
       // Use 75% of context window as max output tokens
@@ -224,27 +251,40 @@ export class OllamaProvider implements LLMProvider {
   private async chat(
     model: string,
     messages: any[],
-    options?: { maxTokens?: number; temperature?: number }
+    options?: { maxTokens?: number; temperature?: number; format?: any; timeout?: number }
   ): Promise<string> {
     // Get effective max tokens (respects model capabilities)
     const effectiveMaxTokens = await this.getEffectiveMaxTokens(model, options?.maxTokens);
 
     try {
+      const requestBody: any = {
+        model,
+        messages,
+        options: {
+          num_predict: effectiveMaxTokens,
+          temperature: options?.temperature ?? this.defaultTemperature,
+        },
+        stream: false, // Get complete response at once
+      };
+
+      // Add format parameter if provided (JSON schema for structured output)
+      // Ollama supports passing a JSON schema directly as the format
+      if (options?.format) {
+        // If format is a JSON schema object, use it directly
+        // Ollama will enforce the structure
+        requestBody.format = options.format;
+      }
+
+      // Use per-request timeout if provided, otherwise fall back to default
+      const requestTimeout = options?.timeout ?? this.timeout;
+
       const response = await fetch(`${this.baseUrl}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          model,
-          messages,
-          options: {
-            num_predict: effectiveMaxTokens,
-            temperature: options?.temperature ?? this.defaultTemperature,
-          },
-          stream: false, // Get complete response at once
-        }),
-        signal: AbortSignal.timeout(this.timeout),
+        body: JSON.stringify(requestBody),
+        signal: AbortSignal.timeout(requestTimeout),
       });
 
       if (!response.ok) {
@@ -252,13 +292,38 @@ export class OllamaProvider implements LLMProvider {
         throw new Error(`Ollama API error: ${response.status} - ${error}`);
       }
 
-      const data = await response.json();
+      // Log raw response text before parsing
+      const rawText = await response.text();
+      console.log('[Ollama] Raw response:', rawText);
 
-      if (!data.message?.content) {
-        throw new Error('No content in Ollama response');
+      const data = JSON.parse(rawText);
+
+      // Handle thinking models (like qwen3-vl) which may return content in 'thinking' field
+      // or have empty 'content' while still generating valid output
+      const content = data.message?.content || '';
+      const thinking = data.message?.thinking || '';
+
+      console.log('[Ollama] Parsed response - content:', content ? `"${content.substring(0, 100)}..."` : '(empty)');
+      console.log('[Ollama] Parsed response - thinking:', thinking ? `"${thinking.substring(0, 100)}..."` : '(empty)');
+      console.log('[Ollama] Parsed response - done_reason:', data.done_reason);
+
+      // If we have content, use it directly
+      if (content) {
+        return content;
       }
 
-      return data.message.content;
+      // For thinking models: if content is empty but we have thinking
+      if (thinking) {
+        // If ran out of tokens during thinking, warn but still try to use thinking
+        if (data.done_reason === 'length') {
+          console.warn('[Ollama] Model ran out of tokens during thinking phase (done_reason=length)');
+        }
+        // Return the thinking content - this IS the response for thinking models
+        console.log('[Ollama] Using thinking content as response');
+        return thinking;
+      }
+
+      throw new Error('No content in Ollama response');
     } catch (error) {
       if (error instanceof Error) {
         throw new LLMError(

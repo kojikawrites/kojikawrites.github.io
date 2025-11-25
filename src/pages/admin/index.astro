@@ -1,0 +1,57 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import '../../styles/admin.css';
+
+// Only render in development mode
+if (import.meta.env.PROD) {
+  return Astro.redirect('/404');
+}
+
+const title = 'Admin';
+const description = 'Site administration';
+const permalink = Astro.url.pathname;
+
+const adminPages = [
+  {
+    title: 'Content Editor',
+    href: '/edit',
+    description: 'Edit blog posts and site content'
+  },
+  {
+      title: 'Deploy',
+      href: '/admin/deploy',
+      description: 'Deploy your changes to production'
+  },
+  {
+    title: 'Theme Editor',
+    href: '/admin/colors',
+    description: 'Edit the color scheme for light and dark modes'
+  },
+  {
+    title: 'SSL Setup',
+    href: '/admin/ssl-setup',
+    description: 'Configure SSL certificates'
+  }
+];
+---
+
+<html lang="en">
+<head>
+  <BaseHead title={title} description={description} permalink={permalink} />
+</head>
+<body>
+  <div class="container">
+    <h1>Admin</h1>
+    <p class="subtitle">Site administration tools</p>
+
+    <div class="admin-grid">
+      {adminPages.map(page => (
+        <a href={page.href} class="admin-card">
+          <h2>{page.title}</h2>
+          <p>{page.description}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</body>
+</html>

@@ -6,7 +6,7 @@ REM For Ollama: exits silently (no action needed)
 setlocal enabledelayedexpansion
 
 REM Exit silently if LLM is disabled
-if "%LLM_ENABLED%"=="false" exit /b 0
+if "%PUBLIC_LLM_ENABLED%"=="false" exit /b 0
 
 REM Exit silently if using Ollama (doesn't need integer replacement)
 if "%LLM_PROVIDER%"=="ollama" exit /b 0

@@ -31,10 +31,10 @@ COMPOSE_FILES="-f compose/docker-compose.yaml"
 # Auto-detect Docker Model Runner capability (unless manually overridden)
 if [ -z "${COMPOSE_PROFILES}" ]; then
     # Check if LLM is disabled
-    if [ "${LLM_ENABLED}" = "false" ]; then
+    if [ "${PUBLIC_LLM_ENABLED}" = "false" ]; then
         export COMPOSE_PROFILES=no-llm
         echo ""
-        echo "🚫 LLM functionality disabled (LLM_ENABLED=false)"
+        echo "🚫 LLM functionality disabled (PUBLIC_LLM_ENABLED=false)"
         echo ""
     # Check if user explicitly chose Docker Model Runner
     elif [ "${LLM_PROVIDER}" = "docker" ]; then
@@ -89,23 +89,60 @@ if [ -z "${COMPOSE_PROFILES}" ]; then
                 echo "  docker model pull $model"
             done
             echo ""
-            echo "Or disable LLM features by setting LLM_ENABLED=false in .env"
+            echo "Or disable LLM features by setting PUBLIC_LLM_ENABLED=false in .env"
             echo ""
             exit 1
         fi
         echo ""
-    # Check if user explicitly chose Ollama provider
-    elif [ "${LLM_PROVIDER}" = "ollama" ]; then
+    # Check if user explicitly chose containerized Ollama (we manage the container)
+    elif [ "${LLM_PROVIDER}" = "ollama-docker" ]; then
         export COMPOSE_PROFILES=ollama
         echo ""
-        echo "📦 Using custom Ollama container (LLM_PROVIDER=ollama)"
+        echo "📦 Using containerized Ollama (LLM_PROVIDER=ollama-docker)"
+        echo "   URL: http://ollama:11434 (internal Docker network)"
         echo ""
-    # Check for unimplemented providers
+    # Check if user is using external Ollama (they manage it)
+    elif [ "${LLM_PROVIDER}" = "ollama" ]; then
+        # No Ollama container needed - user manages their own Ollama instance
+        export COMPOSE_PROFILES=no-llm
+        echo ""
+        echo "🔗 Using external Ollama (LLM_PROVIDER=ollama)"
+        echo "   URL: ${LLM_OLLAMA_URL:-http://host.docker.internal:11434}"
+        echo "   Note: Ensure your Ollama instance is running and accessible"
+        echo ""
+    # Check if user is using OpenAI API
+    elif [ "${LLM_PROVIDER}" = "openai" ]; then
+        # No local LLM container needed - using OpenAI API
+        export COMPOSE_PROFILES=no-llm
+        echo ""
+        echo "🌐 Using OpenAI API (LLM_PROVIDER=openai)"
+        if [ -z "${LLM_OPENAI_API_KEY}" ]; then
+            echo "   ⚠️  Warning: LLM_OPENAI_API_KEY not set"
+        else
+            echo "   ✓ API key configured"
+        fi
+        echo "   Text model: ${LLM_OPENAI_TEXT_MODEL:-gpt-4o}"
+        echo "   Vision model: ${LLM_OPENAI_VISION_MODEL:-gpt-4o}"
+        echo ""
+    # Check if user is using Claude/Anthropic API
+    elif [ "${LLM_PROVIDER}" = "claude" ]; then
+        # No local LLM container needed - using Anthropic API
+        export COMPOSE_PROFILES=no-llm
+        echo ""
+        echo "🤖 Using Claude/Anthropic API (LLM_PROVIDER=claude)"
+        if [ -z "${LLM_ANTHROPIC_API_KEY}" ]; then
+            echo "   ⚠️  Warning: LLM_ANTHROPIC_API_KEY not set"
+        else
+            echo "   ✓ API key configured"
+        fi
+        echo "   Text model: ${LLM_ANTHROPIC_TEXT_MODEL:-claude-sonnet-4-20250514}"
+        echo "   Vision model: ${LLM_ANTHROPIC_VISION_MODEL:-claude-sonnet-4-20250514}"
+        echo ""
+    # Check for unknown providers
     elif [ -n "${LLM_PROVIDER}" ]; then
         echo ""
-        echo "❌ LLM provider '${LLM_PROVIDER}' is not yet implemented" 1>&2
-        echo "   Valid options: docker, ollama" 1>&2
-        echo "   Coming soon: claude, openai" 1>&2
+        echo "❌ Unknown LLM provider '${LLM_PROVIDER}'" 1>&2
+        echo "   Valid options: docker, ollama, ollama-docker, openai, claude" 1>&2
         echo ""
         exit 1
     else
@@ -174,7 +211,7 @@ if [ -z "${COMPOSE_PROFILES}" ]; then
                         echo "  docker model pull $model"
                     done
                     echo ""
-                    echo "Or disable LLM features by setting LLM_ENABLED=false in .env"
+                    echo "Or disable LLM features by setting PUBLIC_LLM_ENABLED=false in .env"
                     echo ""
                     exit 1
                 fi

@@ -50,10 +50,10 @@ $composeFiles = @("-f", "compose/docker-compose.yaml")
 # Auto-detect Docker Model Runner capability (unless manually overridden)
 if (-not $env:COMPOSE_PROFILES) {
     # Check if LLM is disabled
-    if ($env:LLM_ENABLED -eq "false") {
+    if ($env:PUBLIC_LLM_ENABLED -eq "false") {
         $env:COMPOSE_PROFILES = "no-llm"
         Write-Host ""
-        Write-Host "🚫 LLM functionality disabled (LLM_ENABLED=false)" -ForegroundColor Yellow
+        Write-Host "🚫 LLM functionality disabled (PUBLIC_LLM_ENABLED=false)" -ForegroundColor Yellow
         Write-Host ""
     }
     # Check if user explicitly chose Docker Model Runner
@@ -106,25 +106,70 @@ if (-not $env:COMPOSE_PROFILES) {
                 Write-Host "  docker model pull $model"
             }
             Write-Host ""
-            Write-Host "Or disable LLM features by setting LLM_ENABLED=false in .env"
+            Write-Host "Or disable LLM features by setting PUBLIC_LLM_ENABLED=false in .env"
             Write-Host ""
             exit 1
         }
         Write-Host ""
     }
-    # Check if user explicitly chose Ollama provider
-    elseif ($env:LLM_PROVIDER -eq "ollama") {
+    # Check if user explicitly chose containerized Ollama (we manage the container)
+    elseif ($env:LLM_PROVIDER -eq "ollama-docker") {
         $env:COMPOSE_PROFILES = "ollama"
         Write-Host ""
-        Write-Host "📦 Using custom Ollama container (LLM_PROVIDER=ollama)" -ForegroundColor Yellow
+        Write-Host "📦 Using containerized Ollama (LLM_PROVIDER=ollama-docker)" -ForegroundColor Yellow
+        Write-Host "   URL: http://ollama:11434 (internal Docker network)"
         Write-Host ""
     }
-    # Check for unimplemented providers
+    # Check if user is using external Ollama (they manage it)
+    elseif ($env:LLM_PROVIDER -eq "ollama") {
+        # No Ollama container needed - user manages their own Ollama instance
+        $env:COMPOSE_PROFILES = "no-llm"
+        $ollamaUrl = if ($env:LLM_OLLAMA_URL) { $env:LLM_OLLAMA_URL } else { "http://host.docker.internal:11434" }
+        Write-Host ""
+        Write-Host "🔗 Using external Ollama (LLM_PROVIDER=ollama)" -ForegroundColor Cyan
+        Write-Host "   URL: $ollamaUrl"
+        Write-Host "   Note: Ensure your Ollama instance is running and accessible"
+        Write-Host ""
+    }
+    # Check if user is using OpenAI API
+    elseif ($env:LLM_PROVIDER -eq "openai") {
+        # No local LLM container needed - using OpenAI API
+        $env:COMPOSE_PROFILES = "no-llm"
+        Write-Host ""
+        Write-Host "🌐 Using OpenAI API (LLM_PROVIDER=openai)" -ForegroundColor Cyan
+        if (-not $env:LLM_OPENAI_API_KEY) {
+            Write-Host "   ⚠️  Warning: LLM_OPENAI_API_KEY not set" -ForegroundColor Yellow
+        } else {
+            Write-Host "   ✓ API key configured"
+        }
+        $textModel = if ($env:LLM_OPENAI_TEXT_MODEL) { $env:LLM_OPENAI_TEXT_MODEL } else { "gpt-4o" }
+        $visionModel = if ($env:LLM_OPENAI_VISION_MODEL) { $env:LLM_OPENAI_VISION_MODEL } else { "gpt-4o" }
+        Write-Host "   Text model: $textModel"
+        Write-Host "   Vision model: $visionModel"
+        Write-Host ""
+    }
+    # Check if user is using Claude/Anthropic API
+    elseif ($env:LLM_PROVIDER -eq "claude") {
+        # No local LLM container needed - using Anthropic API
+        $env:COMPOSE_PROFILES = "no-llm"
+        Write-Host ""
+        Write-Host "🤖 Using Claude/Anthropic API (LLM_PROVIDER=claude)" -ForegroundColor Cyan
+        if (-not $env:LLM_ANTHROPIC_API_KEY) {
+            Write-Host "   ⚠️  Warning: LLM_ANTHROPIC_API_KEY not set" -ForegroundColor Yellow
+        } else {
+            Write-Host "   ✓ API key configured"
+        }
+        $textModel = if ($env:LLM_ANTHROPIC_TEXT_MODEL) { $env:LLM_ANTHROPIC_TEXT_MODEL } else { "claude-sonnet-4-20250514" }
+        $visionModel = if ($env:LLM_ANTHROPIC_VISION_MODEL) { $env:LLM_ANTHROPIC_VISION_MODEL } else { "claude-sonnet-4-20250514" }
+        Write-Host "   Text model: $textModel"
+        Write-Host "   Vision model: $visionModel"
+        Write-Host ""
+    }
+    # Check for unknown providers
     elseif ($env:LLM_PROVIDER) {
         Write-Host ""
-        Write-Error "LLM provider '$env:LLM_PROVIDER' is not yet implemented"
-        Write-Host "   Valid options: docker, ollama" -ForegroundColor Yellow
-        Write-Host "   Coming soon: claude, openai" -ForegroundColor Yellow
+        Write-Error "Unknown LLM provider '$env:LLM_PROVIDER'"
+        Write-Host "   Valid options: docker, ollama, ollama-docker, openai, claude" -ForegroundColor Yellow
         Write-Host ""
         exit 1
     }
@@ -200,7 +245,7 @@ if (-not $env:COMPOSE_PROFILES) {
                                 Write-Host "  docker model pull $model"
                             }
                             Write-Host ""
-                            Write-Host "Or disable LLM features by setting LLM_ENABLED=false in .env"
+                            Write-Host "Or disable LLM features by setting PUBLIC_LLM_ENABLED=false in .env"
                             Write-Host ""
                             exit 1
                         }

@@ -134,7 +134,7 @@ const previewSrc = (await getMediaMetadata(previewImgPath)).default.src;
 
         div.dataset.hasClickHandler = "true";
         div.addEventListener("click", _ => {
-            const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
+            const theme = (window.getEffectiveTheme() === 'dark') ? 'dark' : 'white';
             // alert(videoSrc);
             Spotlight.show([{
                 media: "video",

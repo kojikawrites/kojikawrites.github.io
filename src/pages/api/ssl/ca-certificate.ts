@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'fs';
 
 // the following line will be automatically commented out
 // by the build process for production builds.
-// export const prerender = false; // ![DEV-ONLY]
+export const prerender = false; // ![DEV-ONLY]
 
 export const GET: APIRoute = async () => {
   const certPath = '/app/.ssl/ca.crt';

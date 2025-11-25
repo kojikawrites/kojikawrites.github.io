@@ -4,7 +4,7 @@
 set -e
 
 # Exit silently if LLM is disabled
-if [ "${LLM_ENABLED}" = "false" ]; then
+if [ "${PUBLIC_LLM_ENABLED}" = "false" ]; then
     exit 0
 fi
 

@@ -32,7 +32,15 @@
     visibility: var(--visibility-truncated-breadcrumbs, hidden);
     position: var(--position-truncated-breadcrumbs, absolute);
 }
-.c-breadcrumbs.is-truncated .c-breadcrumbs__crumb:first-of-type, .c-breadcrumbs.is-truncated .c-breadcrumbs__crumb:last-of-type, .c-breadcrumbs.is-truncated .c-breadcrumbs__crumb.has-ellipsis {
+.c-breadcrumbs.is-truncated .c-breadcrumbs__crumb:first-of-type {
+    --visibility-truncated-breadcrumbs: visible;
+    --position-truncated-breadcrumbs: relative;
+}
+.c-breadcrumbs.is-truncated .c-breadcrumbs__crumb.has-ellipsis {
+    --visibility-truncated-breadcrumbs: visible;
+    --position-truncated-breadcrumbs: relative;
+}
+.c-breadcrumbs.is-truncated .c-breadcrumbs__crumb:last-child {
     --visibility-truncated-breadcrumbs: visible;
     --position-truncated-breadcrumbs: relative;
 }
@@ -49,6 +57,7 @@
     margin: 0;
     padding: 0;
     display: flex;
+    flex-wrap: nowrap;
 }
 .c-breadcrumbs__crumbs:where(.has-no-separators) {
     row-gap: var(--spacing-vertical-separator-breadcrumbs);
@@ -104,9 +113,22 @@
 }
 .c-breadcrumbs .c-breadcrumbs__crumb {
     @apply pt-0.5;
+    min-width: 0;
+    flex-shrink: 1;
+}
+.c-breadcrumbs .c-breadcrumbs__crumb:first-of-type,
+.c-breadcrumbs .c-breadcrumbs__crumb.has-ellipsis {
+    flex-shrink: 0;
+}
+.c-breadcrumbs .c-breadcrumbs__crumb:last-of-type {
+    flex: 1 1 auto;
+    min-width: 3em;
+    overflow: hidden;
 }
 .c-breadcrumbs .c-breadcrumbs__link {
     @apply text-ellipsis overflow-hidden whitespace-nowrap;
+    min-width: 0;
+    flex-shrink: 1;
 }
 .c-breadcrumbs .c-breadcrumbs__link:where(.is-index) {
     @apply min-w-4 min-h-4;

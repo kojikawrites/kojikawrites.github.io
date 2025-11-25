@@ -56,3 +56,90 @@ export function fitsInContext(
   const totalEstimated = estimatedPromptTokens + maxTokens;
   return totalEstimated <= contextWindow;
 }
+
+/**
+ * Recursively fix a JSON schema for OpenAI's strict mode requirements:
+ * - `additionalProperties: false` on ALL object types
+ * - `required` must include ALL properties defined in an object
+ *
+ * @param schema - JSON schema object or sub-schema
+ * @returns Schema fixed for OpenAI strict mode
+ */
+function fixSchemaForStrictMode(schema: Record<string, any>): Record<string, any> {
+  if (!schema || typeof schema !== 'object') {
+    return schema;
+  }
+
+  const result: Record<string, any> = { ...schema };
+
+  // If this is an object type, add additionalProperties: false and ensure required includes all props
+  if (result.type === 'object') {
+    result.additionalProperties = false;
+
+    // Recursively process properties and ensure all are required
+    if (result.properties) {
+      const propKeys = Object.keys(result.properties);
+
+      // OpenAI strict mode requires all properties to be in required
+      result.required = propKeys;
+
+      result.properties = Object.fromEntries(
+        Object.entries(result.properties).map(([key, value]) => [
+          key,
+          fixSchemaForStrictMode(value as Record<string, any>)
+        ])
+      );
+    }
+  }
+
+  // If this is an array, process the items schema
+  if (result.type === 'array' && result.items) {
+    result.items = fixSchemaForStrictMode(result.items);
+  }
+
+  // Handle anyOf, oneOf, allOf
+  for (const combiner of ['anyOf', 'oneOf', 'allOf']) {
+    if (Array.isArray(result[combiner])) {
+      result[combiner] = result[combiner].map((s: Record<string, any>) =>
+        fixSchemaForStrictMode(s)
+      );
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Build OpenAI-compatible response format for structured JSON output.
+ *
+ * OpenAI's strict mode requires `additionalProperties: false` on ALL object types,
+ * including nested objects and array items. This function recursively adds
+ * this property throughout the entire schema.
+ *
+ * @param schema - JSON schema object defining the expected structure
+ * @param name - Name for the schema (default: 'response')
+ * @returns OpenAI-compatible response_format object
+ */
+export function buildJsonResponseFormat(
+  schema: Record<string, any>,
+  name: string = 'response'
+): {
+  type: 'json_schema';
+  json_schema: {
+    name: string;
+    strict: boolean;
+    schema: Record<string, any>;
+  };
+} {
+  // Recursively fix schema for OpenAI strict mode
+  const fixedSchema = fixSchemaForStrictMode(schema);
+
+  return {
+    type: 'json_schema',
+    json_schema: {
+      name,
+      strict: true,
+      schema: fixedSchema,
+    },
+  };
+}

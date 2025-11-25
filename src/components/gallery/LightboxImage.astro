@@ -91,12 +91,12 @@ const resolvedCaption = caption ?? alt;
         const img = document.getElementById(imgId);
         // console.warn(div, img);
         div.addEventListener("click", _ => {
-            const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
+            const spotlightTheme = (window.getEffectiveTheme() === 'dark') ? 'dark' : 'white';
             Spotlight.show([{
                 src: img.src,
                 title: alt,
                 description: description,
-                theme: theme,
+                theme: spotlightTheme,
             }]);
         });
     }

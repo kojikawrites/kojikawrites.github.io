@@ -1,7 +1,10 @@
 ---
 // the following line will be automatically commented out
 // by the build process for production builds.
-// export const prerender = false; // ![DEV-ONLY]
+export const prerender = false; // ![DEV-ONLY]
+
+import BaseHead from '../../components/BaseHead.astro';
+import '../../styles/admin.css';
 
 const userAgent = Astro.request.headers.get('user-agent') || '';
 const isMac = /Mac|iPhone|iPad/.test(userAgent);
@@ -15,48 +18,28 @@ const hostname = (import.meta.env.VITE_HMR_HOST || 'localhost')
   .replace(/:.*$/, '');
 const safeHostname = hostname.replace(/[^a-zA-Z0-9._-]/g, '-');
 const certFilename = `${safeHostname}-ca.crt`;
+
+const title = 'SSL Certificate Setup';
+const description = 'Configure SSL certificates';
+const permalink = '/admin/ssl-setup';
 ---
 
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SSL Certificate Setup</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      background: #f5f5f5;
-      padding: 2rem;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
+  <BaseHead title={title} description={description} permalink={permalink} />
+  <style is:global>
+    /* Override h1 style for this page */
     h1 {
-      color: #2c3e50;
-      margin-bottom: 1rem;
+      border-bottom: none;
     }
 
     .intro {
-      background: #e8f4fd;
-      border-left: 4px solid #3498db;
+      background: rgba(var(--primary-color), 0.15);
+      border-left: 4px solid rgb(var(--primary-color));
       padding: 1rem;
       margin-bottom: 2rem;
       border-radius: 4px;
+      color: rgb(var(--text-main));
     }
 
     .step {
@@ -92,7 +75,8 @@ const certFilename = `${safeHostname}-ca.crt`;
     }
 
     code {
-      background: #f8f8f8;
+      background: rgb(var(--background-mid));
+      color: rgb(var(--text-main));
       padding: 2px 6px;
       border-radius: 3px;
       font-family: 'Courier New', monospace;
@@ -124,11 +108,12 @@ const certFilename = `${safeHostname}-ca.crt`;
     }
 
     .success {
-      background: #d4edda;
-      border-left: 4px solid #28a745;
+      background: rgba(var(--hiive-crt), 0.15);
+      border-left: 4px solid rgb(var(--hiive-crt));
       padding: 1rem;
       margin-top: 2rem;
       border-radius: 4px;
+      color: rgb(var(--text-main));
     }
 
     .os-tabs {
@@ -166,6 +151,7 @@ const certFilename = `${safeHostname}-ca.crt`;
 </head>
 <body>
   <div class="container">
+    <a href="/admin" class="back-link">← Admin</a>
     <h1>🔒 SSL Certificate Setup</h1>
 
     <div class="intro">

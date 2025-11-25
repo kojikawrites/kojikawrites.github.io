@@ -3,7 +3,7 @@
 FROM node:20-alpine
 
 # Install rsync, Python, and curl for build operations
-RUN apk add --no-cache rsync python3 py3-pip curl git git-lfs
+RUN apk add --no-cache rsync python3 py3-pip curl git git-lfs cairo
 
 # Install uv for fast Python package management (static binary for Alpine)
 RUN curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/uv-x86_64-unknown-linux-musl.tar.gz | tar xz -C /usr/local/bin --strip-components=1

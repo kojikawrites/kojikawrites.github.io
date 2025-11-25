@@ -4,12 +4,19 @@
  * Provides a unified interface for multiple LLM providers (Docker Model Runner, Ollama, OpenAI, Claude)
  */
 
-export type LLMProviderType = 'docker' | 'ollama' | 'openai' | 'claude';
+// Provider types:
+// - 'docker': Docker Model Runner (Docker Desktop 4.40+)
+// - 'ollama': External Ollama (you manage it - host machine, remote server, etc.)
+// - 'ollama-docker': Containerized Ollama (we build and manage the container)
+// - 'openai': OpenAI API (future)
+// - 'claude': Claude API (future)
+export type LLMProviderType = 'docker' | 'ollama' | 'ollama-docker' | 'openai' | 'claude';
 
 export interface TextGenerationOptions {
   maxTokens?: number;
   temperature?: number;
   systemPrompt?: string;
+  timeout?: number; // Request timeout in milliseconds (overrides default)
 }
 
 export interface ImageAnalysisOptions {

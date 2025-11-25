@@ -6,68 +6,78 @@ AI-powered content assistance for image alt text generation and text editing.
 
 - **Image Analysis**: Generate alt text for images using vision-capable LLMs
 - **Text Editing**: Rewrite, correct, or enhance text content
-- **Multiple Providers**: Support for Ollama (local), OpenAI, and Claude
-- **Docker Integration**: Two options available:
-  - **Native Model Runner** (Docker Desktop 4.40+): Simplified, built-in AI support
-  - **Custom Ollama Container** (Universal): Works on all platforms
+- **Multiple Providers**: Support for Docker Model Runner, Ollama (external or containerized), OpenAI, and Claude
+- **Flexible Deployment**: Three Ollama deployment options:
+  - **Docker Model Runner** (Docker Desktop 4.40+): Simplified, built-in AI support
+  - **External Ollama**: Use your own Ollama instance (host machine, remote server, etc.)
+  - **Containerized Ollama**: We build and manage the Ollama container for you
 
 ## Quick Start
 
-### 1. Choose Your Deployment Method
+### 1. Choose Your Provider
 
-Check if Docker Model Runner is available on your system:
+| Provider | Value | Description |
+|----------|-------|-------------|
+| Docker Model Runner | `docker` | Built-in Docker Desktop AI (4.40+) |
+| External Ollama | `ollama` | You manage your own Ollama instance |
+| Containerized Ollama | `ollama-docker` | We build and manage Ollama container |
+| OpenAI | `openai` | OpenAI API (future) |
+| Claude | `claude` | Claude API (future) |
 
-```bash
-cd docker
-./check-model-runner.sh  # macOS/Linux
-# or
-check-model-runner.bat   # Windows (batch)
-check-model-runner.ps1   # Windows (PowerShell)
-```
-
-**Docker Model Runner** (Recommended if available):
+**Docker Model Runner** (`LLM_PROVIDER=docker`):
 - ✅ Simpler configuration
 - ✅ Automatic model management via Docker Desktop
 - ✅ OpenAI-compatible API
 - ⚠️ Requires Docker Desktop 4.40+ (macOS/Windows) or Compose 2.38+
 - ⚠️ Uses quantized models (slightly lower quality, much faster)
 
-**Custom Ollama Container** (Universal fallback):
-- ✅ Works on all platforms (Linux, macOS, Windows)
+**External Ollama** (`LLM_PROVIDER=ollama`):
+- ✅ Use existing Ollama installation (host machine, remote server, etc.)
+- ✅ No additional container created
 - ✅ Full model support (not just quantized)
-- ✅ More control over model configuration
-- ⚠️ Requires custom Dockerfile and management
+- ⚠️ You manage Ollama yourself
+
+**Containerized Ollama** (`LLM_PROVIDER=ollama-docker`):
+- ✅ Works on all platforms (Linux, macOS, Windows)
+- ✅ We build and manage the container for you
+- ✅ Full model support (not just quantized)
+- ⚠️ Requires additional container and storage
 
 ### 2. Configure LLM Provider
 
 Edit `src/.sites/[SITE_CODE]/.env`:
 
 ```bash
-# Enable/disable LLM functionality
-LLM_ENABLED=true
+# Enable/disable LLM functionality (PUBLIC_ prefix for client-side access)
+PUBLIC_LLM_ENABLED=true
 
-# Provider selection
-LLM_PROVIDER=ollama
+# Provider selection (docker, ollama, ollama-docker, openai, claude)
+LLM_PROVIDER=docker
 
-# Custom Ollama configuration (used when COMPOSE_PROFILES=ollama)
-LLM_OLLAMA_URL=http://ollama:11434
+# --- For Docker Model Runner (LLM_PROVIDER=docker) ---
+LLM_DOCKER_TEXT_MODEL=ai/llama3.1:8B-F16
+LLM_DOCKER_VISION_MODEL="ai/qwen3-vl:8B-UD-Q4_K_XL"
+
+# --- For External Ollama (LLM_PROVIDER=ollama) ---
+# You must specify the URL where YOUR Ollama instance is running
+LLM_OLLAMA_URL=http://host.docker.internal:11434  # For host machine
+# LLM_OLLAMA_URL=http://192.168.1.100:11434       # For remote server
 LLM_OLLAMA_MODEL=llama3.2-vision:11b
 
-# Docker Model Runner configuration (used when Docker Desktop 4.40+/Compose 2.38+)
-LLM_DOCKER_MODEL="ai/qwen3-vl:8B-UD-Q4_K_XL"
+# --- For Containerized Ollama (LLM_PROVIDER=ollama-docker) ---
+# URL is fixed to http://ollama:11434 (internal Docker network)
+LLM_OLLAMA_MODEL=llama3.2-vision:11b
 
 # Common settings
-# LLM_CONTEXT_SIZE removed - providers automatically use model's native context window
-LLM_MAX_TOKENS=2048        # Maximum tokens for responses (can override per request)
-LLM_TEMPERATURE=0.7        # Creativity (0.0-1.0, higher = more creative)
+LLM_MAX_TOKENS=8192        # Maximum tokens for responses
+LLM_TEMPERATURE=0.7        # Creativity (0.0-1.0)
 LLM_TIMEOUT=30000          # Request timeout in milliseconds
 ```
 
-**That's it!** Build scripts automatically detect and use the best available option:
-- Docker Model Runner is used by default when available (Compose 2.38+)
-- Falls back to custom Ollama on older Docker versions or Linux
-- Set `LLM_ENABLED=false` to completely disable LLM (no containers started)
-- Override with `COMPOSE_PROFILES=ollama` to force custom Ollama
+**Auto-detection**: Leave `LLM_PROVIDER` unset to auto-detect:
+- Uses Docker Model Runner if available (Compose 2.38+)
+- Falls back to containerized Ollama otherwise
+- Set `PUBLIC_LLM_ENABLED=false` to disable LLM entirely
 
 ### 3. Start Docker Services
 
@@ -143,7 +153,7 @@ const { result } = await response.json();
 To completely disable LLM functionality:
 
 ```bash
-LLM_ENABLED=false
+PUBLIC_LLM_ENABLED=false
 ```
 
 This prevents any LLM containers from starting and skips model downloads.

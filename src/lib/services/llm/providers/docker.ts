@@ -18,7 +18,7 @@ import type {
   LLMConfig,
 } from '../types';
 import { LLMError } from '../types';
-import { getEffectiveMaxTokens } from '../utils';
+import { getEffectiveMaxTokens, buildJsonResponseFormat } from '../utils';
 
 export class DockerProvider implements LLMProvider {
   private baseUrl: string;
@@ -74,6 +74,8 @@ export class DockerProvider implements LLMProvider {
     return this.chat(this.textModel, messages, {
       maxTokens: options?.maxTokens,
       temperature: options?.temperature,
+      format: (options as any)?.format,
+      timeout: options?.timeout,
     });
   }
 
@@ -105,6 +107,7 @@ export class DockerProvider implements LLMProvider {
     return this.chat(this.visionModel, messages, {
       maxTokens: options?.maxTokens,
       temperature: options?.temperature,
+      format: (options as any)?.format,
     });
   }
 
@@ -172,7 +175,7 @@ export class DockerProvider implements LLMProvider {
   private async chat(
     model: string,
     messages: any[],
-    options?: { maxTokens?: number; temperature?: number }
+    options?: { maxTokens?: number; temperature?: number; format?: any; timeout?: number }
   ): Promise<string> {
     // Get effective max tokens (respects context window)
     const requestedTokens = options?.maxTokens || this.defaultMaxTokens;
@@ -193,19 +196,29 @@ export class DockerProvider implements LLMProvider {
         ? `${this.baseUrl.replace(/\/$/, '')}/chat/completions`
         : `${this.baseUrl}/v1/chat/completions`;
 
+      const requestBody: any = {
+        model,
+        messages,
+        max_tokens: effectiveMaxTokens,
+        temperature: options?.temperature ?? this.defaultTemperature,
+        stream: false,
+      };
+
+      // Add JSON mode if format is specified
+      if (options?.format) {
+        requestBody.response_format = buildJsonResponseFormat(options.format);
+      }
+
+      // Use per-request timeout if provided, otherwise fall back to default
+      const requestTimeout = options?.timeout ?? this.timeout;
+
       const response = await fetch(chatUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          model,
-          messages,
-          max_tokens: effectiveMaxTokens,
-          temperature: options?.temperature ?? this.defaultTemperature,
-          stream: false,
-        }),
-        signal: AbortSignal.timeout(this.timeout),
+        body: JSON.stringify(requestBody),
+        signal: AbortSignal.timeout(requestTimeout),
       });
 
       if (!response.ok) {

@@ -5,14 +5,18 @@ Runs on port 8000 alongside the Astro dev server on port 4321.
 """
 
 import os
+import base64
+import io
 import shutil
 import subprocess
+import time
 import yaml
+
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse, FileResponse
+from PIL import Image
 
-import time
 
 app = FastAPI()
 
@@ -627,12 +631,11 @@ async def suggest_commit_message(request: Request):
 
         print(f"[COMMIT-MSG] Diff size: ~{diff_tokens} tokens", flush=True)
 
-        # If diff is too large, summarize by file
+        # Format diffs with structured FILEDIFF tags
+        formatted_diffs = []
         if diff_tokens > max_tokens:
             print(f"[COMMIT-MSG] Diff too large, chunking by file...", flush=True)
-
             # Get per-file diffs
-            file_summaries = []
             for file_info in files[:20]:  # Limit to first 20 files
                 file_path = file_info['file']
                 file_diff = subprocess.run(
@@ -642,44 +645,47 @@ async def suggest_commit_message(request: Request):
                     text=True,
                     timeout=5
                 )
-
                 if file_diff.stdout:
-                    # Truncate individual file diffs if needed
-                    truncated_diff = file_diff.stdout[:2000]
-                    file_summaries.append(f"File: {file_path}\n{truncated_diff}")
-
-            diff_context = "\n\n---\n\n".join(file_summaries)
+                    truncated = file_diff.stdout[:2000]
+                    formatted_diffs.append(f'<FILEDIFF filename="{file_path}">\n{truncated}\n</FILEDIFF>')
         else:
-            diff_context = diff_output
+            # Parse the unified diff to extract per-file sections
+            # Or just wrap the whole thing if it's small enough
+            formatted_diffs.append(f'<FILEDIFF filename="(combined)">\n{diff_output}\n</FILEDIFF>')
 
-        # Prepare LLM prompt
-        prompt = f"""Write a single git commit message for these changes. Be specific about WHAT changed, not just WHERE.
+        diff_section = "\n\n".join(formatted_diffs)
 
-Files changed:
+        # Prepare LLM prompt - task first, then context
+        prompt = f"""TASK: Write a single git commit message summarizing the code changes below.
+
+IMPORTANT: This is a simple task. Respond quickly and directly without lengthy analysis.
+
+REQUIREMENTS:
+- Output ONLY factual statements about what the code changes do
+- Do NOT speculate about intent, purpose, or future implications
+- Use imperative mood ("Add" not "Added", "Fix" not "Fixed")
+- Keep total length under 120 characters
+- If multiple unrelated changes, list the 2-3 most significant ones
+- NO quotes, NO preamble, NO options - just the commit message
+
+GOOD EXAMPLES (factual, specific):
+- Add HTTPS support with self-signed cert handling to build service
+- Remove maxTokens parameter from build service LLM calls
+- Rename LLM_ENABLED to PUBLIC_LLM_ENABLED in build scripts
+
+BAD EXAMPLES (speculative, vague):
+- Improve LLM integration for better performance
+- Update build service and configuration
+- Fix issues with the deployment system
+
+FILES CHANGED:
 {file_list}
 
-Git diff:
-{diff_context}
+CODE CHANGES:
+{diff_section}
 
-Rules:
-- ONE message only, not multiple options
-- Use imperative mood ("Add" not "Added")
-- Be specific: mention actual features/fixes, not vague words like "improvements" or "updates"
-- If multiple changes, list the key ones (max 2-3 specific things)
-- Keep total length under 120 characters
-- NO quotes, NO preamble, NO options
-
-Good examples (specific):
-- Add HTTPS support with self-signed cert handling to build service LLM calls
-- Strip quote wrapping from LLM responses and improve commit message prompt
-- Add build log download API and empty default commit message field
-
-Bad examples (too vague):
-- Update build service and LLM integration
-- Add new features and improvements
-- Update multiple files
-
-Your commit message:"""
+Respond with JSON in this exact format:
+{{"text": "<your commit message based on the CODE CHANGES above>"}}"""
 
         # Call blog's LLM API (uses existing provider logic)
         print(f"[COMMIT-MSG] Calling blog LLM API...", flush=True)
@@ -716,21 +722,32 @@ async def call_blog_llm_api(prompt: str) -> str:
     try:
         # Call blog service's LLM API endpoint (internal Docker network)
         # Use HTTPS with self-signed certificate verification disabled (safe for internal Docker network)
-        async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
+        # Don't pass maxTokens - let the blog API use its configured LLM_MAX_TOKENS default
+        async with httpx.AsyncClient(timeout=120.0, verify=False) as client:
             response = await client.post(
                 "https://blog:4321/api/llm/text",
                 json={
                     "operation": "generate",
                     "prompt": prompt,
-                    "maxTokens": 200,
                     "temperature": 0.3,
+                    # JSON schema format for consistent output
+                    "format": {
+                        "type": "object",
+                        "properties": {
+                            "text": {
+                                "type": "string",
+                                "description": "The commit message"
+                            }
+                        },
+                        "required": ["text"]
+                    }
                 }
             )
 
             if response.status_code == 200:
                 result = response.json()
                 message = result.get('result', '')
-                # Strip surrounding quotes if present
+                # Strip surrounding quotes if present (shouldn't happen with JSON schema but just in case)
                 if message.startswith('"') and message.endswith('"'):
                     message = message[1:-1]
                 elif message.startswith("'") and message.endswith("'"):
@@ -1420,6 +1437,248 @@ async def deploy_wisp(request: Request):
             'success': False,
             'error': f'Deployment error: {str(e)}',
             'output': str(e)
+        }, status_code=500)
+
+
+@app.post("/convert-image")
+async def convert_image(request: Request):
+    """
+    Convert any image format to PNG base64 for LLM vision models.
+    Handles SVG, WebP, HEIC, TIFF, and other formats that vision models may not support natively.
+
+    Expects JSON body with:
+    - image: base64 data URI (data:image/...) OR file path starting with /
+    - format: output format (default: 'png', options: 'png', 'jpeg')
+    - max_size: max dimension in pixels (default: 1024, for vision model efficiency)
+    - background: background color for transparent images (default: None, options: 'white', 'black', or hex like '#FF0000')
+
+    Returns:
+    - success: boolean
+    - image: base64 data URI in the requested format
+    - original_format: detected input format
+    """
+    try:
+        body = await request.json()
+        image_input = body.get('image')
+        output_format = body.get('format', 'png').lower()
+        max_size = body.get('max_size', 1024)
+        background_color = body.get('background', None)  # 'white', 'black', or hex like '#FF0000'
+
+        if not image_input:
+            return JSONResponse({
+                'success': False,
+                'error': 'Missing required field: image'
+            }, status_code=400)
+
+        if output_format not in ['png', 'jpeg', 'jpg']:
+            return JSONResponse({
+                'success': False,
+                'error': 'Invalid format. Must be png or jpeg'
+            }, status_code=400)
+
+        # Normalize jpeg
+        if output_format == 'jpg':
+            output_format = 'jpeg'
+
+        image_data = None
+        original_format = 'unknown'
+
+        # Handle file path input
+        if image_input.startswith('/'):
+            # Read from file system
+            file_path = Path('/source') / image_input.lstrip('/')
+            if not file_path.exists():
+                # Try without /source prefix
+                file_path = Path(image_input)
+
+            if not file_path.exists():
+                return JSONResponse({
+                    'success': False,
+                    'error': f'File not found: {image_input}'
+                }, status_code=404)
+
+            original_format = file_path.suffix.lower().lstrip('.')
+
+            # Handle SVG specially
+            if original_format == 'svg':
+                try:
+                    import cairosvg
+                    # Parse background color for SVG conversion
+                    svg_bg_color = None
+                    if background_color:
+                        bg_lower = background_color.lower().strip()
+                        if bg_lower == 'white':
+                            svg_bg_color = 'white'
+                        elif bg_lower == 'black':
+                            svg_bg_color = 'black'
+                        elif bg_lower.startswith('#'):
+                            svg_bg_color = bg_lower
+
+                    print(f"[convert-image] SVG file conversion with background: {svg_bg_color}", flush=True)
+
+                    # Convert SVG to PNG bytes with background color
+                    png_data = cairosvg.svg2png(
+                        url=str(file_path),
+                        output_width=max_size,
+                        background_color=svg_bg_color
+                    )
+                    image_data = io.BytesIO(png_data)
+                except ImportError:
+                    return JSONResponse({
+                        'success': False,
+                        'error': 'SVG conversion requires cairosvg library'
+                    }, status_code=500)
+            else:
+                image_data = file_path
+
+        # Handle base64 data URI input
+        elif image_input.startswith('data:'):
+            # Parse data URI: data:image/png;base64,xxxxx
+            try:
+                header, encoded = image_input.split(',', 1)
+                mime_match = header.split(':')[1].split(';')[0]  # e.g., image/png
+                original_format = mime_match.split('/')[1] if '/' in mime_match else 'unknown'
+
+                decoded = base64.b64decode(encoded)
+
+                # Handle SVG specially
+                if original_format in ['svg+xml', 'svg']:
+                    try:
+                        import cairosvg
+                        # Parse background color early so we can apply it during SVG conversion
+                        svg_bg_color = None
+                        if background_color:
+                            bg_lower = background_color.lower().strip()
+                            if bg_lower == 'white':
+                                svg_bg_color = 'white'
+                            elif bg_lower == 'black':
+                                svg_bg_color = 'black'
+                            elif bg_lower.startswith('#'):
+                                svg_bg_color = bg_lower
+
+                        print(f"[convert-image] SVG conversion with background: {svg_bg_color}", flush=True)
+
+                        # Convert SVG to PNG - cairosvg supports background_color parameter
+                        png_data = cairosvg.svg2png(
+                            bytestring=decoded,
+                            output_width=max_size,
+                            background_color=svg_bg_color
+                        )
+                        image_data = io.BytesIO(png_data)
+                        original_format = 'svg'
+                    except ImportError:
+                        return JSONResponse({
+                            'success': False,
+                            'error': 'SVG conversion requires cairosvg library'
+                        }, status_code=500)
+                else:
+                    image_data = io.BytesIO(decoded)
+
+            except Exception as e:
+                return JSONResponse({
+                    'success': False,
+                    'error': f'Invalid base64 data URI: {str(e)}'
+                }, status_code=400)
+        else:
+            return JSONResponse({
+                'success': False,
+                'error': 'Image must be a file path starting with / or a base64 data URI'
+            }, status_code=400)
+
+        # Helper function to parse background color
+        def parse_background_color(color_str):
+            """Parse background color string to RGB tuple."""
+            if not color_str:
+                return None
+            color_str = color_str.lower().strip()
+            if color_str == 'white':
+                return (255, 255, 255)
+            elif color_str == 'black':
+                return (0, 0, 0)
+            elif color_str.startswith('#') and len(color_str) == 7:
+                # Hex color like #FF0000
+                try:
+                    r = int(color_str[1:3], 16)
+                    g = int(color_str[3:5], 16)
+                    b = int(color_str[5:7], 16)
+                    return (r, g, b)
+                except ValueError:
+                    return None
+            return None
+
+        bg_color = parse_background_color(background_color)
+        print(f"[convert-image] Background color requested: {background_color} -> {bg_color}", flush=True)
+
+        # Open and convert image using Pillow
+        try:
+            img = Image.open(image_data)
+            print(f"[convert-image] Image mode: {img.mode}, size: {img.size}", flush=True)
+
+            # If background color is specified, composite transparent images onto it
+            if bg_color and img.mode in ('RGBA', 'LA', 'P'):
+                if img.mode == 'P':
+                    img = img.convert('RGBA')
+                elif img.mode == 'LA':
+                    img = img.convert('RGBA')
+                # Create background and composite
+                background = Image.new('RGB', img.size, bg_color)
+                background.paste(img, mask=img.split()[-1])
+                img = background
+            # Convert to RGB if necessary (only for JPEG output which doesn't support alpha)
+            elif output_format == 'jpeg':
+                if img.mode in ('RGBA', 'LA', 'P'):
+                    # Create white background for transparency (JPEG doesn't support alpha)
+                    background = Image.new('RGB', img.size, (255, 255, 255))
+                    if img.mode == 'P':
+                        img = img.convert('RGBA')
+                    background.paste(img, mask=img.split()[-1] if img.mode == 'RGBA' else None)
+                    img = background
+                elif img.mode != 'RGB':
+                    img = img.convert('RGB')
+            else:
+                # For PNG output without background color, preserve alpha channel
+                if img.mode == 'P':
+                    img = img.convert('RGBA')
+                elif img.mode == 'LA':
+                    img = img.convert('RGBA')
+
+            # Resize if larger than max_size
+            if max(img.size) > max_size:
+                ratio = max_size / max(img.size)
+                new_size = (int(img.size[0] * ratio), int(img.size[1] * ratio))
+                img = img.resize(new_size, Image.Resampling.LANCZOS)
+
+            # Convert to output format
+            output_buffer = io.BytesIO()
+            if output_format == 'jpeg':
+                img.save(output_buffer, format='JPEG', quality=85)
+                mime_type = 'image/jpeg'
+            else:
+                img.save(output_buffer, format='PNG')
+                mime_type = 'image/png'
+
+            output_buffer.seek(0)
+            output_base64 = base64.b64encode(output_buffer.read()).decode('utf-8')
+
+            return JSONResponse({
+                'success': True,
+                'image': f'data:{mime_type};base64,{output_base64}',
+                'original_format': original_format,
+                'output_format': output_format,
+                'size': img.size
+            })
+
+        except Exception as e:
+            return JSONResponse({
+                'success': False,
+                'error': f'Image conversion failed: {str(e)}'
+            }, status_code=500)
+
+    except Exception as e:
+        print(f"[CONVERT-IMAGE] Error: {e}", flush=True)
+        return JSONResponse({
+            'success': False,
+            'error': f'Image conversion error: {str(e)}'
         }, status_code=500)
 
 

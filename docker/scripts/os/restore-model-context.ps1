@@ -4,7 +4,7 @@
 $ErrorActionPreference = "Stop"
 
 # Exit silently if LLM is disabled
-if ($env:LLM_ENABLED -eq "false") {
+if ($env:PUBLIC_LLM_ENABLED -eq "false") {
     exit 0
 }
 

@@ -2,13 +2,11 @@
 /**
  * LLMOperationModal Component - DEV ONLY
  * Shows LLM operation progress, results, and approval UI
+ * Standalone modal that works without Keystatic React context
  * Automatically excluded from production builds via tree-shaking
  */
 import React, { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { assertKeystaticContext } from './guards';
-import { FocusScope } from '@react-aria/focus';
-import { useOverlay, useModal, usePreventScroll } from '@react-aria/overlays';
 
 export type LLMOperationStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -16,14 +14,19 @@ export interface LLMOperationModalProps {
   visible: boolean;
   status: LLMOperationStatus;
   operation?: string;
-  result?: string;
+  result?: string | string[];  // Can be string for text operations or array for tags/categories
   error?: string;
   originalText?: string;
   context?: string;
+  allowNewSuggestions?: boolean;
+  currentAttempt?: number;
+  maxAttempts?: number;
+  isAutoRetrying?: boolean;
   onApprove?: (result: string) => void;
   onReject?: () => void;
   onRetry?: () => void;
   onContextChange?: (context: string) => void;
+  onAllowNewSuggestionsChange?: (allow: boolean) => void;
   onClose: () => void;
 }
 
@@ -35,26 +38,55 @@ export const LLMOperationModal: React.FC<LLMOperationModalProps> = ({
   error,
   originalText,
   context,
+  allowNewSuggestions = false,
+  currentAttempt = 1,
+  maxAttempts = 5,
+  isAutoRetrying = false,
   onApprove,
   onReject,
   onRetry,
   onContextChange,
+  onAllowNewSuggestionsChange,
   onClose,
 }) => {
-  // Runtime guard: Ensure this component only runs in Keystatic context
-  assertKeystaticContext('LLMOperationModal');
-
   const overlayRef = useRef<HTMLDivElement>(null);
-  const [editedResult, setEditedResult] = useState(result || '');
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
+
+  // Find the Keystatic modal container to portal into
+  useEffect(() => {
+    if (visible) {
+      // Look for Keystatic's modal container
+      const ksModal = document.querySelector('[data-type="modal"][data-open="true"]') as HTMLElement;
+      if (ksModal) {
+        setPortalContainer(ksModal);
+      } else {
+        // Fallback to body
+        setPortalContainer(document.body);
+      }
+    }
+  }, [visible]);
+
+  // Convert array results to string for display (join with newlines for tags/categories)
+  const resultToString = (r: string | string[] | undefined): string => {
+    if (!r) return '';
+    if (Array.isArray(r)) return r.join('\n');
+    return r;
+  };
+  const [editedResult, setEditedResult] = useState(resultToString(result));
   const [editedContext, setEditedContext] = useState(context || '');
   const [hasGenerated, setHasGenerated] = useState(false);
 
   // Update edited result when result changes
   useEffect(() => {
     if (result) {
-      setEditedResult(result);
+      setEditedResult(resultToString(result));
     }
   }, [result]);
+
+  // Update edited context when context prop changes
+  useEffect(() => {
+    setEditedContext(context || '');
+  }, [context]);
 
   // Mark as generated when we get a successful result
   useEffect(() => {
@@ -70,21 +102,34 @@ export const LLMOperationModal: React.FC<LLMOperationModalProps> = ({
     }
   }, [visible]);
 
-  // React Aria hooks for proper overlay management
-  const { overlayProps } = useOverlay(
-    {
-      isOpen: visible,
-      onClose,
-      isDismissable: true,
-      shouldCloseOnBlur: false,
-    },
-    overlayRef
-  );
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (visible) {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+  }, [visible]);
 
-  const { modalProps } = useModal();
-  usePreventScroll({ isDisabled: !visible });
+  // Handle ESC key to close
+  useEffect(() => {
+    if (!visible) return;
 
-  if (!visible) return null;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape, true);
+    return () => document.removeEventListener('keydown', handleEscape, true);
+  }, [visible, onClose]);
+
+  if (!visible || !portalContainer) {
+    return null;
+  }
 
   const handleApprove = () => {
     if (onApprove && editedResult) {
@@ -120,15 +165,14 @@ export const LLMOperationModal: React.FC<LLMOperationModalProps> = ({
   };
 
   const modalContent = (
-    <div className="llm-modal-overlay" onClick={onClose}>
-      <FocusScope contain restoreFocus autoFocus>
-        <div
-          ref={overlayRef}
-          className="llm-modal-container"
-          onClick={(e) => e.stopPropagation()}
-          {...overlayProps}
-          {...modalProps}
-        >
+    <div ref={overlayRef} className="llm-modal-overlay">
+      <div
+        className="llm-modal-container"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="llm-modal-title"
+      >
         {/* Header */}
         <div className="llm-modal-header">
           <h3 className="llm-modal-title">{operation}</h3>
@@ -146,19 +190,43 @@ export const LLMOperationModal: React.FC<LLMOperationModalProps> = ({
           {/* Idle State - Context Input */}
           {status === 'idle' && (
             <div className="llm-modal-idle">
-              <div className="llm-comparison-section">
-                <h4 className="llm-section-title">Context (Optional)</h4>
-                <textarea
-                  className="llm-text-edit"
-                  value={editedContext}
-                  onChange={(e) => handleContextChange(e.target.value)}
-                  rows={Math.min(10, Math.max(4, editedContext.split('\n').length + 2))}
-                  placeholder="Add context to help the AI understand the image better (e.g., selected text from your document)..."
-                />
-                <p className="llm-edit-hint">
-                  Provide context about where this image appears or what it relates to
-                </p>
-              </div>
+              {/* Show checkbox for category/tag suggestions */}
+              {(operation === 'Suggest Categories' || operation === 'Suggest Tags') && onAllowNewSuggestionsChange && (
+                <div className="llm-comparison-section" style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={allowNewSuggestions}
+                      onChange={(e) => onAllowNewSuggestionsChange(e.target.checked)}
+                      style={{ cursor: 'pointer' }}
+                    />
+                    <span>Allow suggesting new {operation === 'Suggest Categories' ? 'categories' : 'tags'}</span>
+                  </label>
+                  <p className="llm-edit-hint" style={{ marginTop: '4px', marginLeft: '24px' }}>
+                    {allowNewSuggestions
+                      ? `The AI can suggest new ${operation === 'Suggest Categories' ? 'categories' : 'tags'} if existing ones don't fit well`
+                      : `The AI will only suggest from the existing list of ${operation === 'Suggest Categories' ? 'categories' : 'tags'}`
+                    }
+                  </p>
+                </div>
+              )}
+
+              {/* Show context input for non-category/tag operations */}
+              {operation !== 'Suggest Categories' && operation !== 'Suggest Tags' && (
+                <div className="llm-comparison-section">
+                  <h4 className="llm-section-title">Context (Optional)</h4>
+                  <textarea
+                    className="llm-text-edit"
+                    value={editedContext}
+                    onChange={(e) => handleContextChange(e.target.value)}
+                    rows={Math.min(10, Math.max(4, editedContext.split('\n').length + 2))}
+                    placeholder="Add context to help the AI understand the image better (e.g., selected text from your document)..."
+                  />
+                  <p className="llm-edit-hint">
+                    Provide context about where this image appears or what it relates to
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
@@ -167,6 +235,11 @@ export const LLMOperationModal: React.FC<LLMOperationModalProps> = ({
             <div className="llm-modal-loading">
               <div className="llm-spinner" />
               <p>Processing with AI...</p>
+              {isAutoRetrying && currentAttempt > 1 && (
+                <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+                  Attempt {currentAttempt}/{maxAttempts}
+                </p>
+              )}
             </div>
           )}
 
@@ -266,12 +339,11 @@ export const LLMOperationModal: React.FC<LLMOperationModalProps> = ({
             </div>
           )}
         </div>
-        </div>
-      </FocusScope>
+      </div>
     </div>
   );
 
-  return createPortal(modalContent, document.body);
+  return createPortal(modalContent, portalContainer);
 };
 
 export default LLMOperationModal;

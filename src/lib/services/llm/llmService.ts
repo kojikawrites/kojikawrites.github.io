@@ -22,31 +22,46 @@ import { ClaudeProvider } from './providers/claude';
  * Load LLM configuration from environment variables
  */
 function loadConfig(): LLMConfig {
-  // Auto-detect Docker Model Runner: if LLM_URL or LLM_MODEL are set by Docker
+  // Get provider from env, default to auto-detection
   let provider = import.meta.env.LLM_PROVIDER as LLMProviderType | undefined;
 
-  // LLM_URL is set by:
-  // 1. Docker Model Runner (auto-injected as LLM_TEXT_URL/LLM_VISION_URL for dual-model)
-  // 2. Docker Model Runner (auto-injected as LLM_URL for single-model - legacy)
-  // 3. docker-compose.yaml (from LLM_OLLAMA_URL when using custom Ollama)
-  // Fallback to LLM_OLLAMA_URL for backward compatibility
-  let ollamaUrl = import.meta.env.LLM_TEXT_URL || import.meta.env.LLM_URL || import.meta.env.LLM_OLLAMA_URL;
+  // Determine Ollama URL based on provider type
+  let ollamaUrl: string | undefined;
 
-  // Auto-detect Docker Model Runner if not explicitly set
-  const isDockerModelRunner = ollamaUrl?.includes('model-runner.docker.internal');
-  if (!provider) {
+  if (provider === 'ollama-docker') {
+    // Containerized Ollama: fixed internal Docker network URL
+    ollamaUrl = 'http://ollama:11434';
+  } else if (provider === 'ollama') {
+    // External Ollama: URL must be specified
+    ollamaUrl = import.meta.env.LLM_OLLAMA_URL;
+    if (!ollamaUrl) {
+      console.warn('LLM_PROVIDER=ollama but LLM_OLLAMA_URL not set. Defaulting to http://host.docker.internal:11434');
+      ollamaUrl = 'http://host.docker.internal:11434';
+    }
+  } else if (provider === 'docker') {
+    // Docker Model Runner: URL injected by Docker or from config
+    ollamaUrl = import.meta.env.LLM_TEXT_URL || import.meta.env.LLM_URL;
+  } else if (!provider) {
+    // Auto-detect provider
     const hasDockerTextUrl = !!import.meta.env.LLM_TEXT_URL;
-
+    const dockerUrl = import.meta.env.LLM_TEXT_URL || import.meta.env.LLM_URL;
+    const isDockerModelRunner = dockerUrl?.includes('model-runner.docker.internal');
     const hasDockerModel = import.meta.env.LLM_TEXT_MODEL?.startsWith('ai/') || import.meta.env.LLM_MODEL?.startsWith('ai/');
-    provider = (hasDockerTextUrl || isDockerModelRunner || hasDockerModel) ? 'docker' : 'ollama';
-    console.log(`Auto-detected LLM provider: ${provider}${hasDockerTextUrl ? ' (from LLM_TEXT_URL)' : ''}${isDockerModelRunner ? ' (from URL)' : ''}${hasDockerModel ? ' (from MODEL)' : ''}`);
+
+    if (hasDockerTextUrl || isDockerModelRunner || hasDockerModel) {
+      provider = 'docker';
+      ollamaUrl = dockerUrl;
+      console.log(`Auto-detected LLM provider: docker${hasDockerTextUrl ? ' (from LLM_TEXT_URL)' : ''}${isDockerModelRunner ? ' (from URL)' : ''}${hasDockerModel ? ' (from MODEL)' : ''}`);
+    } else {
+      // Default to ollama-docker if no explicit config
+      provider = 'ollama-docker';
+      ollamaUrl = 'http://ollama:11434';
+      console.log('Auto-detected LLM provider: ollama-docker (default)');
+    }
   }
 
-  // Build full URL from LLM_OLLAMA_URL and LLM_OLLAMA_PORT if port is specified
-  // Skip for Docker Model Runner URLs (they already include the full path)
-  if (!isDockerModelRunner && import.meta.env.LLM_OLLAMA_PORT && ollamaUrl && !ollamaUrl.match(/:\d+$/)) {
-    ollamaUrl = `${ollamaUrl}:${import.meta.env.LLM_OLLAMA_PORT}`;
-  }
+  // Both 'ollama' and 'ollama-docker' use the OllamaProvider
+  const isOllamaProvider = provider === 'ollama' || provider === 'ollama-docker';
 
   return {
     provider,
@@ -54,22 +69,20 @@ function loadConfig(): LLMConfig {
     temperature: parseFloat(import.meta.env.LLM_TEMPERATURE || '0.7'),
     timeout: parseInt(import.meta.env.LLM_TIMEOUT || '30000'),
     // Context sizes: 0 means "use model's native maximum"
-    // Only set if explicitly configured (for manual override or fallback)
     textContextSize: parseInt(import.meta.env.LLM_TEXT_CONTEXT_SIZE || '0'),
     visionContextSize: parseInt(import.meta.env.LLM_VISION_CONTEXT_SIZE || '0'),
 
     // Docker Model Runner config
-    // Priority: LLM_TEXT_MODEL (injected by Docker), then LLM_DOCKER_TEXT_MODEL (manual config), then LLM_MODEL (legacy)
     dockerUrl: provider === 'docker' ? ollamaUrl : undefined,
     dockerModel: provider === 'docker' ? (import.meta.env.LLM_MODEL || import.meta.env.LLM_DOCKER_MODEL) : undefined,
     dockerTextModel: provider === 'docker' ? (import.meta.env.LLM_TEXT_MODEL || import.meta.env.LLM_DOCKER_TEXT_MODEL) : undefined,
     dockerVisionModel: provider === 'docker' ? (import.meta.env.LLM_VISION_MODEL || import.meta.env.LLM_DOCKER_VISION_MODEL) : undefined,
 
-    // Ollama config
-    ollamaUrl: provider === 'ollama' ? ollamaUrl : undefined,
-    ollamaModel: provider === 'ollama' ? (import.meta.env.LLM_OLLAMA_MODEL || import.meta.env.LLM_MODEL) : undefined,
-    ollamaTextModel: provider === 'ollama' ? import.meta.env.LLM_OLLAMA_TEXT_MODEL : undefined,
-    ollamaVisionModel: provider === 'ollama' ? import.meta.env.LLM_OLLAMA_VISION_MODEL : undefined,
+    // Ollama config (both 'ollama' and 'ollama-docker' use these)
+    ollamaUrl: isOllamaProvider ? ollamaUrl : undefined,
+    ollamaModel: isOllamaProvider ? (import.meta.env.LLM_OLLAMA_MODEL || import.meta.env.LLM_MODEL) : undefined,
+    ollamaTextModel: isOllamaProvider ? import.meta.env.LLM_OLLAMA_TEXT_MODEL : undefined,
+    ollamaVisionModel: isOllamaProvider ? import.meta.env.LLM_OLLAMA_VISION_MODEL : undefined,
 
     // OpenAI config (future)
     openaiApiKey: import.meta.env.LLM_OPENAI_API_KEY,
@@ -91,6 +104,7 @@ function createProvider(config: LLMConfig): LLMProvider {
     case 'docker':
       return new DockerProvider(config);
     case 'ollama':
+    case 'ollama-docker':
       return new OllamaProvider(config);
     case 'openai':
       return new OpenAIProvider(config);

@@ -46,26 +46,80 @@ set "COMPOSE_FILES=-f compose\docker-compose.yaml"
 REM Auto-detect Docker Model Runner capability (unless manually overridden)
 if "%COMPOSE_PROFILES%"=="" (
     REM Check if LLM is disabled
-    if "%LLM_ENABLED%"=="false" (
+    if "%PUBLIC_LLM_ENABLED%"=="false" (
         set "COMPOSE_PROFILES=no-llm"
         echo.
-        echo 🚫 LLM functionality disabled (LLM_ENABLED=false^)
+        echo 🚫 LLM functionality disabled (PUBLIC_LLM_ENABLED=false^)
         echo.
     ) else if "%LLM_PROVIDER%"=="docker" (
         set "COMPOSE_FILES=-f compose\docker-compose.yaml -f compose\docker-compose.llm.yaml"
         echo.
         echo 🐳 Using Docker Model Runner (LLM_PROVIDER=docker^)
         goto :check_docker_models
-    ) else if "%LLM_PROVIDER%"=="ollama" (
+    ) else if "%LLM_PROVIDER%"=="ollama-docker" (
         set "COMPOSE_PROFILES=ollama"
         echo.
-        echo 📦 Using custom Ollama container (LLM_PROVIDER=ollama^)
+        echo 📦 Using containerized Ollama (LLM_PROVIDER=ollama-docker^)
+        echo    URL: http://ollama:11434 (internal Docker network^)
+        echo.
+    ) else if "%LLM_PROVIDER%"=="ollama" (
+        REM No Ollama container needed - user manages their own Ollama instance
+        set "COMPOSE_PROFILES=no-llm"
+        echo.
+        echo 🔗 Using external Ollama (LLM_PROVIDER=ollama^)
+        if "%LLM_OLLAMA_URL%"=="" (
+            echo    URL: http://host.docker.internal:11434
+        ) else (
+            echo    URL: %LLM_OLLAMA_URL%
+        )
+        echo    Note: Ensure your Ollama instance is running and accessible
+        echo.
+    ) else if "%LLM_PROVIDER%"=="openai" (
+        REM No local LLM container needed - using OpenAI API
+        set "COMPOSE_PROFILES=no-llm"
+        echo.
+        echo 🌐 Using OpenAI API (LLM_PROVIDER=openai^)
+        if "%LLM_OPENAI_API_KEY%"=="" (
+            echo    ⚠️  Warning: LLM_OPENAI_API_KEY not set
+        ) else (
+            echo    ✓ API key configured
+        )
+        if "%LLM_OPENAI_TEXT_MODEL%"=="" (
+            echo    Text model: gpt-4o
+        ) else (
+            echo    Text model: %LLM_OPENAI_TEXT_MODEL%
+        )
+        if "%LLM_OPENAI_VISION_MODEL%"=="" (
+            echo    Vision model: gpt-4o
+        ) else (
+            echo    Vision model: %LLM_OPENAI_VISION_MODEL%
+        )
+        echo.
+    ) else if "%LLM_PROVIDER%"=="claude" (
+        REM No local LLM container needed - using Anthropic API
+        set "COMPOSE_PROFILES=no-llm"
+        echo.
+        echo 🤖 Using Claude/Anthropic API (LLM_PROVIDER=claude^)
+        if "%LLM_ANTHROPIC_API_KEY%"=="" (
+            echo    ⚠️  Warning: LLM_ANTHROPIC_API_KEY not set
+        ) else (
+            echo    ✓ API key configured
+        )
+        if "%LLM_ANTHROPIC_TEXT_MODEL%"=="" (
+            echo    Text model: claude-sonnet-4-20250514
+        ) else (
+            echo    Text model: %LLM_ANTHROPIC_TEXT_MODEL%
+        )
+        if "%LLM_ANTHROPIC_VISION_MODEL%"=="" (
+            echo    Vision model: claude-sonnet-4-20250514
+        ) else (
+            echo    Vision model: %LLM_ANTHROPIC_VISION_MODEL%
+        )
         echo.
     ) else if not "%LLM_PROVIDER%"=="" (
         echo.
-        echo ❌ LLM provider '%LLM_PROVIDER%' is not yet implemented 1>&2
-        echo    Valid options: docker, ollama 1>&2
-        echo    Coming soon: claude, openai 1>&2
+        echo ❌ Unknown LLM provider '%LLM_PROVIDER%' 1>&2
+        echo    Valid options: docker, ollama, ollama-docker, openai, claude 1>&2
         echo.
         exit /b 1
     ) else (
@@ -131,7 +185,7 @@ if "%COMPOSE_PROFILES%"=="" (
                 echo.
                 for %%m in (!MISSING_MODELS!) do echo   docker model pull %%m
                 echo.
-                echo Or disable LLM features by setting LLM_ENABLED=false in .env
+                echo Or disable LLM features by setting PUBLIC_LLM_ENABLED=false in .env
                 echo.
                 exit /b 1
             )
@@ -222,7 +276,7 @@ if "%LLM_PROVIDER%"=="docker" (
         echo.
         for %%m in (!MISSING_MODELS!) do echo   docker model pull %%m
         echo.
-        echo Or disable LLM features by setting LLM_ENABLED=false in .env
+        echo Or disable LLM features by setting PUBLIC_LLM_ENABLED=false in .env
         echo.
         exit /b 1
     )

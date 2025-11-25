@@ -5,7 +5,7 @@ REM This reverses the changes made by detect-model-context.bat
 setlocal enabledelayedexpansion
 
 REM Exit silently if LLM is disabled
-if "%LLM_ENABLED%"=="false" exit /b 0
+if "%PUBLIC_LLM_ENABLED%"=="false" exit /b 0
 
 REM Exit silently if using Ollama (no restoration needed)
 if "%LLM_PROVIDER%"=="ollama" exit /b 0
