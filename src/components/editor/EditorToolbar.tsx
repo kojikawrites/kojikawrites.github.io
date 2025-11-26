@@ -27,8 +27,8 @@ const LLM_OPERATIONS: LLMOperation[] = [
     id: 'continue',
     label: 'Continue',
     icon: '✍️',
-    description: 'Continue writing from cursor position',
-    requiresSelection: false,
+    description: 'Continue writing from selected text',
+    requiresSelection: true,
   },
   {
     id: 'improve',
@@ -504,10 +504,9 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ visible = true }) 
   // Handle operation button click
   const handleOperation = (operation: LLMOperation) => {
     console.log('[handleOperation] Called with operation:', operation.id);
-    let text = '';
 
     if (operation.requiresSelection) {
-      text = selectedText;
+      const text = selectedText;
       if (!text) {
         alert('Please select some text first');
         return;
@@ -515,31 +514,6 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ visible = true }) 
 
       console.log('[handleOperation] Selection-based operation, text length:', text.length);
       // For operations that require selection, show modal with context first
-      setCurrentOperation(operation.label);
-      setOriginalText(text);
-      setLlmContext('');
-      setModalVisible(true);
-      setModalStatus('idle');
-      console.log('[handleOperation] Modal state set to visible');
-    } else if (operation.id === 'continue') {
-      // For continue, get the last paragraph or selected text
-      if (selectedText) {
-        text = selectedText;
-      } else {
-        // Get the last few sentences from the editor
-        const editorContent = getEditorContent();
-        const sentences = editorContent.split(/[.!?]\s+/);
-        // Get last 2-3 sentences as context
-        text = sentences.slice(-3).join('. ') + (sentences.length > 0 ? '.' : '');
-      }
-
-      if (!text.trim()) {
-        alert('No content found to continue from. Please write some text first.');
-        return;
-      }
-
-      console.log('[handleOperation] Continue operation, text length:', text.length);
-      // Show modal for continue
       setCurrentOperation(operation.label);
       setOriginalText(text);
       setLlmContext('');

@@ -21,8 +21,8 @@ AI-powered content assistance for image alt text generation and text editing.
 | Docker Model Runner | `docker` | Built-in Docker Desktop AI (4.40+) |
 | External Ollama | `ollama` | You manage your own Ollama instance |
 | Containerized Ollama | `ollama-docker` | We build and manage Ollama container |
-| OpenAI | `openai` | OpenAI API (future) |
-| Claude | `claude` | Claude API (future) |
+| OpenAI | `openai` | OpenAI API |
+| Claude | `claude` | Claude API |
 
 **Docker Model Runner** (`LLM_PROVIDER=docker`):
 - ✅ Simpler configuration
@@ -244,21 +244,16 @@ Full models from Ollama's library. Larger size, slightly higher quality:
 │  LLM Service    │  Provider selection & caching
 └────────┬────────┘
          │
-    ┌────┴────┐
-    │         │
-┌───▼──┐  ┌──▼────┐  ┌──────┐
-│Ollama│  │OpenAI │  │Claude│  (Future)
+    ┌────┴─────────────┐
+    │         │        │
+┌───▼──┐  ┌──▼────┐  ┌─▼────┐
+│Ollama│  │OpenAI │  │Claude│
 └──────┘  └───────┘  └──────┘
 ```
 
-## Adding OpenAI Support (Future)
+## OpenAI Support
 
-1. Install dependency:
-```bash
-npm install openai
-```
-
-2. Configure in `.env`:
+Configure in `.env`:
 ```bash
 LLM_PROVIDER=openai
 LLM_OPENAI_API_KEY=sk-...
@@ -266,30 +261,21 @@ LLM_OPENAI_TEXT_MODEL=gpt-4-turbo
 LLM_OPENAI_VISION_MODEL=gpt-4-vision-preview
 ```
 
-3. Implement `src/lib/services/llm/providers/openai.ts` (see file for TODOs)
+## Claude Support
 
-## Adding Claude Support (Future)
-
-1. Install dependency:
-```bash
-npm install @anthropic-ai/sdk
-```
-
-2. Configure in `.env`:
+Configure in `.env`:
 ```bash
 LLM_PROVIDER=claude
 LLM_ANTHROPIC_API_KEY=sk-ant-...
 LLM_ANTHROPIC_TEXT_MODEL=claude-3-5-sonnet-20241022
 ```
 
-3. Implement `src/lib/services/llm/providers/claude.ts` (see file for TODOs)
-
 ## GPU Support
 
 Ollama can use GPU acceleration if available:
 
 1. Install [nvidia-docker](https://github.com/NVIDIA/nvidia-docker)
-2. Uncomment GPU section in `docker/docker-compose.yaml`:
+2. Uncomment GPU section in `docker/compose/docker-compose.llm.yaml`:
 
 ```yaml
 ollama:
@@ -302,7 +288,7 @@ ollama:
             capabilities: [gpu]
 ```
 
-3. Rebuild containers
+3. Rebuild containers by re-running `./pip-docker-build.sh` or `./uv-docker-build.sh`
 
 ## Troubleshooting
 
@@ -350,23 +336,25 @@ src/lib/services/llm/
 ├── README.md              # This file
 ├── types.ts               # TypeScript interfaces
 ├── llmService.ts          # Main service entry point
+├── promptUtils.ts         # Prompt building utilities
+├── jsonUtils.ts           # JSON parsing utilities
+├── utils.ts               # General utilities
 └── providers/
-    ├── ollama.ts          # Ollama implementation ✅
-    ├── openai.ts          # OpenAI stub (TODO)
-    └── claude.ts          # Claude stub (TODO)
+    ├── docker.ts          # Docker Model Runner implementation
+    ├── ollama.ts          # Ollama implementation
+    ├── openai.ts          # OpenAI implementation
+    └── claude.ts          # Claude implementation
 
 src/pages/api/llm/
 ├── text.ts                # Text generation/editing endpoint
-└── image-alt.ts           # Image analysis endpoint
+├── image-alt.ts           # Image analysis endpoint
+└── schemas.ts             # JSON schemas for responses
 
 docker/
-├── docker-compose.yaml      # Service definitions with Docker Model Runner support
-├── check-model-runner.sh    # Check Docker Model Runner availability (bash)
-├── check-model-runner.bat   # Check Docker Model Runner availability (batch)
-├── check-model-runner.ps1   # Check Docker Model Runner availability (PowerShell)
-├── ollama.Dockerfile        # Custom Ollama image (fallback option)
-├── ollama-entrypoint.sh     # Startup script for custom Ollama
-└── ollama-init.sh           # Model initialization script for custom Ollama
+├── compose/               # Docker Compose configuration files
+├── scripts/               # Docker helper scripts
+├── pip-docker-build.sh    # Build script (pip)
+└── uv-docker-build.sh     # Build script (uv)
 ```
 
 ## Model Storage

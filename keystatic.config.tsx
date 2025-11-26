@@ -7,11 +7,15 @@ import { categories } from './src/build/generators/categories';
 import { tags } from './src/build/generators/tags';
 import React from 'react';
 import { getSiteCode } from "./src/lib/config/getSiteCode.ts";
-import { ContextMenu, type ContextMenuItem } from './src/components/editor/ContextMenu';
 import { LLMOperationModal, type LLMOperationStatus } from './src/components/editor/LLMOperationModal';
 import { EditorToolbar } from './src/components/editor/EditorToolbar';
 import { createPortal } from 'react-dom';
-import pre = $effect.pre;
+import ReactDOM from 'react-dom/client';
+// Keystatic UI components for custom fields
+import { ActionButton } from '@keystar/ui/button';
+import { Flex } from '@keystar/ui/layout';
+import { TextField } from '@keystar/ui/text-field';
+
 
 // Hook to load editor styles on component mount
 const useEditorStyles = () => {
@@ -24,6 +28,230 @@ const useEditorStyles = () => {
         }
     }, []);
 };
+
+// Check if LLM is enabled via environment variable
+const LLM_ENABLED = import.meta.env.PUBLIC_LLM_ENABLED === 'true';
+
+// Universal toolbar injection via DOM observation (only if LLM is enabled)
+if (typeof window !== 'undefined' && LLM_ENABLED) {
+    console.log('[Keystatic Patch] Setting up DOM-based toolbar injection (LLM_ENABLED=true)...');
+
+    let lastPathname = window.location.pathname;
+    let toolbarRoot: ReturnType<typeof ReactDOM.createRoot> | null = null;
+    let injectionPending = false;  // Debounce flag to prevent duplicate injections
+    let injectionTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const injectToolbarDirectly = () => {
+        injectionPending = false;
+
+        // Check if toolbar container already exists and is in DOM
+        const existingContainer = document.getElementById('llm-toolbar-container');
+        if (existingContainer && document.body.contains(existingContainer)) {
+            return true; // Already injected
+        }
+
+        // Find Keystatic's main container
+        const main = document.getElementById('keystatic-main-panel') ||
+                     document.querySelector('main[data-keystatic]') ||
+                     document.querySelector('main');
+
+        if (!main) {
+            return false;
+        }
+
+        // Check if we're actually in a Keystatic page
+        if (!window.location.pathname.includes('/keystatic')) {
+            return false;
+        }
+
+        console.log('[Keystatic Patch] ✓ Found main container, injecting toolbar...');
+
+        // Create toolbar container
+        const container = document.createElement('div');
+        container.id = 'llm-toolbar-container';
+        main.insertBefore(container, main.firstChild);
+
+        // Render the toolbar using ReactDOM
+        toolbarRoot = ReactDOM.createRoot(container);
+        toolbarRoot.render(React.createElement(EditorToolbar));
+
+        console.log('[Keystatic Patch] ✓ Toolbar injected successfully');
+        return true;
+    };
+
+    // Debounced injection scheduler - prevents multiple rapid calls
+    const scheduleInjection = (delay: number = 100) => {
+        if (injectionPending) return;  // Already scheduled
+        injectionPending = true;
+        if (injectionTimeout) clearTimeout(injectionTimeout);
+        injectionTimeout = setTimeout(injectToolbarDirectly, delay);
+    };
+
+    // Try immediately
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            scheduleInjection(100);
+        });
+    } else {
+        scheduleInjection(100);
+    }
+
+    // Observe for DOM changes (including client-side navigation)
+    const observer = new MutationObserver(() => {
+        // Check if URL changed (client-side navigation)
+        if (window.location.pathname !== lastPathname) {
+            lastPathname = window.location.pathname;
+            // Small delay to let the new page render
+            scheduleInjection(100);
+            return;
+        }
+
+        // Also check if toolbar container was removed from DOM
+        const existingContainer = document.getElementById('llm-toolbar-container');
+        if (!existingContainer || !document.body.contains(existingContainer)) {
+            scheduleInjection(100);
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // Also listen for popstate (browser back/forward)
+    window.addEventListener('popstate', () => {
+        lastPathname = window.location.pathname;
+        scheduleInjection(100);
+    });
+
+    console.log('[Keystatic Patch] ✓ DOM observer installed');
+}
+
+// Admin link injection (always enabled, independent of LLM)
+if (typeof window !== 'undefined') {
+    const injectAdminLink = () => {
+        // Check if we're actually in a Keystatic page
+        if (!window.location.pathname.includes('/keystatic')) {
+            return;
+        }
+
+        // Remove any existing admin link, divider, or container first
+        const existingLink = document.getElementById('admin-back-link');
+        if (existingLink) {
+            existingLink.remove();
+        }
+        const existingDivider = document.getElementById('admin-link-divider');
+        if (existingDivider) {
+            existingDivider.remove();
+        }
+        const existingContainer = document.getElementById('admin-link-container');
+        if (existingContainer) {
+            existingContainer.remove();
+        }
+
+        // Find the toolbar buttons area
+        const buttonsArea = document.querySelector('.editor-toolbar-buttons');
+        if (buttonsArea) {
+            // Create link for inside toolbar
+            const adminLink = document.createElement('a');
+            adminLink.id = 'admin-back-link';
+            adminLink.href = '/admin';
+            adminLink.textContent = '← Admin';
+            adminLink.style.cssText = `
+                display: inline-flex;
+                align-items: center;
+                margin-right: 12px;
+                font-size: 0.9rem;
+                color: #ffffff;
+                text-decoration: none;
+                transition: color 0.15s ease;
+            `;
+            adminLink.onmouseenter = () => {
+                adminLink.style.color = '#3b82f6';
+            };
+            adminLink.onmouseleave = () => {
+                adminLink.style.color = '#ffffff';
+            };
+
+            // Create vertical divider
+            const divider = document.createElement('span');
+            divider.id = 'admin-link-divider';
+            divider.style.cssText = `
+                display: inline-flex;
+                align-self: stretch;
+                width: 1px;
+                background: #4b5563;
+                margin-right: 12px;
+            `;
+
+            buttonsArea.insertBefore(divider, buttonsArea.firstChild);
+            buttonsArea.insertBefore(adminLink, buttonsArea.firstChild);
+            console.log('[Keystatic Patch] ✓ Admin link injected into toolbar');
+            return;
+        }
+
+        // No AI toolbar - create a minimal toolbar container with just the admin link
+        const main = document.getElementById('keystatic-main-panel') ||
+                     document.querySelector('main[data-keystatic]') ||
+                     document.querySelector('main');
+        if (main && !document.getElementById('admin-link-container')) {
+            // Create container styled like the AI toolbar
+            const container = document.createElement('div');
+            container.id = 'admin-link-container';
+            container.className = 'editor-toolbar';
+
+            // Create buttons area styled like the AI toolbar
+            const buttonsArea = document.createElement('div');
+            buttonsArea.className = 'editor-toolbar-buttons';
+
+            const adminLink = document.createElement('a');
+            adminLink.id = 'admin-back-link';
+            adminLink.href = '/admin';
+            adminLink.textContent = '← Admin';
+            adminLink.style.cssText = `
+                display: inline-flex;
+                align-items: center;
+                font-size: 0.9rem;
+                color: #ffffff;
+                text-decoration: none;
+                transition: color 0.15s ease;
+            `;
+            adminLink.onmouseenter = () => {
+                adminLink.style.color = '#3b82f6';
+            };
+            adminLink.onmouseleave = () => {
+                adminLink.style.color = '#ffffff';
+            };
+
+            buttonsArea.appendChild(adminLink);
+            container.appendChild(buttonsArea);
+            main.insertBefore(container, main.firstChild);
+            console.log('[Keystatic Patch] ✓ Standalone admin bar created (no AI toolbar)');
+        }
+    };
+
+    // Watch for the toolbar to appear and inject when it does
+    const observer = new MutationObserver(() => {
+        if (!window.location.pathname.includes('/keystatic')) return;
+
+        const hasAdminLink = document.getElementById('admin-back-link');
+        const toolbar = document.querySelector('.editor-toolbar-buttons');
+
+        // If toolbar exists but admin link is not in it, re-inject
+        if (toolbar && (!hasAdminLink || !toolbar.contains(hasAdminLink))) {
+            injectAdminLink();
+        }
+        // If no toolbar and no admin link at all, create standalone
+        else if (!toolbar && !hasAdminLink) {
+            injectAdminLink();
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Initial injection after short delay
+    setTimeout(injectAdminLink, 200);
+}
 
 // Singleton flag to ensure only one toolbar instance
 let toolbarInitialized = false;
@@ -47,7 +275,9 @@ const EditorToolbarInjector: React.FC = () => {
         // Find the Keystatic editor container
         const findEditorContainer = () => {
             // Look for the main content area in Keystatic
-            const main = document.querySelector('main') || document.querySelector('[role="main"]');
+            const main = document.getElementById('keystatic-main-panel') ||
+                         document.querySelector('main') ||
+                         document.querySelector('[role="main"]');
             if (main) {
                 // Create a container for the toolbar at the top of main
                 let container = document.getElementById('llm-toolbar-container');
@@ -217,6 +447,414 @@ const buildImagePath = (filename: string, baseDir: string, slug?: string): strin
 };
 
 // ============================================================================
+// IMAGE DATA STORE - Share image data between ContentView and field inputs
+// ============================================================================
+// React Context doesn't work because Keystatic renders ContentView and form fields
+// in separate DOM trees. Use a simple module-level store instead.
+// Only one image block is edited at a time, so a single value is sufficient.
+// Using an object with a mutable property to avoid bundler const conversion issues.
+
+const imageDataStore = { currentDisplaySrc: null as string | null };
+
+// ============================================================================
+// TEXT WITH AI FIELD - Custom field with generate button
+// ============================================================================
+
+/**
+ * Helper function to convert image src to base64 for LLM API
+ */
+const fetchImageAsBase64 = async (src: string): Promise<string> => {
+    if (src.startsWith('data:')) {
+        return src;
+    }
+
+    const response = await fetch(src);
+    if (!response.ok) throw new Error(`Failed to fetch image: ${src}`);
+    const blob = await response.blob();
+
+    const dataUrl = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(blob);
+    });
+
+    return dataUrl;
+};
+
+/**
+ * Call the LLM image-alt API using the shared utility
+ */
+const callImageAltAPI = async (imageSrc: string, mode: 'alt' | 'description' | 'caption'): Promise<string> => {
+    // Import dynamically to avoid SSR issues (this is only used client-side)
+    const { analyzeImage, fetchImageAsBase64 } = await import('./src/lib/client/imageAnalysis');
+    const imageData = await fetchImageAsBase64(imageSrc);
+
+    const result = await analyzeImage(imageData, { mode, context: '' });
+
+    if (result.success && result.text) {
+        return result.text;
+    }
+    throw new Error(result.error || 'Unknown error');
+};
+
+/**
+ * Custom text field with AI generate button for image-related text
+ * The button finds the nearest image in the component and generates text from it
+ */
+interface TextWithAIConfig {
+    label: string;
+    description?: string;
+    validation?: { isRequired?: boolean; length?: { min?: number; max?: number } };
+    multiline?: boolean;
+    mode: 'alt' | 'description' | 'caption';
+}
+
+const textWithAI = (config: TextWithAIConfig) => {
+    // If LLM is disabled, just return a regular text field
+    if (!LLM_ENABLED) {
+        return fields.text({
+            label: config.label,
+            description: config.description,
+            validation: config.validation,
+            multiline: config.multiline,
+        });
+    }
+
+    // Create the base text field
+    const baseField = fields.text({
+        label: config.label,
+        description: config.description,
+        validation: config.validation,
+        multiline: config.multiline,
+    });
+
+    // Custom Input component with generate button that opens modal dialog
+    const TextWithAIInput: React.FC<{
+        value: string;
+        onChange: (value: string) => void;
+        autoFocus?: boolean;
+        forceValidation?: boolean;
+    }> = (props) => {
+        const containerRef = React.useRef<HTMLDivElement>(null);
+
+        // Modal state
+        const [modalVisible, setModalVisible] = React.useState(false);
+        const [modalStatus, setModalStatus] = React.useState<LLMOperationStatus>('idle');
+        const [llmResult, setLlmResult] = React.useState('');
+        const [llmError, setLlmError] = React.useState('');
+        const [llmContext, setLlmContext] = React.useState('');
+        const [imageSrc, setImageSrc] = React.useState<string | null>(null);
+
+        // Find the image source by traversing the DOM from this component
+        // This is more reliable than module-level state since it reads the actual
+        // rendered image at the moment the button is clicked
+        // Returns { src: string, background: 'white' | 'black' | null } to indicate
+        // if the image needs a specific background color for transparency compositing
+        const findImageSrcFromDOM = (): { src: string; background: 'white' | 'black' | null } | null => {
+            if (!containerRef.current) return null;
+
+            // Helper to check if an image is a content image (not an icon)
+            const isContentImage = (img: HTMLImageElement): boolean => {
+                // Skip robot icon
+                if (img.src.includes('robot.svg')) return false;
+                // Skip very small images (icons are typically < 50px)
+                if (img.naturalWidth > 0 && img.naturalWidth < 50) return false;
+                if (img.naturalHeight > 0 && img.naturalHeight < 50) return false;
+                // Skip images inside buttons
+                if (img.closest('button') || img.closest('[role="button"]')) return false;
+                // Skip images with icon-related classes
+                if (img.className.includes('icon') || img.className.includes('robot')) return false;
+                return true;
+            };
+
+            // Helper to check if a string looks like an image path
+            const looksLikeImagePath = (value: string): boolean => {
+                if (!value) return false;
+                // Check for common image extensions or path patterns
+                return /\.(png|jpg|jpeg|gif|webp|svg|avif)$/i.test(value) ||
+                       /\[THEME\]/i.test(value) || // ThemedImage pattern
+                       value.startsWith('/src/') ||
+                       value.startsWith('/assets/');
+            };
+
+            // Detect current theme from website settings (stored in localStorage)
+            const getCurrentTheme = (): 'light' | 'dark' => {
+                // Check localStorage first - this is where the website stores the theme preference
+                const storedTheme = localStorage.getItem('theme');
+                if (storedTheme === 'dark' || storedTheme === 'light') {
+                    console.log('[textWithAI] Theme from localStorage:', storedTheme);
+                    return storedTheme;
+                }
+                // Handle 'system' theme - resolve to actual light/dark based on browser preference
+                if (storedTheme === 'system') {
+                    const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+                    const resolved = prefersDark ? 'dark' : 'light';
+                    console.log('[textWithAI] Theme from system preference:', resolved);
+                    return resolved;
+                }
+                // Fallback to checking CSS class on document element
+                if (document.documentElement.classList.contains('theme-dark')) {
+                    console.log('[textWithAI] Theme from CSS class: dark');
+                    return 'dark';
+                }
+                // Fallback to browser preference (no localStorage set)
+                const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+                const theme = prefersDark ? 'dark' : 'light';
+                console.log('[textWithAI] Theme from browser preference:', theme);
+                return theme;
+            };
+
+            // Traverse up to find the dialog/form container, then find the img within it
+            // Keystatic renders the edit form in a dialog - look for img in parent containers
+            let element: HTMLElement | null = containerRef.current;
+
+            // Go up to find a reasonable parent container (dialog, form, or content area)
+            while (element && element !== document.body) {
+                // Look for all img elements within this container and find a content image
+                const imgs = element.querySelectorAll('img');
+                for (const img of imgs) {
+                    if (img.src && isContentImage(img as HTMLImageElement)) {
+                        console.log('[textWithAI] Found content image via DOM traversal:', img.src);
+                        return { src: img.src, background: null };
+                    }
+                }
+
+                // Also look for text inputs that might contain image paths (for ThemedImage, etc.)
+                // This handles cases where the image preview is in a separate DOM tree
+                const inputs = element.querySelectorAll('input[type="text"], input:not([type])');
+
+                // First, look for labeled inputs (Dark/Light fields in ThemedImage logoSrc)
+                // These take priority over the generic src field
+                const currentTheme = getCurrentTheme();
+                console.log('[textWithAI] Detected theme:', currentTheme);
+                let darkPath: string | null = null;
+                let lightPath: string | null = null;
+                let genericSrcPath: string | null = null;
+
+                for (const input of inputs) {
+                    const value = (input as HTMLInputElement).value;
+                    if (!looksLikeImagePath(value)) continue;
+
+                    // Try to find the label for this input
+                    const inputEl = input as HTMLInputElement;
+                    const label = inputEl.id ? document.querySelector(`label[for="${inputEl.id}"]`) : null;
+                    const labelText = label?.textContent?.toLowerCase() || '';
+
+                    // Also check parent elements for label context
+                    const parentText = inputEl.closest('[data-field]')?.textContent?.toLowerCase() || '';
+
+                    if (labelText.includes('dark') || parentText.includes('dark')) {
+                        darkPath = value;
+                    } else if (labelText.includes('light') || parentText.includes('light')) {
+                        lightPath = value;
+                    } else if (value.includes('[THEME]')) {
+                        genericSrcPath = value;
+                    } else if (!genericSrcPath) {
+                        // Fallback to any image path found
+                        genericSrcPath = value;
+                    }
+                }
+
+                console.log('[textWithAI] Found paths - dark:', darkPath, 'light:', lightPath, 'generic:', genericSrcPath);
+
+                // Choose path based on current theme, with fallbacks
+                // Priority: matching theme > any available theme path > generic path
+                const themePreference = currentTheme === 'dark' ? [darkPath, lightPath] : [lightPath, darkPath];
+                console.log('[textWithAI] Theme preference order:', themePreference);
+                const selectedPath = themePreference.find(Boolean) || genericSrcPath;
+                console.log('[textWithAI] Selected path:', selectedPath);
+
+                let imagePath: string | null = null;
+                let selectedTheme: 'light' | 'dark' | null = null;
+
+                if (selectedPath) {
+                    imagePath = selectedPath;
+                    if (selectedPath === darkPath) {
+                        selectedTheme = 'dark';
+                    } else if (selectedPath === lightPath) {
+                        selectedTheme = 'light';
+                    } else if (selectedPath.includes('[THEME]')) {
+                        // Use the current theme for [THEME] placeholder
+                        selectedTheme = currentTheme;
+                        imagePath = imagePath.replace('[THEME]', currentTheme);
+                    }
+                    console.log('[textWithAI] Using image path:', imagePath, 'theme:', selectedTheme);
+                }
+
+                if (imagePath) {
+                    // Make relative paths absolute
+                    if (imagePath.startsWith('/')) {
+                        imagePath = window.location.origin + imagePath;
+                    }
+                    // For themed images, set background color MATCHING the selected theme
+                    // Dark theme images are designed for dark backgrounds (have light features) -> black background
+                    // Light theme images are designed for light backgrounds (have dark features) -> white background
+                    const background = selectedTheme === 'dark' ? 'black' : selectedTheme === 'light' ? 'white' : null;
+                    console.log('[textWithAI] Using background:', background);
+                    return { src: imagePath, background };
+                }
+
+                element = element.parentElement;
+            }
+
+            return null;
+        };
+
+        // Store the background color for the current image (for themed images)
+        const [imageBackground, setImageBackground] = React.useState<'white' | 'black' | null>(null);
+
+        const handleOpenModal = () => {
+            const foundImage = findImageSrcFromDOM();
+            if (!foundImage) {
+                alert('No image found. Please select an image first.');
+                return;
+            }
+            setImageSrc(foundImage.src);
+            setImageBackground(foundImage.background);
+            setLlmContext('');
+            setLlmResult('');
+            setLlmError('');
+            setModalStatus('idle');
+            setModalVisible(true);
+        };
+
+        const callLLMAPI = async () => {
+            if (!imageSrc) {
+                console.log('[textWithAI] callLLMAPI: No imageSrc');
+                return;
+            }
+
+            console.log('[textWithAI] callLLMAPI called');
+            console.log('[textWithAI] imageSrc:', imageSrc);
+            console.log('[textWithAI] imageSrc type:', typeof imageSrc);
+            console.log('[textWithAI] imageSrc starts with blob:', imageSrc.startsWith('blob:'));
+            console.log('[textWithAI] imageSrc starts with /:', imageSrc.startsWith('/'));
+            console.log('[textWithAI] imageSrc starts with data:', imageSrc.startsWith('data:'));
+
+            setModalStatus('loading');
+            setLlmError('');
+
+            try {
+                // Use fetchImageAsBase64 which handles MIME type detection for blob URLs
+                console.log('[textWithAI] Converting image to base64...');
+                const imageData = await fetchImageAsBase64(imageSrc);
+                console.log('[textWithAI] Base64 prefix:', imageData.substring(0, 50));
+
+                // Call the LLM API
+                const callAPI = async (image: string) => {
+                    const apiResponse = await fetch('/api/llm/image-alt', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            image,
+                            mode: config.mode,
+                            context: llmContext
+                        })
+                    });
+                    return apiResponse.json();
+                };
+
+                let data = await callAPI(imageData);
+
+                // If unknown format error, convert via build service and retry
+                if (!data.success && data.error && data.error.includes('unknown format')) {
+                    console.log('[textWithAI] Converting image for LLM:');
+                    console.log('[textWithAI]   Image:', imageSrc);
+                    console.log('[textWithAI]   Background:', imageBackground);
+                    const convertResponse = await fetch('/api/build/convert-image', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            image: imageData,
+                            format: 'png',
+                            max_size: 1024,
+                            background: imageBackground // Pass background color for themed images
+                        })
+                    });
+
+                    const convertData = await convertResponse.json();
+
+                    if (convertData.success && convertData.image) {
+                        data = await callAPI(convertData.image);
+                    } else {
+                        throw new Error(convertData.error || 'Image conversion failed');
+                    }
+                }
+
+                if (data.success) {
+                    setLlmResult(data.altText || data.result || '');
+                    setModalStatus('success');
+                } else {
+                    throw new Error(data.error || data.validationError || 'Unknown error');
+                }
+            } catch (error: any) {
+                setLlmError(error.message || 'Failed to generate text');
+                setModalStatus('error');
+            }
+        };
+
+        const handleApprove = async (result: string) => {
+            try {
+                await navigator.clipboard.writeText(result);
+                alert('Copied to clipboard! Paste it into the field.');
+            } catch (e) {
+                alert(`Result: ${result}\n\nManually copy this text to the field.`);
+            }
+        };
+
+        const operationLabel = config.mode === 'alt' ? 'Alt Text'
+            : config.mode === 'description' ? 'Description'
+            : 'Caption';
+
+        return (
+            <div ref={containerRef}>
+                <Flex gap="regular" alignItems="end">
+                    <div style={{ flex: 1 }}>
+                        <TextField
+                            label={config.label}
+                            description={config.description}
+                            value={props.value}
+                            onChange={props.onChange}
+                            autoFocus={props.autoFocus}
+                            isRequired={config.validation?.isRequired}
+                        />
+                    </div>
+                    <span className="ai-generate-btn-wrapper">
+                        <ActionButton
+                            aria-label={`Generate ${config.mode}`}
+                            onPress={handleOpenModal}
+                        >
+                            <img src="/src/assets/images/admin/robot.svg" alt="AI" className="robot-icon" />
+                        </ActionButton>
+                    </span>
+                </Flex>
+
+                {/* LLM Operation Modal */}
+                <LLMOperationModal
+                    visible={modalVisible}
+                    status={modalStatus}
+                    operation={`Generate ${operationLabel}`}
+                    result={llmResult}
+                    error={llmError}
+                    context={llmContext}
+                    onApprove={handleApprove}
+                    onContextChange={setLlmContext}
+                    onClose={() => setModalVisible(false)}
+                    onRetry={callLLMAPI}
+                />
+            </div>
+        );
+    };
+
+    // Return a field that spreads the base field but overrides Input
+    return {
+        ...baseField,
+        Input: TextWithAIInput,
+    };
+};
+
+
+// ============================================================================
 // IMAGE CONTENT VIEW FACTORY
 // ============================================================================
 const createImageContentView = (options: {
@@ -230,19 +868,8 @@ const createImageContentView = (options: {
         // Load editor styles and toolbar
         useEditorStyles();
 
-        const { image, src, alt, caption, description} = value;
+        const { image, src, alt, caption } = value;
         const currentSlug = React.useContext(SlugContext); // Get slug from context instead of global
-
-        // LLM integration state
-        const [contextMenuVisible, setContextMenuVisible] = React.useState(false);
-        const [contextMenuPos, setContextMenuPos] = React.useState({ x: 0, y: 0 });
-        const [modalVisible, setModalVisible] = React.useState(false);
-        const [modalStatus, setModalStatus] = React.useState<LLMOperationStatus>('idle');
-        const [llmOperation, setLlmOperation] = React.useState('');
-        const [llmResult, setLlmResult] = React.useState('');
-        const [llmError, setLlmError] = React.useState('');
-        const [llmContext, setLlmContext] = React.useState('');
-        const [llmMode, setLlmMode] = React.useState<'alt' | 'description' | 'caption'>('alt');
 
         // Memoize extracted image data to prevent creating new blob URLs on every render
         const extractedData = React.useMemo(() => {
@@ -277,129 +904,13 @@ const createImageContentView = (options: {
 
         const displaySrc = isNewlySelected && previewSrc ? previewSrc : imageSrc;
 
-        // Helper function to get selected text and strip HTML/JSX/Astro tags
-        const getSelectedTextStripped = (): string => {
-            const selection = window.getSelection();
-            if (!selection || selection.rangeCount === 0) return '';
-
-            const selectedText = selection.toString();
-            // Strip HTML/JSX/Astro/MDX tags but keep the text content
-            // Remove tags like <Component>, <div>, {variable}, {% component %}, etc.
-            return selectedText
-                .replace(/<[^>]+>/g, '')           // Remove HTML/JSX tags
-                .replace(/\{%[^%]*%\}/g, '')       // Remove MDX component tags {% ... %}
-                .replace(/\{[^}]+\}/g, '')         // Remove JSX expressions
-                .replace(/\s+/g, ' ')              // Normalize whitespace
-                .trim();
-        };
-
-        // LLM API call function
-        const callLLMImageAPI = async () => {
-            if (!displaySrc) return;
-
-            setModalStatus('loading');
-
-            try {
-                // Convert image to base64 if it's a blob URL
-                let imageData = displaySrc;
-                if (displaySrc.startsWith('blob:')) {
-                    const response = await fetch(displaySrc);
-                    const blob = await response.blob();
-                    const reader = new FileReader();
-                    imageData = await new Promise<string>((resolve) => {
-                        reader.onloadend = () => resolve(reader.result as string);
-                        reader.readAsDataURL(blob);
-                    });
-                }
-
-                const apiResponse = await fetch('/api/llm/image-alt', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        image: imageData,
-                        mode: llmMode,
-                        context: llmContext
-                    })
-                });
-
-                const data = await apiResponse.json();
-
-                if (data.success) {
-                    setLlmResult(data.altText || data.result || '');
-                    setModalStatus('success');
-                } else {
-                    throw new Error(data.error || 'Unknown error');
-                }
-            } catch (error: any) {
-                setLlmError(error.message || 'Failed to generate text');
-                setModalStatus('error');
-            }
-        };
-
-        // Handle right-click on image
-        const handleImageContextMenu = (e: React.MouseEvent) => {
-            e.preventDefault();
-            setContextMenuPos({ x: e.clientX, y: e.clientY });
-            setContextMenuVisible(true);
-        };
-
-        // Handler to show modal with context input
-        const handleShowContextModal = (mode: 'alt' | 'description' | 'caption') => {
-            setContextMenuVisible(false);
-            setLlmMode(mode);
-            setLlmOperation(`Generate ${mode === 'alt' ? 'Alt Text' : mode === 'description' ? 'Description' : 'Caption'}`);
-
-            // Capture selected text and strip tags
-            const selectedText = getSelectedTextStripped();
-            const defaultContext = selectedText
-                ? `${selectedText}\n\n(Image in web page${currentSlug ? ` - ${currentSlug}` : ''})`
-                : `Image in web page${currentSlug ? ` (${currentSlug})` : ''}`;
-
-            setLlmContext(defaultContext);
-            setModalStatus('idle');
-            setModalVisible(true);
-        };
-
-        // Context menu items
-        const contextMenuItems: ContextMenuItem[] = [
-            {
-                label: 'Generate Alt Text',
-                icon: <span>🤖</span>,
-                onClick: () => handleShowContextModal('alt')
-            },
-            {
-                label: 'Generate Description',
-                icon: <span>📝</span>,
-                onClick: () => handleShowContextModal('description')
-            },
-            {
-                label: 'Generate Caption',
-                icon: <span>💬</span>,
-                onClick: () => handleShowContextModal('caption')
-            },
-            {
-                separator: true,
-                label: ""
-            },
-            {
-                label: 'Cancel',
-                onClick: () => setContextMenuVisible(false)
-            }
-        ];
-
-        // Handle modal approval
-        const handleApprove = async (result: string) => {
-            // Copy to clipboard
-            try {
-                await navigator.clipboard.writeText(result);
-                alert('Copied to clipboard! Paste it into the appropriate field above.');
-            } catch (e) {
-                alert(`Result: ${result}\n\nManually copy this text to the field above.`);
-            }
-        };
+        // Update the module-level store whenever this component renders/mounts
+        // This ensures textWithAI fields get the correct image when clicking the generate button
+        React.useEffect(() => {
+            imageDataStore.currentDisplaySrc = displaySrc;
+        }, [displaySrc]);
 
         // Clean up blob URLs when component unmounts or previewSrc changes
-        // Must be called unconditionally (Rules of Hooks)
         React.useEffect(() => {
             return () => {
                 if (previewSrc && previewSrc.startsWith('blob:')) {
@@ -430,77 +941,39 @@ const createImageContentView = (options: {
         }
 
         return (
-            <>
-                {/* Toolbar injector (singleton - only first instance renders) */}
-                <EditorToolbarInjector />
-
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{ padding: '12px', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
                     <div style={{ fontSize: '10px', color: '#999', marginBottom: '8px', fontFamily: 'monospace' }}>
                         {sourceInfo}{isNewlySelected && previewSrc ? ' (preview)' : ` → ${imageSrc}`}
                     </div>
-                    <div style={{ position: 'relative' }}>
-                        <img
-                            src={displaySrc}
-                            alt={alt || options.defaultAlt || 'Image'}
-                            style={{ maxWidth: '100%', height: 'auto', display: 'block', cursor: 'context-menu' }}
-                            onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
-                            onContextMenu={handleImageContextMenu}
-                        />
-                        <div style={{
-                            position: 'absolute',
-                            top: '8px',
-                            right: '8px',
-                            backgroundColor: 'rgba(0,0,0,0.7)',
-                            color: 'white',
-                            padding: '4px 8px',
-                            borderRadius: '4px',
-                            fontSize: '11px',
-                            opacity: 0.7
-                        }}>
-                            Right-click for AI options
-                        </div>
-                    </div>
+                    <img
+                        src={displaySrc}
+                        alt={alt || options.defaultAlt || 'Image'}
+                        style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
+                        onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                    />
                     {options.includeCaption && caption && <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>{caption}</p>}
                 </div>
-
-                {/* Context Menu */}
-                <ContextMenu
-                    visible={contextMenuVisible}
-                    x={contextMenuPos.x}
-                    y={contextMenuPos.y}
-                    items={contextMenuItems}
-                    onClose={() => setContextMenuVisible(false)}
-                />
-
-                {/* LLM Operation Modal */}
-                <LLMOperationModal
-                    visible={modalVisible}
-                    status={modalStatus}
-                    operation={llmOperation}
-                    result={llmResult}
-                    error={llmError}
-                    context={llmContext}
-                    onApprove={handleApprove}
-                    onContextChange={setLlmContext}
-                    onClose={() => setModalVisible(false)}
-                    onRetry={callLLMImageAPI}
-                />
-            </>
+            </div>
         );
     };
 
     // Return the component wrapped in SlugProvider
-    return (props: any) => (
-        <SlugProvider enabled={options.includeSlugTracking ?? false}>
-            <ImageContentViewInner value={props.value} />
-        </SlugProvider>
-    );
+    return (props: any) => {
+        return (
+            <SlugProvider enabled={options.includeSlugTracking ?? false}>
+                <ImageContentViewInner value={props.value} />
+            </SlugProvider>
+        );
+    };
 };
 
 const createImageComponent = (type: 'Lightbox' | 'Gallery', imagePath: string, includeSlugTracking?: boolean) => {
     const isGallery = type === 'Gallery';
     const slugTracking = includeSlugTracking !== undefined ? includeSlugTracking : isGallery;
 
+    // @ts-ignore
+    // @ts-ignore
     return block({
         label: `${type} Image`,
         schema: {
@@ -514,13 +987,22 @@ const createImageComponent = (type: 'Lightbox' | 'Gallery', imagePath: string, i
                 description: 'Legacy support - leave empty if using image picker above',
             }),
             id: fields.text({ label: 'Id'}),
-            alt: fields.text(
-                {
-                    label: 'Alt Text',
-                    validation: { isRequired: true },
-                }),
-            description: fields.text({ label: 'Detailed Description' }),
-            caption: fields.text({ label: 'Caption' })
+            // @ts-ignore
+            alt: textWithAI({
+                label: 'Alt Text',
+                validation: { isRequired: true },
+                mode: 'alt'
+            }),
+            // @ts-ignore
+            description: textWithAI({
+                label: 'Detailed Description',
+                mode: 'description'
+            }),
+            // @ts-ignore
+            caption: textWithAI({
+                label: 'Caption',
+                mode: 'caption'
+            })
         },
         ContentView: createImageContentView({
             imageDirectory: `/${imagePath}`,
@@ -1097,6 +1579,7 @@ const sharedCustomComponents = {
                             }}
                             onError={(e) => {
                                 (e.target as HTMLImageElement).style.display = 'none';
+                                // @ts-ignore
                                 (e.target as HTMLImageElement).parentElement!.innerHTML += '<p style="color: var(--ks-color-scale-slate11); font-style: italic;">Thumbnail not available</p>';
                             }}
                         />
@@ -1164,10 +1647,15 @@ const sharedCustomComponents = {
                 label: 'Source',
                 description: 'Path with [THEME] placeholder (e.g., /path/logo-[THEME].png)',
             }),
-            alt: fields.text({ label: 'Alt Text' }),
+            // @ts-ignore
+            alt: textWithAI({ label: 'Alt Text', mode: 'alt' }),
         },
         ContentView: (props) => {
             const { src, alt } = props.value;
+
+            // Replace [THEME] with actual theme values
+            const lightSrc = src && src.includes('[THEME]') ? src.replace('[THEME]', 'light') : src;
+            const darkSrc = src && src.includes('[THEME]') ? src.replace('[THEME]', 'dark') : src;
 
             if (!src) {
                 return <div style={{ padding: '12px', border: '1px dashed #ccc', borderRadius: '4px' }}>
@@ -1175,35 +1663,31 @@ const sharedCustomComponents = {
                 </div>;
             }
 
-            // Replace [THEME] with 'light' for preview (default editor theme)
-            const lightSrc = src.includes('[THEME]') ? src.replace('[THEME]', 'light') : src;
-            const darkSrc = src.includes('[THEME]') ? src.replace('[THEME]', 'dark') : src;
-
             return (
-                <div style={{ padding: '12px', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
+                <div style={{ padding: '12px', border: '1px solid #e0e0e0', borderRadius: '4px', overflow: 'hidden' }}>
                     <div style={{ fontSize: '10px', color: '#999', marginBottom: '8px', fontFamily: 'monospace' }}>
                         Themed Image: {src}
                     </div>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
                             <div style={{ fontSize: '11px', fontWeight: '600', marginBottom: '4px', color: '#666' }}>
                                 Light theme
                             </div>
                             <img
                                 src={lightSrc}
                                 alt={alt || 'Themed image (light)'}
-                                style={{ maxWidth: '100%', height: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#fff', padding: '8px' }}
+                                style={{ maxWidth: '100%', maxHeight: '200px', height: 'auto', width: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#fff', padding: '8px', objectFit: 'contain' }}
                                 onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
                             />
                         </div>
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
                             <div style={{ fontSize: '11px', fontWeight: '600', marginBottom: '4px', color: '#666' }}>
                                 Dark theme
                             </div>
                             <img
                                 src={darkSrc}
                                 alt={alt || 'Themed image (dark)'}
-                                style={{ maxWidth: '100%', height: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#000', padding: '8px' }}
+                                style={{ maxWidth: '100%', maxHeight: '200px', height: 'auto', width: 'auto', display: 'block', border: '1px solid #ddd', backgroundColor: '#000', padding: '8px', objectFit: 'contain' }}
                                 onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
                             />
                         </div>
@@ -1388,6 +1872,8 @@ const sharedCustomComponents = {
                 };
             }, [inlinePreviewSrc, previewPreviewSrc]);
 
+            const displayInlineSrc = inlineIsNew && inlinePreviewSrc ? inlinePreviewSrc : inlineImageSrc;
+
             if (!videoSrc || !inlineImageSrc || !previewImageSrc || !alt) {
                 return (
                     <div style={{ padding: '12px', border: '1px dashed #ccc', borderRadius: '4px' }}>
@@ -1402,8 +1888,6 @@ const sharedCustomComponents = {
                 );
             }
 
-            const displayInlineSrc = inlineIsNew && inlinePreviewSrc ? inlinePreviewSrc : inlineImageSrc;
-
             return (
                 <div style={{ padding: '12px', border: '1px solid var(--ks-color-scale-slate6)', borderRadius: '4px', backgroundColor: 'var(--ks-color-scale-slate2)' }}>
                     <div style={{ fontSize: '10px', color: 'var(--ks-color-scale-slate11)', marginBottom: '8px', fontFamily: 'monospace' }}>
@@ -1411,13 +1895,14 @@ const sharedCustomComponents = {
                     </div>
 
                     {/* Show inline image preview */}
-                    <img
-                        src={displayInlineSrc}
-                        alt={alt}
-                        style={{ maxWidth: '100%', maxHeight: '200px', height: 'auto', display: 'block', border: '2px solid currentColor' }}
-                        onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
-                    />
-
+                    <div style={{ marginBottom: '8px' }}>
+                        <img
+                            src={displayInlineSrc}
+                            alt={alt}
+                            style={{ maxWidth: '100%', maxHeight: '200px', height: 'auto', display: 'block', border: '2px solid currentColor' }}
+                            onError={(e) => { (e.target as HTMLImageElement).style.border = '2px solid red'; }}
+                        />
+                    </div>
 
                     <div style={{ display: 'grid', gap: '6px', fontSize: '11px', color: 'var(--ks-color-scale-slate11)' }}>
                         <div>
@@ -1451,17 +1936,49 @@ const blogSpecificComponents = {
 };
 
 // ============================================================================
-// COMPONENT COLLECTIONS
+// COMPONENT COLLECTIONS WITH AUTO-INJECTED TOOLBAR
 // ============================================================================
-const blogComponents = {
-    ...minimalHtmlComponents,
-    ...sharedCustomComponents,
+// Wrap all components to auto-inject the toolbar (singleton pattern ensures only one renders)
+// Only injects toolbar when LLM_ENABLED is true
+const wrapComponentsWithToolbar = (components: any) => {
+    // If LLM is disabled, return components unchanged (no toolbar injection)
+    if (!LLM_ENABLED) {
+        return components;
+    }
+
+    const wrapped: any = {};
+    for (const [key, component] of Object.entries(components)) {
+        const original = component as any;
+
+        // Skip if no ContentView to wrap
+        if (!original.ContentView) {
+            wrapped[key] = original;
+            continue;
+        }
+
+        // Wrap the ContentView to also render toolbar injector
+        wrapped[key] = {
+            ...original,
+            ContentView: (props: any) => (
+                <>
+                    <EditorToolbarInjector />
+                    {React.createElement(original.ContentView, props)}
+                </>
+            ),
+        };
+    }
+    return wrapped;
 };
 
-const pageComponents = {
+const blogComponents = wrapComponentsWithToolbar({
     ...minimalHtmlComponents,
     ...sharedCustomComponents,
-};
+});
+
+const pageComponents = wrapComponentsWithToolbar({
+    ...minimalHtmlComponents,
+    ...sharedCustomComponents,
+});
 
 // ============================================================================
 // SHARED SCHEMA FACTORY
@@ -1475,7 +1992,21 @@ const createPostSchema = (imageDirectory: string) => ({
         slug: {
             label: 'Slug',
             description: 'Must follow pattern: YYYY-MM-DD-slug-text (e.g., 2025-06-01-my-post)',
+            generate: (name: string) => {
+                // Get today's date prefix
+                const today = new Date();
+                const datePrefix = today.toISOString().slice(0, 10); // YYYY-MM-DD
+                // Use Keystatic's default slugification, then prefix with date
+                const defaultSlug = name
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+                return defaultSlug ? `${datePrefix}-${defaultSlug}` : '';
+            },
             validation: {
+                // @ts-ignore
                 isRequired: true,
                 pattern: {
                     regex: /^\d{4}-\d{2}-\d{2}-.+$/,
@@ -1555,7 +2086,7 @@ export default config({
 
         drafts: collection({
             label: 'Draft Blog Posts',
-            description: 'Posts dated today or earlier will be published within 24 hours. Posts with future dates will be published on the specified date.',
+            // description: 'Posts dated today or earlier will be published within 24 hours. Posts with future dates will be published on the specified date.',
             slugField: 'title',
             path: `${basePostPath}/_drafts/*`,
             format: { contentField: 'content', data: 'json' },

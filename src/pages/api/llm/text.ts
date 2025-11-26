@@ -187,6 +187,7 @@ export const POST: APIRoute = async ({request}) => {
                     });
                 }
                 finalPrompt = buildDescriptionGenerationPrompt(title, content, currentDescription, context);
+                console.log('[LLM TEXT API] Generate description prompt:', finalPrompt);
                 result = await llm.generateText(finalPrompt, {
                     maxTokens: maxTokens || DEFAULT_MAX_TOKENS,
                     temperature: temperature || 0.7,
@@ -204,6 +205,7 @@ export const POST: APIRoute = async ({request}) => {
                     });
                 }
                 finalPrompt = buildTaxonomySuggestionPrompt('categories', title, content, availableCategories, allowNew || false);
+                console.log('[LLM TEXT API] Suggest categories prompt:', finalPrompt);
                 result = await llm.generateText(finalPrompt, {
                     maxTokens: maxTokens || DEFAULT_MAX_TOKENS,
                     temperature: temperature || 0.3,
@@ -221,6 +223,7 @@ export const POST: APIRoute = async ({request}) => {
                     });
                 }
                 finalPrompt = buildTaxonomySuggestionPrompt('tags', title, content, availableTags, allowNew || false);
+                console.log('[LLM TEXT API] Suggest tags prompt:', finalPrompt);
                 result = await llm.generateText(finalPrompt, {
                     maxTokens: maxTokens || DEFAULT_MAX_TOKENS,
                     temperature: temperature || 0.3,
@@ -292,6 +295,7 @@ export const POST: APIRoute = async ({request}) => {
                 // Use custom prompt or operation-specific prompt (with optional user context)
                 const operationPrompt = TEXT_OPERATION_PROMPTS[operation as keyof typeof TEXT_OPERATION_PROMPTS];
                 finalPrompt = prompt || (operationPrompt ? operationPrompt(text, context) : '');
+                console.log(`[LLM TEXT API] ${operation} prompt:`, finalPrompt);
 
                 result = await llm.generateText(finalPrompt, {
                     systemPrompt,

@@ -1,5 +1,4 @@
 import {defineConfig} from 'astro/config'
-import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx';
 import remarkGfm from 'remark-gfm'
 import remarkMath from "remark-math";
@@ -100,7 +99,7 @@ function processDevOnlyMarkers() {
     const srcDir = path.resolve('src');
 
     // File extensions to process
-    const extensions = ['.astro', '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue', '.svelte'];
+    const extensions = ['.astro', '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue'];
 
     let filesProcessed = 0;
     let linesModified = 0;
@@ -390,8 +389,7 @@ export default defineConfig({
         ...(process.env.NODE_ENV === 'development' ? [keystatic(), menuWatcher()] : [excludeDevPages()]),
         tailwind(),
         mdx(),
-        svelte(),
-        solidJs({ include: ['**/solid/*', '**/bluesky/*'] }),
+        solidJs({ include: ['**/solid/*', '**/bluesky/*', '**/admin/ThemeEditor.tsx'] }),
         pagefind(),
         copyPublicFilesIntegration(),
         cleanupSystemFiles(), // Must run after copyPublicFilesIntegration

@@ -11,6 +11,19 @@ export const ARRAY_OUTPUT_EXAMPLE = (fieldName: string) => `{"${fieldName}": ["i
 // Common JSON output instruction
 export const JSON_OUTPUT_INSTRUCTION = `CRITICAL: Respond with ONLY a single JSON object. Do NOT include any text before or after the JSON.`;
 
+// Instruction to avoid common LLM writing patterns
+export const AVOID_LLMISMS_INSTRUCTION = `WRITING STYLE - AVOID THESE COMMON AI PATTERNS:
+- Do NOT start with "I" or use first person unless the original text does
+- Do NOT use filler phrases like "Certainly!", "Absolutely!", "Great question!"
+- Do NOT use overused words: "delve", "crucial", "seamlessly", "cutting-edge", "leverage", "robust", "comprehensive"
+- Do NOT use cliche phrases: "at the end of the day", "it's worth noting", "in today's world", "dive deep into"
+- Do NOT use excessive hedging: "It's important to note that", "It should be mentioned that"
+- Do NOT use unnecessary transitions: "Moreover", "Furthermore", "Additionally" at the start of every sentence
+- Do NOT overuse tricolon lists (groups of three): "X, Y, and Z" - vary your list lengths
+- Do NOT use the "adjective-noun that verb" pattern repeatedly: "A powerful tool that enables", "A comprehensive solution that provides"
+- Write naturally and directly, as a skilled human writer would
+- When appropriate, match the existing writing style as closely as possible`;
+
 /**
  * Wrap input text/content with clear delimiters
  * Makes it clear to the LLM what content it should operate on
@@ -68,6 +81,8 @@ export const buildTextOperationPrompt = (
     const outputExample = options?.outputExample || TEXT_OUTPUT_EXAMPLE;
 
     return `TASK: ${task}${requirements}
+
+${AVOID_LLMISMS_INSTRUCTION}
 ${contextSection}
 
 ${JSON_OUTPUT_INSTRUCTION}

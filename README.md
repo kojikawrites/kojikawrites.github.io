@@ -180,7 +180,7 @@ cp src/.sites/yoursitename/.env.example src/.sites/yoursitename/.env
 
 **Option A: SSH Keys (Recommended)**
 
-Uncomment the SSH volume mount in `docker/docker-compose.yaml`:
+Uncomment the SSH volume mount in `docker/compose/docker-compose.yaml`:
 ```yaml
 volumes:
   - ~/.ssh:/root/.ssh:ro
@@ -205,22 +205,22 @@ GIT_COMMITTER_EMAIL=your-email@example.com
 
 **Start the container:**
 ```bash
-docker-compose -f docker/docker-compose.yaml up -d
+docker-compose -f docker/compose/docker-compose.yaml up -d
 ```
 
 **View logs:**
 ```bash
-docker-compose -f docker/docker-compose.yaml logs -f
+docker-compose -f docker/compose/docker-compose.yaml logs -f
 ```
 
 **Stop the container:**
 ```bash
-docker-compose -f docker/docker-compose.yaml down
+docker-compose -f docker/compose/docker-compose.yaml down
 ```
 
 **Restart after changes:**
 ```bash
-docker-compose -f docker/docker-compose.yaml restart
+docker-compose -f docker/compose/docker-compose.yaml restart
 ```
 
 ### Accessing the Blog
@@ -261,8 +261,8 @@ cd /path/to/hiive.github.io
 **Port already in use:**
 ```bash
 # Stop any existing containers
-docker-compose -f docker/docker-compose.yaml down
-# Or change the port in docker/docker-compose.yaml
+docker-compose -f docker/compose/docker-compose.yaml down
+# Or change the port in docker/compose/docker-compose.yaml
 ```
 
 **Git authentication fails:**
@@ -276,11 +276,11 @@ ls -la ~/.ssh/
 **Container won't start:**
 ```bash
 # View logs
-docker-compose -f docker/docker-compose.yaml logs
+docker-compose -f docker/compose/docker-compose.yaml logs
 
 # Rebuild container
-docker-compose -f docker/docker-compose.yaml build --no-cache
-docker-compose -f docker/docker-compose.yaml up -d
+docker-compose -f docker/compose/docker-compose.yaml build --no-cache
+docker-compose -f docker/compose/docker-compose.yaml up -d
 ```
 
 ## Production Build
@@ -313,18 +313,27 @@ npm run preview-host
 ```
 hiive.github.io/
 ├── src/
+│   ├── .sites/              # Site-specific content and configuration
+│   │   └── [site-name]/
+│   │       ├── config/      # Site configuration (site.yaml)
+│   │       ├── content/     # Blog posts and page content
+│   │       ├── components/  # Site-specific components
+│   │       ├── images/      # Site images
+│   │       └── styles/      # Site-specific styles
 │   ├── assets/
-│   │   ├── posts/           # Blog posts organized by site
-│   │   ├── images/          # Image assets
-│   │   └── config/          # Configuration files
+│   │   ├── fonts/           # Font files
+│   │   └── images/          # Shared image assets
 │   ├── components/          # Reusable components (Astro, Svelte, etc.)
 │   ├── layouts/             # Page layouts
+│   ├── lib/                 # Utility libraries and services
 │   ├── pages/               # Route pages
 │   │   ├── blog/            # Blog routes
 │   │   ├── [page].astro     # Dynamic pages
 │   │   └── index.astro      # Home page
-│   ├── scripts/             # Build and utility scripts
 │   └── styles/              # Global styles
+├── docker/                  # Docker configuration
+│   ├── compose/             # Docker Compose files
+│   └── scripts/             # Build and utility scripts
 ├── public/                  # Static assets
 ├── astro.config.mjs         # Astro configuration
 ├── tailwind.config.mjs      # Tailwind configuration
@@ -397,6 +406,13 @@ Blog posts are stored in `src/.sites/[site-name]/content/posts/` as MDX files. E
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build locally
 - `npm run preview-host` - Preview production build with network access
+
+## Additional Documentation
+
+- **[Docker Setup](docker/README.md)** - Detailed Docker configuration, volumes, scripts, and troubleshooting
+- **[LLM Service](src/lib/services/llm/README.md)** - AI-powered content assistance (alt text generation, text editing)
+- **[Site Configuration](src/.sites/hiivelabs.com/README.md)** - Site-specific setup and environment variables
+- **[Site Components](src/.sites/hiivelabs.com/components/README.md)** - Creating site-specific Astro components
 
 ## License
 

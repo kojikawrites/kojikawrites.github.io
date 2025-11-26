@@ -491,16 +491,51 @@ const iroToRgbString = (color: iro.Color): string => {
 interface ColorRowWithPickerProps extends ColorRowProps {
     colorName: string;
     onOpenPicker: (colorName: string, field: 'light' | 'dark', element: HTMLElement, currentColor: string) => void;
+    activeTooltip: () => string | null;
+    setActiveTooltip: (colorName: string | null) => void;
 }
 
 const ColorRow = (props: ColorRowWithPickerProps) => {
     const isActive = () => props.syncMode !== 'off';
 
+    const handleHelpClick = (e: MouseEvent) => {
+        e.stopPropagation();
+        // Toggle: if this tooltip is already open, close it; otherwise open it (closing any other)
+        if (props.activeTooltip() === props.colorName) {
+            props.setActiveTooltip(null);
+        } else {
+            props.setActiveTooltip(props.colorName);
+        }
+    };
+
+    const isTooltipOpen = () => props.activeTooltip() === props.colorName;
+
     return (
         <tr>
             <td class="name-cell" title={props.color.purpose}>
-                <span class="color-name">{props.color.displayName || formatName(props.color.name)}</span>
-                <code class="color-var">--{props.color.name}</code>
+                <div class="name-cell-content">
+                    <div class="name-cell-text">
+                        <span class="color-name">{props.color.displayName || formatName(props.color.name)}</span>
+                        <code class="color-var">--{props.color.name}</code>
+                    </div>
+                    <Show when={props.color.purpose}>
+                        <div class="help-tooltip-container">
+                            <button
+                                class="help-icon"
+                                onClick={handleHelpClick}
+                                title="Click for description"
+                            >
+                                ?
+                            </button>
+                            <Show when={isTooltipOpen()}>
+                                <div class="help-tooltip" onClick={(e) => e.stopPropagation()}>
+                                    <div class="help-tooltip-content">{props.color.purpose}</div>
+                                    <button class="help-tooltip-close" onClick={() => props.setActiveTooltip(null)}>×</button>
+                                </div>
+                            </Show>
+                        </div>
+                    </Show>
+                </div>
             </td>
             <Show when={props.color.themeIndependent} fallback={[
                     <td class="color-cell dark-bg">
@@ -687,6 +722,9 @@ export const ThemeEditor = () => {
     const [success, setSuccess] = createSignal<string | null>(null);
     // Per-row sync state (keyed by color name) - stores the sync mode for each color
     const [rowSyncStates, setRowSyncStates] = createSignal<Record<string, SyncMode>>({});
+
+    // Shared tooltip state - only one tooltip can be open at a time (by color name)
+    const [activeTooltip, setActiveTooltip] = createSignal<string | null>(null);
 
     // Shared color picker state
     let pickerRef: HTMLDivElement | undefined;
@@ -1872,6 +1910,8 @@ export const ThemeEditor = () => {
                                     onLightChange={(value) => updateColorByName(color.name, 'light', value)}
                                     onDarkChange={(value) => updateColorByName(color.name, 'dark', value)}
                                     onOpenPicker={openPicker}
+                                    activeTooltip={activeTooltip}
+                                    setActiveTooltip={setActiveTooltip}
                                 />
                             )}
                         </For>

@@ -1,11 +1,34 @@
 # Docker Setup Documentation
 
+## Quick Start
+
+To start the Docker environment:
+
+```bash
+cd docker
+./pip-docker-build.sh    # For pip-based build
+# or
+./uv-docker-build.sh     # For uv-based build (faster)
+```
+
+These wrapper scripts handle all the complexity of building and starting the containers.
+
 ## Architecture
 
-The docker setup uses two containers:
+The docker setup uses two main containers:
 
 1. **blog-dev** - Runs Astro dev server with HMR
 2. **build-service** - Handles production builds and git operations
+
+### Optional: LLM Container (Ollama)
+
+When using `LLM_PROVIDER=ollama-docker`, an additional **ollama** container is started:
+
+- Runs Ollama server for local AI inference
+- Pulls and caches models in a shared volume (`blog-ollama-models`)
+- Only started when containerized Ollama is configured (not for external Ollama or Docker Model Runner)
+
+See `src/lib/services/llm/README.md` for LLM configuration details.
 
 ## Volumes
 
@@ -24,7 +47,7 @@ The docker setup uses two containers:
 
 ### Development (blog-dev)
 
-The blog-dev container uses an **entrypoint script** (`docker/entrypoint.sh`) with **bind mount overlay** to maintain separate lock files.
+The blog-dev container uses an **entrypoint script** (`docker/scripts/container/astro-entrypoint.sh`) with **bind mount overlay** to maintain separate lock files.
 
 **How it works: Bind Mount Overlay**
 
@@ -100,13 +123,13 @@ If you need to force a complete rebuild of node_modules:
 
 ```bash
 # Stop the containers
-docker-compose -f docker/docker-compose.yaml down
+docker-compose -f docker/compose/docker-compose.yaml down
 
 # Remove the dev workspace volume
 docker volume rm ${DOCKER_BLOG_CODE}-dev-workspace
 
 # Recreate and start
-docker-compose -f docker/docker-compose.yaml up -d
+docker-compose -f docker/compose/docker-compose.yaml up -d
 ```
 
 The entrypoint script will detect the missing node_modules and run `npm install` on startup.
@@ -117,13 +140,13 @@ To clear the build workspace:
 
 ```bash
 # Stop containers
-docker-compose -f docker/docker-compose.yaml down
+docker-compose -f docker/compose/docker-compose.yaml down
 
 # Remove build workspace
 docker volume rm ${DOCKER_BLOG_CODE}-build-workspace
 
 # Restart
-docker-compose -f docker/docker-compose.yaml up -d
+docker-compose -f docker/compose/docker-compose.yaml up -d
 ```
 
 ### Complete Clean Slate
@@ -159,7 +182,7 @@ docker-compose up -d
 
 2. If changed, restart the container to trigger automatic npm ci:
    ```bash
-   docker-compose -f docker/docker-compose.yaml restart blog
+   docker-compose -f docker/compose/docker-compose.yaml restart blog
    ```
 
 3. If still failing, force rebuild node_modules (see above)
@@ -200,7 +223,7 @@ If seeing "does not provide an export named 'default'" for lodash:
 2. Clear Vite cache:
    ```bash
    docker exec -it ${DOCKER_BLOG_CODE}-blog-dev rm -rf /app/node_modules/.vite
-   docker-compose -f docker/docker-compose.yaml restart blog
+   docker-compose -f docker/compose/docker-compose.yaml restart blog
    ```
 
 ## Environment Variables
@@ -268,3 +291,40 @@ Running `npm ci` on every container start adds ~30-60 seconds startup time. The 
 - Checks timestamps to detect changes
 - Only reinstalls when needed
 - Preserves fast startup for unchanged dependencies
+
+## File Structure
+
+```
+docker/
+├── pip-docker-build.sh       # Build & start using pip (wrapper)
+├── uv-docker-build.sh        # Build & start using uv (wrapper, faster)
+├── compose/                   # Docker Compose configuration files
+│   ├── docker-compose.yaml    # Main compose file
+│   └── docker-compose.llm.yaml # LLM service overlay
+└── scripts/
+    ├── container/             # Scripts that run INSIDE containers
+    │   ├── astro-entrypoint.sh   # Blog container entrypoint
+    │   └── build-service.py      # Build service logic
+    └── os/                    # Scripts that run on HOST machine
+        ├── docker-build.sh       # Main build orchestration (macOS/Linux)
+        ├── docker-build.bat      # Main build orchestration (Windows cmd)
+        ├── docker-build.ps1      # Main build orchestration (PowerShell)
+        ├── check-model-runner.sh # Check Docker Model Runner availability
+        ├── detect-model-context.sh # Detect/set LLM model context
+        └── restore-model-context.sh # Restore LLM model context
+```
+
+### Script Categories
+
+**Wrapper Scripts** (`pip-docker-build.sh`, `uv-docker-build.sh`):
+- Simple entry points that call the main build script with the appropriate build mode
+- Use these to start the Docker environment
+
+**OS Scripts** (`scripts/os/`):
+- Run on your host machine (not inside containers)
+- Cross-platform: `.sh` for macOS/Linux, `.bat`/`.ps1` for Windows
+- Handle Docker Compose orchestration, LLM provider detection, etc.
+
+**Container Scripts** (`scripts/container/`):
+- Run inside Docker containers
+- Handle container initialization, builds, and services

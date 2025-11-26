@@ -303,6 +303,18 @@ const permalink = Astro.url.pathname;
             background: rgb(var(--background-body));
         }
 
+        .name-cell-content {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .name-cell-text {
+            flex: 1;
+            min-width: 0;
+        }
+
         .color-name {
             display: block;
             font-weight: 600;
@@ -317,6 +329,82 @@ const permalink = Astro.url.pathname;
             background: rgb(var(--background-mid) / 0.3);
             padding: 2px 6px;
             border-radius: 3px;
+        }
+
+        /* Help icon and tooltip */
+        .help-tooltip-container {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .help-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid rgb(var(--text-secondary));
+            background: transparent;
+            color: rgb(var(--text-secondary));
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .help-icon:hover {
+            border-color: rgb(var(--primary-color));
+            color: rgb(var(--primary-color));
+            background: rgba(var(--primary-color), 0.1);
+        }
+
+        .help-tooltip {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 4px;
+            padding: 0.75rem;
+            padding-right: 2rem;
+            background: rgb(var(--background-feature));
+            border: 1px solid rgb(var(--background-mid));
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+            min-width: 200px;
+            max-width: 300px;
+        }
+
+        .help-tooltip-content {
+            font-size: 0.85rem;
+            color: rgb(var(--text-main));
+            line-height: 1.4;
+        }
+
+        .help-tooltip-close {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 20px;
+            height: 20px;
+            border: none;
+            background: transparent;
+            color: rgb(var(--text-secondary));
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .help-tooltip-close:hover {
+            background: rgba(var(--text-secondary), 0.1);
+            color: rgb(var(--text-main));
         }
 
         /* Dark column stays fixed black */
