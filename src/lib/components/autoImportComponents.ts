@@ -26,6 +26,7 @@ import MainLogo from "/src/components/MainLogo.astro";
 import ThemedImage from "/src/components/ThemedImage.astro";
 import FootnoteRef from "/src/components/footnote/FootnoteRef.astro";
 import FootnoteDefinition from "/src/components/footnote/FootnoteDefinition.astro";
+import ImageWithText from "/src/components/ImageWithText.astro";
 
 // Type for component collections
 type ComponentMap = Record<string, AstroComponentFactory>;
@@ -56,6 +57,7 @@ const commonComponents: ComponentMap = {
     ThemedImage,
     FootnoteRef,
     FootnoteDefinition,
+    ImageWithText,
 };
 
 /**

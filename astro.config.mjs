@@ -389,7 +389,7 @@ export default defineConfig({
         ...(process.env.NODE_ENV === 'development' ? [keystatic(), menuWatcher()] : [excludeDevPages()]),
         tailwind(),
         mdx(),
-        solidJs({ include: ['**/solid/*', '**/bluesky/*', '**/admin/ThemeEditor.tsx'] }),
+        solidJs({ include: ['**/solid/*', '**/bluesky/*', '**/admin/ThemeEditor.tsx', '**/admin/FontEditor.tsx'] }),
         pagefind(),
         copyPublicFilesIntegration(),
         cleanupSystemFiles(), // Must run after copyPublicFilesIntegration

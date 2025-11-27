@@ -9,6 +9,7 @@
     "start": "NODE_ENV='development' astro dev --host",
     "prebuild": "NODE_ENV='production' npx tsx src/build/generateKeystaticData.ts && NODE_ENV='production' npx tsx src/build/generateNavMenu.ts",
     "build": "NODE_ENV='production' astro build",
+    "postbuild": "node scripts/strip-unused-fonts.mjs",
     "preview": "NODE_ENV='production' astro preview",
     "preview-host": "NODE_ENV='production' astro preview --host",
     "astro": "astro"
@@ -58,6 +59,7 @@
   "devDependencies": {
     "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^6.0.2",
+    "@fullhuman/postcss-purgecss": "^7.0.2",
     "@keystatic/astro": "^5.0.6",
     "@keystatic/core": "^0.5.48",
     "@rollup/plugin-yaml": "^4.1.2",

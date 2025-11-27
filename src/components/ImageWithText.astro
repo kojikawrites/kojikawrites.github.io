@@ -1,0 +1,112 @@
+---
+/**
+ * ImageWithText - A responsive image + text layout component
+ *
+ * Displays an image alongside text content. On desktop, the image and text
+ * sit side-by-side. On mobile, the image is full-width with text below.
+ *
+ * @prop {string} image - Image source path (from picker)
+ * @prop {string} alt - Image alt text
+ * @prop {string} description - Detailed description shown in lightbox
+ * @prop {string} caption - Caption shown below the image
+ * @prop {string} imageWidth - CSS width for the image (e.g., "200px", "30%", "15rem")
+ * @prop {"left" | "right"} imagePosition - Which side the image appears on (default: "left")
+ * @prop {string} gap - Gap between image and text (default: "1.5rem")
+ * @prop {string} class - Additional CSS classes for the container
+ */
+
+interface Props {
+    image?: string;
+    alt: string;
+    description?: string;
+    caption?: string;
+    imageWidth?: string;
+    imagePosition?: "left" | "right";
+    gap?: string;
+    class?: string;
+}
+
+import LightboxImage from "./gallery/LightboxImage.astro";
+
+const {
+    image,
+    alt,
+    description,
+    caption,
+    imageWidth = "200px",
+    imagePosition = "left",
+    gap = "1.5rem",
+    class: className = "",
+} = Astro.props;
+
+const isImageLeft = imagePosition === "left";
+const imageSrc = image;
+---
+
+{imageSrc ? (
+    <div
+        class:list={["image-with-text", className]}
+        style={`--iwt-image-width: ${imageWidth}; --iwt-gap: ${gap};`}
+    >
+        <div class:list={["iwt-image", { "iwt-image-right": !isImageLeft }]}>
+            <LightboxImage
+                src={imageSrc}
+                alt={alt}
+                description={description}
+                caption={caption}
+            />
+        </div>
+        <div class="iwt-text">
+            <slot />
+        </div>
+    </div>
+) : (
+    <div class="image-with-text-error">
+        <p>Image not found</p>
+        <div class="iwt-text">
+            <slot />
+        </div>
+    </div>
+)}
+
+<style>
+    .image-with-text {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: var(--iwt-gap);
+    }
+
+    .iwt-image {
+        flex-shrink: 0;
+        width: 100%;
+    }
+
+    .iwt-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .iwt-text {
+        flex: 1;
+        min-width: 0;
+    }
+
+    /* Desktop: side-by-side layout */
+    @media (min-width: 768px) {
+        .image-with-text {
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .iwt-image {
+            width: var(--iwt-image-width);
+        }
+
+        /* Image on right: reverse the order */
+        .iwt-image.iwt-image-right {
+            order: 2;
+        }
+    }
+</style>

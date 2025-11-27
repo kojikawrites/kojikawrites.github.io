@@ -1,0 +1,520 @@
+---
+// the following line will be automatically commented out
+// by the build process for production builds.
+export const prerender = false; // ![DEV-ONLY]
+
+import BaseHead from '../../components/BaseHead.astro';
+import '../../styles/admin.css';
+import { FontEditor } from '../../components/admin/FontEditor';
+
+// Only render in development mode
+if (import.meta.env.PROD) {
+  return Astro.redirect('/404');
+}
+
+const title = 'Font Editor';
+const description = 'Edit typography and font families';
+const permalink = Astro.url.pathname;
+---
+
+<html lang="en">
+<head>
+    <BaseHead title={title} description={description} permalink={permalink} />
+    <style is:global>
+        /* Override container width for font editor */
+        .container {
+            max-width: 1200px;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            border-bottom: 2px solid rgb(var(--primary-color));
+            padding-bottom: 0.5rem;
+        }
+
+        h1 {
+            color: rgb(var(--heading-color));
+            margin: 0;
+            border: none;
+            padding: 0;
+        }
+
+        .subtitle {
+            color: rgb(var(--text-secondary));
+            margin-bottom: 2rem;
+        }
+
+        /* Font Editor Styles */
+        .font-editor {
+            width: 100%;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: rgb(var(--text-secondary));
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .message.error {
+            background: rgba(var(--secondary-color), 0.15);
+            color: rgb(var(--secondary-color));
+            border: 1px solid rgba(var(--secondary-color), 0.3);
+        }
+
+        .message.success {
+            background: rgba(var(--hiive-crt), 0.15);
+            color: rgb(var(--hiive-crt));
+            border: 1px solid rgba(var(--hiive-crt), 0.3);
+        }
+
+        .font-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .font-section {
+            background: rgb(var(--background-body));
+            border: 1px solid rgb(var(--background-mid));
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .font-section-header {
+            margin-bottom: 1rem;
+        }
+
+        .font-label {
+            display: block;
+            font-weight: 600;
+            color: rgb(var(--text-main));
+            margin-bottom: 0.25rem;
+        }
+
+        .font-description {
+            font-size: 0.875rem;
+            color: rgb(var(--text-secondary));
+        }
+
+        /* Inline preview for each font section */
+        .font-preview-inline {
+            background: rgb(var(--background-feature));
+            border: 1px solid rgb(var(--background-mid));
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .font-preview-sample {
+            /* Container for each preview type */
+        }
+
+        /* Serif preview styles */
+        .serif-sample {
+            font-family: var(--font-family-serif);
+            color: rgb(var(--text-main));
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .font-preview-inline .quote-block {
+            background: rgb(var(--bg-quote-block));
+            border-left: 3px solid rgb(var(--text-highlight-color));
+            padding: 0.5rem 0.75rem;
+            margin: 0;
+            font-style: italic;
+        }
+
+        .font-preview-inline .quote-block p {
+            font-family: var(--font-family-serif);
+            margin: 0;
+            color: rgb(var(--text-highlight-color));
+            font-size: 0.9rem;
+        }
+
+        /* Sans preview styles */
+        .font-preview-inline .navbar {
+            background: rgb(var(--background-body));
+            margin-bottom: 1rem;
+        }
+
+        .font-preview-inline .navbar a {
+            color: rgb(var(--text-main));
+            text-decoration: none;
+            font-family: var(--font-family-sans);
+        }
+
+        .headings-sample {
+            background: rgb(var(--background-body));
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .headings-sample h1,
+        .headings-sample h2,
+        .headings-sample h3 {
+            font-family: var(--font-family-sans);
+            color: rgb(var(--heading-color));
+            margin: 0 0 0.5rem 0;
+        }
+
+        .headings-sample h1 {
+            font-size: 1.5rem;
+            color: rgb(var(--secondary-color));
+        }
+
+        .headings-sample h2 {
+            font-size: 1.25rem;
+        }
+
+        .headings-sample h3 {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Sans-alt preview styles */
+        .font-preview-inline .c-breadcrumbs {
+            font-family: var(--font-family-sans-alt);
+        }
+
+        .tags-sample {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .sample-label {
+            font-family: var(--font-family-serif);
+            font-size: 0.8rem;
+            color: rgb(var(--text-secondary));
+        }
+
+        /* Tags and categories inherit from site styles */
+
+        /* Monospace preview styles */
+        .inline-code-sample {
+            font-family: var(--font-family-serif);
+            font-size: 0.875rem;
+            color: rgb(var(--text-main));
+            margin-bottom: 0.75rem;
+        }
+
+        .font-preview-inline code {
+            font-family: var(--font-family-monospace);
+            background: rgb(var(--background-mid));
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            color: rgb(var(--text-code-color));
+        }
+
+        .font-preview-inline pre {
+            background: rgb(var(--background-mid));
+            padding: 0.75rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        .font-preview-inline pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .font-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .font-select {
+            width: 100%;
+            max-width: 300px;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            border: 1px solid rgb(var(--background-mid));
+            border-radius: 4px;
+            background: rgb(var(--background-feature));
+            color: rgb(var(--text-main));
+            cursor: pointer;
+        }
+
+        .font-select:focus {
+            outline: none;
+            border-color: rgb(var(--primary-color));
+            box-shadow: 0 0 0 3px rgba(var(--primary-color), 0.1);
+        }
+
+        .font-sample {
+            padding: 0.75rem;
+            background: rgb(var(--background-feature));
+            border: 1px solid rgb(var(--background-mid));
+            border-radius: 4px;
+            color: rgb(var(--text-main));
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .font-sample-mono {
+            font-size: 0.875rem;
+        }
+
+        .btn-reset {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            padding: 0;
+            background: transparent;
+            border: 1px solid rgb(var(--background-mid));
+            border-radius: 4px;
+            color: rgb(var(--text-secondary));
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-reset:hover:not(:disabled) {
+            background: rgb(var(--background-mid));
+            color: rgb(var(--text-main));
+            border-color: rgb(var(--primary-color));
+        }
+
+        .btn-reset:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgb(var(--background-mid));
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: rgb(var(--primary-color));
+            color: rgb(var(--primary-color-contrast));
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: rgb(var(--primary-color-alt));
+        }
+
+        .btn-secondary {
+            background: rgb(var(--background-mid));
+            color: rgb(var(--text-main));
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: rgb(var(--primary-color-alt));
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        @media (min-width: 640px) {
+            .font-controls {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .font-select {
+                flex-shrink: 0;
+            }
+
+            .btn-reset {
+                flex-shrink: 0;
+            }
+
+            .font-sample {
+                flex: 1;
+            }
+        }
+
+        .font-preview-panel {
+            margin-bottom: 2rem;
+            background: rgb(var(--background-feature));
+            border: 1px solid rgb(var(--background-mid));
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .preview-title {
+            color: rgb(var(--heading-color));
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgb(var(--background-mid));
+        }
+
+        /* Font preview styles */
+        .font-preview {
+            background: rgb(var(--background-body));
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .font-preview .navbar {
+            background: rgb(var(--background-feature));
+        }
+
+        .font-preview .navbar a {
+            color: rgb(var(--text-main));
+            text-decoration: none;
+            font-family: var(--font-family-sans);
+        }
+
+        .font-preview .navbar a.selected {
+            /* Relies on site's ::before pseudo-element for underline */
+        }
+
+        .font-preview .c-breadcrumbs {
+            font-family: var(--font-family-sans-alt);
+        }
+
+        .font-preview .post-content {
+            border: 1px solid rgb(var(--background-mid));
+        }
+
+        .font-preview h1,
+        .font-preview h2,
+        .font-preview h3,
+        .font-preview h4,
+        .font-preview h5,
+        .font-preview h6 {
+            font-family: var(--font-family-sans);
+            color: rgb(var(--heading-color));
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .font-preview h1 {
+            font-size: 1.5rem;
+            color: rgb(var(--secondary-color));
+        }
+
+        .font-preview h2 {
+            font-size: 1.25rem;
+        }
+
+        .font-preview h3 {
+            font-size: 1.1rem;
+        }
+
+        .font-preview h4,
+        .font-preview h5,
+        .font-preview h6 {
+            font-size: 1rem;
+        }
+
+        .font-preview p {
+            font-family: var(--font-family-serif);
+            color: rgb(var(--text-main));
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .font-preview .preamble {
+            font-family: var(--font-family-serif);
+            font-size: 0.75rem;
+            color: rgb(var(--text-secondary));
+        }
+
+        /* Tags and categories use site's existing a.tag and a.category styles */
+        .font-preview .category,
+        .font-preview .tag {
+            /* Inherits from site's tags-and-categories.css */
+        }
+
+        .font-preview hr {
+            border: none;
+            border-top: 1px solid rgb(var(--background-mid));
+            margin: 0.75rem 0;
+        }
+
+        .font-preview .quote-block {
+            background: rgb(var(--bg-quote-block));
+            border-left: 3px solid rgb(var(--text-highlight-color));
+            padding: 0.5rem 0.75rem;
+            margin: 0.75rem 0;
+            font-style: italic;
+        }
+
+        .font-preview .quote-block p {
+            margin: 0;
+            color: rgb(var(--text-highlight-color));
+        }
+
+        .font-preview code {
+            font-family: var(--font-family-monospace);
+            background: rgb(var(--background-mid));
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            color: rgb(var(--text-code-color));
+        }
+
+        .font-preview pre {
+            background: rgb(var(--background-mid));
+            padding: 0.75rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 0.75rem 0;
+        }
+
+        .font-preview pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .font-preview strong {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/admin" class="back-link">← Admin</a>
+
+        <div class="header-row">
+            <h1>Font Editor</h1>
+        </div>
+
+        <p class="subtitle">Configure typography and font families for your site</p>
+
+        <FontEditor client:load />
+    </div>
+</body>
+</html>
