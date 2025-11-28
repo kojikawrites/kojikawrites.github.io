@@ -1,0 +1,19 @@
+# Environment files
+.env
+.env.local
+
+# State files (ignore generated files, but keep system-menu-items for Keystatic)
+state/*
+!state/system-menu-items.json
+
+# Build outputs
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Environment variables (auto-added for security)
+**/.env
+**/.env.*
+!**/.env.example

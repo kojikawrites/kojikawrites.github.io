@@ -1,37 +1,52 @@
 @echo off
 setlocal enabledelayedexpansion
 
-REM Ensure cleanup always runs on exit (via error handler at end)
-
-REM Load variables from .env file
+REM Load variables from root .env file
 if exist ..\.env (
     for /f "usebackq tokens=1,* delims==" %%a in ("..\.env") do (
         set "%%a=%%b"
     )
 )
 
-REM Load variables from site-specific .env file
-if exist "..\src\.sites\%SITE_CODE%\.env" (
-    for /f "usebackq tokens=1,* delims==" %%a in ("..\src\.sites\%SITE_CODE%\.env") do (
-        set "%%a=%%b"
-    )
+REM Check required environment variables from root .env
+if "%SITE_CODE%"=="" (
+    echo Error: SITE_CODE environment variable is not set in root .env (e.g. "example.com"^) 1>&2
+    exit /b 1
 )
 
-REM Check if DOCKER_BUILD_MODE is set
+REM Load variables from site-specific .env file
+set "SITE_ENV_PATH=..\src\.sites\%SITE_CODE%\.env"
+if not exist "%SITE_ENV_PATH%" (
+    echo Error: Site-specific .env file not found at: %SITE_ENV_PATH% 1>&2
+    exit /b 1
+)
+for /f "usebackq tokens=1,* delims==" %%a in ("%SITE_ENV_PATH%") do (
+    set "%%a=%%b"
+)
+
+REM Check required environment variables
 if "%DOCKER_BUILD_MODE%"=="" (
     echo Error: DOCKER_BUILD_MODE environment variable is not set (valid values: "pip" or "uv"^) 1>&2
     call scripts\os\restore-model-context.bat
     exit /b 1
 )
 
-REM Check if DOCKER_BLOG_CODE is set
 if "%DOCKER_BLOG_CODE%"=="" (
-    echo Error: DOCKER_BLOG_CODE environment variable is not set (e.g. "hiivelabs"^) 1>&2
+    echo Error: DOCKER_BLOG_CODE environment variable is not set in site .env (e.g. "example"^) 1>&2
     call scripts\os\restore-model-context.bat
     exit /b 1
 )
 
-echo Building [%DOCKER_BUILD_MODE%] docker container for [%DOCKER_BLOG_CODE%] blog.
+if "%DOCKER_BLOG_PORT%"=="" (
+    echo Error: DOCKER_BLOG_PORT environment variable is not set in site .env (e.g. "8462"^) 1>&2
+    call scripts\os\restore-model-context.bat
+    exit /b 1
+)
+
+REM Auto-set VITE_HMR_PORT to match DOCKER_BLOG_PORT for HMR websocket to work
+set "VITE_HMR_PORT=%DOCKER_BLOG_PORT%"
+
+echo Building [%DOCKER_BUILD_MODE%] docker container for [%DOCKER_BLOG_CODE%] (%SITE_CODE%^) on port [%DOCKER_BLOG_PORT%].
 
 REM Detect and apply model context sizes to compose file
 call scripts\os\detect-model-context.bat
@@ -291,6 +306,7 @@ docker network create "%DOCKER_BLOG_CODE%-network" 2>nul
 docker volume create "%DOCKER_BLOG_CODE%-dev-workspace" 2>nul
 docker volume create --driver local --opt type=tmpfs --opt device=tmpfs --opt o=size=8g,uid=1000 "%DOCKER_BLOG_CODE%-build-workspace" 2>nul
 docker volume create "blog-ollama-models" 2>nul
+docker volume create "blog-cache" 2>nul
 
 REM Start containers
 docker compose %COMPOSE_FILES% -p "%DOCKER_BLOG_CODE%" up --build -d

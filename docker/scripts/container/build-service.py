@@ -69,6 +69,155 @@ def has_submodule_changes(submodule_path, source_dir):
     )
     return result.returncode == 0 and bool(result.stdout.strip())
 
+def get_unpushed_commits(repo_path, branch=None):
+    """Check if repo has commits ahead of remote. Returns count of unpushed commits."""
+    try:
+        # Get current branch if not specified
+        if not branch:
+            result = subprocess.run(
+                ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
+                cwd=str(repo_path),
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            if result.returncode != 0:
+                return 0
+            branch = result.stdout.strip()
+
+        # Check if remote branch exists
+        remote_check = subprocess.run(
+            ['git', 'rev-parse', '--verify', f'origin/{branch}'],
+            cwd=str(repo_path),
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+
+        if remote_check.returncode != 0:
+            return 0  # Remote branch doesn't exist
+
+        # Get commits ahead of remote
+        result = subprocess.run(
+            ['git', 'rev-list', '--count', f'origin/{branch}..HEAD'],
+            cwd=str(repo_path),
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+
+        if result.returncode == 0:
+            return int(result.stdout.strip() or '0')
+        return 0
+    except Exception as e:
+        print(f"[GIT] Error checking unpushed commits: {e}", flush=True)
+        return 0
+
+def get_commits_behind(repo_path, branch=None):
+    """Check if repo is behind remote. Returns count of commits behind."""
+    try:
+        # Get current branch if not specified
+        if not branch:
+            result = subprocess.run(
+                ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
+                cwd=str(repo_path),
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            if result.returncode != 0:
+                return 0
+            branch = result.stdout.strip()
+
+        # Check if remote branch exists
+        remote_check = subprocess.run(
+            ['git', 'rev-parse', '--verify', f'origin/{branch}'],
+            cwd=str(repo_path),
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+
+        if remote_check.returncode != 0:
+            return 0  # Remote branch doesn't exist
+
+        # Get commits behind remote
+        result = subprocess.run(
+            ['git', 'rev-list', '--count', f'HEAD..origin/{branch}'],
+            cwd=str(repo_path),
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+
+        if result.returncode == 0:
+            return int(result.stdout.strip() or '0')
+        return 0
+    except Exception as e:
+        print(f"[GIT] Error checking commits behind: {e}", flush=True)
+        return 0
+
+def fetch_remote(repo_path, branch=None):
+    """Fetch from remote. Returns True on success."""
+    try:
+        cmd = ['git', 'fetch', 'origin']
+        if branch:
+            cmd.append(branch)
+
+        result = subprocess.run(
+            cmd,
+            cwd=str(repo_path),
+            capture_output=True,
+            text=True,
+            timeout=30,
+            env={**os.environ, 'GIT_TERMINAL_PROMPT': '0'}
+        )
+        return result.returncode == 0
+    except Exception as e:
+        print(f"[GIT] Error fetching remote: {e}", flush=True)
+        return False
+
+def pull_rebase(repo_path, branch=None):
+    """Pull with rebase. Returns (success, error_message)."""
+    try:
+        cmd = ['git', 'pull', '--rebase', 'origin']
+        if branch:
+            cmd.append(branch)
+        else:
+            # Get current branch
+            result = subprocess.run(
+                ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
+                cwd=str(repo_path),
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            if result.returncode == 0:
+                cmd.append(result.stdout.strip())
+
+        result = subprocess.run(
+            cmd,
+            cwd=str(repo_path),
+            capture_output=True,
+            text=True,
+            timeout=60,
+            env={**os.environ, 'GIT_TERMINAL_PROMPT': '0'}
+        )
+
+        if result.returncode != 0:
+            # Abort rebase on failure
+            subprocess.run(
+                ['git', 'rebase', '--abort'],
+                cwd=str(repo_path),
+                capture_output=True,
+                text=True
+            )
+            return False, get_output(result)
+
+        return True, None
+    except Exception as e:
+        return False, str(e)
+
 def get_output(result):
     return (result.stdout + result.stderr)[-2048:]
 
@@ -655,28 +804,71 @@ async def suggest_commit_message(request: Request):
 
         diff_section = "\n\n".join(formatted_diffs)
 
-        # Prepare LLM prompt - task first, then context
-        prompt = f"""TASK: Write a single git commit message summarizing the code changes below.
+        # Determine if this is a large commit
+        num_files = len(files) if files else 0
+        is_large_commit = num_files > 5 or diff_tokens > 2000
 
-IMPORTANT: This is a simple task. Respond quickly and directly without lengthy analysis.
+        # Prepare LLM prompt - task first, then context
+        if is_large_commit:
+            prompt = f"""TASK: Write a git commit message summarizing the code changes below.
 
 REQUIREMENTS:
 - Output ONLY factual statements about what the code changes do
 - Do NOT speculate about intent, purpose, or future implications
 - Use imperative mood ("Add" not "Added", "Fix" not "Fixed")
-- Keep total length under 120 characters
-- If multiple unrelated changes, list the 2-3 most significant ones
+- Start with a summary line (max 72 chars), then a blank line, then bullet points
+- List all significant changes as bullet points (use "- " prefix)
+- Group related changes together
+- Be specific about what changed in each file or component
+- NO quotes, NO preamble, NO options - just the commit message
+
+FORMAT:
+<summary line - concise overview of the main change>
+
+- <specific change 1>
+- <specific change 2>
+- <specific change 3>
+...
+
+GOOD EXAMPLE:
+Refactor blog path handling to use site config
+
+- Update SiteBreadcrumbs to use dynamic blog path from config
+- Fix adminMenuUtils to read blog path from site.yaml
+- Update blog route templates to use configured path
+- Fix PagePostCount archive link to use config value
+
+BAD EXAMPLES (too vague):
+- Update various files
+- Fix bugs and improve code
+
+FILES CHANGED ({num_files} files):
+{file_list}
+
+CODE CHANGES:
+{diff_section}
+
+Respond with JSON in this exact format:
+{{"text": "<your commit message based on the CODE CHANGES above>"}}"""
+        else:
+            prompt = f"""TASK: Write a single-line git commit message summarizing the code changes below.
+
+REQUIREMENTS:
+- Output ONLY factual statements about what the code changes do
+- Do NOT speculate about intent, purpose, or future implications
+- Use imperative mood ("Add" not "Added", "Fix" not "Fixed")
+- Keep to a single line, max 72 characters
+- Be specific about what changed
 - NO quotes, NO preamble, NO options - just the commit message
 
 GOOD EXAMPLES (factual, specific):
-- Add HTTPS support with self-signed cert handling to build service
-- Remove maxTokens parameter from build service LLM calls
-- Rename LLM_ENABLED to PUBLIC_LLM_ENABLED in build scripts
+- Add HTTPS support with self-signed cert handling
+- Remove maxTokens parameter from LLM calls
+- Rename LLM_ENABLED to PUBLIC_LLM_ENABLED
 
 BAD EXAMPLES (speculative, vague):
 - Improve LLM integration for better performance
 - Update build service and configuration
-- Fix issues with the deployment system
 
 FILES CHANGED:
 {file_list}
@@ -958,62 +1150,86 @@ async def git_push(request: Request):
                 'error': 'No changes to commit'
             }, status_code=400)
 
-        # Check if submodule has changes and handle them first
+        # Check if submodule has changes (uncommitted or unpushed) and handle them first
         site_code = get_site_code()
         submodule_path = get_submodule_path(site_code)
         submodule_full_path = source_dir / submodule_path
         submodule_has_changes = False
+        submodule_needs_push = False
 
-        if submodule_full_path.exists():
+        if submodule_full_path.exists() and (submodule_full_path / '.git').exists():
             submodule_has_changes = has_submodule_changes(submodule_path, source_dir)
 
-            if submodule_has_changes:
-                print(f"[PUSH] Submodule {site_code} has changes, committing and pushing submodule first...", flush=True)
+            # Configure git credentials for submodule BEFORE any operations
+            github_token = os.getenv('GITHUB_TOKEN')
+            if github_token:
+                print('[PUSH] Configuring git credentials for submodule...', flush=True)
 
-                # Configure git credentials for submodule BEFORE any operations
-                github_token = os.getenv('GITHUB_TOKEN')
-                if github_token:
-                    print('[PUSH] Configuring git credentials for submodule...', flush=True)
+                # Get submodule's remote URL
+                result = subprocess.run(
+                    ['git', 'remote', 'get-url', 'origin'],
+                    cwd=str(submodule_full_path),
+                    capture_output=True,
+                    text=True,
+                    timeout=10
+                )
 
-                    # Get submodule's remote URL
-                    result = subprocess.run(
-                        ['git', 'remote', 'get-url', 'origin'],
+                if result.returncode == 0:
+                    import re
+                    remote_url = result.stdout.strip()
+                    clean_url = re.sub(r'https://[^@]*@', 'https://', remote_url)
+
+                    # Set clean URL
+                    subprocess.run(
+                        ['git', 'config', '--local', 'remote.origin.url', clean_url],
                         cwd=str(submodule_full_path),
                         capture_output=True,
-                        text=True,
-                        timeout=10
+                        text=True
                     )
 
-                    if result.returncode == 0:
-                        import re
-                        remote_url = result.stdout.strip()
-                        clean_url = re.sub(r'https://[^@]*@', 'https://', remote_url)
+                    # Configure credential helper
+                    subprocess.run(
+                        ['git', 'config', '--local', 'credential.helper', 'store'],
+                        cwd=str(submodule_full_path),
+                        capture_output=True,
+                        text=True
+                    )
 
-                        # Set clean URL
-                        subprocess.run(
-                            ['git', 'config', '--local', 'remote.origin.url', clean_url],
-                            cwd=str(submodule_full_path),
-                            capture_output=True,
-                            text=True
-                        )
+                    # Set up credential helper with token
+                    credential_input = f"url={clean_url}\nusername={github_token}\npassword=x-oauth-basic\n"
+                    subprocess.run(
+                        ['git', 'credential', 'approve'],
+                        cwd=str(submodule_full_path),
+                        input=credential_input,
+                        text=True,
+                        capture_output=True
+                    )
 
-                        # Configure credential helper
-                        subprocess.run(
-                            ['git', 'config', '--local', 'credential.helper', 'store'],
-                            cwd=str(submodule_full_path),
-                            capture_output=True,
-                            text=True
-                        )
+            # Fetch submodule remote to check for updates
+            print(f"[PUSH] Fetching submodule remote...", flush=True)
+            fetch_remote(submodule_full_path)
 
-                        # Set up credential helper with token
-                        credential_input = f"url={clean_url}\nusername={github_token}\npassword=x-oauth-basic\n"
-                        subprocess.run(
-                            ['git', 'credential', 'approve'],
-                            cwd=str(submodule_full_path),
-                            input=credential_input,
-                            text=True,
-                            capture_output=True
-                        )
+            # Check if submodule is behind remote and needs pull --rebase
+            submodule_behind = get_commits_behind(submodule_full_path)
+            if submodule_behind > 0:
+                print(f"[PUSH] Submodule is {submodule_behind} commit(s) behind remote. Pulling with rebase...", flush=True)
+                success, error_msg = pull_rebase(submodule_full_path)
+                if not success:
+                    return JSONResponse({
+                        'error': f'Failed to rebase submodule onto remote changes. Manual intervention required.',
+                        'output': error_msg,
+                        'hint': 'The submodule has remote changes that conflict with local changes.'
+                    }, status_code=409)
+                print(f"[PUSH] Submodule rebased successfully", flush=True)
+
+            # Check for unpushed commits in submodule (made locally outside Docker)
+            submodule_unpushed = get_unpushed_commits(submodule_full_path)
+            if submodule_unpushed > 0:
+                print(f"[PUSH] Submodule has {submodule_unpushed} unpushed commit(s)", flush=True)
+                submodule_needs_push = True
+
+            if submodule_has_changes:
+                print(f"[PUSH] Submodule {site_code} has uncommitted changes, committing...", flush=True)
 
                 # Add all changes in submodule
                 result = subprocess.run(
@@ -1052,9 +1268,13 @@ async def git_push(request: Request):
                         'output': get_output(submodule_commit)
                     }, status_code=500)
 
-                print(f"[PUSH] Submodule committed, now pushing to remote...", flush=True)
+                print(f"[PUSH] Submodule committed", flush=True)
+                submodule_needs_push = True
 
-                # Push submodule changes
+            # Push submodule if needed (either new commits or unpushed existing commits)
+            if submodule_needs_push:
+                print(f"[PUSH] Pushing submodule to remote...", flush=True)
+
                 submodule_push = subprocess.run(
                     ['git', 'push', 'origin', 'HEAD'],
                     cwd=str(submodule_full_path),
@@ -1298,7 +1518,7 @@ async def git_push(request: Request):
             except Exception as e:
                 print(f'[PUSH] Could not get main commit ID: {e}', flush=True)
 
-            if submodule_has_changes:
+            if submodule_needs_push:
                 try:
                     result = subprocess.run(
                         ['git', 'rev-parse', '--short', 'HEAD'],
@@ -1316,8 +1536,8 @@ async def git_push(request: Request):
                 'success': True,
                 'message': 'Changes committed and pushed successfully',
                 'branch': branch,
-                'submodule_pushed': submodule_has_changes,
-                'site_code': site_code if submodule_has_changes else None,
+                'submodule_pushed': submodule_needs_push,
+                'site_code': site_code if submodule_needs_push else None,
                 'main_commit': main_commit,
                 'submodule_commit': submodule_commit,
                 'output': get_output(push_result)

@@ -12,6 +12,7 @@ export interface Props {
 
 const { title, description, permalink } = Astro.props
 const siteCode = getSiteCode();
+const isDev = import.meta.env.DEV;
 
 ---
 
@@ -119,5 +120,16 @@ const siteCode = getSiteCode();
 
 </script>
 
-
+{isDev && (
+<!-- Menu update handler - reloads page when menu changes (dev mode only) -->
+<!-- Keystatic pages ignore this event to preserve draft state -->
+<script>
+    if (import.meta.hot) {
+        import.meta.hot.on('menu-updated', () => {
+            console.log('[HMR] Menu updated, reloading page...');
+            window.location.reload();
+        });
+    }
+</script>
+)}
 

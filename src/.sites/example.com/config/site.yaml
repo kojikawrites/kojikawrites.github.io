@@ -1,0 +1,57 @@
+main:
+  logo:
+    alt: Example Site Logo
+    dynamic_dir: ''
+build:
+  exclude_from_production:
+    - api
+    - admin
+blog:
+  pagination_size: 10
+  path: posts
+  small_mode: card
+  large_mode: card
+  default_author: Example Author
+navbar:
+  logo:
+    dark: /src/.sites/example.com/images/logos/logo-dark.svg
+    light: /src/.sites/example.com/images/logos/logo-light.svg
+    alt: Example Site
+    dynamic_dir: ''
+  left:
+    - href: /posts
+      label: posts
+  right:
+    - href: /test
+      label: Test Page
+    - href: /about
+      label: about
+  breadcrumbs:
+    include: true
+    valid_breadcrumbs:
+      - href: /blog
+        label: Blog
+      - href: /about
+        label: About
+      - href: /test
+        label: Test
+footer:
+  content:
+    - Example Site Content © 2024-[CURRENT_YEAR] by hiivelabs.
+    - Powered by Astro
+bluesky:
+  include: false
+  hashtag_link: ''
+  auto_post_text: ''
+facebook:
+  include: false
+  app_id: ''
+tags_and_categories:
+  aliases: {}
+search:
+  include: true
+rss:
+  include: true
+  site:
+    name: Example Site
+    description: A minimal example site demonstrating the blog platform

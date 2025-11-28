@@ -26,8 +26,10 @@ function getSiteCode(): string {
             .replace(/\s/g, '');
     }
 
-    // Default fallback
-    return 'hiivelabs.com';
+    // No silent fallbacks - throw error if not configured
+    console.error('ERROR: SITE_CODE not configured. Please set SITE_CODE in your .env file.');
+    console.error('Example: SITE_CODE=example.com');
+    process.exit(1);
 }
 
 function copyRecursive(src: string, dest: string): void {

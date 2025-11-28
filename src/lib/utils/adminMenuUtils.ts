@@ -1,14 +1,33 @@
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { getSiteCode } from '../config/getSiteCode.ts';
+import jsYaml from 'js-yaml';
 
 export interface DevMenuInfo {
   editUrl: string;
   hasKeystatic: boolean;
 }
 
+/**
+ * Get the blog path from site config (synchronous for use in adminMenuUtils)
+ */
+function getBlogPath(siteCode: string): string {
+  try {
+    const configPath = resolve(`src/.sites/${siteCode}/config/site.yaml`);
+    if (existsSync(configPath)) {
+      const yamlString = readFileSync(configPath, 'utf8');
+      const config = jsYaml.load(yamlString) as any;
+      return config?.blog?.path || 'blog';
+    }
+  } catch (e) {
+    // Fall back to default
+  }
+  return 'blog';
+}
+
 export function getAdminMenuInfo(currentPath: string): DevMenuInfo {
   const siteCode = getSiteCode();
+  const blogPath = getBlogPath(siteCode);
   let editUrl = '/edit'; // Default fallback
   let hasKeystatic = false;
 
@@ -16,8 +35,9 @@ export function getAdminMenuInfo(currentPath: string): DevMenuInfo {
   const postsPath = resolve(`src/.sites/${siteCode}/content/posts`);
   const draftsPath = resolve(`src/.sites/${siteCode}/content/posts/_drafts`);
 
-  // Check if it's a blog post: /blog/[...categories]/[date]/[slug]
-  const blogMatch = currentPath.match(/^\/blog\/(.+)\/(\d{4})\/(\d{2})\/(\d{2})\/([^/]+)\/?$/);
+  // Check if it's a blog post: /{blogPath}/[...categories]/[date]/[slug]
+  const blogPattern = new RegExp(`^\\/${blogPath}\\/(.+)\\/(\\d{4})\\/(\\d{2})\\/(\\d{2})\\/([^/]+)\\/?$`);
+  const blogMatch = currentPath.match(blogPattern);
   if (blogMatch) {
     const [_, categories, year, month, day, slug] = blogMatch;
     // Reconstruct the post item ID: YYYY-MM-DD-slug
@@ -36,7 +56,7 @@ export function getAdminMenuInfo(currentPath: string): DevMenuInfo {
     }
   }
   // Check if it's a standard page (e.g., /about, /contact, etc.)
-  else if (currentPath !== '/' && !currentPath.startsWith('/blog') && !currentPath.startsWith('/admin') && !currentPath.startsWith('/keystatic') && !currentPath.startsWith('/api')) {
+  else if (currentPath !== '/' && !currentPath.startsWith(`/${blogPath}`) && !currentPath.startsWith('/admin') && !currentPath.startsWith('/keystatic') && !currentPath.startsWith('/api')) {
     // Remove leading/trailing slashes and use as item ID
     const pageId = currentPath.replace(/^\/|\/$/g, '');
     if (pageId) {

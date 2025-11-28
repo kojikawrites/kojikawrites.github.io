@@ -109,8 +109,10 @@ export const POST: APIRoute = async ({request}) => {
         });
     }
 
+    // Parse body once and save for potential retry in catch block
+    const body = await request.json();
+
     try {
-        const body = await request.json();
         const {image, mode = 'alt', prompt, context, maxTokens, temperature} = body;
 
         if (!image) {
@@ -316,6 +318,137 @@ export const POST: APIRoute = async ({request}) => {
             const isUnsupportedFormat = error.message.includes('unknown format') ||
                 error.message.includes('unsupported') ||
                 error.message.includes('failed to process');
+
+            // If unsupported format, try converting to PNG and retry once
+            if (isUnsupportedFormat) {
+                console.log('[LLM IMAGE-ALT API] Unsupported format detected, attempting conversion to PNG');
+                try {
+                    // Use the already-parsed body from the top of the function
+                    const { image, mode = 'alt', prompt, context, maxTokens, temperature } = body;
+
+                    // Call build-service to convert image to PNG
+                    const buildServiceUrl = 'http://build-service:8000/convert-image';
+                    const convertResponse = await fetch(buildServiceUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            image: image,
+                            format: 'png',
+                            background: '#ffffff'
+                        })
+                    });
+
+                    if (!convertResponse.ok) {
+                        const errorBody = await convertResponse.text();
+                        throw new Error(`Conversion service error: ${convertResponse.status} - ${errorBody}`);
+                    }
+
+                    const convertResult = await convertResponse.json();
+                    if (!convertResult.success || !convertResult.image) {
+                        throw new Error(convertResult.error || 'Conversion failed');
+                    }
+
+                    console.log('[LLM IMAGE-ALT API] Image converted to PNG, retrying LLM call');
+                    // The build-service returns a full data URI in the 'image' field
+                    const convertedImage = convertResult.image;
+
+                    // Retry with converted image
+                    const llm = await getLLMService();
+                    const modePromptGenerator = MODE_PROMPTS[mode as keyof typeof MODE_PROMPTS];
+                    const finalPrompt = prompt || (modePromptGenerator ? modePromptGenerator(context) : MODE_PROMPTS.alt(context));
+                    const schema = getModeSchema(mode);
+                    const expectedField = getModeFieldName(mode);
+
+                    const result = await llm.analyzeImage(convertedImage, finalPrompt, {
+                        maxTokens,
+                        temperature,
+                        format: schema
+                    } as any);
+
+                    // Process result (same logic as above)
+                    const validation = extractAndValidateJSON(result, expectedField);
+                    if (!validation.success) {
+                        return new Response(JSON.stringify({
+                            success: false,
+                            needsRetry: true,
+                            validationError: validation.error,
+                            rawResponse: result
+                        }), {
+                            status: 422,
+                            headers: {'Content-Type': 'application/json'}
+                        });
+                    }
+
+                    let extractedValue: any;
+                    if (mode === 'color') {
+                        extractedValue = validation.data[expectedField];
+                        if (!extractedValue || typeof extractedValue !== 'object' || Array.isArray(extractedValue)) {
+                            return new Response(JSON.stringify({
+                                success: false,
+                                needsRetry: true,
+                                validationError: "predominantColor must be an object with r, g, b properties",
+                                rawResponse: result
+                            }), {
+                                status: 422,
+                                headers: {'Content-Type': 'application/json'}
+                            });
+                        }
+                        const color = extractedValue as { r: number; g: number; b: number };
+                        if (typeof color.r !== 'number' || typeof color.g !== 'number' || typeof color.b !== 'number') {
+                            return new Response(JSON.stringify({
+                                success: false,
+                                needsRetry: true,
+                                validationError: "predominantColor must have numeric r, g, b properties",
+                                rawResponse: result
+                            }), {
+                                status: 422,
+                                headers: {'Content-Type': 'application/json'}
+                            });
+                        }
+                        const clampedColor = {
+                            r: Math.max(0, Math.min(255, Math.round(color.r))),
+                            g: Math.max(0, Math.min(255, Math.round(color.g))),
+                            b: Math.max(0, Math.min(255, Math.round(color.b))),
+                        };
+                        return new Response(JSON.stringify({
+                            success: true,
+                            predominantColor: clampedColor,
+                            prompt: finalPrompt,
+                            validated: true,
+                            converted: true
+                        }), {
+                            status: 200,
+                            headers: {'Content-Type': 'application/json'}
+                        });
+                    } else {
+                        extractedValue = extractFieldValue(validation.data, expectedField);
+                        if (extractedValue === undefined || extractedValue === null || extractedValue === '') {
+                            return new Response(JSON.stringify({
+                                success: false,
+                                needsRetry: true,
+                                validationError: `Field '${expectedField}' exists but contains no extractable value`,
+                                rawResponse: result
+                            }), {
+                                status: 422,
+                                headers: {'Content-Type': 'application/json'}
+                            });
+                        }
+                        return new Response(JSON.stringify({
+                            success: true,
+                            altText: extractedValue,
+                            prompt: finalPrompt,
+                            validated: true,
+                            converted: true
+                        }), {
+                            status: 200,
+                            headers: {'Content-Type': 'application/json'}
+                        });
+                    }
+                } catch (retryError) {
+                    console.error('[LLM IMAGE-ALT API] Conversion/retry failed:', retryError);
+                    // Fall through to return original error
+                }
+            }
 
             return new Response(JSON.stringify({
                 success: false,

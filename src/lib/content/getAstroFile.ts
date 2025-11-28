@@ -5,13 +5,15 @@ export async function getAstroFile(filename: string) : Promise<any> {
     const site = getSiteCode();
 
     // Get the specific page file using siteGlob (cached and site-filtered)
+    // Note: Must use eager to load MDX content immediately (non-eager returns just the loader)
     const astroValue: any = await siteGlob({
         siteCode: site,
         type: 'components',
         filename: filename,
-        globFilter: (eager) => import.meta.glob<{
-            default: any
-        }>('/src/.sites/**/content/pagecontent/**/*.{mdx,astro}')
+        eager: true, // Critical: must be eager to get actual content, not just loader
+        globFilter: (eager) => eager
+            ? import.meta.glob<{ default: any }>('/src/.sites/**/content/pagecontent/**/*.{mdx,astro}', { eager: true })
+            : import.meta.glob<{ default: any }>('/src/.sites/**/content/pagecontent/**/*.{mdx,astro}')
     });
 
     if (!astroValue) {

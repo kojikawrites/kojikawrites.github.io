@@ -34,14 +34,21 @@ See `src/lib/services/llm/README.md` for LLM configuration details.
 
 ### blog-dev-workspace
 - **Mounts to:** `/app/node_modules` in blog container
-- **Purpose:** Isolates node_modules from host machine
-- **Persistence:** External volume that persists across container recreations
-- **Auto-refresh:** Entrypoint script detects package-lock.json changes and runs `npm ci` automatically
+- **Purpose:** Stores node_modules persistently, avoiding re-installation on every container restart
+- **Type:** Standard Docker volume (persists across container recreations and host restarts)
+- **Auto-refresh:** Entrypoint script detects package.json changes and runs `npm install` automatically
 
 ### blog-build-workspace
-- **Mounts to:** `/tmp/build-workspace` in build-service container
-- **Purpose:** Workspace for production builds
-- **Persistence:** External volume that persists across container recreations
+- **Mounts to:** `/tmp/build-workspace` in both blog and build-service containers
+- **Purpose:** Fast temporary storage for production build artifacts
+- **Type:** tmpfs (RAM-backed, 8GB limit) - file I/O happens in memory for faster builds
+- **Shared:** Both containers can read/write, allowing build-service to generate artifacts that blog container can access
+- **Ephemeral:** Contents are lost on host restart (acceptable since build artifacts are temporary)
+
+### blog-cache
+- **Mounts to:** `/app/.cache` in blog container, `/cache` in build-service container
+- **Purpose:** Shared persistent cache for SSL certificates, downloaded tools (wisp-cli), and other cached data
+- **Type:** Standard Docker volume (persists across container recreations and host restarts)
 
 ## Node Modules Management
 
@@ -198,13 +205,14 @@ The build-service always installs fresh dependencies, but the build might be cop
 
 If HMR is not connecting:
 
-1. Ensure environment variables are set:
+1. Ensure `DOCKER_BLOG_PORT` is set in your site's `.env` file (VITE_HMR_PORT is auto-set from this)
+
+2. If using an external hostname, set `VITE_HMR_HOST` in your site's `.env`:
    ```bash
    VITE_HMR_HOST=silverfish.local  # Your external hostname
-   VITE_HMR_PORT=8462              # Your external port
    ```
 
-2. Check astro.config.mjs has HMR configuration in `vite.server.hmr`
+3. Check astro.config.mjs has HMR configuration in `vite.server.hmr`
 
 ### Keystatic lodash errors
 
@@ -254,14 +262,14 @@ GIT_COMMITTER_NAME=Your Name
 GIT_COMMITTER_EMAIL=your-email@example.com
 GITHUB_TOKEN=ghp_xxxxx
 
-# Docker configuration (optional, only if using Docker)
+# Docker configuration (required for Docker builds)
 DOCKER_BLOG_CODE=mysite        # Prefix for container/volume names
-DOCKER_BLOG_PORT=8462          # External port for dev server
+DOCKER_BLOG_PORT=8462          # External port for dev server (also used for HMR)
 DOCKER_BUILD_MODE=pip          # or 'uv' for alternative build image
 
-# HMR configuration for Docker (enables hot reload from other devices)
-VITE_HMR_HOST=silverfish.local # External hostname
-VITE_HMR_PORT=8462            # External port (same as DOCKER_BLOG_PORT)
+# HMR configuration for Docker (optional - enables hot reload from other devices)
+VITE_HMR_HOST=silverfish.local # External hostname (optional)
+# Note: VITE_HMR_PORT is auto-set from DOCKER_BLOG_PORT by the build scripts
 ```
 
 **Note**: Both files are loaded by astro.config.mjs, with site-specific values overriding root values.

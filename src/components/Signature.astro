@@ -2,6 +2,8 @@
 import ThemedImage from './ThemedImage.astro'
 import getSafeId from '../lib/utils/toSafeId';
 import { getSiteCode } from "../lib/config/getSiteCode";
+import getMediaMetadata from '../lib/content/getMediaMetadata.ts';
+
 interface Props {
     signature: string
 }
@@ -14,7 +16,12 @@ const themed_src: Record<string, string> = {
     'light': `/src/.sites/${siteCode}/images/signatures/signature-${signature}-light.png`
 };
 
+// Check if signature images exist before rendering
+const darkExists = await getMediaMetadata(themed_src.dark, true);
+const lightExists = await getMediaMetadata(themed_src.light, true);
+const hasSignatureImages = darkExists !== null && lightExists !== null;
 ---
 
-<!--<img alt={signature} src={img_src} />-->
-<ThemedImage id={id} alt={signature}  srcList={themed_src} class="signature" />
+{hasSignatureImages ? (
+    <ThemedImage id={id} alt={signature} srcList={themed_src} class="signature" />
+) : null}

@@ -19,12 +19,14 @@ RUN /build-service/.venv/bin/pip install -r requirements.txt
 # Configure git
 RUN git config --global --add safe.directory /source
 
-# download wisp-cli
-RUN curl https://sites.wisp.place/nekomimi.pet/wisp-cli-binaries/wisp-cli-x86_64-linux -o wisp-cli
-RUN chmod +x wisp-cli
+# Copy wisp-cli download script (will be run at container startup, not build time)
+COPY docker/scripts/container/download-wisp-cli.sh /build-service/
+COPY docker/scripts/container/build-service-entrypoint.sh /build-service/
+RUN chmod +x /build-service/download-wisp-cli.sh /build-service/build-service-entrypoint.sh
 
 # Expose FastAPI port
 EXPOSE 8000
 
-# Start FastAPI build service
+# Use entrypoint to download wisp-cli at startup (when /cache volume is mounted)
+ENTRYPOINT ["/build-service/build-service-entrypoint.sh"]
 CMD ["/build-service/.venv/bin/python", "build-service.py"]

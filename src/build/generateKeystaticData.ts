@@ -125,8 +125,13 @@ function extractKeys(postFiles: string[]): { categories: Set<string>, tags: Set<
 }
 
 // Main execution
-// Get site code from environment variable or use default
-const SITE_CODE = process.env.SITE_CODE || 'hiivelabs.com';
+// Get site code from environment variable - no silent fallbacks
+const SITE_CODE = process.env.SITE_CODE;
+if (!SITE_CODE) {
+    console.error('ERROR: SITE_CODE not configured. Please set SITE_CODE in your .env file.');
+    console.error('Example: SITE_CODE=example.com');
+    process.exit(1);
+}
 const postsDir = path.join(__dirname, `../.sites/${SITE_CODE}/content/posts`);
 const postFiles = getAllPostFiles(postsDir);
 const { categories, tags } = extractKeys(postFiles);

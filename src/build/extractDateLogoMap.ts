@@ -3,6 +3,10 @@ import path from "path";
 // import {getSiteCode} from "./extractPagesFrontMatter.ts";
 import {getSiteCode} from "../lib/config/getSiteCode.ts";
 import yaml from 'js-yaml';
+import { loadEnv } from '../lib/config/loadEnv.js';
+
+// Load environment variables before getSiteCode() is called
+loadEnv();
 
 import {getJson} from "../lib/config/getJson.ts";
 import {getSiteStatePath} from "../lib/config/getSiteStatePath.ts";

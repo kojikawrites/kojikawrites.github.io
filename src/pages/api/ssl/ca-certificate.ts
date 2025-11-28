@@ -6,7 +6,7 @@ import { readFileSync, existsSync } from 'fs';
 export const prerender = false; // ![DEV-ONLY]
 
 export const GET: APIRoute = async () => {
-  const certPath = '/app/.ssl/ca.crt';
+  const certPath = '/app/.cache/ssl/ca.crt';
 
   if (!existsSync(certPath)) {
     return new Response(JSON.stringify({

@@ -13,9 +13,10 @@ import {getAllPageTitles} from "../lib/content/getAllPageTitles";
 const siteConfig = await getSiteConfig();
 
 // Build unified title mapping for all content (blog posts + pages)
+const blogPath = siteConfig.blog.path;
 const allPosts = (await getPosts()).map((p: any) => getPostData(p));
 const blogTitles = allPosts.reduce((acc: Record<string, string>, post: { path: string; title: string }) => {
-    acc[`/blog/${post.path}`] = post.title;
+    acc[`/${blogPath}/${post.path}`] = post.title;
     return acc;
 }, {});
 
@@ -23,7 +24,7 @@ const pageTitles = await getAllPageTitles();
 
 // Merge all titles into one mapping, including common section pages
 const allTitles = {
-    '/blog': 'BLOG',
+    [`/${blogPath}`]: blogPath,  // Use configured blog path with lowercase label
     ...pageTitles,
     ...blogTitles
 };

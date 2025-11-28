@@ -38,7 +38,9 @@ export async function GET(context) {
 
             const publishDate = createDateFromStrings(day, month, year);
 
-            const href = `/${siteConfig.blog.prefix}${path}`;
+            // Normalize blog path - strip trailing slash, add it back for URL construction
+            const blogPath = (siteConfig.blog?.path || 'blog').replace(/\/$/, '') + '/';
+            const href = `/${blogPath}${path}`;
             // console.log(href);
             const categories = typeof post.frontmatter.categories == 'string'
                 ? [post.frontmatter.categories] //.replace(' ', ',')

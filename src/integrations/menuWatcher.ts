@@ -12,8 +12,14 @@ export default function menuWatcher(): AstroIntegration {
     name: 'menu-watcher',
     hooks: {
       'astro:server:setup': ({ server }) => {
-        // Get site code from environment variable or use default
-        const SITE_CODE = process.env.SITE_CODE || 'hiivelabs.com';
+        // Get site code from environment variable - no silent fallbacks
+        const SITE_CODE = process.env.SITE_CODE;
+        if (!SITE_CODE) {
+          throw new Error(
+            'SITE_CODE not configured. Please set SITE_CODE in your .env file.\n' +
+            'Example: SITE_CODE=example.com'
+          );
+        }
 
         const watchPaths = [
           `src/.sites/${SITE_CODE}/content/pagecontent`,
@@ -36,12 +42,20 @@ export default function menuWatcher(): AstroIntegration {
             });
             console.log('✅ Menu updated');
 
-            // Trigger full page reload after menu regeneration
-            server.ws.send({
-              type: 'full-reload',
-              path: '*'
-            });
-            console.log('🔃 Page reload triggered\n');
+            // Trigger page reload after menu regeneration
+            // Use setTimeout to ensure the file system has settled
+            // Note: Vite 6 renamed server.ws to server.hot
+            setTimeout(() => {
+              const hotServer = (server as any).hot || server.ws;
+              // Send custom event - client will decide whether to reload
+              // (skips reload on Keystatic editor pages to avoid draft conflicts)
+              hotServer.send({
+                type: 'custom',
+                event: 'menu-updated',
+                data: {}
+              });
+              console.log('🔃 Menu update notification sent\n');
+            }, 100);
           } catch (error) {
             console.error('❌ Menu regeneration failed');
           } finally {

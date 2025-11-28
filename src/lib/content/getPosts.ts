@@ -4,11 +4,12 @@ import {siteGlob} from "../utils/siteGlob";
 import {getSiteCode} from "../config/getSiteCode";
 
 const siteConfig = await getSiteConfig();
+// console.log('getPosts:siteConfig', siteConfig);
 const blog_path = siteConfig.blog.path;
 
 export default async function getPosts() {
     // Glob function for posts - MUST stay exactly as is to avoid breaking everything
-    const postFilter = (eager:boolean) => import.meta.glob<{ default: T }>(
+    const postFilter = (eager:boolean) => import.meta.glob<{ default: any }>(
         [
             '/src/.sites/**/content/posts/**/*.{md,mdx}',
             '/src/.sites/**/content/blog/**/*.{md,mdx}',

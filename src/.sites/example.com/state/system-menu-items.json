@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "href": "/posts",
+      "label": "posts",
+      "position": "left",
+      "order": 1
+    }
+  ]
+}

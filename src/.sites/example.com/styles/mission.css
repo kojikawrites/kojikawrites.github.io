@@ -1,0 +1,7 @@
+#mission-page {
+    @apply lg:mt-4;
+
+    #mission-logo {
+        @apply mx-auto lg:mx-0 float-none lg:float-start w-56 h-56 lg:w-72 lg:h-72 lg:pr-2;
+    }
+}

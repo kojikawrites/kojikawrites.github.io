@@ -1,26 +1,48 @@
 #!/bin/bash
 
-# Export all variables from .env
+# Export all variables from root .env
 set -a
 source ../.env
-# shellcheck disable=SC1090
-source "../src/.sites/${SITE_CODE}/.env"
 set +a
 
 # Ensure cleanup always runs on exit (success or failure)
 trap 'scripts/os/restore-model-context.sh' EXIT
 
-# Check if DOCKER_BUILD_MODE is set
+# Check required environment variables from root .env
+if [ -z "${SITE_CODE}" ]; then
+    echo "Error: SITE_CODE environment variable is not set in root .env (e.g. \"example.com\")" >&2
+    exit 1
+fi
+
+# Load site-specific .env file
+SITE_ENV_PATH="../src/.sites/${SITE_CODE}/.env"
+if [ ! -f "${SITE_ENV_PATH}" ]; then
+    echo "Error: Site-specific .env file not found at: ${SITE_ENV_PATH}" >&2
+    exit 1
+fi
+set -a
+# shellcheck disable=SC1090
+source "${SITE_ENV_PATH}"
+set +a
+
+# Check required environment variables
 if [ -z "${DOCKER_BUILD_MODE}" ]; then
     echo "Error: DOCKER_BUILD_MODE environment variable is not set (valid values: \"pip\" or \"uv\")" >&2
     exit 1
 fi
 if [ -z "${DOCKER_BLOG_CODE}" ]; then
-    echo "Error: DOCKER_BLOG_CODE environment variable is not set (e.g. \"hiivelabs\")" >&2
+    echo "Error: DOCKER_BLOG_CODE environment variable is not set in site .env (e.g. \"example\")" >&2
+    exit 1
+fi
+if [ -z "${DOCKER_BLOG_PORT}" ]; then
+    echo "Error: DOCKER_BLOG_PORT environment variable is not set in site .env (e.g. \"8462\")" >&2
     exit 1
 fi
 
-echo "Building [$DOCKER_BUILD_MODE] docker container for [$DOCKER_BLOG_CODE] blog."
+# Auto-set VITE_HMR_PORT to match DOCKER_BLOG_PORT for HMR websocket to work
+export VITE_HMR_PORT="${DOCKER_BLOG_PORT}"
+
+echo "Building [$DOCKER_BUILD_MODE] docker container for [$DOCKER_BLOG_CODE] (${SITE_CODE}) on port [$DOCKER_BLOG_PORT]."
 
 # Detect and apply model context sizes to compose file
 scripts/os/detect-model-context.sh
@@ -260,5 +282,5 @@ docker network create "${DOCKER_BLOG_CODE}-network" 2>/dev/null || true
 docker volume create "${DOCKER_BLOG_CODE}-dev-workspace" 2>/dev/null || true
 docker volume create --driver local --opt type=tmpfs --opt device=tmpfs --opt o=size=8g,uid=1000 "${DOCKER_BLOG_CODE}-build-workspace" 2>/dev/null || true
 docker volume create "blog-ollama-models" 2>/dev/null || true
-docker volume create "blog-ssl-certs" 2>/dev/null || true
+docker volume create "blog-cache" 2>/dev/null || true
 docker compose ${COMPOSE_FILES} -p "${DOCKER_BLOG_CODE}" up --build -d

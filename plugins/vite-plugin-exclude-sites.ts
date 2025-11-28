@@ -3,11 +3,20 @@ import path from 'path';
 import fs from 'fs';
 
 /**
+ * Directories that should be excluded from production builds globally
+ * These are dev-only directories that exist in any .sites folder
+ */
+const DEV_ONLY_DIRS = ['keystatic'];
+
+/**
  * Vite plugin to exclude .sites directories that don't match the current SITE_CODE
  * This prevents Vite from processing CSS, images, and other assets from other sites
+ *
+ * In production mode, also excludes dev-only directories (like keystatic) from ALL sites
  */
 export default function excludeNonMatchingSites(siteCode: string): Plugin {
     let hasLoggedInfo = false;
+    const isProduction = process.env.NODE_ENV === 'production';
 
     return {
         name: 'exclude-non-matching-sites',
@@ -15,7 +24,11 @@ export default function excludeNonMatchingSites(siteCode: string): Plugin {
 
         buildStart() {
             if (!hasLoggedInfo) {
-                console.log(`\n🔧 Excluding .sites directories except: ${siteCode}\n`);
+                console.log(`\n🔧 Excluding .sites directories except: ${siteCode}`);
+                if (isProduction) {
+                    console.log(`🔧 Production mode: Also excluding dev-only dirs: ${DEV_ONLY_DIRS.join(', ')}`);
+                }
+                console.log('');
                 hasLoggedInfo = true;
             }
         },
@@ -23,6 +36,17 @@ export default function excludeNonMatchingSites(siteCode: string): Plugin {
         resolveId(source: string, importer?: string, options?: any) {
             // Intercept at resolution time and mark for skipping
             const cleanSource = source.split('?')[0];
+
+            // In production, exclude dev-only directories from ALL sites (including current site)
+            if (isProduction && cleanSource.includes('.sites/')) {
+                for (const devDir of DEV_ONLY_DIRS) {
+                    if (cleanSource.includes(`/${devDir}/`) || cleanSource.endsWith(`/${devDir}`)) {
+                        return '\0virtual:empty-site-file';
+                    }
+                }
+            }
+
+            // Exclude non-matching sites
             if (cleanSource.includes('.sites/')) {
                 const match = cleanSource.match(/\.sites[\/\\]([^\/\\]+)/);
                 if (match && match[1] && match[1] !== siteCode) {
@@ -45,6 +69,15 @@ export default function excludeNonMatchingSites(siteCode: string): Plugin {
 
             // Check if this is a file path that includes .sites/
             if (cleanId.includes('.sites/')) {
+                // In production, exclude dev-only directories from ALL sites
+                if (isProduction) {
+                    for (const devDir of DEV_ONLY_DIRS) {
+                        if (cleanId.includes(`/${devDir}/`) || cleanId.endsWith(`/${devDir}`)) {
+                            return { code: 'export default {}', map: null };
+                        }
+                    }
+                }
+
                 // Extract the site code from the path
                 const match = cleanId.match(/\.sites[\/\\]([^\/\\]+)/);
                 if (match && match[1]) {

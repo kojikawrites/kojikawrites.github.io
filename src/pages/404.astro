@@ -11,7 +11,9 @@ const title = '404';
 const description = '404.';
 // const url = Astro.url.pathname;
 
-const allPostPaths = (await getPosts()).map((p: any) => siteConfig.blog.prefix + getPostData(p).path); // DO NOT DELETE
+// Normalize blog path - strip trailing slash, add it back for URL construction
+const blogPath = (siteConfig.blog?.path || 'blog').replace(/\/$/, '') + '/';
+const allPostPaths = (await getPosts()).map((p: any) => blogPath + getPostData(p).path); // DO NOT DELETE
 
 ---
 

@@ -15,6 +15,7 @@ module.exports = {
                 content: [
                     './src/**/*.{astro,html,js,jsx,ts,tsx,vue,svelte,mdx,md}',
                     './src/.sites/**/*.{astro,html,js,jsx,ts,tsx,vue,svelte,mdx,md,css}',
+                    './src/styles/**/*.css',  // Framework-level styles (blog-index.css, etc.)
                 ],
 
                 // Default extractor for most content

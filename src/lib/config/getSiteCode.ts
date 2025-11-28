@@ -1,5 +1,5 @@
 export function getSiteCode(): string {
-    // Try import.meta.env.SITE first (Astro runtime)
+    // Try import.meta.env.SITE (Astro runtime - extracts hostname from site URL)
     if (typeof import.meta !== 'undefined' && import.meta.env?.SITE) {
         return import.meta.env.SITE
             .replace(/^.*?\/\//, '') // Remove the protocol
@@ -16,6 +16,11 @@ export function getSiteCode(): string {
         return siteCode.replace(/\s/g, ''); // Remove all whitespace characters
     }
 
-    // Default fallback
-    return 'hiivelabs.com';
+    // No fallback - throw an error with helpful message
+    throw new Error(
+        'SITE_CODE not configured. Please set one of:\n' +
+        '  - SITE_CODE in .env (for build scripts)\n' +
+        '  - VITE_SITE_NAME with full URL (extracts hostname)\n' +
+        'Example: SITE_CODE=example.com'
+    );
 }

@@ -333,6 +333,7 @@ const github_repo = import.meta.env?.PUBLIC_GITHUB_REPO || 'unknown';
 // LOGO MAP - Load synchronously at module level
 // ============================================================================
 const siteCode = getSiteCode();
+console.log('[Keystatic Config] siteCode:', siteCode, '| SITE:', import.meta.env?.SITE);
 // Import logo-map.json dynamically
 const logoMapGlob = import.meta.glob<{ default: any }>('/src/.sites/**/state/*.json', { eager: true });
 const logoMapKey = Object.keys(logoMapGlob).find(key => key.includes(`.sites/${siteCode}`) && key.includes('logo-map.json'));
@@ -794,43 +795,54 @@ const minimalHtmlComponents = {
         },
         ContentView: (props) => {
             const isInline = props.value.inline ?? true;
-            const equation = props.value.equation ? `$${props.value.equation}$` :  '(no equation)';
-            const containerRef = React.useRef<HTMLDivElement>(null);
+            const rawEquation = props.value.equation || '';
+            const containerRef = React.useRef<HTMLSpanElement>(null);
+            const mathContainerRef = React.useRef<HTMLSpanElement>(null);
             const { loaded, error } = useMathJax();
 
-            React.useEffect(() => {
-                if (!loaded || error || !containerRef.current) return;
+            // Use useLayoutEffect to synchronously update before browser paint
+            // This prevents Slate from seeing intermediate DOM states
+            React.useLayoutEffect(() => {
+                if (!loaded || error || !mathContainerRef.current) return;
 
-                const typeset = async () => {
+                const mathContainer = mathContainerRef.current;
+                const equation = rawEquation ? `$${rawEquation}$` : '(no equation)';
+
+                // Clear and set content synchronously
+                mathContainer.textContent = equation;
+
+                // Typeset after a microtask to let React finish
+                queueMicrotask(async () => {
                     try {
-                        if ((window as any).MathJax?.typesetPromise) {
-                            await (window as any).MathJax.typesetPromise([containerRef.current]);
+                        if ((window as any).MathJax?.typesetPromise && mathContainerRef.current) {
+                            await (window as any).MathJax.typesetPromise([mathContainerRef.current]);
                         }
                     } catch (err) {
                         console.error('MathJax typeset failed:', err);
                     }
-                };
+                });
+            }, [rawEquation, loaded, error]);
 
-                typeset();
-            }, [equation, isInline, loaded, error]);
-
+            // Always render as inline in the editor to avoid Slate DOM errors
+            // The 'inline' toggle only affects the final rendered page
+            // Use contentEditable={false} to prevent Slate from tracking inner DOM changes
             return (
-                <div
+                <span
                     ref={containerRef}
+                    contentEditable={false}
                     style={{
-                        padding: isInline ? '2px 4px' : '8px 12px',
+                        padding: '2px 4px',
                         backgroundColor: 'var(--ks-color-scale-purple3)',
                         borderRadius: '3px',
                         color: 'var(--ks-color-scale-purple11)',
                         border: '1px solid var(--ks-color-scale-purple6)',
-                        display: isInline ? 'inline-block' : 'block',
-                        textAlign: isInline ? 'left' : 'center',
+                        display: 'inline-block',
                         verticalAlign: 'middle'
                     }}
                 >
-                    {isInline ? '' : '📐 '}
-                    {equation}
-                </div>
+                    {!isInline && <span style={{ opacity: 0.6, fontSize: '10px', marginRight: '4px' }}>[block]</span>}
+                    <span ref={mathContainerRef}>{rawEquation ? `$${rawEquation}$` : '(no equation)'}</span>
+                </span>
             );
         },
     }),
@@ -966,6 +978,201 @@ const sharedCustomComponents = {
 };
 
 // ============================================================================
+// PLACEHOLDER COMPONENT FACTORY
+// ============================================================================
+// Creates a placeholder for undefined/missing components to prevent page errors
+// Uses fields.ignored() to accept common prop names without validation errors
+
+// Common prop names that components might use - all use ignored() to accept any value
+const placeholderSchema = {
+    // Common text/content props
+    message: fields.ignored(),
+    text: fields.ignored(),
+    value: fields.ignored(),
+    content: fields.ignored(),
+    title: fields.ignored(),
+    name: fields.ignored(),
+    label: fields.ignored(),
+    description: fields.ignored(),
+    placeholder: fields.ignored(),
+    caption: fields.ignored(),
+    heading: fields.ignored(),
+    subheading: fields.ignored(),
+    body: fields.ignored(),
+    summary: fields.ignored(),
+    // Common HTML-like props
+    id: fields.ignored(),
+    class: fields.ignored(),
+    className: fields.ignored(),
+    style: fields.ignored(),
+    slot: fields.ignored(),
+    // Media props
+    src: fields.ignored(),
+    href: fields.ignored(),
+    alt: fields.ignored(),
+    url: fields.ignored(),
+    image: fields.ignored(),
+    icon: fields.ignored(),
+    thumbnail: fields.ignored(),
+    poster: fields.ignored(),
+    // State/behavior props
+    type: fields.ignored(),
+    variant: fields.ignored(),
+    size: fields.ignored(),
+    color: fields.ignored(),
+    theme: fields.ignored(),
+    mode: fields.ignored(),
+    disabled: fields.ignored(),
+    hidden: fields.ignored(),
+    loading: fields.ignored(),
+    active: fields.ignored(),
+    selected: fields.ignored(),
+    checked: fields.ignored(),
+    open: fields.ignored(),
+    closed: fields.ignored(),
+    expanded: fields.ignored(),
+    collapsed: fields.ignored(),
+    visible: fields.ignored(),
+    enabled: fields.ignored(),
+    required: fields.ignored(),
+    optional: fields.ignored(),
+    readonly: fields.ignored(),
+    editable: fields.ignored(),
+    // Layout props
+    width: fields.ignored(),
+    height: fields.ignored(),
+    maxWidth: fields.ignored(),
+    maxHeight: fields.ignored(),
+    minWidth: fields.ignored(),
+    minHeight: fields.ignored(),
+    padding: fields.ignored(),
+    margin: fields.ignored(),
+    gap: fields.ignored(),
+    align: fields.ignored(),
+    justify: fields.ignored(),
+    position: fields.ignored(),
+    layout: fields.ignored(),
+    direction: fields.ignored(),
+    orientation: fields.ignored(),
+    columns: fields.ignored(),
+    rows: fields.ignored(),
+    span: fields.ignored(),
+    order: fields.ignored(),
+    // Data props
+    data: fields.ignored(),
+    items: fields.ignored(),
+    options: fields.ignored(),
+    list: fields.ignored(),
+    array: fields.ignored(),
+    object: fields.ignored(),
+    json: fields.ignored(),
+    config: fields.ignored(),
+    settings: fields.ignored(),
+    props: fields.ignored(),
+    params: fields.ignored(),
+    args: fields.ignored(),
+    // Numeric props
+    count: fields.ignored(),
+    index: fields.ignored(),
+    number: fields.ignored(),
+    amount: fields.ignored(),
+    total: fields.ignored(),
+    min: fields.ignored(),
+    max: fields.ignored(),
+    step: fields.ignored(),
+    level: fields.ignored(),
+    priority: fields.ignored(),
+    // Date/time props
+    date: fields.ignored(),
+    time: fields.ignored(),
+    datetime: fields.ignored(),
+    timestamp: fields.ignored(),
+    duration: fields.ignored(),
+    delay: fields.ignored(),
+    // Event-like props (stored as strings in MDX)
+    onClick: fields.ignored(),
+    onChange: fields.ignored(),
+    onSubmit: fields.ignored(),
+    onLoad: fields.ignored(),
+    onError: fields.ignored(),
+    onClose: fields.ignored(),
+    onOpen: fields.ignored(),
+    // Misc common props
+    key: fields.ignored(),
+    ref: fields.ignored(),
+    target: fields.ignored(),
+    rel: fields.ignored(),
+    role: fields.ignored(),
+    tabIndex: fields.ignored(),
+    autoFocus: fields.ignored(),
+    children: fields.ignored(),
+};
+
+const createPlaceholderComponent = (name: string) => wrapper({
+    label: `${name} (Placeholder)`,
+    schema: placeholderSchema,
+    ContentView: (props) => (
+        <div style={{
+            padding: '12px 16px',
+            border: '2px dashed #f59e0b',
+            borderRadius: '6px',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            color: '#92400e',
+            fontFamily: 'monospace',
+            fontSize: '13px',
+        }}>
+            <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
+                Missing component: {name}
+            </div>
+            <div style={{ fontSize: '11px', opacity: 0.8 }}>
+                This component is not defined. Add it to keystatic.config.tsx or remove from content.
+            </div>
+            {props.children && (
+                <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid rgba(245, 158, 11, 0.3)' }}>
+                    {props.children}
+                </div>
+            )}
+        </div>
+    ),
+});
+
+// ============================================================================
+// SITE-SPECIFIC KEYSTATIC COMPONENTS
+// ============================================================================
+// Load site-specific keystatic editor components dynamically based on siteCode
+// Only load in development mode - keystatic is excluded from production builds
+const siteSpecificComponents: Record<string, any> = {};
+
+if (process.env.NODE_ENV === 'development') {
+    const siteKeystatiComponentsGlob = import.meta.glob<{ [key: string]: any }>(
+        '/src/.sites/**/keystatic/*.tsx',
+        { eager: true }
+    );
+
+    // Filter and collect components for the current site
+    for (const [path, module] of Object.entries(siteKeystatiComponentsGlob)) {
+        if (path.includes(`.sites/${siteCode}/keystatic/`)) {
+            // Extract component name from filename (e.g., ExampleComponent.tsx -> ExampleComponent)
+            const fileName = path.split('/').pop()?.replace('.tsx', '');
+            if (fileName && module[fileName]) {
+                siteSpecificComponents[fileName] = module[fileName];
+            }
+        }
+    }
+}
+
+// ============================================================================
+// PLACEHOLDER COMPONENTS
+// ============================================================================
+// Add any components referenced in MDX but not yet implemented
+// Site-specific components override placeholders
+const placeholderComponents = {
+    // Placeholders are only used if no site-specific component exists
+    ...(siteSpecificComponents.ExampleComponent ? {} : { ExampleComponent: createPlaceholderComponent('ExampleComponent') }),
+    ...siteSpecificComponents, // Site-specific components take precedence
+};
+
+// ============================================================================
 // BLOG-SPECIFIC CUSTOM COMPONENTS
 // ============================================================================
 const blogSpecificComponents = {
@@ -1009,11 +1216,13 @@ const wrapComponentsWithToolbar = (components: any) => {
 const blogComponents = wrapComponentsWithToolbar({
     ...minimalHtmlComponents,
     ...sharedCustomComponents,
+    ...placeholderComponents,
 });
 
 const pageComponents = wrapComponentsWithToolbar({
     ...minimalHtmlComponents,
     ...sharedCustomComponents,
+    ...placeholderComponents,
 });
 
 // ============================================================================
@@ -1125,7 +1334,7 @@ export default config({
             // description: 'Posts dated today or earlier will be published within 24 hours. Posts with future dates will be published on the specified date.',
             slugField: 'title',
             path: `${basePostPath}/_drafts/*`,
-            format: { contentField: 'content', data: 'json' },
+            format: { contentField: 'content' },
             entryLayout: 'content',
             schema: createPostSchema(blogImagePath),
         }),
@@ -1185,7 +1394,11 @@ export default config({
     singletons: {
         systemMenuItems: singleton({
             label: 'System Menu Items',
-            path: `src/.sites/${siteCode}/state/system-menu-items`,
+            path: (() => {
+                const p = `src/.sites/${siteCode}/state/system-menu-items`;
+                console.log('[Keystatic Config] Singleton path:', p);
+                return p;
+            })(),
             format: { data: 'json' },
             schema: {
                 items: fields.array(

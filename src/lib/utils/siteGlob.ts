@@ -179,16 +179,36 @@ export async function siteGlob<T = any>(options: SiteGlobOptions): Promise<T | G
             console.warn(`No ${filename} found for ${siteCode}`);
             return null;
         }
-        const [, loader] = filteredEntries[0];
+        const [filePath, loader] = filteredEntries[0];
         let result;
         if (eager) {
-            // For YAML and css, result is the content directly (not wrapped in { default: })
-            // For other types, it's wrapped in { default: }
-            result = (type === 'yaml' || type === 'css' || type == 'components') ? (loader as any) : (loader as any).default;
+            // When eager, the loader IS the loaded content
+            // MDX files: { frontmatter, Content, getHeadings, ..., default }
+            // YAML files via @rollup/plugin-yaml: { default: content } (no other keys)
+            // CSS files: raw content string
+            if (type === 'css') {
+                result = loader;
+            } else if ((loader as any).Content !== undefined) {
+                // MDX/Astro files - they have Content, use the whole loader
+                result = loader;
+            } else if ((loader as any).default !== undefined) {
+                // YAML/JSON wrapped in { default: } - extract the default
+                result = (loader as any).default;
+            } else {
+                // Fallback - use as-is
+                result = loader;
+            }
         } else {
-            const loaded = await (loader as Function)();
-            // For YAML and css, loaded IS the content; for others, extract .default
-            result = (type === 'yaml' || type === 'css' || type == 'components') ? loaded : loaded.default;
+            // Non-eager: loader is a function that returns a promise
+            if (typeof loader !== 'function') {
+                console.error(`[siteGlob] Expected loader to be a function for ${filePath}, got:`, typeof loader, loader);
+                throw new Error(`siteGlob: Expected loader function for ${filePath}`);
+            }
+            const loaded = await loader();
+            // MDX/Astro files have { Content, frontmatter, ... } without .default wrapper
+            // YAML/JSON have { default: content }
+            // Try both patterns
+            result = loaded.default ?? loaded;
         }
 
         // Apply post-processing if provided

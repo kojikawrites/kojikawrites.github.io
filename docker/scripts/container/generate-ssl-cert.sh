@@ -2,7 +2,7 @@
 # Generate self-signed SSL certificate for HTTPS in dev environment
 # Certificates are stored in a persistent volume so they survive container restarts
 
-CERT_DIR="/app/.ssl"
+CERT_DIR="/app/.cache/ssl"
 CA_KEY="$CERT_DIR/ca.key"
 CA_CERT="$CERT_DIR/ca.crt"
 SERVER_KEY="$CERT_DIR/server.key"

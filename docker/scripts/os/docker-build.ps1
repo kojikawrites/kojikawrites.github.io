@@ -301,6 +301,7 @@ docker network create "$env:DOCKER_BLOG_CODE-network" 2>$null
 docker volume create "$env:DOCKER_BLOG_CODE-dev-workspace" 2>$null
 docker volume create --driver local --opt type=tmpfs --opt device=tmpfs --opt o=size=8g,uid=1000 "$env:DOCKER_BLOG_CODE-build-workspace" 2>$null
 docker volume create "blog-ollama-models" 2>$null
+docker volume create "blog-cache" 2>$null
 
 # Start containers
 docker compose @composeFiles -p "$env:DOCKER_BLOG_CODE" up --build -d

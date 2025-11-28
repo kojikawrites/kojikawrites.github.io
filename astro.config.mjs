@@ -47,6 +47,7 @@ import menuWatcher from './src/integrations/menuWatcher.ts';
 import excludeDevPages from './src/integrations/excludeDevPages.ts';
 import copyPublicFilesIntegration from './src/integrations/copyPublicFiles.ts';
 import cleanupSystemFiles from './src/integrations/cleanupSystemFiles.ts';
+import dynamicBlogRoutes from './src/integrations/dynamicBlogRoutes.ts';
 import multiPublicPlugin from './plugins/vite-plugin-multi-public.ts';
 import excludeNonMatchingSites from './plugins/vite-plugin-exclude-sites.ts';
 
@@ -54,6 +55,7 @@ import sitemap from '@astrojs/sitemap';
 
 /**
  * Get site code from environment variables
+ * Throws error if not configured - no silent fallbacks
  */
 function getSiteCode() {
     const siteCode = process.env.SITE_CODE;
@@ -61,10 +63,15 @@ function getSiteCode() {
         return siteCode;
     }
     try {
-        return new URL(process.env.VITE_SITE_NAME || '').hostname;
+        const hostname = new URL(process.env.VITE_SITE_NAME || '').hostname;
+        if (hostname) return hostname;
     } catch (e) {
-        return 'hiivelabs.com';
+        // URL parsing failed, fall through to error
     }
+    throw new Error(
+        'SITE_CODE not configured. Please set SITE_CODE or VITE_SITE_NAME in your .env file.\n' +
+        'Example: SITE_CODE=example.com'
+    );
 }
 
 /**
@@ -312,19 +319,25 @@ export default defineConfig({
                         .filter(d => d.isDirectory())
                         .map(d => d.name);
 
-                    return allSites
+                    const denied = allSites
                         .filter(site => site !== currentSiteCode)
                         .map(site => `**/.sites/${site}/**`);
+
+                    console.log(`🔒 fs.deny - Current site: ${currentSiteCode}, Denying access to: ${denied.join(', ') || '(none)'}`);
+                    return denied;
                 })(),
             },
             watch: {
                 // Ignore build artifacts and generated files to prevent unnecessary reloads
+                // Note: Don't ignore system-menu-items.json - menuWatcher needs to see changes
                 ignored: [
                     '**/dist/**',
                     '**/.astro/**',
                     '**/node_modules/**',
                     '**/.building',
-                    '**/src/.sites/**/state',
+                    '**/src/.sites/**/state/frontmatter.json',
+                    '**/src/.sites/**/state/bluesky_posted.json',
+                    '**/src/.sites/**/state/published_posts*.json',
                     '**/src/build/generators/**'
                 ]
             },
@@ -353,8 +366,8 @@ export default defineConfig({
                     return {
                         server: {
                             https: (() => {
-                                const certPath = '.ssl/server.crt';
-                                const keyPath = '.ssl/server.key';
+                                const certPath = '.cache/ssl/server.crt';
+                                const keyPath = '.cache/ssl/server.key';
 
                                 // Check if cert files exist
                                 if (fs.existsSync(certPath) && fs.existsSync(keyPath)) {
@@ -385,6 +398,7 @@ export default defineConfig({
     trailingSlash: 'ignore',
 
     integrations: [
+        dynamicBlogRoutes(),
         react({ include: ['**/react/*'] }),
         ...(process.env.NODE_ENV === 'development' ? [keystatic(), menuWatcher()] : [excludeDevPages()]),
         tailwind(),

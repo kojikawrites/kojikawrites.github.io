@@ -2,12 +2,6 @@
 // Run 'npm run generate:keystatic-data' to regenerate
 
 export const categories = [
-  "artificial-intelligence",
-  "cellular-automata",
-  "fuzzy-logic",
-  "gamedev",
-  "graphics",
-  "machine-learning",
-  "procedural-generation",
-  "roguelike"
+  "announcements",
+  "general"
 ];

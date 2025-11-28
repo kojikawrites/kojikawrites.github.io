@@ -28,7 +28,6 @@ interface SiteConfig {
     blog: {
         pagination_size: number;
         path: string;
-        prefix: string;
         small_mode: string;
         large_mode: string;
         default_author: string;
@@ -71,7 +70,7 @@ interface SiteConfig {
 
 export async function getSiteConfig() {
     const site = getSiteCode();
-
+//    console.log('getSiteConfig:site:', site);
     const siteYamlFilter = (eager:boolean) => eager //  '../../.sites/**/styles/custom.css',
         ? import.meta.glob<SiteConfig>('/src/.sites/**/config/site.yaml', { eager: true })
         : import.meta.glob<SiteConfig>('/src/.sites/**/config/site.yaml'); // <-- usual case
@@ -82,6 +81,8 @@ export async function getSiteConfig() {
         filename: 'site.yaml',
         globFilter: siteYamlFilter,
     }) as SiteConfig;
+
+    // console.log('getSiteConfig:config:', config.blog);
 
     // Process breadcrumbs
     if (config.navbar && config.navbar.breadcrumbs) {

@@ -13,8 +13,8 @@ services:
       - blog-dev-workspace:/app/node_modules
       # Shared volume for build operations
       - blog-build-workspace:/tmp/build-workspace
-      # Shared SSL certificates (one cert for all sites on this machine)
-      - blog-ssl-certs:/app/.ssl
+      # Shared cache for SSL certs, downloaded binaries, etc.
+      - blog-cache:/app/.cache
     cap_add:
       # Required for mount --bind in entrypoint (even though container runs as root)
       # Docker restricts mount syscall by default, requiring CAP_SYS_ADMIN
@@ -41,6 +41,8 @@ services:
       - ../..:/source
       # Shared volume for build operations
       - blog-build-workspace:/tmp/build-workspace
+      # Shared cache for SSL certs, downloaded binaries, etc.
+      - blog-cache:/cache
     environment:
       - NODE_ENV=production
     env_file:
@@ -104,9 +106,9 @@ volumes:
   blog-build-workspace:
     external: true
     name: ${DOCKER_BLOG_CODE}-build-workspace
-  blog-ssl-certs:
+  blog-cache:
     external: true
-    name: blog-ssl-certs  # Shared across all sites on this machine
+    name: blog-cache  # Shared cache for SSL certs, downloaded binaries, etc.
   ollama-models:
     external: true
     name: blog-ollama-models  # Shared across all sites

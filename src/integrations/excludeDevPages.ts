@@ -9,6 +9,7 @@ loadEnv();
 
 /**
  * Get site code from environment variables
+ * Throws error if not configured - no silent fallbacks
  */
 function getSiteCode(): string {
   const siteCode = process.env.SITE_CODE;
@@ -17,10 +18,16 @@ function getSiteCode(): string {
   }
 
   try {
-    return new URL(process.env.VITE_SITE_NAME || '').hostname;
+    const hostname = new URL(process.env.VITE_SITE_NAME || '').hostname;
+    if (hostname) return hostname;
   } catch (e) {
-    return 'hiivelabs.com';
+    // URL parsing failed, fall through to error
   }
+
+  throw new Error(
+    'SITE_CODE not configured. Please set SITE_CODE or VITE_SITE_NAME in your .env file.\n' +
+    'Example: SITE_CODE=example.com'
+  );
 }
 
 /**
