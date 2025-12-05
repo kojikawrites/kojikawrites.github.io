@@ -13,6 +13,7 @@ function categoriesToPath(categories: string | string[]): string {
   {
     return undefined;
   }
+  // extractKeyList already resolves aliases (e.g., "ml" -> "machine-learning")
   const categoryArray: string[] = extractKeyList(categories);
   // Create a path from each entry by joining with '/' (have to use %2f)
   return categoryArray.join('/');

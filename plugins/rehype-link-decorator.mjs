@@ -129,13 +129,16 @@ function buildFaviconPathDevMode(dirPath, faviconDomain) {
         console.error(`rehypeLinkDecorator: Error reading directory '${dirPath}':`, error);
     }
 
-    // If a matching file was found, return its full path; otherwise, default to .png.
-    const devPath = matchingFile
-        ? path.join(dirPath, matchingFile)
-        : path.join(dirPath, `${faviconDomain}.png`);
+    // Only return a path if the file actually exists
+    if (matchingFile) {
+        const devPath = path.join(dirPath, matchingFile);
+        console.log(`rehypeLinkDecorator: Building dev mode path: ${devPath}`);
+        return devPath;
+    }
 
-    console.log(`rehypeLinkDecorator: Building dev mode path: ${devPath}`);
-    return devPath;
+    // No matching favicon file found
+    console.log(`rehypeLinkDecorator: No favicon found for ${faviconDomain} in ${dirPath}`);
+    return null;
 }
 
 const defaultProtocols = ['http', 'https'];
@@ -429,10 +432,17 @@ export default function rehypeLinkDecorator(node, icons, siteName, protocols) {
                         const downloadedFavicon = import.meta.env.PROD
                             ? downloadFaviconSync(selectedFavicon, faviconDomain, favIconDownloadPath)
                             : buildFaviconPathDevMode(favIconDownloadPath, faviconDomain);
-                        selectedFavicon = downloadedFavicon.replace(buildTimePublicPrefix, '') ?? selectedFavicon;
 
-                        faviconDictionary[faviconDomain] = selectedFavicon;
-                        console.log('rehypeLinkDecorator -> selectedFavicon:', selectedFavicon);
+                        // Only set favicon if we successfully got one
+                        if (downloadedFavicon) {
+                            selectedFavicon = downloadedFavicon.replace(buildTimePublicPrefix, '');
+                            faviconDictionary[faviconDomain] = selectedFavicon;
+                            console.log('rehypeLinkDecorator -> selectedFavicon:', selectedFavicon);
+                        } else {
+                            // Mark as null so we don't keep trying to fetch it
+                            faviconDictionary[faviconDomain] = null;
+                            console.log(`rehypeLinkDecorator -> No favicon available for: ${faviconDomain}`);
+                        }
                     }
                     if (faviconDomain in faviconDictionary) {
                         const favicon = faviconDictionary[faviconDomain];

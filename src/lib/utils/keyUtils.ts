@@ -1,6 +1,10 @@
 import toSafeId from "./toSafeId";
 import {KeyType} from "./enums";
 import getPosts from "../content/getPosts";
+import {resolveKeyAlias} from "./aliasUtils";
+
+// Re-export alias utilities for backwards compatibility
+export { buildAliasMap, setAliasMapCache, getAliasMapCache, resolveKeyAlias, resolveKeyAliases } from "./aliasUtils";
 
 export function toSafeKey(key: string, prefix:string = '') {
     const isUnkeyed = key.startsWith('~') && key.endsWith('~')
@@ -16,7 +20,8 @@ export function extractKeyList(keys: string | string[]) : string[] {
     } else if (Array.isArray(keys)) {
         keyArray = keys;
     }
-    return keyArray?.map(k => k?.toLowerCase());
+    // Lowercase and resolve aliases (e.g., "ml" -> "machine-learning")
+    return keyArray?.map(k => k ? resolveKeyAlias(k.toLowerCase()) : k);
 }
 
 export function getKeyId(keyType: KeyType, key:string) : string {

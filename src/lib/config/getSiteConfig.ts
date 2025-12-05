@@ -1,6 +1,7 @@
 import {getSiteCode} from "./getSiteCode.ts";
 import {siteGlob} from "../utils/siteGlob.ts";
 import {getAllPageTitles} from '../content/getAllPageTitles';
+import {setAliasMapCache} from '../utils/aliasUtils';
 
 // Type definitions for site config
 interface ThemedImage {
@@ -83,6 +84,11 @@ export async function getSiteConfig() {
     }) as SiteConfig;
 
     // console.log('getSiteConfig:config:', config.blog);
+
+    // Initialize alias map cache for tags/categories
+    if (config.tags_and_categories?.aliases) {
+        setAliasMapCache(config.tags_and_categories.aliases);
+    }
 
     // Process breadcrumbs
     if (config.navbar && config.navbar.breadcrumbs) {

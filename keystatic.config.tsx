@@ -13,6 +13,7 @@ import { createPortal } from 'react-dom';
 import ReactDOM from 'react-dom/client';
 import { createImageWithTextComponent } from './src/keystatic/ImageWithText.tsx';
 import { textWithAI } from './src/keystatic/fields/textWithAI';
+import { readOnlyText } from './src/keystatic/fields/readOnlyText';
 
 // Extracted Keystatic components
 import { FootnoteDefinition } from './src/keystatic/footnote/FootnoteDefinition';
@@ -1312,7 +1313,7 @@ const createPostSchema = (imageDirectory: string) => ({
             itemLabel: props => props.value || 'Tag',
         }
     ),
-    createdAt: fields.text({
+    createdAt: readOnlyText({
         label: 'Created At',
         description: 'Auto-filled when post is created (read-only)',
         defaultValue: new Date().toISOString(),

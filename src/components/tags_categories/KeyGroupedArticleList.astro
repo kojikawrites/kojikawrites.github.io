@@ -16,6 +16,7 @@ import { getKeyId, toSafeKey, extractKeyList } from "../../lib/utils/keyUtils";
 const siteConfig = await getSiteConfig();
 const smallMode = siteConfig.blog.small_mode;
 const largeMode = siteConfig.blog.large_mode;
+const isDev = import.meta.env.DEV;
 
 const keyType = Astro.props.keyType;
 const ungroupedKey = keyType == KeyType.Tags ? "~untagged~" : "~uncategorized~";
@@ -33,7 +34,8 @@ function sortKeysUngroupedAware(keys) {
 
 async function getKeyToPostsDictionary(keyType: string) {
     const tcDictionary = {};
-    const allPosts = sortPosts(await getPosts());
+    // In dev mode, include drafts so they appear in tags/categories pages
+    const allPosts = sortPosts(await getPosts({ includeDrafts: isDev }));
 
     const allKeyedPosts = allPosts.map(p => (
         { post: p, keys: extractKeyList(p.frontmatter[keyType]) }
@@ -87,7 +89,7 @@ console.log(tcBtnIds != null); // DO NOT REMOVE
             <h2 class="key-header-inactive key-post-header" data-name={key}>{getKeyPrefix(ix)}{key}</h2>
             <ul class="key-post-list post-list">
                 {tcDict[key].map((post) => (
-                        <PostSummary post={post} smallMode={smallMode} largeMode={largeMode} />
+                        <PostSummary post={post} smallMode={smallMode} largeMode={largeMode} isDraft={post.frontmatter.isDraft} />
                 ))}
             </ul>
         </div>

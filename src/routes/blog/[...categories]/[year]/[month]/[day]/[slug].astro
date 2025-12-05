@@ -14,6 +14,8 @@ const siteConfig = await getSiteConfig();
 
 
 export async function getStaticPaths() {
+  // Ensure site config is loaded first (initializes alias map for categories/tags)
+  await getSiteConfig();
   // Fetch all the posts from the collection 'blog'
   // In dev mode, include drafts so they can be previewed
   const isDev = import.meta.env.DEV;

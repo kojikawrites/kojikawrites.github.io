@@ -6,7 +6,7 @@
 // Cache for glob results
 const globCache = new Map<string, any>();
 
-export type GlobType = 'json' | 'yaml' | 'css' | 'pages' | 'posts' | 'media' | 'components' | 'custom';
+export type GlobType = 'json' | 'yaml' | 'css' | 'pages' | 'posts'| 'posts-with-drafts' | 'media' | 'components' | 'custom';
 
 // Type for glob results when returning multiple files (loaders)
 export type GlobResult<T> = Record<string, (() => Promise<{ default: T }>) | { default: T }>;
