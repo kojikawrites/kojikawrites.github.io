@@ -112,6 +112,26 @@ export default function ThemeToggleButton() {
     localStorage.setItem('theme', t);
     localStorage.setItem('themeSet', 'true');
     window.dispatchEvent(new Event('storage'));
+
+    // iOS has a WebGL compositor caching bug where canvas content doesn't
+    // update properly on theme change. Trigger a View Transition to the
+    // same page to force a full repaint without a hard reload.
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+    if (isIOS) {
+      // Use View Transitions API if available, otherwise navigate normally
+      if ('startViewTransition' in document) {
+        (document as any).startViewTransition(() => {
+          // Navigate to current URL to trigger transition
+          window.location.href = window.location.href;
+        });
+      } else {
+        // Fallback: navigate to self (triggers Astro page transition)
+        setTimeout(() => {
+          window.location.href = window.location.href;
+        }, 50);
+      }
+    }
   }
 
   return (

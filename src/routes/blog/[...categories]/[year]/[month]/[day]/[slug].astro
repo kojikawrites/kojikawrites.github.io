@@ -15,7 +15,9 @@ const siteConfig = await getSiteConfig();
 
 export async function getStaticPaths() {
   // Fetch all the posts from the collection 'blog'
-  const posts = await getPosts();
+  // In dev mode, include drafts so they can be previewed
+  const isDev = import.meta.env.DEV;
+  const posts = await getPosts({ includeDrafts: isDev });
   // Iterate over the posts, generating the tokens and
   // setting them inside the `params` key.
   // Astro will use anything inside `params` as the token

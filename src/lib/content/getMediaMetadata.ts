@@ -7,11 +7,11 @@ export default async function getMediaMetadata(src: string, excludeVideo: boolea
 
     const mediaFilter = (eager:boolean) =>
         eager
-            ? import.meta.glob<{ default: T }>([
+            ? import.meta.glob<{ default: any }>([
                 '/src/assets/**/*.{jpeg,jpg,png,gif,svg,webp,mp4}',
                 '/src/.sites/**/*.{jpeg,jpg,png,gif,svg,webp,mp4}'
             ], { eager: true })
-            : import.meta.glob<{ default: T }>([
+            : import.meta.glob<{ default: any }>([
                 '/src/assets/**/*.{jpeg,jpg,png,gif,svg,webp,mp4}',
                 '/src/.sites/**/*.{jpeg,jpg,png,gif,svg,webp,mp4}'
             ]);

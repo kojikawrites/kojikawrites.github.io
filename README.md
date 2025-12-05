@@ -98,6 +98,12 @@ These directories will:
 
 This is useful for admin interfaces, API routes, or other development-only pages that shouldn't be deployed to production.
 
+### site.yaml Reference
+
+Each site has a `config/site.yaml` file for navigation, blog settings, social integrations, component injection, and more.
+
+For complete site.yaml documentation, see the [Example Site README](src/.sites/example.com/README.md#site-configuration-siteyaml).
+
 ## Development
 
 ### Local Development
@@ -411,8 +417,229 @@ Blog posts are stored in `src/.sites/[site-name]/content/posts/` as MDX files. E
 
 - **[Docker Setup](docker/README.md)** - Detailed Docker configuration, volumes, scripts, and troubleshooting
 - **[LLM Service](src/lib/services/llm/README.md)** - AI-powered content assistance (alt text generation, text editing)
-- **[Site Configuration](src/.sites/hiivelabs.com/README.md)** - Site-specific setup and environment variables
+- **[Example Site](src/.sites/example.com/README.md)** - Reference site with complete site.yaml documentation
 - **[Site Components](src/.sites/hiivelabs.com/components/README.md)** - Creating site-specific Astro components
+
+## Creating a New Site from the Framework
+
+This project is designed as a reusable framework. You can create your own site by forking/cloning this repository and adding your site-specific content, while still being able to pull in framework updates.
+
+### Architecture Overview
+
+```
+your-site-repo/
+├── src/
+│   ├── components/      # Framework (from upstream)
+│   ├── layouts/         # Framework (from upstream)
+│   ├── lib/             # Framework (from upstream)
+│   ├── styles/          # Framework (from upstream)
+│   ├── pages/           # Framework (from upstream)
+│   └── .sites/
+│       ├── example.com/       # Reference site (from upstream)
+│       └── your-site.com/     # YOUR site content
+├── scripts/             # Framework (from upstream)
+└── ...
+```
+
+**Key principle:** Framework code lives in the root directories. Your site content lives entirely within `src/.sites/your-site.com/`. This separation allows clean merges when updating the framework.
+
+### Step 1: Create Your Site Repository
+
+**Option A: Fork (if you want to contribute back)**
+1. Fork this repository on GitHub
+2. Clone your fork locally:
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/YOUR-FORK.git my-site
+   cd my-site
+   ```
+
+**Option B: Clone as new project (recommended for most users)**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/hiive/hiive.github.io.git my-site
+   cd my-site
+   ```
+2. Remove the original origin and set up your own:
+   ```bash
+   git remote remove origin
+   git remote add origin https://github.com/YOUR-USERNAME/my-site.git
+   ```
+
+### Step 2: Add Framework as Upstream Remote
+
+This allows you to pull framework updates later:
+
+```bash
+git remote add upstream https://github.com/hiive/hiive.github.io.git
+```
+
+Verify your remotes:
+```bash
+git remote -v
+# Should show:
+# origin    https://github.com/YOUR-USERNAME/my-site.git (fetch)
+# origin    https://github.com/YOUR-USERNAME/my-site.git (push)
+# upstream  https://github.com/hiive/hiive.github.io.git (fetch)
+# upstream  https://github.com/hiive/hiive.github.io.git (push)
+```
+
+### Step 3: Create Your Site Directory
+
+1. Copy the example site as a starting point:
+   ```bash
+   cp -r src/.sites/example.com src/.sites/your-site.com
+   ```
+
+2. Remove the other site directories (optional, keeps your repo clean):
+   ```bash
+   rm -rf src/.sites/hiivelabs.com
+   rm -rf src/.sites/kosmic.wisp.place
+   # Keep example.com as reference if you want
+   ```
+
+3. Configure your site code in the root `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env`:
+   ```env
+   SITE_CODE=your-site.com
+   ```
+
+4. Configure your site-specific settings in `src/.sites/your-site.com/.env`:
+   ```env
+   VITE_SITE_NAME=https://your-site.com
+   DEFAULT_AUTHOR=Your Name
+   GIT_AUTHOR_NAME=Your Name
+   GIT_AUTHOR_EMAIL=you@example.com
+   GIT_COMMITTER_NAME=Your Name
+   GIT_COMMITTER_EMAIL=you@example.com
+   ```
+
+5. Customize `src/.sites/your-site.com/config/site.yaml` with your:
+   - Site name and logo
+   - Navigation links
+   - Blog settings
+   - Social integrations
+   - Custom component injections
+
+### Step 4: Install and Run
+
+**Option A: Using Docker (Recommended)**
+
+Docker provides a consistent development environment with hot reloading accessible from any device on your network.
+
+1. Add Docker-specific configuration to `src/.sites/your-site.com/.env`:
+   ```env
+   # Docker configuration
+   DOCKER_BLOG_CODE=mysite           # Prefix for container/volume names
+   DOCKER_BLOG_PORT=4321             # External port for dev server
+   DOCKER_BUILD_MODE=pip             # or 'uv' for faster builds
+
+   # Optional: Enable HMR from other devices
+   VITE_HMR_HOST=your-server.local   # Your server's hostname
+   ```
+
+2. Start the Docker environment:
+   ```bash
+   cd docker
+   ./pip-docker-build.sh    # For pip-based build
+   # or
+   ./uv-docker-build.sh     # For uv-based build (faster)
+   ```
+
+3. Access your site at `https://localhost:4321` (or your configured port)
+
+See [Docker Setup](docker/README.md) for detailed configuration and troubleshooting.
+
+**Option B: Local Development (without Docker)**
+
+```bash
+npm install
+npm run dev
+```
+
+Your site is now running at https://localhost:4321
+
+### Step 5: Commit Your Site
+
+```bash
+git add .
+git commit -m "Initialize my-site"
+git push -u origin main
+```
+
+### Updating the Framework
+
+When the framework has updates you want to incorporate:
+
+```bash
+# Fetch the latest framework changes
+git fetch upstream
+
+# Merge framework updates into your branch
+git merge upstream/main
+```
+
+**Handling merge conflicts:**
+
+Conflicts are rare if you follow the architecture (your content stays in `.sites/your-site.com/`). If conflicts occur:
+
+1. **Framework file conflicts** (components, layouts, lib, etc.): Usually accept the upstream version unless you've intentionally modified framework code
+2. **Site file conflicts** (anything in `.sites/your-site.com/`): Keep your version
+3. **Config file conflicts** (astro.config.mjs, package.json): Review carefully, merge as appropriate
+
+```bash
+# After resolving conflicts
+git add .
+git commit -m "Merge framework updates"
+git push
+```
+
+### Best Practices
+
+1. **Never modify framework files directly** - If you need custom behavior, create site-specific overrides in your `.sites/` directory or open an issue/PR on the framework repo
+
+2. **Keep your site content isolated** - Everything specific to your site should be in:
+   - `src/.sites/your-site.com/config/` - Configuration
+   - `src/.sites/your-site.com/content/` - Blog posts, pages
+   - `src/.sites/your-site.com/components/` - Custom components
+   - `src/.sites/your-site.com/images/` - Site images
+   - `src/.sites/your-site.com/styles/` - Site-specific CSS
+
+3. **Pull framework updates regularly** - Smaller, frequent merges are easier than large infrequent ones
+
+4. **Test after merging** - Run `npm run dev` and `npm run build` after pulling framework updates
+
+### Directory Reference
+
+| Directory | Owner | Description |
+|-----------|-------|-------------|
+| `src/components/` | Framework | Shared Astro/React/Svelte components |
+| `src/layouts/` | Framework | Page layout templates |
+| `src/lib/` | Framework | Utilities, services, config helpers |
+| `src/pages/` | Framework | Route definitions |
+| `src/styles/` | Framework | Global CSS and Tailwind config |
+| `src/.sites/your-site.com/` | **You** | All your site-specific content |
+| `scripts/` | Framework | Build and utility scripts |
+| `docker/` | Framework | Docker configuration |
+
+### Troubleshooting
+
+**"SITE_CODE not configured" error:**
+- Ensure `.env` exists in the root with `SITE_CODE=your-site.com`
+- Ensure the directory `src/.sites/your-site.com/` exists
+
+**Framework updates break your site:**
+- Check the framework's changelog/commits for breaking changes
+- You can always revert: `git reset --hard HEAD~1`
+- Or stay on a specific framework version by not merging upstream
+
+**Want to contribute a fix back to the framework:**
+1. Create a branch: `git checkout -b fix/my-fix`
+2. Make changes to framework files only
+3. Push to your fork: `git push origin fix/my-fix`
+4. Open a PR against the upstream repository
 
 ## License
 

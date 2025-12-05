@@ -81,7 +81,7 @@ function getSiteSpecificComponents(): ComponentMap {
     try {
         // Use Vite's import.meta.glob to find all .astro components in the site-specific directory
         // This creates a map of file paths to dynamic import functions
-        const componentModules = import.meta.glob<GlobModule>('/src/.sites/*/components/*.astro', { eager: true });
+        const componentModules = import.meta.glob<GlobModule>('/src/.sites/*/components/**/*.astro', { eager: true });
 
         const siteComponents: ComponentMap = {};
         const sitePrefix = `/src/.sites/${siteCode}/components/`;

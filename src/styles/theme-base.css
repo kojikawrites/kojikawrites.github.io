@@ -226,11 +226,11 @@
         @apply text-[1.2rem];
     }
 
-    /* Links - underline effect */
-    p a, article a {
+    /* Links - underline effect (only within main content containers) */
+    .container p a, .container li a, .container article a {
         @apply transition-shadow ease-linear delay-150
-               shadow-[inset_0_-0.12em_0_var(--primary-color-alt)]
-               hover:shadow-[inset_0_-1.5em_0_var(--primary-color-alt)]
+               shadow-[inset_0_-0.12em_0_rgb(var(--primary-color-alt))]
+               hover:shadow-[inset_0_-1.5em_0_rgb(var(--primary-color-alt))]
     }
 
     /* Text elements */

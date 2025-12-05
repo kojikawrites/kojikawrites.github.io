@@ -50,6 +50,7 @@ import cleanupSystemFiles from './src/integrations/cleanupSystemFiles.ts';
 import dynamicBlogRoutes from './src/integrations/dynamicBlogRoutes.ts';
 import multiPublicPlugin from './plugins/vite-plugin-multi-public.ts';
 import excludeNonMatchingSites from './plugins/vite-plugin-exclude-sites.ts';
+import globRefreshPlugin from './plugins/vite-plugin-glob-refresh.ts';
 
 import sitemap from '@astrojs/sitemap';
 
@@ -329,7 +330,7 @@ export default defineConfig({
             },
             watch: {
                 // Ignore build artifacts and generated files to prevent unnecessary reloads
-                // Note: Don't ignore system-menu-items.json - menuWatcher needs to see changes
+                // Note: Don't ignore content/config files - menuWatcher needs to see them
                 ignored: [
                     '**/dist/**',
                     '**/.astro/**',
@@ -351,6 +352,7 @@ export default defineConfig({
             excludeNonMatchingSites(getSiteCode()), // Exclude non-matching .sites directories
             multiPublicPlugin(), // Must be first to intercept requests before Astro routing
             yaml(),
+            ...(process.env.NODE_ENV === 'development' ? [globRefreshPlugin()] : []), // Force reload when new content files added
             // Use custom SSL certificates only when accessing via dev site hostname (not localhost/127.0.0.1)
             ...(process.env.NODE_ENV === 'development' ? [{
                 name: 'custom-ssl',

@@ -3,6 +3,7 @@ interface Props {
     post: any
     smallMode: string
     largeMode: string
+    isDraft?: boolean
 }
 
 import FormattedDate from "../FormattedDate.astro";
@@ -17,6 +18,7 @@ const {
     post,
     smallMode = "card",
     largeMode = "card",
+    isDraft = false,
 } = Astro.props;
 
 const siteConfig = await getSiteConfig();
@@ -66,7 +68,8 @@ const classExt = `sm-${smallMode}-lg-${largeMode}`;
 ---
 
 <!-- post summary text -->
-<div class={`post-summary-wrapper-${classExt}`}>
+<div class={`post-summary-wrapper-${classExt} ${isDraft ? 'post-summary-draft' : ''}`}>
+    {isDraft && <div class="draft-watermark">DRAFT</div>}
 
     <!-- post thumbnail -->
     {thumbnailSrc && (

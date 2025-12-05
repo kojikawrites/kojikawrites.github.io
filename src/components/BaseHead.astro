@@ -121,12 +121,17 @@ const isDev = import.meta.env.DEV;
 </script>
 
 {isDev && (
-<!-- Menu update handler - reloads page when menu changes (dev mode only) -->
-<!-- Keystatic pages ignore this event to preserve draft state -->
+<!-- Content change handler - reloads page when content changes (dev mode only) -->
+<!-- Skips reload on Keystatic editor pages to avoid losing draft state -->
 <script>
     if (import.meta.hot) {
-        import.meta.hot.on('menu-updated', () => {
-            console.log('[HMR] Menu updated, reloading page...');
+        import.meta.hot.on('content-changed', (data) => {
+            // Skip reload if we're on a Keystatic editor page
+            if (window.location.pathname.startsWith('/keystatic')) {
+                // console.log('[HMR] Content changed but skipping reload (Keystatic editor active)');
+                return;
+            }
+            // console.log('[HMR] Content changed:', data?.source || data?.file || 'unknown');
             window.location.reload();
         });
     }

@@ -3,11 +3,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PagePostCount from "../../components/posts/PagePostCount.astro";
 import PostSummary from "../../components/posts/PostSummary.astro";
 
-import getPosts from "../../lib/content/getPosts";
+import getPosts, { sortPosts } from "../../lib/content/getPosts";
 import {buildPermalink} from "../../lib/utils/urlUtils";
 import {getSiteConfig} from "../../lib/config/getSiteConfig";
 
-const allPosts = (await getPosts()).sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
+const allPosts = sortPosts(await getPosts());
 const siteConfig = await getSiteConfig();
 const smallMode = siteConfig.blog.small_mode;
 const largeMode = siteConfig.blog.large_mode;

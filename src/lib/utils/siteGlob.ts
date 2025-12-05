@@ -205,10 +205,18 @@ export async function siteGlob<T = any>(options: SiteGlobOptions): Promise<T | G
                 throw new Error(`siteGlob: Expected loader function for ${filePath}`);
             }
             const loaded = await loader();
-            // MDX/Astro files have { Content, frontmatter, ... } without .default wrapper
-            // YAML/JSON have { default: content }
-            // Try both patterns
-            result = loaded.default ?? loaded;
+            // MDX/Astro files have { Content, frontmatter, default, ... } - return whole module
+            // YAML/JSON have { default: content } - extract the default
+            if (loaded.Content !== undefined || loaded.frontmatter !== undefined) {
+                // MDX/Astro file - return the whole module
+                result = loaded;
+            } else if (loaded.default !== undefined) {
+                // YAML/JSON - extract the default
+                result = loaded.default;
+            } else {
+                // Fallback
+                result = loaded;
+            }
         }
 
         // Apply post-processing if provided

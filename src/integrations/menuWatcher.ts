@@ -41,21 +41,8 @@ export default function menuWatcher(): AstroIntegration {
               cwd: process.cwd()
             });
             console.log('✅ Menu updated');
-
-            // Trigger page reload after menu regeneration
-            // Use setTimeout to ensure the file system has settled
-            // Note: Vite 6 renamed server.ws to server.hot
-            setTimeout(() => {
-              const hotServer = (server as any).hot || server.ws;
-              // Send custom event - client will decide whether to reload
-              // (skips reload on Keystatic editor pages to avoid draft conflicts)
-              hotServer.send({
-                type: 'custom',
-                event: 'menu-updated',
-                data: {}
-              });
-              console.log('🔃 Menu update notification sent\n');
-            }, 100);
+            // Note: No event sent here - the site.yaml change will be picked up
+            // by vite-plugin-glob-refresh which handles the content-changed event
           } catch (error) {
             console.error('❌ Menu regeneration failed');
           } finally {

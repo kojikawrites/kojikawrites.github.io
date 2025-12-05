@@ -350,6 +350,13 @@ const basePagePath = `${baseDir}/.sites/${siteCode}/content/pagecontent`;
 const baseImagePath = `${baseDir}/.sites/${siteCode}/images`;
 const blogImagePath = `${baseImagePath}/blog`;
 
+console.log('[Keystatic Config] Paths:', {
+    basePostPath,
+    basePagePath,
+    baseImagePath,
+    blogImagePath
+});
+
 // ============================================================================
 // CONFIGURATION CONSTANTS
 // ============================================================================
@@ -1226,7 +1233,7 @@ const pageComponents = wrapComponentsWithToolbar({
 });
 
 // ============================================================================
-// SHARED SCHEMA FACTORY
+// POST SCHEMA FACTORY
 // ============================================================================
 const createPostSchema = (imageDirectory: string) => ({
     title: fields.slug({
@@ -1269,7 +1276,7 @@ const createPostSchema = (imageDirectory: string) => ({
         multiline: true,
         validation: { isRequired: true },
     }),
-    thumbnail:  fields.image({
+    thumbnail: fields.image({
         label: 'Thumbnail',
         directory: imageDirectory,
         publicPath: `/${imageDirectory}/`,
@@ -1305,6 +1312,11 @@ const createPostSchema = (imageDirectory: string) => ({
             itemLabel: props => props.value || 'Tag',
         }
     ),
+    createdAt: fields.text({
+        label: 'Created At',
+        description: 'Auto-filled when post is created (read-only)',
+        defaultValue: new Date().toISOString(),
+    }),
 });
 
 // ============================================================================

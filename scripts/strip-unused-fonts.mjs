@@ -193,7 +193,8 @@ function cleanupCssFiles(distDir, usedFonts, dryRun = false) {
 async function main() {
     const args = process.argv.slice(2);
     const dryRun = args.includes('--dry-run');
-    const siteDir = process.env.SITE || 'hiivelabs.com';
+    // Use SITE_CODE to match the rest of the codebase
+    const siteDir = process.env.SITE_CODE || process.env.SITE || 'hiivelabs.com';
     const distDir = path.join(ROOT_DIR, 'dist');
 
     console.log('\n🔤 Font Stripping Tool');

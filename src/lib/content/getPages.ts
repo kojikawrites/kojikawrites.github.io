@@ -3,19 +3,34 @@ import {filterContent} from "./filterContent";
 import {siteGlob} from "../utils/siteGlob";
 
 export default async function getPages() {
-    // Glob function for pages - MUST stay exactly as is to avoid breaking everything
-    const pagesFilter = (eager:boolean) => eager
-        ? import.meta.glob<{ default: T }>('/src/.sites/**/content/pagecontent/**/*.{md,mdx,astro}', { eager: true })
-        : import.meta.glob<{ default: T }>('/src/.sites/**/content/pagecontent/**/*.{md,mdx,astro}');
-
+    // Glob function for pages - use lazy loading to handle deleted files gracefully
+    const pagesFilter = (eager:boolean) => import.meta.glob<{ default: any }>(
+        '/src/.sites/**/content/pagecontent/**/*.{md,mdx,astro}',
+        { eager: false }  // Use lazy loading to avoid errors on deleted files
+    );
 
     // Use siteGlob with the glob function (for caching and filtering)
-    const globResult = await siteGlob({
+    const lazyGlobResult = await siteGlob({
         siteCode: getSiteCode(),
         type: 'pages',
         globFilter: pagesFilter,
     });
-    // console.log(globResult);
+
+    // Load each page, filtering out any that fail (e.g., deleted files)
+    const globResult: Record<string, any> = {};
+    if (lazyGlobResult) {
+        const entries = Object.entries(lazyGlobResult as Record<string, () => Promise<any>>);
+        await Promise.all(entries.map(async ([path, loader]) => {
+            try {
+                const loaded = await loader();
+                globResult[path] = loaded;
+            } catch (e) {
+                // File was deleted - skip it silently
+                console.log(`[getPages] Skipping deleted file: ${path}`);
+            }
+        }));
+    }
+
     // Use shared content filter for additional processing (slugs)
     const filteredContent = filterContent(globResult as Record<string, any>, {
         basePath: '.sites',
@@ -23,6 +38,6 @@ export default async function getPages() {
         filterDrafts: false,
         filterTest: false,
     });
-    // console.log(filteredContent);
+
     return filteredContent;
 }

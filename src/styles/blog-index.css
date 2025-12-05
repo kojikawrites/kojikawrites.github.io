@@ -1,4 +1,33 @@
 @layer components {
+    /* Drafts section - dev mode only */
+    .drafts-section {
+        @apply mb-8 pt-2 px-4 pb-4 mt-2 rounded-lg;
+        @apply border-2 border-dashed border-[rgb(var(--secondary-color))];
+        @apply bg-[rgb(var(--secondary-color))]/10;
+    }
+
+    .drafts-heading {
+        @apply text-2xl font-bold;
+        @apply mb-1 mt-0;
+    }
+
+    .drafts-notice {
+        @apply text-sm italic color-text-secondary mb-4;
+    }
+
+    /* Draft watermark overlay */
+    .post-summary-draft {
+        @apply relative overflow-hidden;
+    }
+    .draft-watermark {
+        @apply absolute scale-150 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+        @apply text-9xl lg:text-8xl font-bold;
+        @apply text-[rgb(var(--secondary-color))]/30;
+        @apply rotate-[-15deg];
+        @apply pointer-events-none select-none;
+        @apply z-10;
+    }
+
     /* blog listing page */
     .post-list {
         @apply min-h-full;
@@ -22,8 +51,6 @@
                 @apply underline-link-hover;
                 @apply -bottom-1 w-full h-[1px] bg-color-secondary-color;
             }
-
-
 
             .post-thumbnail-wrapper {
                 @apply box-content w-fit h-fit max-w-[8vw]; /* max-w-32 max-h-32 */
