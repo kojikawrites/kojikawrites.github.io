@@ -689,6 +689,18 @@ history is purely framework — mixing becomes impossible rather than merely
 discouraged. This is worth the extra ceremony mainly if you run multiple
 sites or want content backed up/versioned independently.
 
+If you do use a submodule, set this in **every clone** of the outer
+repository (it's per-clone local config, not committable):
+
+```bash
+git config push.recurseSubmodules on-demand
+```
+
+Without it, pushing the outer repo can record a submodule pointer whose
+commit only exists on your machine — CI's recursive checkout then fails
+with `fatal: remote error: upload-pack: not our ref <sha>`. With it, git
+automatically pushes the referenced submodule commits first.
+
 ### Best Practices
 
 1. **Never modify framework files directly** - If you need custom behavior, create site-specific overrides in your `.sites/` directory or open an issue/PR on the framework repo
