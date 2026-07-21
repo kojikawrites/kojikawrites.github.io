@@ -10,9 +10,9 @@ interface Props {
 }
 
 import { Image } from 'astro:assets';
-import toSafeId from '../../scripts/toSafeId';
-import getMediaMetadata from "../../scripts/getMediaMetadata.ts";
-import {getSiteCode} from "../../scripts/getSiteConfig.ts";
+import toSafeId from '../../lib/utils/toSafeId';
+import getMediaMetadata from "../../lib/content/getMediaMetadata.ts";
+import {getSiteCode} from "../../lib/config/getSiteCode.ts";
 
 const siteCode = getSiteCode()
 
@@ -37,7 +37,7 @@ if (sourceValue) {
         src = sourceValue.startsWith('/') ? sourceValue : `/${sourceValue}`;
     } else {
         // It's just a filename from fields.image(), prepend the directory
-        src = `/src/assets/images/${siteCode}/blog/${sourceValue}`;
+        src = `/src/.sites/${siteCode}/images/blog/${sourceValue}`;
     }
 }
 
@@ -77,26 +77,28 @@ const resolvedCaption = caption ?? alt;
 
 </style>
 
-<div id={id} class="flex cursor-pointer">
-    <Image src={getMediaMetadata(src)} alt={alt} class=`lightbox-image  ${className}` id={imgId} title={alt} {...next} />
-</div>
-{ resolvedCaption != null && resolvedCaption.length > 0 &&
-    <div class="lightbox-caption">
-        {resolvedCaption.trim()}
+<figure class="lightbox-figure">
+    <div id={id} class="flex cursor-pointer">
+        <Image src={getMediaMetadata(src)} alt={alt} class=`lightbox-image  ${className}` id={imgId} title={alt} {...next} />
     </div>
-}
+    { resolvedCaption != null && resolvedCaption.length > 0 &&
+        <figcaption class="lightbox-caption">
+            {resolvedCaption.trim()}
+        </figcaption>
+    }
+</figure>
 <script is:inline define:vars={{id, imgId, alt, description}} data-astro-rerun>
     function addClickListener() {
         const div = document.getElementById(id);
         const img = document.getElementById(imgId);
         // console.warn(div, img);
         div.addEventListener("click", _ => {
-            const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
+            const spotlightTheme = (window.getEffectiveTheme() === 'dark') ? 'dark' : 'white';
             Spotlight.show([{
                 src: img.src,
                 title: alt,
                 description: description,
-                theme: theme,
+                theme: spotlightTheme,
             }]);
         });
     }

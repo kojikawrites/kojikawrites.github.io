@@ -5,10 +5,10 @@ interface Props {
 }
 
 import BaseLayout from '../layouts/BaseLayout.astro';
-import {buildPermalink} from "../scripts/urlUtils";
+import {buildPermalink} from "../lib/utils/urlUtils";
 
-import { getAstroFile } from "../scripts/getAstroFile";
-import { components } from '../scripts/mixins/autoImportComponents';
+import { getAstroFile } from "../lib/content/getAstroFile";
+import { components } from "../lib/components/autoImportComponents";
 
 const {file, current} = Astro.props;
 const AstroContent = (await getAstroFile(file));
@@ -23,8 +23,29 @@ const currentLink = current
 const title = AstroContent.title;
 const description = AstroContent.description;
 const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
+
+const pageId = `${file}-page`
 ---
 
 <BaseLayout title={title} description={description} permalink={permalink} current={currentLink} >
-    <AstroContent.Content components={components} />
+    <div id={pageId}>
+        <AstroContent.Content components={components} />
+    </div>
 </BaseLayout>
+
+<script is:inline data-astro-rerun>
+    // this block of script is a workaround for a bizarre Astro quirk/bug that I haven't figured out
+    // sometimes the first bio block is set as hidden, so I'm just making sure that any 'hidden' attributes
+    // are removed from the relevant block.
+    function checkHiddenBios() {
+        const bios = document.querySelectorAll('div.bio'); // Select all bios
+        console.warn('bio-refresh');
+        bios.forEach(bio => {
+            if (bio.classList.contains('hidden')) {
+                bio.classList.remove('hidden');
+                console.warn('hidden class removed from bio');
+            }
+        });
+    }
+    checkHiddenBios();
+</script>

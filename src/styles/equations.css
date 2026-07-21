@@ -17,4 +17,10 @@
         @apply inline-flex flex-row;
         @apply color-text-highlight-color;
     }
+
+    .equation-snippet > mjx-container > svg {
+        position: relative !important;
+        top: 0.125rem !important;
+        vertical-align: baseline;
+    }
 }

@@ -1,29 +1,31 @@
 ---
 import { Breadcrumbs } from "astro-breadcrumbs";
-import "../styles/breadcrumbs.scss";
+import "astro-breadcrumbs/breadcrumbs.css";
+import "../styles/breadcrumbs.css";
 
-import {matchUrlToPattern} from "../scripts/matchUrlToPattern";
-import {getSiteConfig, getSiteCode} from "../scripts/getSiteConfig";
-import getPosts from "../scripts/getPosts";
-import getPages from "../scripts/getPages";
-import getPostData from "../scripts/getPostData";
+import {matchUrlToPattern} from "../lib/utils/matchUrlToPattern";
+import {getSiteConfig} from "../lib/config/getSiteConfig";
+import {getSiteCode} from "../lib/config/getSiteCode";
+import getPosts from "../lib/content/getPosts";
+import getPostData from "../lib/content/getPostData";
+import {getAllPageTitles} from "../lib/content/getAllPageTitles";
 
 const siteConfig = await getSiteConfig();
+const isDev = import.meta.env.DEV;
 
 // Build unified title mapping for all content (blog posts + pages)
-const allPosts = getPosts().map((p: any) => getPostData(p));
+const blogPath = siteConfig.blog.path;
+const allPosts = (await getPosts({ includeDrafts: isDev })).map((p: any) => getPostData(p));
 const blogTitles = allPosts.reduce((acc: Record<string, string>, post: { path: string; title: string }) => {
-    acc[`/blog/${post.path}`] = post.title;
+    acc[`/${blogPath}/${post.path}`] = post.title;
     return acc;
 }, {});
 
-const siteCode = getSiteCode();
-const frontmatterData = await import(`../assets/_private/state/${siteCode}/frontmatter.json`);
-const pageTitles: Record<string, string> = frontmatterData.default || {};
+const pageTitles = await getAllPageTitles();
 
 // Merge all titles into one mapping, including common section pages
 const allTitles = {
-    '/blog': 'BLOG',
+    [`/${blogPath}`]: blogPath,  // Use configured blog path with lowercase label
     ...pageTitles,
     ...blogTitles
 };

@@ -1,51 +1,29 @@
 ---
+import BaseHead from '../../components/BaseHead.astro';
+import '../../styles/admin.css';
+
 // Only render in development mode
 if (import.meta.env.PROD) {
   return Astro.redirect('/404');
 }
 
-const title = 'Deploy to GitHub';
+const title = 'Deploy';
+const description = 'Deploy your changes';
+const permalink = Astro.url.pathname;
 const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.env.SHOW_TEST_BUILD === true;
 ---
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title}</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: #f5f5f5;
-      padding: 2rem;
-      line-height: 1.6;
-    }
-
+  <BaseHead title={title} description={description} permalink={permalink} />
+  <style is:global>
+    /* Override container width for deploy page */
     .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      color: #333;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px solid #007bff;
-      padding-bottom: 0.5rem;
+      max-width: 1200px;
     }
 
     .status-section {
-      background: #f8f9fa;
+      background: rgb(var(--background-body));
       padding: 1rem;
       border-radius: 4px;
       margin-bottom: 1.5rem;
@@ -53,32 +31,106 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
 
     .status-section h2 {
       font-size: 1.1rem;
-      color: #495057;
+      color: rgb(var(--text-main));
       margin-bottom: 0.5rem;
     }
 
+    .status-content-wrapper {
+      position: relative;
+      max-height: 300px;
+    }
+
+    .status-content-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1.5rem;
+      background: linear-gradient(to top, transparent, rgb(var(--background-body)));
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1;
+    }
+
+    .status-content-wrapper.show-top-fade::before {
+      opacity: 1;
+    }
+
+    .status-content-wrapper::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1.5rem;
+      background: linear-gradient(to bottom, transparent, rgb(var(--background-body)));
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .status-content-wrapper.show-bottom-fade::after {
+      opacity: 1;
+    }
+
+    #status-content {
+      max-height: 300px;
+      overflow-y: scroll;
+    }
+
     .file-list {
+      background: rgb(var(--background-mid) / 0.2);
       list-style: none;
       margin-top: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 4px;
     }
 
     .file-list li {
-      padding: 0.25rem 0;
-      font-family: monospace;
+      /*padding: 0.05rem 0;*/
+      font-family: var(--font-family-monospace);
       font-size: 0.9rem;
       word-break: break-all;
       overflow-wrap: break-word;
+      line-height: 0.9;
+    }
+
+    .file-list .module-header {
+      font-weight: bold;
+      color: rgb(var(--text-highlight-color));
+      /*margin-top: 0.75rem;*/
+      margin-top: 0;
+      margin-bottom: 0.25rem;
+      padding-top: 0;
+      border-top: 1px solid rgb(var(--background-mid));
+      font-family: var(--font-family-system);
+    }
+
+    .module-header > h6 {
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+
+    .file-list .module-header:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
     }
 
     .file-status {
       display: inline-block;
       width: 2rem;
       font-weight: bold;
+      cursor: help;
     }
 
     .status-modified { color: #ffc107; }
     .status-added { color: #28a745; }
     .status-deleted { color: #dc3545; }
+    .status-untracked { color: #17a2b8; }
+    .status-renamed { color: #6f42c1; }
 
     .form-group {
       margin-bottom: 1.5rem;
@@ -87,25 +139,27 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     label {
       display: block;
       margin-bottom: 0.5rem;
-      color: #495057;
+      color: rgb(var(--text-secondary));
       font-weight: 500;
     }
 
     textarea {
       width: 100%;
       padding: 0.75rem;
-      border: 1px solid #ced4da;
+      border: 1px solid rgb(var(--background-mid));
       border-radius: 4px;
       font-family: inherit;
       font-size: 1rem;
       resize: vertical;
       min-height: 100px;
+      background: rgb(var(--background-feature));
+      color: rgb(var(--text-main));
     }
 
     textarea:focus {
       outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+      border-color: rgb(var(--primary-color));
+      box-shadow: 0 0 0 3px rgba(var(--primary-color), 0.1);
     }
 
     .button-group {
@@ -124,21 +178,21 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     }
 
     .btn-primary {
-      background: #007bff;
-      color: white;
+      background: rgb(var(--primary-color));
+      color: rgb(var(--primary-color-contrast));
     }
 
     .btn-primary:hover:not(:disabled) {
-      background: #0056b3;
+      background: rgb(var(--primary-color-alt));
     }
 
     .btn-secondary {
-      background: #6c757d;
-      color: white;
+      background: rgb(var(--background-mid));
+      color: rgb(var(--text-main));
     }
 
     .btn-secondary:hover:not(:disabled) {
-      background: #545b62;
+      background: rgb(var(--primary-color-alt));
     }
 
     button:disabled {
@@ -162,18 +216,19 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     #message-text {
       display: block;
       word-break: break-word;
+      white-space: pre-line;
     }
 
     .message.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
+      background: rgba(var(--hiive-crt), 0.15);
+      color: rgb(var(--hiive-crt));
+      border: 1px solid rgba(var(--hiive-crt), 0.3);
     }
 
     .message.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
+      background: rgba(var(--secondary-color), 0.15);
+      color: rgb(var(--secondary-color));
+      border: 1px solid rgba(var(--secondary-color), 0.3);
     }
 
     .message-close {
@@ -197,7 +252,7 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       display: none;
       margin-top: 1rem;
       text-align: center;
-      color: #6c757d;
+      color: rgb(var(--text-secondary));
     }
 
     .loading.show {
@@ -205,21 +260,20 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     }
 
     .branch-info {
-      background: #e7f3ff;
-      padding: 0.5rem 1rem;
+      background: rgba(var(--primary-color), 0.1);
+      padding: 0.5rem 0.5rem;
       border-radius: 4px;
-      font-family: monospace;
-      color: #004085;
-      margin-bottom: 1rem;
+      font-family: var(--font-family-monospace);
+      color: rgb(var(--text-highlight-color));
     }
 
     .no-changes {
-      color: #28a745;
+      color: rgb(var(--hiive-crt));
       font-weight: 500;
     }
 
     .build-section {
-      background: #f8f9fa;
+      background: rgb(var(--background-body));
       padding: 1rem;
       border-radius: 4px;
       margin-bottom: 1.5rem;
@@ -227,22 +281,43 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
 
     .build-section h2 {
       font-size: 1.1rem;
-      color: #495057;
+      color: rgb(var(--text-main));
       margin-bottom: 0.5rem;
     }
 
     .build-output {
-      background: #2d2d2d;
-      color: #f8f8f2;
-      padding: 1rem;
+      background: rgb(var(--background-mid));
+      color: rgb(var(--text-main));
+      padding: 1rem 3rem 1rem 1rem;
       border-radius: 4px;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: var(--font-family-monospace);
       font-size: 0.85rem;
       max-height: 400px;
       overflow-y: auto;
       white-space: pre-wrap;
       word-break: break-word;
       display: none;
+      position: relative;
+      margin-top: 0.25rem;
+    }
+
+    .build-output-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(var(--background-body), 0.8);
+      border: 1px solid rgb(var(--text-secondary));
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      opacity: 0.7;
+      color: rgb(var(--text-main));
+      border-radius: 4px;
+    }
+
+    .build-output-close:hover {
+      opacity: 1;
+      background: rgb(var(--background-body));
     }
 
     .build-output.show {
@@ -250,26 +325,29 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
     }
 
     .build-output.success {
-      border-left: 4px solid #28a745;
+      border-left: 4px solid rgb(var(--hiive-crt));
     }
 
     .build-output.error {
-      border-left: 4px solid #dc3545;
+      border-left: 4px solid rgb(var(--secondary-color));
     }
 
     .btn-info {
-      background: #17a2b8;
-      color: white;
+      background: rgb(var(--background-mid));
+      color: rgb(var(--text-main));
+      /*border: 2px solid rgb(var(--text-highlight-color));*/
     }
 
     .btn-info:hover:not(:disabled) {
-      background: #138496;
+      background: rgb(var(--primary-color-alt));
+      /*border-color: rgb(var(--text-highlight-color));*/
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🚀 Deploy to GitHub</h1>
+    <a href="/admin" class="back-link">← Admin</a>
+    <h1 id="page-title">🚀 Deploy</h1>
 
     <div id="message" class="message">
       <button class="message-close" onclick="document.getElementById('message').classList.remove('show')">✕</button>
@@ -281,16 +359,21 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
         <h2>Test Build</h2>
         <button type="button" id="testBuildBtn" class="btn-info">Run Test Build</button>
         <div id="loading-build" class="loading">
-          <p>Building project... This may take up to 2 minutes.</p>
+          <p>Building project... This may take up to 10 minutes.</p>
         </div>
         <div id="build-output" class="build-output"></div>
+        <div id="build-log-download" style="display: none; margin-top: 1rem;">
+          <a id="build-log-link" href="#" class="btn-secondary" style="display: inline-block; text-decoration: none;">Download Full Build Log</a>
+        </div>
       </div>
     )}
 
     <div class="status-section">
       <h2>Git Status</h2>
       <div id="branch-info" class="branch-info">Loading...</div>
-      <div id="status-content" >Loading git status...</div>
+      <div class="status-content-wrapper">
+        <div id="status-content">Loading git status...</div>
+      </div>
       <div style="margin-top: 1rem;">
         <button type="button" class="btn-secondary" onclick="window.location.reload()">Refresh Status</button>
       </div>
@@ -300,16 +383,23 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       <form id="pushForm">
         <div class="form-group">
           <label for="commitMessage">Commit Message</label>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <button type="button" id="suggestMessageBtn" class="btn-secondary" style="display: inline; font-size: 0.9rem; padding: 0.5rem 1rem;">
+              <img src="/src/assets/images/admin/robot.svg" alt="" class="ai-icon" style="display:inline; width: 1em; height: 1em; vertical-align: middle; margin-right: 0.3em;" />
+              Suggest Message
+            </button>
+            <span id="suggest-status" style="display: none; align-self: center; color: rgb(var(--text-secondary)); font-size: 0.9rem;"></span>
+          </div>
           <textarea
             id="commitMessage"
             name="message"
             placeholder="Enter a commit message describing your changes..."
             required
-          >Update content</textarea>
+          ></textarea>
         </div>
 
         <div class="button-group">
-          <button type="submit" class="btn-primary">Commit & Push</button>
+          <button type="submit" class="btn-primary" id="deploy-button">Deploy</button>
         </div>
       </form>
 
@@ -320,51 +410,20 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
   </div>
 
   <script>
-    // Fetch git status on page load
-    async function loadGitStatus() {
-      try {
-        const response = await fetch('/api/git/status');
-        const data = await response.json();
+    import { formatBuildCode } from '../../lib/utils/buildUtils';
 
-        if (data.error) {
-          showMessage('error', data.error);
-          return;
-        }
+    // Cache files from git status for suggest endpoint
+    let cachedFiles = [];
 
-        // Update branch info
-        document.getElementById('branch-info').textContent = `Branch: ${data.branch}`;
+    // Deployment configuration
+    let deployConfig = null;
 
-        // Update status content
-        const statusContent = document.getElementById('status-content');
-        if (!data.hasChanges) {
-          statusContent.innerHTML = '<p class="no-changes">✓ No changes to commit</p>';
-          document.getElementById('deploy-form').style.display = 'none';
-        } else {
-          let html = '<ul class="file-list">';
-          data.files.forEach(file => {
-            const statusClass = file.status.includes('M') ? 'status-modified' :
-                               file.status.includes('A') ? 'status-added' :
-                               file.status.includes('D') ? 'status-deleted' : '';
-            html += `<li><span class="file-status ${statusClass}">${file.status}</span> ${file.file}</li>`;
-          });
-          html += '</ul>';
-          statusContent.innerHTML = html;
-          document.getElementById('deploy-form').style.display = 'block';
-        }
-      } catch (error) {
-        showMessage('error', `Failed to load git status: ${error.message}`);
-      }
-    }
+    // Track whether there are changes to commit
+    let hasChanges = false;
 
     // Handle form submission
     document.getElementById('pushForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const message = document.getElementById('commitMessage').value;
-      if (!message.trim()) {
-        showMessage('error', 'Please enter a commit message');
-        return;
-      }
 
       const loading = document.getElementById('loading');
       const buttons = document.querySelectorAll('button');
@@ -374,36 +433,86 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       loading.classList.add('show');
 
       try {
-        const request_url = '/api/git/push';
-        const response = await fetch(request_url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({'message': message}),
-        });
+        // Check if we're in wisp mode with no changes (direct deploy without git push)
+        const isWispDirect = deployConfig && deployConfig.target === 'wisp' && !hasChanges;
 
-        const data = await response.json();
-
-        if (data.success) {
-          showMessage('success', `✓ Successfully pushed to ${data.branch}!`);
-          document.getElementById('commitMessage').value = '';
-          setTimeout(() => window.location.reload(), 2000);
+        if (isWispDirect) {
+          // Skip git push and go straight to wisp deployment
+          await deployToWisp();
         } else {
-          showMessage('error', `Error: ${data.error || 'Push failed'}\n${data.output || ''}`);
+          // Normal flow: git push first
+          const message = document.getElementById('commitMessage').value;
+          if (!message.trim()) {
+            showMessage('error', 'Please enter a commit message', false);
+            buttons.forEach(btn => btn.disabled = false);
+            loading.classList.remove('show');
+            return;
+          }
+
+          const request_url = '/api/git/push';
+          const response = await fetch(request_url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({'message': message}),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            let successMsg;
+
+            // Format build code using shared utility
+            const buildCode = formatBuildCode(data.main_commit, data.submodule_commit);
+
+            // Prioritize submodule message - that's the main content being deployed
+            if (data.submodule_pushed && data.site_code) {
+              successMsg = `✓ Successfully deployed ${data.site_code} content!\n📦 Pushed to branch: ${data.branch}`;
+              if (buildCode) {
+                successMsg += `\n🏗️  Build code: ${buildCode}`;
+              }
+            } else {
+              // Main repo only changes (less common)
+              successMsg = `✓ Successfully pushed to ${data.branch}`;
+              if (buildCode) {
+                successMsg += `\n🏗️  Build code: ${buildCode}`;
+              }
+            }
+
+            showMessage('success', successMsg, false);
+            document.getElementById('commitMessage').value = '';
+
+            // Refresh git status to show clean state after push
+            await loadGitStatus();
+
+            // Check if we need to deploy to wisp.place
+            if (deployConfig && deployConfig.target === 'wisp') {
+              await deployToWisp();
+            }
+          } else {
+            showMessage('error', `Error: ${data.error || 'Push failed'}\n${data.output || ''}`, false);
+          }
         }
       } catch (error) {
-        showMessage('error', `Failed to push: ${error.message}`);
+        showMessage('error', `Failed to push: ${error.message}`, false);
       } finally {
         buttons.forEach(btn => btn.disabled = false);
         loading.classList.remove('show');
       }
     });
 
-    function showMessage(type, text, autoHide = true) {
+    function showMessage(type, text, autoHide = true, isHtml = false) {
       const messageEl = document.getElementById('message');
       const messageText = document.getElementById('message-text');
-      messageText.textContent = text;
+
+      // Support both HTML and plain text content
+      if (isHtml) {
+        messageText.innerHTML = text;
+      } else {
+        messageText.textContent = text;
+      }
+
       messageEl.className = `message ${type} show`;
 
       // Only auto-hide if requested (don't auto-hide build messages)
@@ -413,6 +522,398 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
         }, 10000); // 10 seconds for regular messages
       }
     }
+
+    // Handle suggest commit message button
+    document.getElementById('suggestMessageBtn').addEventListener('click', async () => {
+      const suggestBtn = document.getElementById('suggestMessageBtn');
+      const statusSpan = document.getElementById('suggest-status');
+      const commitMessageField = document.getElementById('commitMessage');
+
+      // Disable button and show loading
+      suggestBtn.disabled = true;
+      statusSpan.style.display = 'inline';
+      statusSpan.textContent = 'Generating...';
+
+      try {
+        // Call the suggest-commit-message API
+        const response = await fetch('/api/git/suggest-commit-message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ files: cachedFiles })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.message) {
+          // Set the suggested message
+          commitMessageField.value = data.message;
+
+          // Show feedback based on generation method
+          if (data.generated_by === 'llm') {
+            statusSpan.textContent = '✓ Generated by AI';
+            statusSpan.style.color = 'rgb(var(--hiive-crt))';
+          } else if (data.generated_by === 'fallback') {
+            statusSpan.textContent = '✓ Generated (LLM unavailable)';
+            statusSpan.style.color = 'rgb(var(--text-secondary))';
+          } else {
+            statusSpan.textContent = '✓ Generated';
+            statusSpan.style.color = 'rgb(var(--hiive-crt))';
+          }
+
+          // Hide status after 3 seconds
+          setTimeout(() => {
+            statusSpan.style.display = 'none';
+          }, 3000);
+        } else {
+          statusSpan.textContent = '✗ Failed';
+          statusSpan.style.color = 'rgb(var(--secondary-color))';
+          showMessage('error', data.error || 'Failed to generate commit message', false);
+        }
+      } catch (error) {
+        statusSpan.textContent = '✗ Error';
+        statusSpan.style.color = 'rgb(var(--secondary-color))';
+        showMessage('error', `Failed to suggest commit message: ${error.message}`, false);
+      } finally {
+        suggestBtn.disabled = false;
+      }
+    });
+
+    // Load deployment configuration
+    async function loadDeployConfig() {
+      try {
+        const response = await fetch('/api/git/deploy-config');
+        deployConfig = await response.json();
+        console.log('Deploy config loaded:', deployConfig);
+
+        // Update UI elements based on target
+        const pageTitle = document.getElementById('page-title');
+        const deployButton = document.getElementById('deploy-button');
+
+        if (deployConfig.target === 'wisp') {
+          if (pageTitle) pageTitle.textContent = '🚀 Deploy to Wisp';
+          if (deployButton) deployButton.textContent = 'Deploy to Wisp';
+        } else {
+          if (pageTitle) pageTitle.textContent = '🚀 Deploy to GitHub';
+          if (deployButton) deployButton.textContent = 'Deploy to GitHub';
+        }
+      } catch (error) {
+        console.error('Failed to load deploy config:', error);
+        // Default to GitHub if config loading fails
+        deployConfig = { target: 'github' };
+
+        const pageTitle = document.getElementById('page-title');
+        const deployButton = document.getElementById('deploy-button');
+        if (pageTitle) pageTitle.textContent = '🚀 Deploy to GitHub';
+        if (deployButton) deployButton.textContent = 'Deploy to GitHub';
+      }
+    }
+
+    // Parse wisp-cli output to extract relevant information
+    function parseWispOutput(output) {
+      const lines = output.split('\n');
+      const parsedLines = [];
+      let inJsonBlock = false;
+
+      for (const line of lines) {
+        // Skip empty lines
+        if (!line.trim()) continue;
+
+        // Detect JSON response blocks (they start with "json: {")
+        if (line.trim().startsWith('json:')) {
+          inJsonBlock = true;
+          continue;
+        }
+
+        // Skip lines that are pure JSON (start with { or [)
+        if (line.trim().startsWith('{') || line.trim().startsWith('[')) {
+          inJsonBlock = true;
+          continue;
+        }
+
+        // End of JSON block
+        if (inJsonBlock && (line.trim().endsWith('}') || line.trim().endsWith(']'))) {
+          inJsonBlock = false;
+          continue;
+        }
+
+        // Skip lines inside JSON blocks
+        if (inJsonBlock) {
+          continue;
+        }
+
+        // Extract upload lines with file info
+        const uploadMatch = line.match(/↑\s+Uploading\s+(.+?)\s+\((\d+)\s+bytes/);
+        if (uploadMatch) {
+          const [, filename, bytes] = uploadMatch;
+          const sizeKB = (parseInt(bytes) / 1024).toFixed(1);
+          parsedLines.push(`↑ ${filename} (${sizeKB} KB)`);
+          continue;
+        }
+
+        // Extract reuse lines with file info
+        const reuseMatch = line.match(/✓\s+Reusing blob for\s+(.+?)\s+\(CID:/);
+        if (reuseMatch) {
+          const [, filename] = reuseMatch;
+          parsedLines.push(`✓ ${filename} (reused)`);
+          continue;
+        }
+
+        // Keep important status messages and error indicators
+        if (line.includes('Signed in as') ||
+            line.includes('Deploying site') ||
+            line.includes('Found existing manifest') ||
+            line.includes('Found') && line.includes('subfs records') ||
+            line.includes('Deployment complete') ||
+            line.includes('Successfully deployed') ||
+            line.includes('error') ||
+            line.includes('Error') ||
+            line.includes('failed') ||
+            line.includes('Failed') ||
+            line.includes('invalid') ||
+            line.includes('help:') ||
+            line.includes('×') ||  // Error symbol
+            line.includes('╰─▶') || // Error arrow
+            line.trim().startsWith('help:')) {
+          parsedLines.push(line);
+          continue;
+        }
+      }
+
+      return parsedLines.join('\n');
+    }
+
+    // Deploy to wisp.place
+    async function deployToWisp() {
+      const loading = document.getElementById('loading');
+      const loadingText = loading.querySelector('p');
+      const buttons = document.querySelectorAll('button');
+
+      try {
+        // Update loading message for build
+        loadingText.textContent = 'Building for production... This may take up to 10 minutes.';
+
+        // Run production build
+        const buildResponse = await fetch('/api/git/build', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        const buildData = await buildResponse.json();
+
+        if (!buildData.success) {
+          throw new Error(buildData.error || 'Build failed');
+        }
+
+        // Update loading message for wisp deployment
+        loadingText.textContent = 'Deploying to wisp.place...';
+
+        // Deploy to wisp.place
+        const deployResponse = await fetch('/api/git/deploy-wisp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            handle: deployConfig.wisp.handle,
+            app_password: deployConfig.wisp.app_password,
+            site_name: deployConfig.wisp.site_name
+          })
+        });
+
+        const deployData = await deployResponse.json();
+
+        // Parse and display wisp deployment output
+        const buildOutput = document.getElementById('build-output');
+        if (deployData.output && buildOutput) {
+          const parsedOutput = parseWispOutput(deployData.output);
+          buildOutput.innerHTML = `<button class="build-output-close" onclick="document.getElementById('build-output').classList.remove('show')">✕</button>${parsedOutput}`;
+          buildOutput.classList.remove('success', 'error');
+          if (deployData.success) {
+            buildOutput.classList.add('success');
+          } else {
+            buildOutput.classList.add('error');
+          }
+          buildOutput.classList.add('show');
+        }
+
+        if (deployData.success) {
+          const successHtml = `✓ Successfully deployed to wisp.place!<br>🌐 URL: <a href="${deployData.url}" target="_blank" style="color: inherit; text-decoration: underline;">${deployData.url}</a>`;
+          showMessage('success', successHtml, false, true);
+        } else {
+          throw new Error(deployData.error || 'Deployment failed');
+        }
+      } catch (error) {
+        showMessage('error', `wisp.place deployment failed: ${error.message}`, false);
+      } finally {
+        buttons.forEach(btn => btn.disabled = false);
+        loading.classList.remove('show');
+      }
+    }
+
+    // Modify loadGitStatus to cache files
+    async function loadGitStatus() {
+      try {
+        const response = await fetch('/api/git/status');
+        const data = await response.json();
+
+        if (data.error) {
+          showMessage('error', data.error, false);
+          return;
+        }
+
+        // Cache files for suggest endpoint
+        cachedFiles = data.files || [];
+
+        // Track whether there are changes
+        hasChanges = data.hasChanges;
+
+        // Update branch info
+        document.getElementById('branch-info').textContent = `Branch: ${data.branch}`;
+
+        // Update status content
+        const statusContent = document.getElementById('status-content');
+        if (!data.hasChanges) {
+          statusContent.innerHTML = '<p class="no-changes">✓ No changes to commit</p>';
+          // In wisp mode, always show deploy button to allow redeployment
+          // In GitHub mode, hide deploy form when no changes
+          if (deployConfig && deployConfig.target === 'wisp') {
+            document.getElementById('deploy-form').style.display = 'block';
+            // Hide commit message field when no changes in wisp mode
+            const commitMessageGroup = document.querySelector('.form-group');
+            const commitMessageField = document.getElementById('commitMessage');
+            if (commitMessageGroup) {
+              commitMessageGroup.style.display = 'none';
+              // Remove required attribute to allow form submission without commit message
+              if (commitMessageField) {
+                commitMessageField.removeAttribute('required');
+              }
+            }
+          } else {
+            document.getElementById('deploy-form').style.display = 'none';
+          }
+        } else {
+          // Group files by module (submodule vs main)
+          const submoduleFiles = data.files.filter(f => f.module === 'submodule');
+          const mainFiles = data.files.filter(f => f.module === 'main');
+
+          function renderFileList(files) {
+            let html = '';
+            files.forEach(file => {
+              // Map git status codes to readable indicators and tooltips
+              let statusLabel, statusClass, statusTooltip;
+
+              if (file.status.includes('M')) {
+                statusLabel = 'M';
+                statusClass = 'status-modified';
+                statusTooltip = 'Modified';
+              } else if (file.status.includes('A')) {
+                statusLabel = 'A';
+                statusClass = 'status-added';
+                statusTooltip = 'Added (staged)';
+              } else if (file.status.includes('D')) {
+                statusLabel = 'D';
+                statusClass = 'status-deleted';
+                statusTooltip = 'Deleted';
+              } else if (file.status.includes('R')) {
+                statusLabel = 'R';
+                statusClass = 'status-renamed';
+                statusTooltip = 'Renamed';
+              } else if (file.status.includes('??')) {
+                statusLabel = 'U';
+                statusClass = 'status-untracked';
+                statusTooltip = 'Untracked (new file)';
+              } else {
+                statusLabel = file.status;
+                statusClass = '';
+                statusTooltip = 'Unknown status';
+              }
+
+              html += `<li><span class="file-status ${statusClass}" title="${statusTooltip}">${statusLabel}</span> ${file.file}</li>`;
+            });
+            return html;
+          }
+
+          let html = '<ul class="file-list">';
+
+          // Show submodule section if there are submodule files and a valid module name
+          if (submoduleFiles.length > 0) {
+            const moduleName = submoduleFiles[0].moduleName;
+            if (moduleName && moduleName !== 'null' && moduleName !== 'undefined') {
+              html += `<li class="module-header"><h6>${moduleName} (submodule)</h6></li>`;
+              html += renderFileList(submoduleFiles);
+            }
+          }
+
+          // Show main module section if there are main files and a valid module name
+          if (mainFiles.length > 0) {
+            const moduleName = mainFiles[0].moduleName;
+            if (moduleName && moduleName !== 'null' && moduleName !== 'undefined') {
+              html += `<li class="module-header"><h6>${moduleName} (main)</h6></li>`;
+              html += renderFileList(mainFiles);
+            }
+          }
+
+          html += '</ul>';
+          statusContent.innerHTML = html;
+          document.getElementById('deploy-form').style.display = 'block';
+
+          // Ensure commit message field is shown when there are changes
+          const commitMessageGroup = document.querySelector('.form-group');
+          const commitMessageField = document.getElementById('commitMessage');
+          if (commitMessageGroup) {
+            commitMessageGroup.style.display = 'block';
+            // Restore required attribute when there are changes
+            if (commitMessageField) {
+              commitMessageField.setAttribute('required', 'required');
+            }
+          }
+
+          // Update scroll fade indicators after content is loaded
+          updateScrollFades();
+        }
+      } catch (error) {
+        showMessage('error', `Failed to load git status: ${error.message}`, false);
+      }
+    }
+
+    // Update scroll fade visibility based on scroll position
+    function updateScrollFades() {
+      const statusContent = document.getElementById('status-content');
+      const wrapper = document.querySelector('.status-content-wrapper');
+
+      if (!statusContent || !wrapper) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = statusContent;
+      const isScrollable = scrollHeight > clientHeight;
+      const isAtTop = scrollTop === 0;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      // Show bottom fade if scrollable and not at bottom
+      if (isScrollable && !isAtBottom) {
+        wrapper.classList.add('show-bottom-fade');
+      } else {
+        wrapper.classList.remove('show-bottom-fade');
+      }
+
+      // Show top fade if scrolled down from top
+      if (isScrollable && !isAtTop) {
+        wrapper.classList.add('show-top-fade');
+      } else {
+        wrapper.classList.remove('show-top-fade');
+      }
+    }
+
+    // Listen for scroll events on status content
+    document.addEventListener('DOMContentLoaded', () => {
+      const statusContent = document.getElementById('status-content');
+      if (statusContent) {
+        statusContent.addEventListener('scroll', updateScrollFades);
+      }
+    });
 
     // Handle test build button (only if it exists)
     const testBuildBtn = document.getElementById('testBuildBtn');
@@ -428,6 +929,12 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
         buildOutput.classList.remove('show', 'success', 'error');
         buildOutput.textContent = '';
 
+        // Hide download link initially
+        const downloadSection = document.getElementById('build-log-download');
+        if (downloadSection) {
+          downloadSection.style.display = 'none';
+        }
+
         try {
           // Call the local API which coordinates with the build service
           const response = await fetch('/api/git/build', {
@@ -439,8 +946,8 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
 
           const data = await response.json();
 
-          // Show build output
-          buildOutput.textContent = data.output || '';
+          // Show build output with close button
+          buildOutput.innerHTML = `<button class="build-output-close" onclick="document.getElementById('build-output').classList.remove('show')">✕</button>${data.output || ''}`;
           buildOutput.classList.add('show');
 
           if (data.success) {
@@ -449,6 +956,15 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
           } else {
             buildOutput.classList.add('error');
             showMessage('error', data.error || 'Build failed', false);
+          }
+
+          // Show download link if log file is available
+          if (data.log_file && downloadSection) {
+            const downloadLink = document.getElementById('build-log-link');
+            if (downloadLink) {
+              downloadLink.href = `/api/git/build-log/${data.log_file}`;
+              downloadSection.style.display = 'block';
+            }
           }
         } catch (error) {
           buildOutput.textContent = `Failed to run build: ${error.message}`;
@@ -461,7 +977,8 @@ const showTestBuild = import.meta.env.SHOW_TEST_BUILD === 'true' || import.meta.
       });
     }
 
-    // Load status on page load
+    // Load configuration and status on page load
+    loadDeployConfig();
     loadGitStatus();
   </script>
 </body>

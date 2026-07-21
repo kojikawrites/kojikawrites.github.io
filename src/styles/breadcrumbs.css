@@ -1,0 +1,204 @@
+:root {
+    --color-link-breadcrumbs: rgb(var(--primary-color));
+    --size-font-breadcrumbs: 14px;
+    --spacing-vertical-separator-breadcrumbs: 8px;
+
+/*    !*$overflow-behavior: "ellipsis",*!*/
+/*    !*$color-link: rgb(var(--primary-color)),*!*/
+/*    !*$color-hover-link: rgb(var(--text-main)),*!*/
+/*    !*$color-separator: rgb(var(--text-secondary)),*!*/
+/*    !*$color-is-current: rgb(var(--secondary-color)),*!*/
+/*    !*$color-is-index: rgb(var(--primary-color-alt)),*!*/
+/*    !*$size-font: 14px,*!*/
+/*    !*$overflow-wrap-horizontal-spacing: 10px,*!*/
+/*    !*$spacing-vertical-separator: 8px,*!*/
+/*    !*$icons-not-bigger-than-font-size: true,*!*/
+/*    !*$transition-link-breadcrumbs: all 0.3s ease,*!*/
+/*    !*$truncated: true,*!*/
+}
+
+/*.c-breadcrumbs {*/
+/*    --color-link-breadcrumbs: rgb(var(--primary-color));*/
+/*    --size-font-breadcrumbs: 14px;*/
+/*    --spacing-vertical-separator-breadcrumbs: 8px;*/
+/*}*/
+.c-breadcrumbs .has-ellipsis {
+    display: var(--display-ellipsis-breadcrumbs, none);
+}
+.c-breadcrumbs.is-truncated .has-ellipsis {
+    --display-ellipsis-breadcrumbs: flex;
+}
+.c-breadcrumbs.is-truncated .c-breadcrumbs__crumb {
+    visibility: var(--visibility-truncated-breadcrumbs, hidden);
+    position: var(--position-truncated-breadcrumbs, absolute);
+}
+.c-breadcrumbs.is-truncated .c-breadcrumbs__crumb:first-of-type {
+    --visibility-truncated-breadcrumbs: visible;
+    --position-truncated-breadcrumbs: relative;
+}
+.c-breadcrumbs.is-truncated .c-breadcrumbs__crumb.has-ellipsis {
+    --visibility-truncated-breadcrumbs: visible;
+    --position-truncated-breadcrumbs: relative;
+}
+.c-breadcrumbs.is-truncated .c-breadcrumbs__crumb:last-child {
+    --visibility-truncated-breadcrumbs: visible;
+    --position-truncated-breadcrumbs: relative;
+}
+.c-breadcrumbs__truncated-button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    color: var(--color-truncated-button, var(--color-link-breadcrumbs));
+}
+.c-breadcrumbs__crumbs {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: nowrap;
+}
+.c-breadcrumbs__crumbs:where(.has-no-separators) {
+    row-gap: var(--spacing-vertical-separator-breadcrumbs);
+}
+.c-breadcrumbs__crumb {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.c-breadcrumbs__crumb:has(.c-breadcrumbs__separator) .c-breadcrumbs__separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline: var(--spacing-vertical-separator-breadcrumbs);
+    color: rgb(var(--text-secondary));
+}
+.c-breadcrumbs__crumb:has(svg, image) :where(svg, image) {
+    max-width: var(--size-font-breadcrumbs);
+    max-height: var(--size-font-breadcrumbs);
+}
+.c-breadcrumbs__link, .c-breadcrumbs__truncated-button {
+    font-size: var(--size-font-breadcrumbs);
+    text-decoration: none;
+    color: var(--color-link-breadcrumbs);
+    line-height: 1;
+    transition: all 0.3s ease;
+}
+@media (hover: hover) {
+    .c-breadcrumbs__link:hover, .c-breadcrumbs__truncated-button:hover {
+        --color-link-breadcrumbs: rgb(var(--text-main));
+    }
+}
+.c-breadcrumbs__link:where(.is-current), .c-breadcrumbs__truncated-button:where(.is-current) {
+    --color-link-breadcrumbs: rgb(var(--secondary-color));
+}
+.c-breadcrumbs__link:where(.is-index), .c-breadcrumbs__truncated-button:where(.is-index) {
+    --color-link-breadcrumbs: rgb(var(--primary-color-alt));
+}
+
+/* breadcrumb */
+.c-breadcrumbs {
+    @apply max-h-4 w-full min-h-6;
+    @apply border-t-[1px] border-[rgb(var(--background-mid))] border-opacity-100;
+}
+.c-breadcrumbs .c-breadcrumbs__crumbs {
+    @apply pl-2 pt-0.5 lg:pl-6 w-full max-w-full;
+    @apply bg-[rgb(var(--background-feature))];
+    /* Fix for iOS Safari transparency issue - same as navbar and search */
+    background-color: rgb(var(--background-feature)) !important;
+    @apply pb-2;
+}
+.c-breadcrumbs .c-breadcrumbs__crumb {
+    @apply pt-0.5;
+    min-width: 0;
+    flex-shrink: 1;
+}
+.c-breadcrumbs .c-breadcrumbs__crumb:first-of-type,
+.c-breadcrumbs .c-breadcrumbs__crumb.has-ellipsis {
+    flex-shrink: 0;
+}
+.c-breadcrumbs .c-breadcrumbs__crumb:last-of-type {
+    flex: 1 1 auto;
+    min-width: 3em;
+    overflow: hidden;
+}
+.c-breadcrumbs .c-breadcrumbs__link {
+    @apply text-ellipsis overflow-hidden whitespace-nowrap;
+    min-width: 0;
+    flex-shrink: 1;
+}
+.c-breadcrumbs .c-breadcrumbs__link:where(.is-index) {
+    @apply min-w-4 min-h-4;
+}
+.c-breadcrumbs .crumb-index-img {
+    @apply w-[14px] h-[14px];
+    @apply relative top-[1px];
+}
+
+/*!* Breadcrumbs CSS Variables *!*/
+/*:root {*/
+/*    --color-link-breadcrumbs: rgb(var(--primary-color));*/
+/*    --size-font-breadcrumbs: 14px;*/
+/*    --spacing-vertical-separator-breadcrumbs: 8px;*/
+
+/*    !*$overflow-behavior: "ellipsis",*!*/
+/*    !*$color-link: rgb(var(--primary-color)),*!*/
+/*    !*$color-hover-link: rgb(var(--text-main)),*!*/
+/*    !*$color-separator: rgb(var(--text-secondary)),*!*/
+/*    !*$color-is-current: rgb(var(--secondary-color)),*!*/
+/*    !*$color-is-index: rgb(var(--primary-color-alt)),*!*/
+/*    !*$size-font: 14px,*!*/
+/*    !*$overflow-wrap-horizontal-spacing: 10px,*!*/
+/*    !*$spacing-vertical-separator: 8px,*!*/
+/*    !*$icons-not-bigger-than-font-size: true,*!*/
+/*    !*$transition-link-breadcrumbs: all 0.3s ease,*!*/
+/*    !*$truncated: true,*!*/
+/*}*/
+
+/*!* Breadcrumbs Container *!*/
+/*.c-breadcrumbs {*/
+/*    @apply max-h-4 w-full min-h-6;*/
+/*    @apply border-t-[1px] border-[rgb(var(--background-mid))] border-opacity-100;*/
+/*}*/
+
+/*.c-breadcrumbs__crumbs {*/
+/*    @apply pl-2 pt-0.5 lg:pl-6 w-full max-w-full pb-2;*/
+/*    @apply bg-[rgb(var(--background-feature))];*/
+/*    !* Fix for iOS Safari transparency issue *!*/
+/*    background-color: rgb(var(--background-feature)) !important;*/
+/*}*/
+
+/*.c-breadcrumbs__crumb {*/
+/*    @apply pt-0.5;*/
+/*}*/
+
+/*.c-breadcrumbs__link {*/
+/*    @apply text-ellipsis overflow-hidden whitespace-nowrap;*/
+/*    color: rgb(var(--primary-color));*/
+/*    transition: all 0.3s ease;*/
+/*}*/
+
+/*.c-breadcrumbs__link:hover {*/
+/*    color: rgb(var(--text-main));*/
+/*}*/
+
+/*.c-breadcrumbs__link:where(.is-current) {*/
+/*    color: rgb(var(--secondary-color));*/
+/*}*/
+
+/*.c-breadcrumbs__link:where(.is-index) {*/
+/*    @apply min-w-4 min-h-4;*/
+/*    color: rgb(var(--primary-color-alt));*/
+/*}*/
+
+/*.c-breadcrumbs__separator {*/
+/*    color: rgb(var(--text-secondary));*/
+/*}*/
+
+/*.crumb-index-img {*/
+/*    @apply w-[14px] h-[14px];*/
+/*    @apply relative top-[1px];*/
+/*}*/

@@ -1,6 +1,6 @@
 import {AppBskyFeedDefs} from "@atproto/api";
 import type {BlockedPost, NotFoundPost, ThreadViewPost,} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import {getSiteConfig} from "../../scripts/getSiteConfig";
+import {getSiteConfig} from "../../lib/config/getSiteConfig";
 import DOMPurify from "isomorphic-dompurify";
 
 export interface ThreadViewPostUI extends ThreadViewPost {

@@ -1,0 +1,6 @@
+atproto==0.0.55
+beautifulsoup4==4.12.3
+Markdown==3.7
+PyYAML==6.0.2
+Pillow==11.0.0
+python-dotenv==1.0.1

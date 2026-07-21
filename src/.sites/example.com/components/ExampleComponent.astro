@@ -1,0 +1,59 @@
+---
+/**
+ * ExampleComponent - A minimal Astro component
+ *
+ * This demonstrates how to create a simple reusable component
+ * that can be used in MDX files.
+ *
+ * Usage in MDX:
+ * <ExampleComponent message="Your message here" />
+ */
+
+interface Props {
+  message?: string;
+  variant?: 'info' | 'success' | 'warning';
+}
+
+const {
+  message = 'Hello from ExampleComponent!',
+  variant = 'info'
+} = Astro.props;
+
+const variantStyles = {
+  info: 'bg-blue-100 border-blue-400 text-blue-800',
+  success: 'bg-green-100 border-green-400 text-green-800',
+  warning: 'bg-yellow-100 border-yellow-400 text-yellow-800',
+};
+---
+
+<div
+  class={`p-4 mb-4 border-l-4 rounded ${variantStyles[variant]}`}
+  role="note"
+>
+  <div class="flex items-start">
+    <div class="flex-shrink-0 mr-3">
+      {variant === 'info' && <span class="text-2xl">ℹ️</span>}
+      {variant === 'success' && <span class="text-2xl">✅</span>}
+      {variant === 'warning' && <span class="text-2xl">⚠️</span>}
+    </div>
+    <div class="flex-1">
+      <p class="font-medium">{message}</p>
+      {Astro.slots.has('default') && (
+        <div class="mt-2 text-sm">
+          <slot />
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Scoped component styles */
+  div[role="note"] {
+    transition: all 0.2s ease-in-out;
+  }
+
+  div[role="note"]:hover {
+    transform: translateX(4px);
+  }
+</style>

@@ -1,0 +1,126 @@
+@layer base {
+    :root {
+        --tw-bg-opacity: 1.0;
+        --tw-text-opacity: 1.0;
+        --tw-border-opacity: 1.0;
+
+        /* Navbar Bottom Gradient: decorative fade effect at bottom of navigation bar (background layer, subtle brand accent) */
+        --theme-color: 163 146 227;
+        /* Navigation Background Pattern: tiled texture image behind navigation bar (background layer, nav foundation) */
+        --nav-background-image: none;
+        /* Page Background Pattern: tiled texture image behind all content (background layer, page foundation) */
+        --background-body-image: none; /* TODO: Add site-specific background image at /src/.sites/example.com/images/ */
+        /* Background Image Filter: CSS filter to tint background pattern to match theme colors (background layer, color harmony) */
+        --background-body-image-filter: none;
+        /* Main Body Background: base color of entire page body (background layer, primary canvas) */
+        --background-body: 164 164 179;
+        /* Elevated Surface Background: navbar, breadcrumbs, search UI, content cards (midground layer, raised panels) */
+        --background-feature: 210 205 235;
+        /* Interactive Element Background: buttons, table cells, borders, controls (midground layer, clickable surfaces) */
+        --background-mid: 210 200 230;
+        /* Main Body Text: primary reading text in articles and content (foreground layer, high readability) */
+        --text-main: 15 15 35;
+        /* Secondary Metadata Text: timestamps, author names, descriptions, captions (foreground layer, subdued info) */
+        --text-secondary: 55 55 75;
+        /* Primary Brand Color: main CTA buttons, selected states, brand gradients (midground/foreground layer, primary action) */
+        --primary-color: 95 60 150;
+        /* Interactive Accent Color: link underlines, hover states, breadcrumb links (foreground layer, hover feedback) */
+        --primary-color-alt: 85 120 170;
+        /* High Contrast Text: text on primary backgrounds, tag/button borders (foreground layer, accessible contrast) */
+        --primary-color-contrast: 0 0 10;
+        /* Secondary Brand Color: active breadcrumbs, success states, secondary gradients (foreground/midground layer, supporting accent) */
+        --secondary-color: 0 81 186;
+        /* Heading Text: all h1-h6 headings site-wide (foreground layer, content hierarchy) */
+        --heading-color: 0 15 181;
+        /* Link & Emphasis Text: hyperlinks, emphasized spans, quote text (foreground layer, clickable/important text) */
+        --text-highlight-color: 0 80 135;
+        /* Steam Link Color: platform-specific links to Steam (foreground layer, Steam brand) */
+        --text-highlight-color-alt1: 26 106 168;
+        /* Bluesky Link Color: platform-specific links to Bluesky (foreground layer, Bluesky brand) */
+        --text-highlight-color-alt2: 56 112 168;
+        /* GitHub Link Color: platform-specific links to GitHub (foreground layer, GitHub brand) */
+        --text-highlight-color-alt3: 82 97 70;
+        /* Inline Code Text: code snippets within paragraphs (foreground layer, monospace distinction) */
+        --text-code-color: 35 35 35;
+        /* Quote Block Background: blockquote and pullquote containers (midground layer, cited content) */
+        --bg-quote-block: 150 154 173 / 0.125;
+        /* Success Status Text: deploy success, notifications, terminal output (foreground layer, positive feedback) */
+        --hiive-crt: 0 117 61;
+
+        /* Tag & Category Borders: outline of taxonomy pill buttons (foreground layer, pill definition) */
+        --tag-category-border-color: 115 115 135;
+        /* Tag Pill Background: background of tag buttons/chips (midground layer, metadata badges) */
+        --tag-background-color: 128 225 131;
+        /* Category Pill Background: background of category buttons/chips (midground layer, taxonomy badges) */
+        --category-background-color: 252 141 129;
+
+        /* Warning Box Background: alert and warning container fills (midground layer, attention surface) */
+        --warning-bg-color: 225 160 160;
+        /* Warning Box Border: alert and warning container outlines (foreground layer, alert emphasis) */
+        --warning-border: 215 115 115;
+        /* Warning Box Text: text within alert messages (foreground layer, readable alerts) */
+        --warning-text-color: 35 5 5;
+
+        /* Hidden Content Background: collapsed accordion/spoiler backgrounds (midground layer, collapsible sections) */
+        --hidden-content-background: 210 210 235 / 0.14;
+        /* Hidden Content Border: collapsed accordion/spoiler outlines (foreground layer, section boundaries) */
+        --hidden-content-border: 135 135 155 / 0.16;
+
+        /* Table Header Background: data table column header cells (midground layer, column labels) */
+        --th-background: 190 185 220 / 0.5;
+        /* Table Odd Row Background: alternating row color for readability (background layer, zebra stripe) */
+        --tr-background-odd: 200 200 230 / 0.5;
+        /* Table Even Row Background: alternating row color for readability (background layer, zebra stripe) */
+        --tr-background-even: 195 195 225 / 0.5;
+
+        /* Post Header Overlay: translucent metadata bar in post listings (background layer, info banner) */
+        --bg-post-header-color: 185 190 220 / 0.19;
+
+        /* Footer Legal Text: copyright notices and footer metadata (foreground layer, fine print) */
+        --footer-text-color: 45 45 65;
+
+        /* Pagination Button Background: default page number buttons (midground layer, navigation controls) */
+        --pagination-link-bg: 195 175 225 / 0.13;
+        /* Pagination Disabled Background: non-clickable page number buttons (midground layer, inactive state) */
+        --pagination-link-disabled-bg: 195 195 215 / 0.06;
+        /* Pagination Active Background: current/hover page number buttons (midground layer, active state) */
+        --pagination-link-active-bg: 175 155 205 / 0.25;
+
+        /* Comment Widget Background: embedded social comment sections (midground layer, third-party embeds) */
+        --comment-block-bg: 200 200 230 / 0.56;
+
+        --font-family-serif: 'Libre Baskerville', serif;
+        --font-family-sans: Oswald, sans-serif;
+        --font-family-sans-alt: 'Source Sans 3', sans-serif;
+        --font-family-monospace: 'Lucida Console', monospace;
+        --font-family-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+
+
+    }
+
+    :root.theme-dark {
+        --tw-bg-opacity: 1.0;
+        --tw-text-opacity: 1.0;
+        --tw-border-opacity: 1.0;
+
+        --theme-color: 45 28 109;
+        --background-body-image: none; /* TODO: Add site-specific background image at /src/.sites/example.com/images/ */
+        --background-body-image-filter: none;
+        --background-body: 15 15 35;
+        --background-feature: 25 20 50;
+        --background-mid: 35 25 55;
+        --text-main: 220 220 240;
+        --text-secondary: 180 180 200;
+        --text-highlight-color: 120 200 255;
+        --text-highlight-color-alt1: 0 120 215;
+        --text-highlight-color-alt2: 0 85 170;
+        --text-highlight-color-alt3: 40 40 40;
+        --text-code-color: 220 220 220;
+        --primary-color: 157 0 255;
+        --primary-color-alt: 85 120 170;
+        --secondary-color: 255 77 0;
+        --heading-color: 253 255 107;
+        --bg-quote-block: 30 35 60 / 0.125;
+        --hiive-crt: 0 117 61; /* Light Green */
+    }
+}

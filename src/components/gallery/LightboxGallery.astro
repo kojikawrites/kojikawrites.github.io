@@ -2,22 +2,29 @@
 interface Props {
     id?: string;
     caption?: string;
+    smCols?: number | string;
+    lgCols?: number | string;
 }
 
 
-import toSafeId from '../../scripts/toSafeId';
+import toSafeId from '../../lib/utils/toSafeId';
 
-const { id:rawId, caption = "Image Gallery" } = Astro.props;
+const { id:rawId, caption = "Image Gallery", smCols, lgCols } = Astro.props;
 
-const id = rawId ?? toSafeId(rawId);
+// Generate a unique ID if none provided
+const id = rawId ?? toSafeId("gallery");
 const captionId = `caption_${id}`;
-// console.warn('id', id);
+
+// Build grid classes - use defaults if not specified (empty string from select counts as falsy)
+const smGridClass = smCols ? `grid-cols-${smCols}` : 'grid-cols-[repeat(auto-fit,_minmax(25%,_1fr))]';
+const lgGridClass = lgCols ? `lg:grid-cols-${lgCols}` : 'lg:grid-cols-[repeat(auto-fit,_minmax(172px,_1fr))]';
 ---
 <div class="lg:left-4">
-    <div id={id} class="lightbox-gallery grid w-fit flex-1 place-items-stretch
-                        grid-cols-[repeat(auto-fit,_minmax(25%,_1fr))]
-                        lg:grid-cols-[repeat(auto-fit,_minmax(172px,_1fr))]
-                         space-x-1 lg:space-x-0">
+    <div id={id} class:list={[
+        "lightbox-gallery grid w-fit flex-1 place-items-stretch space-x-1 lg:space-x-0",
+        smGridClass,
+        lgGridClass
+    ]}>
         <slot />
     </div>
     <div id={captionId} class="lightbox-gallery-caption">
@@ -25,71 +32,73 @@ const captionId = `caption_${id}`;
     </div>
 </div>
 <script is:inline define:vars={{id, captionId}} data-astro-rerun>
+    // IIFE to avoid polluting global scope when multiple galleries exist on the same page
+    (function() {
+        const galleryId = id;
+        const galleryCaptionId = captionId;
 
-    function addImageEventHandler(img, idx) {
-        img.addEventListener("click", _ => {
-            Spotlight.show(galleryList, null, idx);//, null, img.dataset.idx);
-        });
-    }
+        function initGallery() {
+            const galleryDiv = document.getElementById(galleryId);
+            if (!galleryDiv) {
+                return [];
+            }
 
-    function initGallery(galleryId) {
-        const galleryDiv = document.getElementById(galleryId);
-        if (!galleryDiv) {
-            return [];
+            const galleryEntries = galleryDiv.querySelectorAll('[data-gallery-entry]');
+            const spotlightTheme = (window.getEffectiveTheme() === 'dark') ? 'dark' : 'white';
+            let idx = 0;
+            return Array.from(galleryEntries).map(div => {
+                const img = div.querySelector('img');
+                img.id = `${galleryId}_${idx}`;
+                idx += 1;
+                return {
+                    src: img.src || '',
+                    title: div.getAttribute('data-alt') || '',
+                    description: div.getAttribute('data-description') || '',
+                    theme: spotlightTheme
+                };
+            });
         }
 
-        const galleryEntries = galleryDiv.querySelectorAll('[data-gallery-entry]');
-        const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
-        let idx = 0
-        return Array.from(galleryEntries).map(div => {
-            const img = div.querySelector('img');
-            idx += 1;
-            img.id = `${galleryId}_${idx}`;
-            addImageEventHandler(img, idx);
-            return {
-                src: img.src || '', //div.getAttribute('data-src') || '',
-                title: div.getAttribute('data-alt') || '',
-                description: div.getAttribute('data-description') || '',
-                theme: theme
+        const galleryList = initGallery();
+
+        // Add click handlers after galleryList is built
+        const galleryDiv = document.getElementById(galleryId);
+        if (galleryDiv) {
+            const images = galleryDiv.querySelectorAll('[data-gallery-entry] img');
+            images.forEach((img, idx) => {
+                img.addEventListener("click", _ => {
+                    Spotlight.show(galleryList, null, idx);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gallery = document.getElementById(galleryId);
+            const caption = document.getElementById(galleryCaptionId);
+            const images = gallery.querySelectorAll('img');
+
+            const updateCaptionSpan = () => {
+                caption.style.maxWidth = `${gallery.clientWidth}px`
             };
+
+            const checkAllImagesLoaded = () => {
+                const allLoaded = Array.from(images).every(img => img.complete && img.naturalWidth !== 0);
+                if (allLoaded) {
+                    updateCaptionSpan();
+                }
+            };
+
+            images.forEach(img => {
+                if (img.complete) {
+                    checkAllImagesLoaded();
+                } else {
+                    img.addEventListener('load', checkAllImagesLoaded);
+                    img.addEventListener('error', checkAllImagesLoaded);
+                }
+            });
+
+            updateCaptionSpan();
+            window.addEventListener('resize', updateCaptionSpan);
         });
-    }
-    const galleryList = initGallery(id);
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const gallery = document.getElementById(id);
-        const caption = document.getElementById(captionId);
-        const images = gallery.querySelectorAll('img'); // Select all images in the gallery
-
-        const updateCaptionSpan = () => {
-            caption.style.maxWidth = `${gallery.clientWidth}px`
-            // console.warn(`setting ${captionId} to  ${caption.style.width}`);
-        };
-
-        // Function to check if all images have loaded
-        const checkAllImagesLoaded = () => {
-            const allLoaded = Array.from(images).every(img => img.complete && img.naturalWidth !== 0);
-            if (allLoaded) {
-                updateCaptionSpan();
-            }
-        };
-
-        // Attach load event listeners to all images
-        images.forEach(img => {
-            if (img.complete) {
-                // If the image is already loaded
-                checkAllImagesLoaded();
-            } else {
-                img.addEventListener('load', checkAllImagesLoaded);
-                img.addEventListener('error', checkAllImagesLoaded); // Handle error cases
-            }
-        });
-
-        // Initial update
-        updateCaptionSpan();
-
-        // Update on window resize
-        window.addEventListener('resize', updateCaptionSpan);
-    });
-
+    })();
 </script>

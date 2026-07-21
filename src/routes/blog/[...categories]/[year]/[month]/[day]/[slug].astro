@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../../../../../../layouts/BaseLayout.astro";
+
+import PostHeader from "../../../../../../components/posts/PostHeader.astro";
+import PostContent from "../../../../../../components/posts/PostContent.astro";
+import PostFooter from "../../../../../../components/posts/PostFooter.astro";
+
+import getPosts from "../../../../../../lib/content/getPosts";
+import getPostData  from '../../../../../../lib/content/getPostData';
+import buildPostHref  from '../../../../../../lib/utils/urlUtils';
+import {getSiteConfig} from "../../../../../../lib/config/getSiteConfig";
+
+const siteConfig = await getSiteConfig();
+
+
+export async function getStaticPaths() {
+  // Ensure site config is loaded first (initializes alias map for categories/tags)
+  await getSiteConfig();
+  // Fetch all the posts from the collection 'blog'
+  // In dev mode, include drafts so they can be previewed
+  const isDev = import.meta.env.DEV;
+  const posts = await getPosts({ includeDrafts: isDev });
+  // Iterate over the posts, generating the tokens and
+  // setting them inside the `params` key.
+  // Astro will use anything inside `params` as the token
+  // for a dynamic route segment.
+  return posts.map((p: any) => {
+    return {
+      params: getPostData(p),
+      props: { post: p },
+  }});
+}
+
+
+const post = Astro.props.post;
+
+const permalink = `${buildPostHref(post, Astro.site.href)}`;
+// console.log('permalink', permalink);
+const { title, description} = post.frontmatter;
+
+---
+
+<BaseLayout title={title} description={description} permalink={permalink} current={`/${siteConfig.blog.path}`}>
+  <div class="post-content">
+      <PostHeader post={post}/>
+      <PostContent post={post}/>
+      <PostFooter post={post}/>
+  </div>
+</BaseLayout>
+
+<script is:inline data-astro-rerun>
+  (function() {
+    // Create a URL object from the current window location
+    const currentUrl = new URL(window.location.href);
+
+    // Get the pathname (e.g., '/about.html')
+    const pathname = currentUrl.pathname;
+
+    // Regular expression to match '.html' at the end of the pathname (case-insensitive)
+    const htmlExtensionRegex = /\.html$/i;
+
+    // Check if the pathname ends with '.html'
+    if (htmlExtensionRegex.test(pathname)) {
+      // Remove the '.html' extension
+      const newPathname = pathname.replace(htmlExtensionRegex, '');
+
+      // Construct the new URL with the modified pathname
+      const newUrl = currentUrl.origin + newPathname + currentUrl.search + currentUrl.hash;
+
+      // Update the address bar without reloading the page
+      history.replaceState(null, '', newUrl);
+
+      //console.log(`URL updated to: ${newUrl}`);
+    } else {
+      //console.log('URL does not end with .html. No changes made.');
+    }
+  })();
+</script>
+

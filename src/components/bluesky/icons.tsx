@@ -1,10 +1,10 @@
 import type { Component, JSX } from "solid-js";
-import vsCommentSvg from "../../assets/images/shared/bluesky/vs-comment.svg?raw";
-import vsEmptyHeartSvg from "../../assets/images/shared/bluesky/vs-empty-heart.svg?raw";
-import vsFilledHeartSvg from "../../assets/images/shared/bluesky/vs-filled-heart.svg?raw";
-import vsLinkSvg from "../../assets/images/shared/bluesky/vs-link.svg?raw";
-import blueskyLinkSvg from "../../assets/images/shared/bluesky/bluesky.svg?raw";
-import externalLinkSvg from "../../assets/images/shared/links/-external-link.svg?raw";
+import vsCommentSvg from "../../assets/images/bluesky/vs-comment.svg?raw";
+import vsEmptyHeartSvg from "../../assets/images/bluesky/vs-empty-heart.svg?raw";
+import vsFilledHeartSvg from "../../assets/images/bluesky/vs-filled-heart.svg?raw";
+import vsLinkSvg from "../../assets/images/bluesky/vs-link.svg?raw";
+import blueskyLinkSvg from "../../assets/images/bluesky/bluesky.svg?raw";
+import externalLinkSvg from "../../assets/images/links/-external-link.svg?raw";
 
 type IconProps = JSX.HTMLAttributes<HTMLSpanElement>;
 

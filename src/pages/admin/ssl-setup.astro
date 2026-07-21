@@ -1,0 +1,252 @@
+---
+// Dev-only route: runs on-demand in dev; excludeDevPages forces it to
+// prerender in production builds and deletes its output from dist.
+export const prerender = false;
+
+import BaseHead from '../../components/BaseHead.astro';
+import '../../styles/admin.css';
+
+const userAgent = Astro.request.headers.get('user-agent') || '';
+const isMac = /Mac|iPhone|iPad/.test(userAgent);
+const isWindows = /Windows/.test(userAgent);
+const isLinux = !isMac && !isWindows;
+
+// Get hostname for display
+const hostname = (import.meta.env.VITE_HMR_HOST || 'localhost')
+  .replace(/^https?:\/\//, '')
+  .replace(/\/.*$/, '')
+  .replace(/:.*$/, '');
+const safeHostname = hostname.replace(/[^a-zA-Z0-9._-]/g, '-');
+const certFilename = `${safeHostname}-ca.crt`;
+
+const title = 'SSL Certificate Setup';
+const description = 'Configure SSL certificates';
+const permalink = '/admin/ssl-setup';
+---
+
+<html lang="en">
+<head>
+  <BaseHead title={title} description={description} permalink={permalink} />
+  <style is:global>
+    /* Override h1 style for this page */
+    h1 {
+      border-bottom: none;
+    }
+
+    .intro {
+      background: rgba(var(--primary-color), 0.15);
+      border-left: 4px solid rgb(var(--primary-color));
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border-radius: 4px;
+      color: rgb(var(--text-main));
+    }
+
+    .step {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .step:last-child {
+      border-bottom: none;
+    }
+
+    .step h2 {
+      color: #3498db;
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .download-btn {
+      display: inline-block;
+      background: #3498db;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 600;
+      margin: 1rem 0;
+      transition: background 0.2s;
+    }
+
+    .download-btn:hover {
+      background: #2980b9;
+    }
+
+    code {
+      background: rgb(var(--background-mid));
+      color: rgb(var(--text-main));
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: var(--font-family-monospace);
+      font-size: 0.9em;
+    }
+
+    .code-block {
+      background: #2c3e50;
+      color: #ecf0f1;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    .code-block code {
+      background: transparent;
+      color: #ecf0f1;
+      padding: 0;
+    }
+
+    ol {
+      margin-left: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    .success {
+      background: rgba(var(--hiive-crt), 0.15);
+      border-left: 4px solid rgb(var(--hiive-crt));
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 4px;
+      color: rgb(var(--text-main));
+    }
+
+    .os-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #eee;
+    }
+
+    .os-tab {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 1rem;
+      color: #666;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+
+    .os-tab.active {
+      color: #3498db;
+      border-bottom-color: #3498db;
+      font-weight: 600;
+    }
+
+    .os-content {
+      display: none;
+    }
+
+    .os-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/admin" class="back-link">← Admin</a>
+    <h1>🔒 SSL Certificate Setup</h1>
+
+    <div class="intro">
+      <p><strong>Why am I seeing this?</strong></p>
+      <p>This development server uses HTTPS with a self-signed certificate for security. Your browser doesn't trust it by default, which causes security warnings.</p>
+      <p>Follow these steps once to eliminate the warnings permanently.</p>
+    </div>
+
+    <div class="step">
+      <h2>Step 1: Download the Certificate</h2>
+      <p>Click the button below to download the CA certificate to your computer:</p>
+      <a href="/api/ssl/ca-certificate" class="download-btn" download={certFilename}>⬇️ Download CA Certificate</a>
+      <p><small>The file will be named <code>{certFilename}</code></small></p>
+    </div>
+
+    <div class="step">
+      <h2>Step 2: Trust the Certificate</h2>
+
+      <div class="os-tabs">
+        <button class:list={['os-tab', { active: isMac }]} data-os="mac">macOS</button>
+        <button class:list={['os-tab', { active: isWindows }]} data-os="windows">Windows</button>
+        <button class:list={['os-tab', { active: isLinux }]} data-os="linux">Linux</button>
+      </div>
+
+      <div class:list={['os-content', { active: isMac }]} data-os="mac">
+        <h3>For macOS:</h3>
+        <ol>
+          <li>Double-click the downloaded certificate file, <code>{certFilename}</code></li>
+          <li>Keychain Access will open - select "System" keychain</li>
+          <li>Click "Add" to import the certificate</li>
+          <li>Find the certificate (named "Astro Blog Development CA") in the list</li>
+          <li>Double-click it and expand the "Trust" section</li>
+          <li>Change "When using this certificate" to <strong>"Always Trust"</strong></li>
+          <li>Close the window and enter your password when prompted</li>
+        </ol>
+      </div>
+
+      <div class:list={['os-content', { active: isWindows }]} data-os="windows">
+        <h3>For Windows:</h3>
+        <ol>
+          <li>Double-click the downloaded certificate file, <code>{certFilename}</code></li>
+          <li>Click "Install Certificate..."</li>
+          <li>Select "Current User" or "Local Machine" and click "Next"</li>
+          <li>Choose "Place all certificates in the following store"</li>
+          <li>Click "Browse" and select <strong>"Trusted Root Certification Authorities"</strong></li>
+          <li>Click "Next" then "Finish"</li>
+          <li>Click "Yes" when asked to install the certificate</li>
+        </ol>
+      </div>
+
+      <div class:list={['os-content', { active: isLinux }]} data-os="linux">
+        <h3>For Linux:</h3>
+        <p>Open a terminal and run these commands:</p>
+        <div class="code-block">
+          <code>sudo cp ~/Downloads/{certFilename} /usr/local/share/ca-certificates/</code><br>
+          <code>sudo update-ca-certificates</code>
+        </div>
+        <p>Then restart your browser.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2>Step 3: Refresh Your Browser</h2>
+      <p>After trusting the certificate:</p>
+      <ol>
+        <li>Close all browser windows for this site</li>
+        <li>Open a new browser window</li>
+        <li>Visit the site again - no more warnings!</li>
+      </ol>
+    </div>
+
+    <div class="success">
+      <p><strong>✅ That's it!</strong></p>
+      <p>You only need to do this once. The certificate is valid for 2 years and works for all sites running on this server.</p>
+    </div>
+  </div>
+
+  <script>
+    // Handle OS tab switching
+    const tabs = document.querySelectorAll('.os-tab');
+    const contents = document.querySelectorAll('.os-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const os = tab.dataset.os;
+
+        // Update active tab
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Update active content
+        contents.forEach(c => c.classList.remove('active'));
+        document.querySelector(`.os-content[data-os="${os}"]`).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

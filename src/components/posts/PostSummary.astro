@@ -3,25 +3,30 @@ interface Props {
     post: any
     smallMode: string
     largeMode: string
+    isDraft?: boolean
 }
 
 import FormattedDate from "../FormattedDate.astro";
 import { Image } from 'astro:assets';
-import getPostData from "../../scripts/getPostData";
-import getMediaMetadata from "../../scripts/getMediaMetadata";
-import {getSiteConfig, getSiteCode} from "../../scripts/getSiteConfig";
-import toSafeId from '../../scripts/toSafeId';
+import getPostData from "../../lib/content/getPostData";
+import getMediaMetadata from "../../lib/content/getMediaMetadata";
+import {getSiteConfig} from "../../lib/config/getSiteConfig";
+import {getSiteCode} from "../../lib/config/getSiteCode";
+import toSafeId from '../../lib/utils/toSafeId';
 
 const {
     post,
     smallMode = "card",
     largeMode = "card",
+    isDraft = false,
 } = Astro.props;
 
 const siteConfig = await getSiteConfig();
 const siteCode = getSiteCode();
 const { path } = getPostData(post);
-const href = `/${siteConfig.blog.prefix}${path}`;
+// Normalize blog path - strip trailing slash, add it back for URL construction
+const blogPath = (siteConfig.blog?.path || 'blog').replace(/\/$/, '') + '/';
+const href = `/${blogPath}${path}`;
 
 const { frontmatter } = post;
 // console.log("post", frontmatter);
@@ -63,7 +68,8 @@ const classExt = `sm-${smallMode}-lg-${largeMode}`;
 ---
 
 <!-- post summary text -->
-<div class={`post-summary-wrapper-${classExt}`}>
+<div class={`post-summary-wrapper-${classExt} ${isDraft ? 'post-summary-draft' : ''}`}>
+    {isDraft && <div class="draft-watermark">DRAFT</div>}
 
     <!-- post thumbnail -->
     {thumbnailSrc && (

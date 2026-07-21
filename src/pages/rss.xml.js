@@ -1,9 +1,9 @@
 import rss  from '@astrojs/rss';
-import getPosts from "../scripts/getPosts";
+import getPosts from "../lib/content/getPosts";
 // import {buildPermalink} from "../scripts/urlUtils";
-import {getSiteConfig} from "../scripts/getSiteConfig";
-import getPostData from "../scripts/getPostData";
-import {createDateFromStrings} from "../scripts/dateUtils";
+import {getSiteConfig} from "../lib/config/getSiteConfig";
+import getPostData from "../lib/content/getPostData";
+import {createDateFromStrings} from "../lib/utils/dateUtils";
 // <?xml-stylesheet href="/assets/xsl/rss-style-light.xsl" type="text/xsl"?>
 
 export async function GET(context) {
@@ -19,7 +19,7 @@ export async function GET(context) {
         });
     }
 
-    const posts = getPosts();
+    const posts = await getPosts();
 
     // console.log('context', context);
     return rss({
@@ -38,7 +38,9 @@ export async function GET(context) {
 
             const publishDate = createDateFromStrings(day, month, year);
 
-            const href = `/${siteConfig.blog.prefix}${path}`;
+            // Normalize blog path - strip trailing slash, add it back for URL construction
+            const blogPath = (siteConfig.blog?.path || 'blog').replace(/\/$/, '') + '/';
+            const href = `/${blogPath}${path}`;
             // console.log(href);
             const categories = typeof post.frontmatter.categories == 'string'
                 ? [post.frontmatter.categories] //.replace(' ', ',')

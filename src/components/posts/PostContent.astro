@@ -4,13 +4,13 @@ interface Props {
 	post: any,
 }
 
-import { components } from '../../scripts/mixins/autoImportComponents';
+import { components } from '../../lib/components/autoImportComponents';
 
 import BlueskyComments from "./BlueskyComments.astro";
 import FacebookComments from "./FacebookComments.astro";
 import Signature from "../Signature.astro";
 
-import getPostData from "../../scripts/getPostData";
+import getPostData from "../../lib/content/getPostData";
 
 
 const post = Astro.props.post;

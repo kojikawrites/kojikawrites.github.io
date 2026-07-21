@@ -3,21 +3,19 @@ interface Props {
     filename: string;
 }
 
-// import blueskyJson from "../../assets/_private/state/hiivelabs.com/bluesky_posted.json"
-//console.log('BLUESKYTYPE',typeof blueskyJson);
-
-import { getSiteConfig, getSiteCode } from "../../scripts/getSiteConfig";
-import {getAllKeys} from "../../scripts/keyUtils";
-import {KeyType} from "../../scripts/enums";
+import { getSiteConfig } from "../../lib/config/getSiteConfig";
+import { getSiteCode } from "../../lib/config/getSiteCode";
+import {getAllKeys} from "../../lib/utils/keyUtils";
+import {KeyType} from "../../lib/utils/enums";
 import { Comments } from "../bluesky/Comments";
-import { getJson} from "../../scripts/getJson";
+import { getJson} from "../../lib/config/getJson";
 
 const blueskyJson = await getJson(getSiteCode(), 'bluesky_posted.json');
 // console.log('blueskyJson', blueskyJson);
 
 const { filename } = Astro.props;
 const siteConfig = await getSiteConfig();
-const allCategories = getAllKeys(KeyType.Categories);
+const allCategories = await getAllKeys(KeyType.Categories);
 // console.log(allCategories);
 function trimPathToBlog(path: string): string {
     // Remove leading and trailing slashes for consistent splitting

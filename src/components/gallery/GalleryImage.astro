@@ -9,8 +9,8 @@ interface Props {
 }
 
 import {Image} from "astro:assets";
-import getMediaMetadata from "../../scripts/getMediaMetadata.ts";
-import {getSiteCode} from "../../scripts/getSiteConfig.ts";
+import getMediaMetadata from "../../lib/content/getMediaMetadata.ts";
+import {getSiteCode} from "../../lib/config/getSiteCode.ts";
 
 const siteCode = getSiteCode()
 
@@ -25,7 +25,7 @@ if (sourceValue) {
         src = sourceValue.startsWith('/') ? sourceValue : `/${sourceValue}`;
     } else {
         // It's just a filename from fields.image(), prepend the directory
-        src = `/src/assets/images/${siteCode}/blog/${sourceValue}`;
+        src = `/src/.sites/${siteCode}/images/blog/${sourceValue}`;
     }
 }
 

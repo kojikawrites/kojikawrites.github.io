@@ -1,11 +1,11 @@
 ---
-import {extractKeyList} from "../../scripts/keyUtils";
+import {extractKeyList} from "../../lib/utils/keyUtils";
 interface Props {
     post: any
 }
 import KeyList from "../tags_categories/KeyList.astro";
 import FormattedDate from "../FormattedDate.astro";
-import {KeyType} from "../../scripts/enums";
+import {KeyType} from "../../lib/utils/enums";
 
 const { frontmatter } = Astro.props.post;
 const {

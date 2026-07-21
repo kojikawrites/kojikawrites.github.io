@@ -1,11 +1,14 @@
 {
   "extends": "astro/tsconfigs/base",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  "exclude": [
+    "dist",
+    "src/components/editor/**/*"
+  ],
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true, //
@@ -18,7 +21,7 @@
 // //    ],
     "baseUrl": ".",
     "paths": {
-      "@client-scripts/*": ["/src/scripts/client/*"],
+      "@client-scripts/*": ["/src/lib/client/*"],
     },
 //    "plugins": [
 //      {
