@@ -1,4 +1,8 @@
-A modern blog platform built with Astro, featuring math rendering, multi-framework support, and content management capabilities.
+# Blog Framework
+
+A reusable, multi-site blog platform built with Astro, featuring math rendering, multi-framework support, and content management capabilities.
+
+This repository is a **template**: framework code lives at the root, and each site's content lives entirely under `src/.sites/[site-name]/`. You create your own site by copying the bundled `example.com` reference site, and you pull framework updates later with an ordinary git merge — see [Creating a New Site from the Framework](#creating-a-new-site-from-the-framework).
 
 ## Tech Stack
 
@@ -19,10 +23,12 @@ A modern blog platform built with Astro, featuring math rendering, multi-framewo
 
 ### Initial Setup
 
+The quickest way to try the framework is to run the bundled example site. To build a site of your own, see [Creating a New Site from the Framework](#creating-a-new-site-from-the-framework).
+
 1. Clone the repository:
 ```bash
-git clone https://github.com/hiive/hiive.github.io.git
-cd hiive.github.io
+git clone https://github.com/hiive/blog-framework.git
+cd blog-framework
 ```
 
 2. Install dependencies:
@@ -41,14 +47,14 @@ cp .env.example .env
 
 Edit the root `.env` file to set your site code:
 ```env
-SITE_CODE=hiivelabs.com
+SITE_CODE=example.com
 ```
 
 **Site level** (site-specific configuration):
 
-**Note**: Site directories (`src/.sites/[site-name]`) are git submodules - separate repositories for each site.
+**Note**: Site directories (`src/.sites/[site-name]`) are plain directories by default. If you prefer, a site directory can be its own git repository (e.g. a submodule) so content is versioned separately from the framework — but nothing requires this.
 
-Create `src/.sites/[site-name]/.env` with your site-specific configuration:
+Create `src/.sites/[site-name]/.env` with your site-specific configuration (see `src/.sites/example.com/.env.example`):
 
 ```env
 # Site URL with protocol (used for sitemap, RSS, and canonical URLs)
@@ -96,6 +102,8 @@ These directories will:
 - Be removed from the production build output
 - Remain fully functional in development mode
 
+The framework directories `admin`, `api`, and `edit` are always excluded from production builds. Dev-only routes declare `export const prerender = false` so the dev server runs them on-demand; at production build time the `excludeDevPages` integration forces them to prerender (a static build would otherwise fail) and then deletes their output from `dist/`. Source files are never modified by the build.
+
 This is useful for admin interfaces, API routes, or other development-only pages that shouldn't be deployed to production.
 
 ### site.yaml Reference
@@ -139,6 +147,28 @@ In development mode, Keystatic CMS is available at `/keystatic` for editing cont
 - HTTPS connection (automatically enabled in development)
 - Only available when `NODE_ENV=development`
 
+### Adding Content
+
+All content lives in your site directory — you never add files to `src/pages/` to create content. Use Keystatic at `/keystatic` (recommended), or edit files by hand:
+
+**Standalone pages** go in `src/.sites/[site-name]/content/pagecontent/`. A file named `my-page.mdx` is automatically served at `/my-page` by the catch-all route. Menu placement is controlled by frontmatter:
+
+```yaml
+---
+title: About My Site
+showInMenu: true
+menuLabel: about
+menuPosition: right   # left | right | none
+menuOrder: 2
+---
+```
+
+The navigation menu regenerates from this frontmatter (plus `state/system-menu-items.json` for system entries like tags/categories) at every dev-server start and build.
+
+**Blog posts** go in `src/.sites/[site-name]/content/posts/` as `YYYY-MM-DD-slug.mdx` — the publish date comes from the filename. Frontmatter tags and categories feed the generated tag/category pages. Start a post in `content/posts/_drafts/` and it appears in development but is excluded from production builds; the `manage_posts` workflow can promote drafts on a schedule.
+
+The example site's post *Adapting the Example Site* walks through this end-to-end.
+
 ### Deploy UI (Development)
 
 A web-based deploy interface is available at `/admin/deploy` in development mode. This allows you to:
@@ -164,8 +194,8 @@ Run the blog in a Docker container on your local server for network-wide access.
 
 1. **Clone the repository on your server:**
 ```bash
-git clone https://github.com/hiive/hiive.github.io.git
-cd hiive.github.io
+git clone https://github.com/hiive/blog-framework.git
+cd blog-framework
 ```
 
 2. **Configure environment:**
@@ -257,7 +287,7 @@ docker-compose -f docker/compose/docker-compose.yaml restart
 Since the code is volume-mounted, you can also edit files directly on the server:
 
 ```bash
-cd /path/to/hiive.github.io
+cd /path/to/blog-framework
 # Edit files with your favorite editor
 # Changes appear immediately in the dev server
 ```
@@ -317,7 +347,7 @@ npm run preview-host
 ## Project Structure
 
 ```
-hiive.github.io/
+blog-framework/
 ├── src/
 │   ├── .sites/              # Site-specific content and configuration
 │   │   └── [site-name]/
@@ -418,7 +448,7 @@ Blog posts are stored in `src/.sites/[site-name]/content/posts/` as MDX files. E
 - **[Docker Setup](docker/README.md)** - Detailed Docker configuration, volumes, scripts, and troubleshooting
 - **[LLM Service](src/lib/services/llm/README.md)** - AI-powered content assistance (alt text generation, text editing)
 - **[Example Site](src/.sites/example.com/README.md)** - Reference site with complete site.yaml documentation
-- **[Site Components](src/.sites/hiivelabs.com/components/README.md)** - Creating site-specific Astro components
+- **[Site Components](src/.sites/example.com/components/)** - Site-specific Astro components (see `ExampleComponent.astro`)
 
 ## Creating a New Site from the Framework
 
@@ -445,7 +475,15 @@ your-site-repo/
 
 ### Step 1: Create Your Site Repository
 
-**Option A: Fork (if you want to contribute back)**
+**Option A: GitHub template (recommended)**
+1. Click **Use this template** on the repository page to create your own repo with a fresh history
+2. Clone it locally:
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/my-site.git my-site
+   cd my-site
+   ```
+
+**Option B: Fork (if you want to contribute back)**
 1. Fork this repository on GitHub
 2. Clone your fork locally:
    ```bash
@@ -453,10 +491,10 @@ your-site-repo/
    cd my-site
    ```
 
-**Option B: Clone as new project (recommended for most users)**
+**Option C: Clone as new project**
 1. Clone the repository:
    ```bash
-   git clone https://github.com/hiive/hiive.github.io.git my-site
+   git clone https://github.com/hiive/blog-framework.git my-site
    cd my-site
    ```
 2. Remove the original origin and set up your own:
@@ -470,7 +508,7 @@ your-site-repo/
 This allows you to pull framework updates later:
 
 ```bash
-git remote add upstream https://github.com/hiive/hiive.github.io.git
+git remote add upstream https://github.com/hiive/blog-framework.git
 ```
 
 Verify your remotes:
@@ -479,25 +517,25 @@ git remote -v
 # Should show:
 # origin    https://github.com/YOUR-USERNAME/my-site.git (fetch)
 # origin    https://github.com/YOUR-USERNAME/my-site.git (push)
-# upstream  https://github.com/hiive/hiive.github.io.git (fetch)
-# upstream  https://github.com/hiive/hiive.github.io.git (push)
+# upstream  https://github.com/hiive/blog-framework.git (fetch)
+# upstream  https://github.com/hiive/blog-framework.git (push)
 ```
+
+**Note for Option A (template):** a repo created from a GitHub template starts with a fresh history unrelated to the framework's. The first time you update, graft the ancestry so future merges are ordinary three-way merges:
+```bash
+git fetch upstream
+git merge --allow-unrelated-histories -s ours upstream/main   # one-time, changes nothing in your tree
+```
+After that, `git merge upstream/main` works normally. (Forks and clones already share history and skip this.)
 
 ### Step 3: Create Your Site Directory
 
-1. Copy the example site as a starting point:
+1. Copy the example site as a starting point (keep `example.com` itself as a reference):
    ```bash
    cp -r src/.sites/example.com src/.sites/your-site.com
    ```
 
-2. Remove the other site directories (optional, keeps your repo clean):
-   ```bash
-   rm -rf src/.sites/hiivelabs.com
-   rm -rf src/.sites/kosmic.wisp.place
-   # Keep example.com as reference if you want
-   ```
-
-3. Configure your site code in the root `.env`:
+2. Configure your site code in the root `.env`:
    ```bash
    cp .env.example .env
    ```
@@ -506,7 +544,7 @@ git remote -v
    SITE_CODE=your-site.com
    ```
 
-4. Configure your site-specific settings in `src/.sites/your-site.com/.env`:
+3. Configure your site-specific settings in `src/.sites/your-site.com/.env`:
    ```env
    VITE_SITE_NAME=https://your-site.com
    DEFAULT_AUTHOR=Your Name
@@ -516,7 +554,7 @@ git remote -v
    GIT_COMMITTER_EMAIL=you@example.com
    ```
 
-5. Customize `src/.sites/your-site.com/config/site.yaml` with your:
+4. Customize `src/.sites/your-site.com/config/site.yaml` with your:
    - Site name and logo
    - Navigation links
    - Blog settings
@@ -587,7 +625,8 @@ Conflicts are rare if you follow the architecture (your content stays in `.sites
 
 1. **Framework file conflicts** (components, layouts, lib, etc.): Usually accept the upstream version unless you've intentionally modified framework code
 2. **Site file conflicts** (anything in `.sites/your-site.com/`): Keep your version
-3. **Config file conflicts** (astro.config.mjs, package.json): Review carefully, merge as appropriate
+3. **Generated data conflicts** (`src/build/generators/`): Keep your version — these files are regenerated from *your* site's content by the pre-build scripts
+4. **Config file conflicts** (astro.config.mjs, package.json): Review carefully, merge as appropriate
 
 ```bash
 # After resolving conflicts
