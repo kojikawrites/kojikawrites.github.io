@@ -3,5 +3,6 @@
 
 export const categories = [
   "announcements",
-  "general"
+  "general",
+  "tutorials"
 ];

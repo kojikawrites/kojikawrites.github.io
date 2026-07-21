@@ -2,6 +2,9 @@
 // Run 'npm run generate:keystatic-data' to regenerate
 
 export const tags = [
+  "configuration",
+  "customization",
   "getting-started",
+  "setup",
   "welcome"
 ];

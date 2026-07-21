@@ -25,9 +25,9 @@ import {
     TEXT_OUTPUT_EXAMPLE,
 } from '../../../lib/services/llm/promptUtils';
 
-// the following line will be automatically commented out
-// by the build process for production builds.
-export const prerender = false; // ![DEV-ONLY]
+// Dev-only route: runs on-demand in dev; excludeDevPages forces it to
+// prerender in production builds and deletes its output from dist.
+export const prerender = false;
 
 // Image analysis mode prompts using shared utilities
 const MODE_PROMPTS = {

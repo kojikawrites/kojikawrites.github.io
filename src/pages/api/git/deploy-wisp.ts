@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
 
-// the following line will be automatically commented out
-// by the build process for production builds.
-export const prerender = false; // ![DEV-ONLY]
+// Dev-only route: runs on-demand in dev; excludeDevPages forces it to
+// prerender in production builds and deletes its output from dist.
+export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   try {

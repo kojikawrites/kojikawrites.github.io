@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
 import { readFileSync, existsSync } from 'fs';
 
-// the following line will be automatically commented out
-// by the build process for production builds.
-export const prerender = false; // ![DEV-ONLY]
+// Dev-only route: runs on-demand in dev; excludeDevPages forces it to
+// prerender in production builds and deletes its output from dist.
+export const prerender = false;
 
 export const GET: APIRoute = async () => {
   const certPath = '/app/.cache/ssl/ca.crt';

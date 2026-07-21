@@ -97,6 +97,25 @@ export default function excludeDevPages(): AstroIntegration {
         }
       },
 
+      'astro:route:setup': ({ route }) => {
+        // Only run in production builds
+        if (process.env.NODE_ENV !== 'production') {
+          return;
+        }
+
+        // Dev-only routes export `prerender = false` so the dev server runs
+        // them on-demand, but a static (no-adapter) production build fails
+        // with NoAdapterInstalled if any route is left non-prerendered.
+        // Force them to prerender here; their built output is deleted from
+        // dist in astro:build:done below.
+        const isExcluded = excludeDirs.some(
+          (dirName) => route.component.includes(`/pages/${dirName}/`)
+        );
+        if (isExcluded) {
+          route.prerender = true;
+        }
+      },
+
       'astro:build:done': async ({ dir }) => {
         // Only run in production builds
         if (process.env.NODE_ENV !== 'production') {

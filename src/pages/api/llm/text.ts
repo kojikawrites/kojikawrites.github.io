@@ -37,9 +37,9 @@ import {
 // Get default max tokens from LLM config
 const DEFAULT_MAX_TOKENS = getLLMConfig().maxTokens || 8192;
 
-// the following line will be automatically commented out
-// by the build process for production builds.
-export const prerender = false; // ![DEV-ONLY]
+// Dev-only route: runs on-demand in dev; excludeDevPages forces it to
+// prerender in production builds and deletes its output from dist.
+export const prerender = false;
 
 const JSON_SCHEMA_TEXT = createTextSchema();
 
