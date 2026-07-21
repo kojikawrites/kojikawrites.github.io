@@ -5,7 +5,7 @@
         --tw-border-opacity: 1.0;
 
         --theme-color: 255 255 255;
-        --background-image: url('/src/assets/images/thewriteplace.rocks/kojika-background-light.png');
+        --background-image: url('/src/.sites/thewriteplace.rocks/images/kojika-background-light.png');
         --background-body: 221 221 221;
         --background-feature: 238 238 238;
         --background-mid: 208 208 208;
@@ -36,7 +36,7 @@
         --tw-border-opacity: 1.0;
 
         --theme-color: 00 00 00;
-        --background-image: url('/src/assets/images/thewriteplace.rocks/kojika-background-dark.png');
+        --background-image: url('/src/.sites/thewriteplace.rocks/images/kojika-background-dark.png');
         --background-body: 32 33 32;
         --background-feature: 40 41 42;
         --background-mid: 64 64 64;
