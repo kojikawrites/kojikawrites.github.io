@@ -635,6 +635,60 @@ git commit -m "Merge framework updates"
 git push
 ```
 
+### Committing: Content vs. Framework Changes
+
+Your repository carries two different kinds of change, and keeping them in
+**separate commits** is the single most important habit for keeping the
+template relationship healthy:
+
+- **Content commits** — posts, pages, `site.yaml`, images, styles: anything
+  under `src/.sites/your-site.com/`. These are yours alone. Commit them freely
+  and as often as you like; they will never conflict with a framework update
+  and never need to leave your repository.
+- **Framework commits** — anything outside `.sites/`: components, layouts,
+  integrations, plugins, config. Write each one as if it will become an
+  upstream pull request, because it might: one logical change per commit,
+  framework files only.
+
+**Never mix the two in one commit.** A commit that touches both a component
+and a blog post cannot be cleanly cherry-picked upstream, and it makes future
+`git merge upstream/main` conflicts harder to reason about. If you catch
+yourself with mixed staged changes, split them:
+
+```bash
+git add src/.sites/            # stage content only
+git commit -m "Post: my new article"
+git add src/ plugins/          # stage the framework change separately
+git commit -m "Fix breadcrumb truncation on narrow viewports"
+```
+
+**The built-in tooling already respects this split.** Keystatic (`/keystatic`)
+and the deploy UI (`/admin/deploy`) only ever write to your site directory, so
+commits made through them are always pure content commits. A practical rule of
+thumb: use the web tooling for content, and drop to git deliberately for
+framework work.
+
+**A typical framework fix, end to end:**
+
+```bash
+git checkout -b fix/breadcrumb-truncation   # branch, keeping main deployable
+# ...edit framework files only...
+git commit -m "Fix breadcrumb truncation on narrow viewports"
+git checkout main && git merge fix/breadcrumb-truncation
+git push                                     # deploys with your site
+git push origin fix/breadcrumb-truncation    # then PR this branch upstream
+```
+
+Meanwhile content commits continue on `main` uninterrupted — the two streams
+only ever meet at merge time, where they touch disjoint files.
+
+**Want the separation enforced structurally?** Make your site directory its
+own git repository (e.g. a submodule, as noted in Getting Started). Content
+then has its own history and remote entirely, and the outer repository's
+history is purely framework — mixing becomes impossible rather than merely
+discouraged. This is worth the extra ceremony mainly if you run multiple
+sites or want content backed up/versioned independently.
+
 ### Best Practices
 
 1. **Never modify framework files directly** - If you need custom behavior, create site-specific overrides in your `.sites/` directory or open an issue/PR on the framework repo
