@@ -17,28 +17,6 @@ const { filename } = Astro.props;
 const siteConfig = await getSiteConfig();
 const allCategories = await getAllKeys(KeyType.Categories);
 // console.log(allCategories);
-function trimPathToBlog(path: string): string {
-    // Remove leading and trailing slashes for consistent splitting
-    const trimmedPath = path.replace(/^\/+|\/+$/g, '');
-    // Split the path into components using '/' as the separator
-    const components = trimmedPath.split('/');
-
-    // Find the index of 'blog' in the components array
-    const blogIndex = components.indexOf(siteConfig.blog.path);
-
-
-    if (blogIndex !== -1) {
-        // Slice the array from 'blog' onwards and join back into a path
-        const newPathComponents = components.slice(blogIndex);
-        // console.log('newPath', newPathComponents.join('/'));
-        return newPathComponents.join('/');
-    } else {
-        // If 'blog' is not found, return the original path or handle as needed
-        return trimmedPath;
-    }
-}
-
-
 interface BlueskyPostEntry {
     post_id: string;
     post_uri: string;
@@ -46,13 +24,18 @@ interface BlueskyPostEntry {
     post_url?: string;
 }
 
+// post_id values have varied across layouts (full-ish paths in the old
+// single-site layout, basenames or _drafts/-prefixed names now), so match
+// on the basename, which is stable: filenames are date-prefixed and unique.
+const basename = (p: string) => p.replace(/\/+$/, '').split('/').pop() ?? p;
+
 function getBlueskyPostData(originalFilename: string): { post_uri: string; post_url?: string } | null {
     if (!siteConfig.bluesky.include) {
         return null;
     }
-    const thisId = trimPathToBlog(originalFilename);
+    const thisId = basename(originalFilename);
     // Find the matching entry
-    const entry = blueskyJson.find((entry: BlueskyPostEntry) => entry.post_id === thisId);
+    const entry = blueskyJson.find((entry: BlueskyPostEntry) => basename(entry.post_id) === thisId);
     if (entry) {
         return {
             post_uri: entry.post_uri,
