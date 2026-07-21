@@ -2,9 +2,28 @@
 // Run 'npm run generate:keystatic-data' to regenerate
 
 export const tags = [
-  "configuration",
-  "customization",
-  "getting-started",
-  "setup",
-  "welcome"
+  "ai",
+  "archetypes",
+  "botd",
+  "call-to-adventure",
+  "character-archetypes",
+  "character-development",
+  "course-review",
+  "exercise",
+  "fiction-writing",
+  "fish-out-of-water",
+  "ftbotb",
+  "goal-seeking",
+  "horror",
+  "life",
+  "motivations",
+  "names",
+  "outline",
+  "post-apocalyptic",
+  "prompts",
+  "protagonist",
+  "setting",
+  "software",
+  "writing",
+  "zombies"
 ];

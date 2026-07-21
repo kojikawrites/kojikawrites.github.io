@@ -1,9 +1,5 @@
-/* default */
-@import "../fonts.css";
-@import "../site.css";
-@import "../equations.css";
-@import "../shiki.css";
-@import "../search.css";
+/* Framework base styles */
+@import "/src/styles/include-me.css";
 
 /* site specific */
 @import "colors.css";

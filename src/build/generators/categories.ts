@@ -2,7 +2,18 @@
 // Run 'npm run generate:keystatic-data' to regenerate
 
 export const categories = [
-  "announcements",
-  "general",
-  "tutorials"
+  "ai",
+  "archetypes",
+  "botd",
+  "course-review",
+  "exercise",
+  "ftbotb",
+  "life",
+  "motivations",
+  "names",
+  "outline",
+  "prompts",
+  "review",
+  "software",
+  "writing"
 ];
