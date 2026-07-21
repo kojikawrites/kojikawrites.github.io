@@ -11,10 +11,11 @@ import getPostData from "../lib/content/getPostData";
 import {getAllPageTitles} from "../lib/content/getAllPageTitles";
 
 const siteConfig = await getSiteConfig();
+const isDev = import.meta.env.DEV;
 
 // Build unified title mapping for all content (blog posts + pages)
 const blogPath = siteConfig.blog.path;
-const allPosts = (await getPosts()).map((p: any) => getPostData(p));
+const allPosts = (await getPosts({ includeDrafts: isDev })).map((p: any) => getPostData(p));
 const blogTitles = allPosts.reduce((acc: Record<string, string>, post: { path: string; title: string }) => {
     acc[`/${blogPath}/${post.path}`] = post.title;
     return acc;

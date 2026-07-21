@@ -22,10 +22,15 @@ interface ImageComponentConfig {
 const createImageComponent = (type: 'Lightbox' | 'Gallery', imagePath: string, includeSlugTracking?: boolean) => {
     const isGallery = type === 'Gallery';
     const slugTracking = includeSlugTracking !== undefined ? includeSlugTracking : isGallery;
+    const label = isGallery ? 'Lightbox Gallery Image' : 'Lightbox Image';
+    const description = isGallery
+        ? 'Image for use inside a Lightbox Gallery container'
+        : 'Standalone clickable image that opens in a lightbox overlay';
 
     // @ts-ignore
     return block({
-        label: `${type} Image`,
+        label,
+        description,
         schema: {
             image: fields.image({
                 label: 'Image (Picker)',

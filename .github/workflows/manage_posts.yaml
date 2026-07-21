@@ -12,13 +12,21 @@ env:
   ROOT_URL: ${{ vars.ROOT_URL }}
   ANNOUNCE_START_DATE: ${{ vars.ANNOUNCE_START_DATE }}
   SITE_CODE: ${{ vars.SITE_CODE }}
+
 jobs:
+  # Phase 1: Move drafts to live, commit, build and deploy
   manage_posts:
     runs-on: ubuntu-latest
+    outputs:
+      posts_changed: ${{ steps.commit_posts.outputs.posts_changed }}
+      submodule_branch: ${{ steps.commit_posts.outputs.submodule_branch }}
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v7
@@ -35,8 +43,121 @@ jobs:
         run: |
           uv run workflow/manage_posts.py
 
+      - name: Commit and Push Post Changes
+        id: commit_posts
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+          SUBMODULE_PATH="src/.sites/${{ env.SITE_CODE }}"
+
+          # Commit changes in the submodule
+          cd "$SUBMODULE_PATH"
+
+          # Fetch and checkout the default branch from the remote
+          git fetch origin
+          DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | awk '{print $NF}')
+          echo "Submodule default branch: $DEFAULT_BRANCH"
+          echo "submodule_branch=$DEFAULT_BRANCH" >> $GITHUB_OUTPUT
+
+          # Checkout the branch (we're likely in detached HEAD)
+          git checkout "$DEFAULT_BRANCH"
+          git pull origin "$DEFAULT_BRANCH"
+
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No post changes in submodule"
+            echo "posts_changed=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "Publish scheduled posts [skip ci]"
+            git push origin "$DEFAULT_BRANCH"
+            echo "Submodule post changes pushed to $DEFAULT_BRANCH"
+            echo "posts_changed=true" >> $GITHUB_OUTPUT
+          fi
+          cd -
+
+          # Update the submodule reference in the parent repo
+          git add "$SUBMODULE_PATH"
+          if ! git diff --cached --quiet; then
+            git commit -m "Update ${{ env.SITE_CODE }} submodule - publish posts [skip ci]"
+            git push
+            echo "Parent repo updated with new submodule reference"
+          fi
+
+      - name: Trigger site rebuild
+        if: steps.commit_posts.outputs.posts_changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          gh workflow run "Deploy Astro site to Pages" --ref "${{ github.ref_name }}"
+
+  # Phase 2: Post to Bluesky after site is rebuilt, then commit tracking data
+  post_to_bluesky:
+    needs: manage_posts
+    runs-on: ubuntu-latest
+    # Wait for the site to be deployed before announcing (only if posts changed)
+    # The astro workflow takes ~2-3 minutes typically
+
+    steps:
+      - name: Wait for site deployment
+        if: needs.manage_posts.outputs.posts_changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          echo "Waiting for Deploy Astro site to Pages workflow to complete..."
+
+          # Wait a few seconds for the workflow to start
+          sleep 10
+
+          MAX_ATTEMPTS=60  # 10 minutes max (60 * 10 seconds)
+          ATTEMPT=0
+
+          while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+            # Get the most recent run of the deploy workflow
+            STATUS=$(gh run list --workflow="Deploy Astro site to Pages" --limit=1 --json status,conclusion --jq '.[0]')
+            RUN_STATUS=$(echo "$STATUS" | jq -r '.status')
+            RUN_CONCLUSION=$(echo "$STATUS" | jq -r '.conclusion')
+
+            echo "Attempt $((ATTEMPT + 1))/$MAX_ATTEMPTS: status=$RUN_STATUS, conclusion=$RUN_CONCLUSION"
+
+            if [ "$RUN_STATUS" = "completed" ]; then
+              if [ "$RUN_CONCLUSION" = "success" ]; then
+                echo "✓ Deploy workflow completed successfully"
+                break
+              else
+                echo "✗ Deploy workflow failed with conclusion: $RUN_CONCLUSION"
+                exit 1
+              fi
+            fi
+
+            ATTEMPT=$((ATTEMPT + 1))
+            sleep 10
+          done
+
+          if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+            echo "✗ Timeout waiting for deploy workflow"
+            exit 1
+          fi
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install Required Python Packages
+        working-directory: python
+        run: |
+          uv sync
+
       - name: Post to Bluesky
-        if: always()
         working-directory: python
         env:
           BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
@@ -46,21 +167,37 @@ jobs:
             --root-url "${{ env.ROOT_URL }}" \
             --announce-start-date "${{ env.ANNOUNCE_START_DATE }}"
 
-      - name: Commit and Push Changes
-        if: always()
+      - name: Commit Bluesky Tracking Data
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-          # Stage all changes
-          git add -A
+          SUBMODULE_PATH="src/.sites/${{ env.SITE_CODE }}"
+          SUBMODULE_BRANCH="${{ needs.manage_posts.outputs.submodule_branch }}"
 
-          # Check if there are any changes to commit
+          # Commit tracking data in the submodule
+          cd "$SUBMODULE_PATH"
+
+          git fetch origin
+          git checkout "$SUBMODULE_BRANCH"
+          git pull origin "$SUBMODULE_BRANCH"
+
+          git add -A
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "No Bluesky tracking changes"
           else
-            git commit -m "Automated post and draft management [skip ci]"
+            git commit -m "Update Bluesky tracking data [skip ci]"
+            git push origin "$SUBMODULE_BRANCH"
+            echo "Bluesky tracking data pushed"
+          fi
+          cd -
+
+          # Update the submodule reference in the parent repo (no rebuild needed)
+          git add "$SUBMODULE_PATH"
+          if ! git diff --cached --quiet; then
+            git commit -m "Update ${{ env.SITE_CODE }} submodule - Bluesky tracking [skip ci]"
             git push
+            echo "Parent repo updated with Bluesky tracking"
           fi

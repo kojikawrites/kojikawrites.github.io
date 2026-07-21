@@ -70,7 +70,7 @@ const previewSrc = (await getMediaMetadata(previewImgPath)).default.src;
     .spl-footer { /* the footer wrapping element */ }
 
     /* To ensure that the video is visible without being overlaid by controls*/
-    .spl-pane {
+    .spl-pane:has(video) {
         max-height: 85vh !important;
         position: relative !important;
         top: 7.5vh !important;

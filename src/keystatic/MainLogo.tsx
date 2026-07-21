@@ -7,6 +7,7 @@ import { block, baseImagePath, logoMap, siteCode } from './helpers';
 
 export const MainLogo = block({
     label: 'Main Logo',
+    description: 'Site logo with light/dark theme variants',
     schema: {},
     ContentView: () => {
         // Get logo sources from logo-map.json

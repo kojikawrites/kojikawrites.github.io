@@ -18,6 +18,7 @@ import {
 export const createBiographyComponent = () => {
     return wrapper({
         label: 'Biography',
+        description: 'Author bio block with image and text',
         schema: {
             id: fields.text({
                 label: 'ID',

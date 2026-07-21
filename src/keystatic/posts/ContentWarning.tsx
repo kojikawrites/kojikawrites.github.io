@@ -8,6 +8,7 @@ import { fields, wrapper } from '../helpers';
 
 export const ContentWarning = wrapper({
     label: 'Content Warning',
+    description: 'Expandable warning box for sensitive content',
     schema: {
         warning: fields.text({
             label: 'Warning Text',

@@ -142,14 +142,47 @@ def parse_date_from_filename(filename):
     return None, None
 
 
-def construct_post_url(date, slug, root_url, categories):
+def build_alias_map(aliases):
+    """
+    Build a reverse lookup map from aliases to their canonical names.
+    The config format is: { "canonical-name": ["alias1", "alias2"] }
+    This builds: { "alias1": "canonical-name", "alias2": "canonical-name" }
+    """
+    alias_map = {}
+    if not aliases:
+        return alias_map
+    for canonical, alias_list in aliases.items():
+        if isinstance(alias_list, list):
+            for alias in alias_list:
+                alias_map[alias.lower()] = canonical.lower()
+    return alias_map
+
+
+def resolve_category_alias(category, alias_map):
+    """
+    Resolve a category to its canonical name using aliases.
+    If no alias exists, returns the category as-is (lowercased).
+    """
+    lower_cat = category.lower()
+    return alias_map.get(lower_cat, lower_cat)
+
+
+def construct_post_url(date, slug, root_url, categories, alias_map=None):
     if not root_url:
         print("ERROR: ROOT_URL is not provided.")
         sys.exit(1)
     date_str = date.strftime('%Y/%m/%d')
-    # Join categories into a path
-    categories_path = '/'.join(quote_plus(cat.strip()) for cat in categories).lower()
-    return f"{root_url}{categories_path}/{date_str}/{slug}/"
+    # Resolve category aliases and join into a path
+    if alias_map is None:
+        alias_map = {}
+    resolved_categories = [resolve_category_alias(cat.strip(), alias_map) for cat in categories]
+    categories_path = '/'.join(quote_plus(cat) for cat in resolved_categories)
+    # Build URL, avoiding double slashes
+    root_url = root_url.rstrip('/')
+    if categories_path:
+        return f"{root_url}/{categories_path}/{date_str}/{slug}/"
+    else:
+        return f"{root_url}/{date_str}/{slug}/"
 
 def strip_markdown(md_text):
     """
@@ -209,66 +242,38 @@ def extract_random_image_path(content_body):
     return selected_image_path
 
 def extract_metadata_from_file(file_path, slug, post_dir):
+    import yaml
+
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
     # Split front matter and content
     parts = content.split('---')
     if len(parts) >= 3:
-        front_matter = parts[1]
+        front_matter_str = parts[1]
         content_body = '---'.join(parts[2:])
     else:
-        front_matter = ''
+        front_matter_str = ''
         content_body = content
 
-    # Process front matter
+    # Parse front matter with YAML
     title = None
     categories = []
     description = None
     thumbnail = None
-    in_multiline_field = None
-    multiline_content = []
 
-    for line in front_matter.strip().split('\n'):
-        stripped_line = line.strip()
-
-        # Handle multiline YAML fields (>- or |-)
-        if in_multiline_field:
-            if stripped_line and not stripped_line.endswith(':'):
-                multiline_content.append(stripped_line)
-                continue
-            else:
-                # End of multiline field
-                combined = ' '.join(multiline_content)
-                if in_multiline_field == 'description':
-                    description = combined
-                elif in_multiline_field == 'thumbnail':
-                    thumbnail = combined
-                in_multiline_field = None
-                multiline_content = []
-
-        if stripped_line.startswith('title:'):
-            title = stripped_line[6:].strip().strip('"').strip("'")
-        elif stripped_line.startswith('categories:'):
-            categories_line = stripped_line[11:].strip()
-            if categories_line.startswith('[') and categories_line.endswith(']'):
-                categories = [cat.strip().strip('"').strip("'") for cat in categories_line[1:-1].split(',')]
-            else:
-                categories = categories_line.split()
-        elif stripped_line.startswith('description:'):
-            desc_value = stripped_line[12:].strip()
-            if desc_value in ('>-', '|-', '>'):
-                in_multiline_field = 'description'
-                multiline_content = []
-            else:
-                description = desc_value.strip('"').strip("'")
-        elif stripped_line.startswith('thumbnail:'):
-            thumb_value = stripped_line[10:].strip()
-            if thumb_value in ('>-', '|-', '>'):
-                in_multiline_field = 'thumbnail'
-                multiline_content = []
-            else:
-                thumbnail = thumb_value.strip('"').strip("'")
+    if front_matter_str.strip():
+        try:
+            front_matter = yaml.safe_load(front_matter_str)
+            if front_matter:
+                title = front_matter.get('title')
+                categories = front_matter.get('categories', [])
+                if categories is None:
+                    categories = []
+                description = front_matter.get('description')
+                thumbnail = front_matter.get('thumbnail')
+        except yaml.YAMLError as e:
+            print(f"  ⚠ Error parsing YAML frontmatter: {e}")
 
     if not title:
         # Try to find title in content
@@ -353,11 +358,31 @@ def post_to_bluesky(title, post_date, description, image_path, url, categories, 
     tb = client_utils.TextBuilder()
     tb.text(f"New blog post: {title}!\n\nAs always, comments and questions are welcome.\n\n")
     for category in categories:
-        tb.tag(f"#{category} \n", category)
-        aliases = category_aliases.get(category)
-        if aliases is not None:
-            for alias in aliases:
-                tb.tag(f"#{alias} \n", alias)
+        # Build a set of all tags: the category itself, its canonical form, and all aliases
+        tags_to_add = set()
+        tags_to_add.add(category.lower())
+
+        # Check if this category IS an alias (resolve to canonical)
+        canonical = None
+        for canon, alias_list in category_aliases.items():
+            if category.lower() == canon.lower():
+                canonical = canon
+                break
+            if alias_list and category.lower() in [a.lower() for a in alias_list]:
+                canonical = canon
+                break
+
+        if canonical:
+            tags_to_add.add(canonical.lower())
+            # Add all aliases for the canonical name
+            aliases = category_aliases.get(canonical, [])
+            if aliases:
+                for alias in aliases:
+                    tags_to_add.add(alias.lower())
+
+        # Add all unique tags
+        for tag in sorted(tags_to_add):
+            tb.tag(f"#{tag} ", tag)
 
     embed = models.AppBskyEmbedExternal.Main(
         external=models.AppBskyEmbedExternal.External(
@@ -524,6 +549,10 @@ def main():
     current_datetime = datetime.now(timezone.utc)
     print(f"✓ Current time: {current_datetime.strftime('%Y-%m-%d %H:%M:%S')} UTC")
 
+    # Load config early so we have aliases for URL construction
+    category_aliases, auto_post_text = load_config(config_file)
+    alias_map = build_alias_map(category_aliases)
+
     # Find all posts in the posts directory
     print(f"\n--- Scanning for posts to announce ---")
     posts_to_announce = []
@@ -570,7 +599,7 @@ def main():
                 print(f"  ✓ {file} - queued for announcement")
 
                 title, categories, description, image_path = extract_metadata_from_file(file_path, slug, post_dir)
-                url = construct_post_url(file_date, slug, root_url, categories)
+                url = construct_post_url(file_date, slug, root_url, categories, alias_map)
 
                 posts_to_announce.append({
                     'id': post_id,
@@ -619,7 +648,6 @@ def main():
 
     # Post to Bluesky and update the tracking list
     print(f"\n--- Posting to Bluesky ---")
-    category_aliases, auto_post_text = load_config(config_file)
 
     for post in posts_to_announce:
         title = post['title']

@@ -8,6 +8,7 @@ import { textWithAI } from './fields/textWithAI';
 
 export const ThemedImage = block({
     label: 'Themed Image',
+    description: 'Image that changes based on light/dark theme',
     schema: {
         id: fields.text({ label: 'Id' }),
         class: classField(),

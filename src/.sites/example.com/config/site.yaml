@@ -21,6 +21,10 @@ navbar:
   left:
     - href: /posts
       label: posts
+    - href: /tags
+      label: tags
+    - href: /categories
+      label: categories
   right:
     - href: /test
       label: Test Page

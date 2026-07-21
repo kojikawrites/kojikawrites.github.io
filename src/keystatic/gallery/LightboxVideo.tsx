@@ -23,6 +23,7 @@ interface LightboxVideoConfig {
 export const createLightboxVideoComponent = (imagePath: string) => {
     return block({
         label: 'Lightbox Video',
+        description: 'Video that plays in a lightbox overlay when clicked',
         schema: {
             video: fields.file({
                 label: 'Video File',

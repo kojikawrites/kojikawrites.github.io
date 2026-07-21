@@ -8,6 +8,7 @@ import { fields, block } from './helpers';
 
 export const EmbeddedYouTube = block({
     label: 'Embedded YouTube',
+    description: 'Embed a YouTube video by its video ID',
     schema: {
         youtubeId: fields.text({ label: 'YouTube ID' }),
         caption: fields.text({ label: 'Caption' }),

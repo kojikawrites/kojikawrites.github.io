@@ -40,9 +40,9 @@ export const useEditorStyles = () => {
 // ============================================================================
 // SIMPLE COMPONENT FACTORIES
 // ============================================================================
-export const simpleWrapper = (label: string, schema = {}) => wrapper({ label, schema });
-export const simpleInline = (label: string, schema = {}) => inline({ label, schema });
-export const simpleBlock = (label: string, schema = {}) => block({ label, schema });
+export const simpleWrapper = (label: string, schema = {}, description?: string) => wrapper({ label, schema, description });
+export const simpleInline = (label: string, schema = {}, description?: string) => inline({ label, schema, description });
+export const simpleBlock = (label: string, schema = {}, description?: string) => block({ label, schema, description });
 
 export const classField = () => fields.text({ label: 'Class' });
 

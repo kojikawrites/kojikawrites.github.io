@@ -1212,15 +1212,67 @@ async def git_push(request: Request):
             # Check if submodule is behind remote and needs pull --rebase
             submodule_behind = get_commits_behind(submodule_full_path)
             if submodule_behind > 0:
-                print(f"[PUSH] Submodule is {submodule_behind} commit(s) behind remote. Pulling with rebase...", flush=True)
+                print(f"[PUSH] Submodule is {submodule_behind} commit(s) behind remote.", flush=True)
+
+                # If there are uncommitted changes, stash them before rebasing
+                stash_applied = False
+                if submodule_has_changes:
+                    print(f"[PUSH] Stashing uncommitted changes before rebase...", flush=True)
+                    # Include untracked files with -u to ensure everything is stashed
+                    stash_result = subprocess.run(
+                        ['git', 'stash', 'push', '-u', '-m', 'Auto-stash before rebase'],
+                        cwd=str(submodule_full_path),
+                        capture_output=True,
+                        text=True,
+                        timeout=10
+                    )
+                    if stash_result.returncode == 0:
+                        # Check if a stash was actually created (not just "No local changes to save")
+                        if 'No local changes to save' not in stash_result.stdout:
+                            stash_applied = True
+                            print(f"[PUSH] Changes stashed successfully", flush=True)
+                        else:
+                            print(f"[PUSH] No changes to stash", flush=True)
+                    else:
+                        print(f"[PUSH] Warning: Failed to stash changes: {get_output(stash_result)}", flush=True)
+
+                print(f"[PUSH] Pulling with rebase...", flush=True)
                 success, error_msg = pull_rebase(submodule_full_path)
                 if not success:
+                    # Try to restore stashed changes if rebase failed
+                    if stash_applied:
+                        subprocess.run(
+                            ['git', 'stash', 'pop'],
+                            cwd=str(submodule_full_path),
+                            capture_output=True,
+                            text=True
+                        )
                     return JSONResponse({
                         'error': f'Failed to rebase submodule onto remote changes. Manual intervention required.',
                         'output': error_msg,
                         'hint': 'The submodule has remote changes that conflict with local changes.'
                     }, status_code=409)
                 print(f"[PUSH] Submodule rebased successfully", flush=True)
+
+                # Restore stashed changes after successful rebase
+                if stash_applied:
+                    print(f"[PUSH] Restoring stashed changes...", flush=True)
+                    pop_result = subprocess.run(
+                        ['git', 'stash', 'pop'],
+                        cwd=str(submodule_full_path),
+                        capture_output=True,
+                        text=True,
+                        timeout=10
+                    )
+                    if pop_result.returncode != 0:
+                        return JSONResponse({
+                            'error': f'Failed to restore stashed changes after rebase.',
+                            'output': get_output(pop_result),
+                            'hint': 'The rebase succeeded but stashed changes could not be applied. Check for conflicts.'
+                        }, status_code=409)
+                    print(f"[PUSH] Stashed changes restored", flush=True)
+                    # Re-check for changes since we just restored them
+                    submodule_has_changes = has_submodule_changes(submodule_path, source_dir)
 
             # Check for unpushed commits in submodule (made locally outside Docker)
             submodule_unpushed = get_unpushed_commits(submodule_full_path)

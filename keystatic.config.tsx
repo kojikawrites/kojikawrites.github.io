@@ -419,9 +419,9 @@ const SlugProvider: React.FC<{ children: React.ReactNode; enabled: boolean }> = 
 // ============================================================================
 
 /** Simple component factories for reducing boilerplate */
-const simpleWrapper = (label: string, schema = {}) => wrapper({ label, schema });
-const simpleInline = (label: string, schema = {}) => inline({ label, schema });
-const simpleBlock = (label: string, schema = {}) => block({ label, schema });
+const simpleWrapper = (label: string, schema = {}, description?: string) => wrapper({ label, description, schema });
+const simpleInline = (label: string, schema = {}, description?: string) => inline({ label, description, schema });
+const simpleBlock = (label: string, schema = {}, description?: string) => block({ label, description, schema });
 
 const classField = () => fields.text({ label: 'Class' });
 
@@ -737,31 +737,32 @@ const minimalHtmlComponents = {
         id: fields.text({ label: 'Id' }),
         class: classField(),
         style: fields.text({ label: 'Style' }),
-    }),
+    }, 'HTML span element for inline styling'),
     p: simpleWrapper('Paragraph', {
         id: fields.text({ label: 'Id' }),
         class: classField(),
         style: fields.text({ label: 'Style' }),
-    }),
+    }, 'HTML paragraph element'),
     a: simpleWrapper('Link', {
         id: fields.text({ label: 'Id' }),
         href: fields.url({ label: 'Url' }),
         target: fields.url({ label: 'Target' }),
         class: classField(),
         style: fields.text({ label: 'Style' }),
-    }),
+    }, 'HTML anchor element for hyperlinks'),
     div: simpleWrapper('Div', {
         id: fields.text({ label: 'Id' }),
         class: classField(),
         slot: fields.text({ label: 'Slot' }),
         style: fields.text({ label: 'Style' }),
-    }),
+    }, 'HTML div container element'),
     // Block elements
-    br: simpleBlock('Line Break'),
-    hr: simpleBlock('Horizontal Rule'),
+    br: simpleBlock('Line Break', {}, 'Insert a line break'),
+    hr: simpleBlock('Horizontal Rule', {}, 'Insert a horizontal divider line'),
     // Inline elements for text styling (can't have children, use text field instead)
     InlineSpan: inline({
         label: 'Inline Span',
+        description: 'Inline text with custom styling',
         schema: {
             text: fields.text({ label: 'Text' }),
             id: fields.text({ label: 'Id' }),
@@ -785,6 +786,7 @@ const minimalHtmlComponents = {
     }),
     EquationSnippet: inline({
         label: 'Equation',
+        description: 'LaTeX math equation (inline or block)',
         schema: {
             equation: fields.text({
                 label: 'Equation',
@@ -862,6 +864,7 @@ const minimalHtmlComponents = {
 const sharedCustomComponents = {
     FootnoteRef: inline({
         label: 'Footnote Reference',
+        description: 'Superscript reference to a footnote',
         schema: {
             id: fields.text({
                 label: 'Footnote ID',
@@ -879,6 +882,7 @@ const sharedCustomComponents = {
     Thanks,
     PublicDownloadLink: inline({
         label: 'Download Link',
+        description: 'Link to a downloadable file',
         schema: {
             filePath: fields.file({
                 label: 'File to Download',
@@ -942,6 +946,7 @@ const sharedCustomComponents = {
     TimelineEntry,
     HiiveLabsText: inline({
         label: 'Hiive Labs Text',
+        description: 'Stylized hiivelabs brand text',
         schema: {},
         ContentView: () => (
             <span>
@@ -954,11 +959,44 @@ const sharedCustomComponents = {
     MainLogo,
     ThemedImage,
     ContentWarning,
-    LightboxGallery: simpleWrapper('Lightbox Gallery', {
-        caption: fields.text({ label: 'Caption' })
+    LightboxGallery: wrapper({
+        label: 'Lightbox Gallery',
+        description: 'Container for multiple clickable images that open in a lightbox',
+        schema: {
+            caption: fields.text({ label: 'Caption' }),
+            smCols: fields.select({
+                label: 'Mobile Columns',
+                description: 'Number of columns on small screens',
+                options: [
+                    { label: 'Default', value: '' },
+                    { label: '1', value: '1' },
+                    { label: '2', value: '2' },
+                    { label: '3', value: '3' },
+                    { label: '4', value: '4' },
+                    { label: '5', value: '5' },
+                    { label: '6', value: '6' },
+                ],
+                defaultValue: ''
+            }),
+            lgCols: fields.select({
+                label: 'Desktop Columns',
+                description: 'Number of columns on large screens',
+                options: [
+                    { label: 'Default', value: '' },
+                    { label: '1', value: '1' },
+                    { label: '2', value: '2' },
+                    { label: '3', value: '3' },
+                    { label: '4', value: '4' },
+                    { label: '5', value: '5' },
+                    { label: '6', value: '6' },
+                ],
+                defaultValue: ''
+            })
+        }
     }),
     FormattedDate: inline({
         label: 'Formatted Date',
+        description: 'Display a date in localized format',
         schema: {
             date: fields.date({ label: 'Date' }),
         },
@@ -1313,6 +1351,7 @@ const createPostSchema = (imageDirectory: string) => ({
             itemLabel: props => props.value || 'Tag',
         }
     ),
+    // @ts-ignore - custom field type
     createdAt: readOnlyText({
         label: 'Created At',
         description: 'Auto-filled when post is created (read-only)',
@@ -1335,20 +1374,24 @@ export default config({
     collections: {
         posts: collection({
             label: 'Blog Posts',
+            // @ts-ignore - TypeScript can't infer literal type from factory function
             slugField: 'title',
             path: `${basePostPath}/*`,
             format: { contentField: 'content' },
             entryLayout: 'content',
+            // @ts-ignore - custom field type in schema
             schema: createPostSchema(blogImagePath),
         }),
 
         drafts: collection({
             label: 'Draft Blog Posts',
-            // description: 'Posts dated today or earlier will be published within 24 hours. Posts with future dates will be published on the specified date.',
+            description: 'Posts dated today or earlier will be published within 24 hours. Posts with future dates will be published on the specified date.',
+            // @ts-ignore - TypeScript can't infer literal type from factory function
             slugField: 'title',
             path: `${basePostPath}/_drafts/*`,
             format: { contentField: 'content' },
             entryLayout: 'content',
+            // @ts-ignore - custom field type in schema
             schema: createPostSchema(blogImagePath),
         }),
 

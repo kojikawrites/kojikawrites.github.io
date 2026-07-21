@@ -8,6 +8,7 @@ import { fields, wrapper } from '../helpers';
 
 export const FootnoteDefinition = wrapper({
     label: 'Footnote Definition',
+    description: 'Content block for footnote text at the bottom of the page',
     schema: {
         id: fields.text({
             label: 'Footnote ID',

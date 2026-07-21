@@ -6,10 +6,11 @@
 import React from 'react';
 import { fields, wrapper, simpleWrapper } from '../helpers';
 
-export const Timeline = simpleWrapper('Timeline');
+export const Timeline = simpleWrapper('Timeline', {}, 'Container for timeline entries');
 
 export const TimelineEntry = wrapper({
     label: 'Timeline Entry',
+    description: 'Single dated entry within a timeline',
     schema: {
         date: fields.text({ label: 'Timeline Date (in plaintext)' })
     },
