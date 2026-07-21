@@ -90,7 +90,7 @@ def add_created_at(content: str, created_at: str) -> str:
     if match:
         start, frontmatter, end = match.groups()
         # Add createdAt before the closing ---
-        new_frontmatter = frontmatter.rstrip() + f'\ncreatedAt: "{created_at}""'
+        new_frontmatter = frontmatter.rstrip() + f'\ncreatedAt: "{created_at}"'
         return start + new_frontmatter + end + content[match.end():]
     return content
 
