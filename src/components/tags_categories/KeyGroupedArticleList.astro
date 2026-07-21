@@ -1,6 +1,6 @@
 ---
 import KeyList from "./KeyList.astro";
-import { KeyType } from "../../scripts/enums";
+import { KeyType } from "../../lib/utils/enums";
 
 interface Props {
     keyType: KeyType,
@@ -8,9 +8,15 @@ interface Props {
 
 import PostSummary from "../../components/posts/PostSummary.astro";
 
-import getPosts from "../../scripts/getPosts";
-import toSafeId from "../../scripts/toSafeId";
-import { getKeyId, toSafeKey, extractKeyList } from "../../scripts/keyUtils";
+import getPosts, { sortPosts } from "../../lib/content/getPosts";
+import {getSiteConfig} from "../../lib/config/getSiteConfig";
+import toSafeId from "../../lib/utils/toSafeId";
+import { getKeyId, toSafeKey, extractKeyList } from "../../lib/utils/keyUtils";
+
+const siteConfig = await getSiteConfig();
+const smallMode = siteConfig.blog.small_mode;
+const largeMode = siteConfig.blog.large_mode;
+const isDev = import.meta.env.DEV;
 
 const keyType = Astro.props.keyType;
 const ungroupedKey = keyType == KeyType.Tags ? "~untagged~" : "~uncategorized~";
@@ -26,9 +32,10 @@ function sortKeysUngroupedAware(keys) {
     });
 }
 
-function getKeyToPostsDictionary(keyType: string) {
+async function getKeyToPostsDictionary(keyType: string) {
     const tcDictionary = {};
-    const allPosts = getPosts().sort((a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf());
+    // In dev mode, include drafts so they appear in tags/categories pages
+    const allPosts = sortPosts(await getPosts({ includeDrafts: isDev }));
 
     const allKeyedPosts = allPosts.map(p => (
         { post: p, keys: extractKeyList(p.frontmatter[keyType]) }
@@ -58,7 +65,7 @@ function getKeyToPostsDictionary(keyType: string) {
 }
 
 
-const tcDict = getKeyToPostsDictionary(keyType);
+const tcDict = await getKeyToPostsDictionary(keyType);
 const tcKeys = sortKeysUngroupedAware(Object.keys(tcDict));
 
 const title = "Posts grouped by " + (keyType == KeyType.Tags ? "Tag" : "Category");
@@ -82,7 +89,7 @@ console.log(tcBtnIds != null); // DO NOT REMOVE
             <h2 class="key-header-inactive key-post-header" data-name={key}>{getKeyPrefix(ix)}{key}</h2>
             <ul class="key-post-list post-list">
                 {tcDict[key].map((post) => (
-                    <PostSummary post={post} />
+                        <PostSummary post={post} smallMode={smallMode} largeMode={largeMode} isDraft={post.frontmatter.isDraft} />
                 ))}
             </ul>
         </div>
@@ -92,14 +99,14 @@ console.log(tcBtnIds != null); // DO NOT REMOVE
 <script is:inline define:vars={{ tcBtnIds }} data-astro-rerun>
 
     function closeAllSections() {
-        var contents = document.querySelectorAll('.key-post-list');
+        const contents = document.querySelectorAll('.key-post-list');
         contents.forEach(function(content) {
             // content.style.display = 'none';
             content.classList.add('hidden');
         });
 
         // Set all headers to inactive
-        var headers = document.querySelectorAll('.key-post-header');
+        const headers = document.querySelectorAll('.key-post-header');
         headers.forEach(function(header) {
             header.classList.remove('key-header-active');
             header.classList.add('key-header-inactive');
@@ -108,8 +115,8 @@ console.log(tcBtnIds != null); // DO NOT REMOVE
 
     function openSection(id) {
         closeAllSections();
-        var content = document.querySelector(`#${id} .key-post-list`);
-        var header = document.querySelector(`#${id} .key-post-header`);
+        const content = document.querySelector(`#${id} .key-post-list`);
+        const header = document.querySelector(`#${id} .key-post-header`);
         if (content && header) {
             // content.style.display = 'block';
             content.classList.remove('hidden');
@@ -120,7 +127,7 @@ console.log(tcBtnIds != null); // DO NOT REMOVE
     }
 
     // Add click event listeners to all h2 headers
-    var headers = document.querySelectorAll('.key-div .key-post-header');
+    const headers = document.querySelectorAll('.key-div .key-post-header');
     headers.forEach(function(header) {
         // add a click handler for the header.
         function headerClickHandler(headerId) {
@@ -152,16 +159,16 @@ console.log(tcBtnIds != null); // DO NOT REMOVE
             const hashId = window.location.hash.substring(1);
             openSection(hashId);
             // Scroll to the section
-            var elem = document.getElementById(hashId);
+            const elem = document.getElementById(hashId);
 
             if (elem) {
                 elem.scrollIntoView();
             }
         } else {
-            var keyDivs = document.querySelectorAll('.key-div');
+            const keyDivs = document.querySelectorAll('.key-div');
             if (keyDivs.length === 1) {
                 // If only one tag, open it by default
-                var id = keyDivs[0].id;
+                const id = keyDivs[0].id;
                 openSection(id);
             } else {
                 // If multiple tags, close all sections
@@ -172,19 +179,5 @@ console.log(tcBtnIds != null); // DO NOT REMOVE
 
     // On hash change
     window.addEventListener('hashchange', handleHash);
-
-    // document.addEventListener("astro:after-swap", function() {
-    //     // On page load
-    //     // console.log('hash: ', window.location.hash);
-    //     handleHash();
-    // });
-    //
-    // document.addEventListener("astro:page-load", function() {
-    //     // On page load
-    //     // console.log('hash: ', window.location.hash);
-    //     handleHash();
-    // });
-
     handleHash();
-
 </script>

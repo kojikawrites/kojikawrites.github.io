@@ -1,0 +1,6 @@
+@layer components {
+    /* index page logo */
+    .main-page-logo {
+        @apply mx-auto w-[48vmin] my-8 ;
+    }
+}

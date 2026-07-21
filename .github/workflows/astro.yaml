@@ -34,9 +34,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_SITE_NAME: ${{ vars.VITE_SITE_NAME }}
+      SITE_CODE: ${{ vars.SITE_CODE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.PAT_TOKEN }}
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -74,6 +78,8 @@ jobs:
             --site "${{ steps.pages.outputs.origin }}" \
             --base "${{ steps.pages.outputs.base_path }}"
         working-directory: ${{ env.BUILD_PATH }}
+        env:
+          NODE_ENV: production
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -1,30 +1,60 @@
 # Docker Setup Documentation
 
+## Quick Start
+
+To start the Docker environment:
+
+```bash
+cd docker
+./pip-docker-build.sh    # For pip-based build
+# or
+./uv-docker-build.sh     # For uv-based build (faster)
+```
+
+These wrapper scripts handle all the complexity of building and starting the containers.
+
 ## Architecture
 
-The docker setup uses two containers:
+The docker setup uses two main containers:
 
 1. **blog-dev** - Runs Astro dev server with HMR
 2. **build-service** - Handles production builds and git operations
+
+### Optional: LLM Container (Ollama)
+
+When using `LLM_PROVIDER=ollama-docker`, an additional **ollama** container is started:
+
+- Runs Ollama server for local AI inference
+- Pulls and caches models in a shared volume (`blog-ollama-models`)
+- Only started when containerized Ollama is configured (not for external Ollama or Docker Model Runner)
+
+See `src/lib/services/llm/README.md` for LLM configuration details.
 
 ## Volumes
 
 ### blog-dev-workspace
 - **Mounts to:** `/app/node_modules` in blog container
-- **Purpose:** Isolates node_modules from host machine
-- **Persistence:** External volume that persists across container recreations
-- **Auto-refresh:** Entrypoint script detects package-lock.json changes and runs `npm ci` automatically
+- **Purpose:** Stores node_modules persistently, avoiding re-installation on every container restart
+- **Type:** Standard Docker volume (persists across container recreations and host restarts)
+- **Auto-refresh:** Entrypoint script detects package.json changes and runs `npm install` automatically
 
 ### blog-build-workspace
-- **Mounts to:** `/tmp/build-workspace` in build-service container
-- **Purpose:** Workspace for production builds
-- **Persistence:** External volume that persists across container recreations
+- **Mounts to:** `/tmp/build-workspace` in both blog and build-service containers
+- **Purpose:** Fast temporary storage for production build artifacts
+- **Type:** tmpfs (RAM-backed, 8GB limit) - file I/O happens in memory for faster builds
+- **Shared:** Both containers can read/write, allowing build-service to generate artifacts that blog container can access
+- **Ephemeral:** Contents are lost on host restart (acceptable since build artifacts are temporary)
+
+### blog-cache
+- **Mounts to:** `/app/.cache` in blog container, `/cache` in build-service container
+- **Purpose:** Shared persistent cache for SSL certificates, downloaded tools (wisp-cli), and other cached data
+- **Type:** Standard Docker volume (persists across container recreations and host restarts)
 
 ## Node Modules Management
 
 ### Development (blog-dev)
 
-The blog-dev container uses an **entrypoint script** (`docker/entrypoint.sh`) with **bind mount overlay** to maintain separate lock files.
+The blog-dev container uses an **entrypoint script** (`docker/scripts/container/astro-entrypoint.sh`) with **bind mount overlay** to maintain separate lock files.
 
 **How it works: Bind Mount Overlay**
 
@@ -59,16 +89,16 @@ Both lock files are maintained separately. Commit whichever version you prefer (
 **How it works:**
 
 1. On startup, creates bind mount overlay for `package-lock.json`
-   - Initializes container's lock from host's (first time only)
-   - Mounts container's lock at `/app/package-lock.json`
-   - Host's file is hidden but unmodified
+    - Initializes container's lock from host's (first time only)
+    - Mounts container's lock at `/app/package-lock.json`
+    - Host's file is hidden but unmodified
 2. Checks if `package.json` is newer than `/app/node_modules/.install-timestamp`
 3. If dependencies changed, runs `npm install` (reads/writes container's lock)
 4. Creates timestamp marker
 
 The bind mount persists for the container's lifetime, ensuring npm always uses the container's lock file.
 
-**Security Note:** Requires `CAP_SYS_ADMIN` capability (configured in docker-compose.yml). This is needed for the bind mount operation and is scoped only to the container.
+**Security Note:** Requires `CAP_SYS_ADMIN` capability (configured in docker-compose.yaml). This is needed for the bind mount operation and is scoped only to the container.
 
 **Graceful Fallback:** If `CAP_SYS_ADMIN` is not granted (capability removed or restricted environment), the entrypoint will:
 - Detect the mount failure and log a warning
@@ -100,13 +130,13 @@ If you need to force a complete rebuild of node_modules:
 
 ```bash
 # Stop the containers
-docker-compose -f docker/docker-compose.yml down
+docker-compose -f docker/compose/docker-compose.yaml down
 
 # Remove the dev workspace volume
 docker volume rm ${DOCKER_BLOG_CODE}-dev-workspace
 
 # Recreate and start
-docker-compose -f docker/docker-compose.yml up -d
+docker-compose -f docker/compose/docker-compose.yaml up -d
 ```
 
 The entrypoint script will detect the missing node_modules and run `npm install` on startup.
@@ -117,13 +147,13 @@ To clear the build workspace:
 
 ```bash
 # Stop containers
-docker-compose -f docker/docker-compose.yml down
+docker-compose -f docker/compose/docker-compose.yaml down
 
 # Remove build workspace
 docker volume rm ${DOCKER_BLOG_CODE}-build-workspace
 
 # Restart
-docker-compose -f docker/docker-compose.yml up -d
+docker-compose -f docker/compose/docker-compose.yaml up -d
 ```
 
 ### Complete Clean Slate
@@ -159,7 +189,7 @@ docker-compose up -d
 
 2. If changed, restart the container to trigger automatic npm ci:
    ```bash
-   docker-compose restart blog
+   docker-compose -f docker/compose/docker-compose.yaml restart blog
    ```
 
 3. If still failing, force rebuild node_modules (see above)
@@ -175,13 +205,14 @@ The build-service always installs fresh dependencies, but the build might be cop
 
 If HMR is not connecting:
 
-1. Ensure environment variables are set:
+1. Ensure `DOCKER_BLOG_PORT` is set in your site's `.env` file (VITE_HMR_PORT is auto-set from this)
+
+2. If using an external hostname, set `VITE_HMR_HOST` in your site's `.env`:
    ```bash
    VITE_HMR_HOST=silverfish.local  # Your external hostname
-   VITE_HMR_PORT=8462              # Your external port
    ```
 
-2. Check astro.config.mjs has HMR configuration in `vite.server.hmr`
+3. Check astro.config.mjs has HMR configuration in `vite.server.hmr`
 
 ### Keystatic lodash errors
 
@@ -200,31 +231,48 @@ If seeing "does not provide an export named 'default'" for lodash:
 2. Clear Vite cache:
    ```bash
    docker exec -it ${DOCKER_BLOG_CODE}-blog-dev rm -rf /app/node_modules/.vite
-   docker-compose restart blog
+   docker-compose -f docker/compose/docker-compose.yaml restart blog
    ```
 
 ## Environment Variables
 
-Required in `.env` file:
+The project uses a **two-level environment configuration**:
+
+### Root `.env` file
+
+Contains only the site selector:
 
 ```bash
-# Docker configuration
+SITE_CODE=hiivelabs.com
+```
+
+### Site-specific `.env` file
+
+Located at `src/.sites/[SITE_CODE]/.env`, contains all site-specific configuration:
+
+```bash
+# Site configuration
+VITE_SITE_NAME=https://hiivelabs.com
+DEFAULT_AUTHOR=hiive
+
+# Git credentials (for build-service push and /admin/deploy)
+GIT_AUTHOR_NAME=Your Name
+GIT_AUTHOR_EMAIL=your-email@example.com
+GIT_COMMITTER_NAME=Your Name
+GIT_COMMITTER_EMAIL=your-email@example.com
+GITHUB_TOKEN=ghp_xxxxx
+
+# Docker configuration (required for Docker builds)
 DOCKER_BLOG_CODE=mysite        # Prefix for container/volume names
-DOCKER_BLOG_PORT=8462          # External port for dev server
+DOCKER_BLOG_PORT=8462          # External port for dev server (also used for HMR)
 DOCKER_BUILD_MODE=pip          # or 'uv' for alternative build image
 
-# HMR configuration (for docker)
-VITE_HMR_HOST=silverfish.local # External hostname
-VITE_HMR_PORT=8462            # External port (same as DOCKER_BLOG_PORT)
-
-# Site configuration
-SITE_CODE=hiivelabs.com
-VITE_SITE_NAME=https://hiivelabs.com
-ROOT_URL=https://hiivelabs.com
-
-# Git credentials (for build-service push)
-GITHUB_TOKEN=ghp_xxxxx
+# HMR configuration for Docker (optional - enables hot reload from other devices)
+VITE_HMR_HOST=silverfish.local # External hostname (optional)
+# Note: VITE_HMR_PORT is auto-set from DOCKER_BLOG_PORT by the build scripts
 ```
+
+**Note**: Both files are loaded by astro.config.mjs, with site-specific values overriding root values.
 
 ## Architecture Decisions
 
@@ -251,3 +299,40 @@ Running `npm ci` on every container start adds ~30-60 seconds startup time. The 
 - Checks timestamps to detect changes
 - Only reinstalls when needed
 - Preserves fast startup for unchanged dependencies
+
+## File Structure
+
+```
+docker/
+├── pip-docker-build.sh       # Build & start using pip (wrapper)
+├── uv-docker-build.sh        # Build & start using uv (wrapper, faster)
+├── compose/                   # Docker Compose configuration files
+│   ├── docker-compose.yaml    # Main compose file
+│   └── docker-compose.llm.yaml # LLM service overlay
+└── scripts/
+    ├── container/             # Scripts that run INSIDE containers
+    │   ├── astro-entrypoint.sh   # Blog container entrypoint
+    │   └── build-service.py      # Build service logic
+    └── os/                    # Scripts that run on HOST machine
+        ├── docker-build.sh       # Main build orchestration (macOS/Linux)
+        ├── docker-build.bat      # Main build orchestration (Windows cmd)
+        ├── docker-build.ps1      # Main build orchestration (PowerShell)
+        ├── check-model-runner.sh # Check Docker Model Runner availability
+        ├── detect-model-context.sh # Detect/set LLM model context
+        └── restore-model-context.sh # Restore LLM model context
+```
+
+### Script Categories
+
+**Wrapper Scripts** (`pip-docker-build.sh`, `uv-docker-build.sh`):
+- Simple entry points that call the main build script with the appropriate build mode
+- Use these to start the Docker environment
+
+**OS Scripts** (`scripts/os/`):
+- Run on your host machine (not inside containers)
+- Cross-platform: `.sh` for macOS/Linux, `.bat`/`.ps1` for Windows
+- Handle Docker Compose orchestration, LLM provider detection, etc.
+
+**Container Scripts** (`scripts/container/`):
+- Run inside Docker containers
+- Handle container initialization, builds, and services

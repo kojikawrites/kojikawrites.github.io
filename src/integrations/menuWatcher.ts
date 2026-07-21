@@ -1,23 +1,30 @@
 import type { AstroIntegration } from 'astro';
 import { execSync } from 'child_process';
 import path from 'path';
-import { config as dotenvConfig } from 'dotenv';
-import { getSiteStatePath } from '../scripts/getSiteConfig.ts';
+import { getSiteStatePath } from '../lib/config/getSiteStatePath.ts';
+import { loadEnv } from '../lib/config/loadEnv.js';
 
-// Load environment variables from .env file
-dotenvConfig();
+// Load environment variables from root and site-specific .env files
+loadEnv();
 
 export default function menuWatcher(): AstroIntegration {
   return {
     name: 'menu-watcher',
     hooks: {
       'astro:server:setup': ({ server }) => {
-        // Get site code from environment variable or use default
-        const SITE_CODE = process.env.SITE_CODE || 'hiivelabs.com';
+        // Get site code from environment variable - no silent fallbacks
+        const SITE_CODE = process.env.SITE_CODE;
+        if (!SITE_CODE) {
+          throw new Error(
+            'SITE_CODE not configured. Please set SITE_CODE in your .env file.\n' +
+            'Example: SITE_CODE=example.com'
+          );
+        }
 
         const watchPaths = [
-          `src/assets/pagecontent/${SITE_CODE}`,
-          getSiteStatePath('system-menu-items.json', SITE_CODE)
+          `src/.sites/${SITE_CODE}/content/pagecontent`,
+          getSiteStatePath('system-menu-items.json', SITE_CODE),
+          getSiteStatePath('logo-map.json', SITE_CODE)
         ];
 
         let regenerating = false;
@@ -29,18 +36,13 @@ export default function menuWatcher(): AstroIntegration {
           console.log('\n🔄 Regenerating menu...');
 
           try {
-            execSync('npx tsx src/scripts/generateNavMenu.ts', {
+            execSync('npx tsx src/build/generateNavMenu.ts', {
               stdio: 'inherit',
               cwd: process.cwd()
             });
             console.log('✅ Menu updated');
-
-            // Trigger full page reload after menu regeneration
-            server.ws.send({
-              type: 'full-reload',
-              path: '*'
-            });
-            console.log('🔃 Page reload triggered\n');
+            // Note: No event sent here - the site.yaml change will be picked up
+            // by vite-plugin-glob-refresh which handles the content-changed event
           } catch (error) {
             console.error('❌ Menu regeneration failed');
           } finally {
@@ -53,7 +55,7 @@ export default function menuWatcher(): AstroIntegration {
           const relativePath = path.relative(process.cwd(), file);
 
           // Debug: log all changes to config/content directories
-          if (relativePath.includes('assets/config') || relativePath.includes('assets/pagecontent')) {
+          if (relativePath.includes(`${SITE_CODE}/config`) || relativePath.includes(`${SITE_CODE}/content/pagecontent`)) {
             console.log(`[MenuWatcher] File changed: ${relativePath}`);
           }
 

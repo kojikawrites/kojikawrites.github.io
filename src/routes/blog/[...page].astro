@@ -1,0 +1,90 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PagePostCount from "../../components/posts/PagePostCount.astro";
+import PostSummary from "../../components/posts/PostSummary.astro";
+import Pagination from "../../components/Pagination.astro";
+
+import getPosts, { sortPosts } from "../../lib/content/getPosts";
+import {getSiteConfig} from "../../lib/config/getSiteConfig";
+import {buildPermalink} from "../../lib/utils/urlUtils";
+// import getPostData from '../../lib/content/getPostData";
+
+const isDev = import.meta.env.DEV;
+const allPostsCount = (await getPosts()).length;
+const siteConfig = await getSiteConfig();
+const paginationSize = siteConfig.blog.pagination_size;
+const smallMode = siteConfig.blog.small_mode;
+const largeMode = siteConfig.blog.large_mode;
+
+// Get drafts in dev mode only (for display at top of first page)
+const allPostsWithDrafts = isDev ? sortPosts(await getPosts({ includeDrafts: true })) : [];
+const drafts = allPostsWithDrafts.filter(post => post.frontmatter.isDraft);
+
+// Debug logging
+console.log('[blog] isDev:', isDev);
+console.log('[blog] allPostsWithDrafts count:', allPostsWithDrafts.length);
+console.log('[blog] drafts count:', drafts.length);
+if (isDev && allPostsWithDrafts.length > 0) {
+  console.log('[blog] First few posts paths:', allPostsWithDrafts.slice(0, 3).map(p => p.file));
+}
+
+const title = 'Blog';
+const description = 'Latest articles.';
+const permalink = buildPermalink(Astro.site.href, Astro.url.pathname);
+
+export async function getStaticPaths({ paginate }) {
+  const siteConfig = await getSiteConfig();
+  const paginationSize = siteConfig.blog.pagination_size;
+
+  const allPosts = sortPosts(await getPosts());
+
+  return paginate(allPosts, {
+    pageSize: paginationSize,
+  })
+}
+const { page } : any = Astro.props;
+
+const pathname = new URL(Astro.request.url).pathname.split('/');
+const firstPath = pathname[1];
+
+---
+
+<BaseLayout title={title} description={description} permalink={permalink} current={`/${siteConfig.blog.path}`}>
+  <div class="post-list min-h-[75vh]">
+    {/* Drafts section - only shown in dev mode on first page */}
+    {isDev && page.currentPage === 1 && drafts.length > 0 && (
+      <div class="drafts-section">
+        <h1 class="drafts-heading">Drafts</h1>
+        <p class="drafts-notice">These drafts are only visible in development mode.</p>
+        {drafts.map((post, _) => (
+          <PostSummary post={post} smallMode={smallMode} largeMode={largeMode} isDraft={true} />
+        ))}
+      </div>
+    )}
+
+    <h1>Recent Posts</h1>
+    <PagePostCount postCount={allPostsCount} postsPerPage={paginationSize} currentPage={page.currentPage} class="post-count" />
+
+    <!--post summaries -->
+    {page.data.map((post, _) => (
+        <PostSummary post={post} smallMode={smallMode} largeMode={largeMode} />
+    ))}
+
+    {allPostsCount > paginationSize
+        ? (
+        <div class="pagination-wrapper">
+          <Pagination
+              length={page.lastPage}
+              currentUrl={page.url.current}
+              currentPage={page.currentPage}
+              firstUrl={`/${firstPath}`}
+              prevUrl={page.url.prev}
+              nextUrl={page.url.next}
+              lastUrl={`/${firstPath}/${page.lastPage}`}
+          />
+        </div>
+        )
+        : null
+    }
+  </div>
+</BaseLayout>

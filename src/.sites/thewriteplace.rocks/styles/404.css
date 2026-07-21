@@ -1,0 +1,97 @@
+@layer components {
+    /* 404 formatting */
+    :root {
+        --b75: 1.25; /*calc(1.0/0.75);*/
+        --b125: 0.8; /*calc(1.0/1.25);*/
+        --b150: 0.5; /*calc(1.0/1.50);*/
+        --o75: 0.5;
+        --o125: 0.8;
+        --o150: 1.00;
+    }
+    :root.theme-dark {
+        --b75: 0.75;
+        --b125: 1.25;
+        --b150: 1.50;
+        --o75: 1.0;
+        --o125: 1.0;
+        --o150: 1.0;
+    }
+
+    .t-bright-low {
+        @apply brightness-[var(--b75)];
+        @apply opacity-[var(--o75)];
+    }
+
+    .t-bright-medium {
+        @apply brightness-[var(--b125)];
+        @apply opacity-[var(--o125)];
+    }
+
+    .t-bright-high {
+        @apply brightness-[var(--b150)];
+        @apply opacity-[var(--o150)];
+    }
+
+    .c404 {
+        @apply pt-5 text-center;
+
+        h1 {
+            @apply text-4xl lg:text-5xl;
+        }
+
+        h2 {
+            @apply t-bright-low;
+            @apply text-3xl lg:text-[1.8rem]
+        }
+
+        p {
+            @apply text-2xl;
+            @apply font-family-monospace;
+            @apply color-secondary-color;
+        }
+
+        .shrug {
+            @apply mt-0 lg:pb-6;
+            @apply color-text-main;
+        }
+
+        hr {
+            @apply hidden lg:block lg:my-10;
+        }
+
+
+        /* auto-redirect formatting */
+        .redirect {
+            @apply font-family-monospace;
+
+            .redirect-info {
+                @apply text-lg p-2 color-primary-color ;
+            }
+
+            .redirect-from-url {
+                @apply text-sm color-secondary-color break-words;
+            }
+
+            .redirect-to-url {
+                @apply text-base color-secondary-color break-words;
+
+                a {
+                    @apply relative italic py-0 t-bright-high;
+                }
+
+                a::before {
+                    @apply underline-link-hover;
+                    @apply -bottom-0.5 w-full h-[1px] bg-color-secondary-color;
+                }
+
+            }
+
+            .redirect-instruction {
+                @apply text-base lg:text-xl t-bright-low;
+                .redirect-countdown {
+                    @apply color-secondary-color;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "href": "/posts",
+      "label": "posts",
+      "position": "left",
+      "order": 1
+    },
+    {
+      "href": "/categories",
+      "label": "categories",
+      "position": "left",
+      "order": 3
+    },
+    {
+      "href": "/tags",
+      "label": "tags",
+      "position": "left",
+      "order": 2
+    }
+  ]
+}

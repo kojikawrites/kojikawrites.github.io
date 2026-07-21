@@ -1,0 +1,119 @@
+services:
+  blog:
+    build:
+      context: ../..
+      dockerfile: docker/compose/dockerfiles/astro.Dockerfile
+    container_name: ${DOCKER_BLOG_CODE}-blog-dev
+    ports:
+      - ${DOCKER_BLOG_PORT}:4321  # Astro dev server
+    volumes:
+      # Mount source code from host - all edits persist on server
+      - ../..:/app
+      # Exclude node_modules and other important directories - use container's version
+      - blog-dev-workspace:/app/node_modules
+      # Shared volume for build operations
+      - blog-build-workspace:/tmp/build-workspace
+      # Shared cache for SSL certs, downloaded binaries, etc.
+      - blog-cache:/app/.cache
+    cap_add:
+      # Required for mount --bind in entrypoint (even though container runs as root)
+      # Docker restricts mount syscall by default, requiring CAP_SYS_ADMIN
+      - SYS_ADMIN
+    environment:
+      - NODE_ENV=development
+      # Fallback URL when using custom Ollama (overridden by Docker Model Runner)
+      - LLM_URL=${LLM_OLLAMA_URL:-http://ollama:11434}
+    env_file:
+      - ../../.env
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    networks:
+      - blog-network
+
+  build-service:
+    build:
+      context: ../..
+      dockerfile: docker/compose/dockerfiles/${DOCKER_BUILD_MODE}/build-service.Dockerfile
+    container_name: ${DOCKER_BLOG_CODE}-build-service
+    volumes:
+      # Access to source code (for copying and git)
+      - ../..:/source
+      # Shared volume for build operations
+      - blog-build-workspace:/tmp/build-workspace
+      # Shared cache for SSL certs, downloaded binaries, etc.
+      - blog-cache:/cache
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ../../.env
+      - ../../src/.sites/${SITE_CODE}/.env
+    restart: unless-stopped
+    networks:
+      - blog-network
+
+  # Custom Ollama container (fallback for older Docker versions or Linux)
+  # Activated with: COMPOSE_PROFILES=ollama
+  # Note: No ports exposed - only accessible via internal Docker network at http://ollama:11434
+  ollama:
+    profiles:
+      - ollama
+    build:
+      context: ..
+      dockerfile: compose/dockerfiles/ollama.Dockerfile
+    container_name: ${DOCKER_BLOG_CODE}-ollama
+    # No ports exposed - internal Docker network only
+    # To use external Ollama instead, set LLM_OLLAMA_URL in .env
+    volumes:
+      # Persistent storage for downloaded models
+      - ollama-models:/root/.ollama
+      # Access to source for reading site-specific .env
+      - ../..:/source:ro
+    environment:
+      # Use all available GPUs if present (optional, works on CPU too)
+      # For NVIDIA GPUs, add deploy.resources.reservations.devices
+      - OLLAMA_HOST=0.0.0.0
+    env_file:
+      - ../../.env
+    restart: unless-stopped
+    networks:
+      - blog-network
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          # Reserve enough memory for llama3.2-vision:11b (requires 10.9 GiB)
+          memory: 16G
+        reservations:
+          memory: 15G
+    # Uncomment for NVIDIA GPU support (requires nvidia-docker)
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+volumes:
+  blog-dev-workspace:
+    external: true
+    name: ${DOCKER_BLOG_CODE}-dev-workspace
+  blog-build-workspace:
+    external: true
+    name: ${DOCKER_BLOG_CODE}-build-workspace
+  blog-cache:
+    external: true
+    name: blog-cache  # Shared cache for SSL certs, downloaded binaries, etc.
+  ollama-models:
+    external: true
+    name: blog-ollama-models  # Shared across all sites
+
+networks:
+  blog-network:
+    external: true
+    name: ${DOCKER_BLOG_CODE}-network

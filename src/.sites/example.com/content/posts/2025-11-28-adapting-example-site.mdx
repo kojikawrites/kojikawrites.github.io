@@ -1,0 +1,182 @@
+---
+title: How to Adapt Example Site for Your Own Use
+author: Example Author
+description: A step-by-step guide to customizing this example site and making it your own
+categories:
+  - Tutorials
+tags:
+  - customization
+  - configuration
+  - setup
+  - getting-started
+---
+Ready to transform this example site into your own? This guide walks you through the key files and settings you'll need to customize.
+
+## The Admin Panel
+
+Most day-to-day content management happens through the **admin panel** at `/admin`. Here you can:
+
+* **Create and edit blog posts** - Full visual editor with live preview
+* **Manage pages** - Edit your About, Contact, and other static pages
+* **Upload images** - Drag-and-drop image management
+* **Configure site settings** - Update your site name, logo, and navigation
+* **Deploy your site** - Push changes live with one click
+
+The admin panel is powered by [Keystatic](https://keystatic.com/), providing a user-friendly CMS experience while keeping all your content in version-controlled files.
+
+## Initial Setup
+
+Before using the admin panel, you'll need to do some one-time configuration.
+
+### Step 1: Copy the Example Site
+
+Duplicate the example site directory:
+
+```bash
+cp -r src/.sites/example.com src/.sites/yoursite.com
+```
+
+Then update the root `.env` file to point to your new site:
+
+```bash
+SITE_CODE=yoursite.com
+```
+
+### Step 2: Configure Environment Variables
+
+Copy `.env.example` to `.env` in your site directory and configure these essential settings:
+
+```bash
+# Your site's URL
+VITE_SITE_NAME=https://yoursite.com
+
+# Default author for posts
+DEFAULT_AUTHOR=Your Name
+
+# GitHub repository (for deployment)
+PUBLIC_GITHUB_REPO_OWNER=your-username
+PUBLIC_GITHUB_REPO=yoursite.com
+
+# Git credentials
+GITHUB_TOKEN=ghp_your_token_here
+GIT_AUTHOR_NAME=Your Name
+GIT_AUTHOR_EMAIL=you@example.com
+
+# AI features (optional)
+PUBLIC_LLM_ENABLED=true
+LLM_PROVIDER=openai
+LLM_OPENAI_API_KEY=sk-your-api-key
+```
+
+The AI features enable the toolbar in the editor for generating alt text, improving content, and more. Set `PUBLIC_LLM_ENABLED=false` to disable them.
+
+### Step 3: Add Your Logo
+
+Replace the logo files in `images/logos/`:
+
+* `logo-dark.svg` - Used on dark backgrounds
+* `logo-light.svg` - Used on light backgrounds
+
+### Step 4: Test Locally
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Or with Docker:
+
+```bash
+cd docker
+./uv-docker-build.sh
+```
+
+Your site will be available at `http://localhost:4321` (or your configured Docker port).
+
+### Step 5: Deploy
+
+The site supports multiple deployment targets configured in `.env`:
+
+* **GitHub Pages** - Set `DEPLOY_TARGET=github`
+* **Wisp** - Set `DEPLOY_TARGET=wisp` and configure your Wisp credentials
+
+Use the admin panel at `/admin/deploy` to trigger deployments.
+
+## Advanced: Manual File Editing
+
+While the admin panel handles most tasks, you may want to edit files directly for advanced customization.
+
+### Site Configuration (`config/site.yaml`)
+
+This file controls your site's structure and appearance:
+
+```yaml
+blog:
+  pagination_size: 10
+  path: blog              # URL path for blog posts
+  small_mode: card        # Mobile layout: 'card' or 'list'
+  large_mode: list        # Desktop layout: 'card' or 'list'
+
+navbar:
+  left:
+    - href: /blog
+      label: Blog
+  right:
+    - href: /about
+      label: About
+```
+
+### Colors (`styles/colors.css`)
+
+Define your color palette using CSS custom properties:
+
+```css
+:root {
+  --color-primary: #3b82f6;
+  --color-secondary: #10b981;
+  --color-background: #ffffff;
+  --color-text: #1f2937;
+}
+
+.dark {
+  --color-background: #111827;
+  --color-text: #f9fafb;
+}
+```
+
+**Important:** Do not delete or modify the comments in `colors.css` - they contain metadata used by the admin panel's theme editor.
+
+### Other Style Files
+
+* `navbar.css` - Navigation styling
+* `blog-page.css` - Individual post layout
+* `tags-and-categories.css` - Tag and category pages
+
+## Directory Structure Reference
+
+```
+src/.sites/yoursite.com/
+├── .env                 # Environment variables
+├── config/
+│   └── site.yaml        # Site configuration
+├── content/
+│   ├── pages/           # Static pages
+│   └── posts/           # Blog posts
+├── images/
+│   └── logos/           # Site logos
+├── styles/
+│   ├── colors.css       # Color theming
+│   ├── navbar.css       # Navigation styles
+│   └── ...              # Other style files
+└── components/          # Site-specific components
+```
+
+## Need Help?
+
+* Check the `README.md` in your site directory for additional details
+* Review other example posts for MDX formatting examples
+* Explore the admin panel at `/admin` for content management
+* Check out the other README files too
+
+Happy building!

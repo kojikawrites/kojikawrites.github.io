@@ -1,0 +1,66 @@
+main:
+  logo:
+    alt: thewriteplace.rocks
+    dynamic_dir: /src/.sites/thewriteplace.rocks/images/logos/dynamic
+build:
+  exclude_from_production:
+    - admin
+    - api
+    - edit
+navbar:
+  logo:
+    dark: /src/.sites/thewriteplace.rocks/images/logos/menu-dark.png
+    light: /src/.sites/thewriteplace.rocks/images/logos/menu-light.png
+    alt: thewriteplace.rocks
+  left:
+    - href: /blog
+      label: blog
+    - href: /categories
+      label: categories
+    - href: /tags
+      label: tags
+  right:
+    - href: /about
+      label: About
+    - href: /contact
+      label: contact us
+  breadcrumbs:
+    include: true
+    valid_breadcrumbs:
+      - href: '[slug]'
+        label: '[slug]'
+blog:
+  pagination_size: 20
+  path: blog
+  small_mode: card
+  large_mode: card
+  default_author: K°
+footer:
+  content:
+    - thewriteplace.rocks and its logo are registered trademarks of kojika.
+    - All content © 2005-[CURRENT_YEAR] by kojika.
+bluesky:
+  include: true
+  handle: thewriteplace.rocks
+  hashtag_link: /categories/#[HASHTAG]
+  auto_post_text: (This is an automated post.)
+facebook:
+  include: false
+  app_id: APP_ID_HERE
+tags_and_categories:
+  aliases:
+    machine-learning:
+      - ml
+    artificial-intelligence:
+      - ai
+    large-language-model:
+      - llm
+    reinforcement-learning:
+      - rl
+search:
+  include: true
+rss:
+  include: true
+  site:
+    name: TheWritePlace.rocks
+    description: A blog about writing.

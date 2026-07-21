@@ -2,6 +2,8 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import AdminMenu from '../components/AdminMenu.astro';
+import { getSiteConfig } from '../lib/config/getSiteConfig';
 
 export interface Props {
   title: string;
@@ -10,6 +12,32 @@ export interface Props {
   current?: string;
 }
 const { title, description, permalink, current } = Astro.props;
+
+// Get site config for injectable components
+const siteCode = import.meta.env.SITE_CODE || process.env.SITE_CODE;
+const siteConfig = await getSiteConfig();
+
+// Glob all site-specific components (eager load)
+const componentModules = import.meta.glob<{ default: any }>(
+  '/src/.sites/*/components/**/*.astro',
+  { eager: true }
+);
+
+// Build map of component paths to components for current site
+const siteComponentMap: Record<string, any> = {};
+const sitePrefix = `/src/.sites/${siteCode}/components/`;
+for (const [path, module] of Object.entries(componentModules)) {
+  if (path.startsWith(sitePrefix)) {
+    // Extract relative path: "starfield/StarfieldBackground" from full path
+    const relativePath = path
+      .replace(sitePrefix, '')
+      .replace(/\.astro$/, '');
+    siteComponentMap[relativePath] = module.default;
+  }
+}
+
+// Get injectable components from config
+const injectComponents = siteConfig?.inject_components || [];
 
 ---
 <html lang="en">
@@ -22,13 +50,23 @@ const { title, description, permalink, current } = Astro.props;
 <div class="layout min-h-full">
   <Header current={current} />
   <main>
-    <div class="container mx-auto">
+    {/* Render site-configured injectable components */}
+    {injectComponents.map(({ component, props = {} }) => {
+      const Component = siteComponentMap[component];
+      if (!Component) {
+        console.warn(`Injectable component not found: ${component}`);
+        return null;
+      }
+      return <Component {...props} />;
+    })}
+    <div class="container mx-auto top-bump">
       <slot />
     </div>
   </main>
 
   <Footer />
 </div>
+{ process.env.NODE_ENV === 'development' && <AdminMenu /> }
 </body>
 </html>
 
@@ -44,7 +82,7 @@ const { title, description, permalink, current } = Astro.props;
     position: relative;
     margin: 0 auto;
     max-width: 1400px;
-    padding: 1em 2em;
+    padding: 0 2em;
     box-sizing: border-box;
     width: 100%;
     display: flex;

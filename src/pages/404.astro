@@ -1,17 +1,19 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "/src/layouts/BaseLayout.astro";
 
-import getPosts from "../scripts/getPosts";
-import getPostData from "../scripts/getPostData";
+import getPosts from "/src/lib/content/getPosts";
+import getPostData from "/src/lib/content/getPostData";
 
-import {getSiteConfig} from "../scripts/getSiteConfig";
+import {getSiteConfig} from "/src/lib/config/getSiteConfig";
 const siteConfig = await getSiteConfig();
 
 const title = '404';
 const description = '404.';
 // const url = Astro.url.pathname;
 
-const allPostPaths = getPosts().map((p: any) => siteConfig.blog.prefix + getPostData(p).path); // DO NOT DELETE
+// Normalize blog path - strip trailing slash, add it back for URL construction
+const blogPath = (siteConfig.blog?.path || 'blog').replace(/\/$/, '') + '/';
+const allPostPaths = (await getPosts()).map((p: any) => blogPath + getPostData(p).path); // DO NOT DELETE
 
 ---
 
@@ -63,13 +65,13 @@ const allPostPaths = getPosts().map((p: any) => siteConfig.blog.prefix + getPost
 <div id = "all-post-paths" data-post-paths={ allPostPaths } />
 <script>
 
-    import { addTimedRedirect, removeTimedRedirect } from '../scripts/client/redirection';
+    import { addTimedRedirect, removeTimedRedirect } from '/src/lib/client/redirection';
 
     // get data
     const dataEl = document.getElementById('all-post-paths');
 
     const allPostPaths:string[] = dataEl.dataset.postPaths.split(',');
-    console.log(allPostPaths);
+    // console.log(allPostPaths);
 
     function checkForRedirect(paths) {
         const url = window.location.href.replace(/^.*?:\/\/[^/]+/, '');

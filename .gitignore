@@ -12,11 +12,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# old jekyll stuff
-docs/_site
-docs/.bundle
-docs/vendor
-docs/content
+
 # environment variables
 **/.env
 **/.env.*
@@ -28,8 +24,7 @@ docs/content
 .astro/
 .venv/
 /site.txt
-/src/assets/_private/state/**/published_posts*.json
+/src/.sites/**/state/published_posts*.json
 /public/favicons/*/external/
 .env
-/docker/uv.lock
-/uv.lock
+/**/uv.lock

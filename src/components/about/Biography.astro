@@ -9,7 +9,7 @@ interface Props {
 }
 
 import ThemedImage from "../ThemedImage.astro";
-import { getSiteCode } from "../../scripts/getSiteConfig.ts";
+import { getSiteCode } from "../../lib/config/getSiteCode.ts";
 
 const {id, alt = "", image, src, slug, class:className} = Astro.props;
 const portraitId = `${id}-portrait`;
@@ -19,7 +19,7 @@ let imagePath: string;
 if (image) {
     // Image from picker - build path with slug subdirectory
     const siteCode = getSiteCode();
-    const baseImagePath = `src/assets/images/${siteCode}`;
+    const baseImagePath = `src/.sites/${siteCode}/images`;
 
     // If image is already a full path, use it as-is
     if (image.startsWith('/') || image.startsWith('src/')) {

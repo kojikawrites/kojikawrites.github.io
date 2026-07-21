@@ -61,5 +61,7 @@
 
     #search-bar {
         @apply w-full md:w-1/2 md:pr-2 ml-auto enable-input;
+        /* On desktop, position absolutely so it doesn't push down the fader */
+        @apply md:absolute md:right-0 md:z-50;
     }
 }

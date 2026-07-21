@@ -1,8 +1,8 @@
 ---
-import ThemeToggleButton from './ThemeToggleButton.svelte';
+import ThemeToggleButton from './solid/ThemeToggleButton.tsx';
 import SiteLogo from './SiteLogo.astro';
 
-import {getSiteConfig} from "../scripts/getSiteConfig";
+import {getSiteConfig} from "../lib/config/getSiteConfig";
 const siteConfig = await getSiteConfig();
 const { current = '', showTheme = false } = Astro.props;
 const selected = "selected max-w-fit text-nowrap text-left xl:text-center xl:px-2 py-1";
@@ -11,6 +11,24 @@ const notSelected = "max-w-fit text-nowrap text-left xl:text-center xl:px-2 py-1
 const leftNav = siteConfig.navbar.left;
 const rightNav = siteConfig.navbar.right;
 const {dark, light, alt} = siteConfig.navbar.logo;
+
+// Navbar background component support
+const siteCode = import.meta.env.SITE_CODE || process.env.SITE_CODE;
+const navbarBackground = siteConfig.navbar?.background;
+
+// import.meta.glob must be at top level with static pattern
+const componentModules = import.meta.glob<{ default: any }>(
+  '/src/.sites/*/components/**/*.astro',
+  { eager: true }
+);
+
+let NavbarBackgroundComponent: any = null;
+if (navbarBackground?.component) {
+  const sitePrefix = `/src/.sites/${siteCode}/components/`;
+  const fullPath = `${sitePrefix}${navbarBackground.component}.astro`;
+  NavbarBackgroundComponent = componentModules[fullPath]?.default;
+}
+const navbarBackgroundProps = navbarBackground?.props || {};
 ---
 
 <style>
@@ -19,9 +37,28 @@ const {dark, light, alt} = siteConfig.navbar.logo;
       display: none;
     }
   }
+
+  .navbar-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--navbar-height, 80px);
+    z-index: 19;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+  }
 </style>
 
 <div class="z-20 fixed top-0 left-0 w-full">
+  {NavbarBackgroundComponent && (
+    <div class="navbar-background">
+      <NavbarBackgroundComponent {...navbarBackgroundProps} />
+    </div>
+  )}
   <div class="navbar w-full mx-auto px-1 xl:px-2 py-4 flex flex-row">
     <div class="flex flex-row items-start py-1">
       <button id="menu" aria-label="Toggle Menu" class="xl:hidden">
@@ -72,7 +109,7 @@ const {dark, light, alt} = siteConfig.navbar.logo;
     </div>
     <!-- } -->
   </div>
-  <div id="more-controls">
+  <div id="more-controls" class="relative">
     <slot />
   </div>
 </div>

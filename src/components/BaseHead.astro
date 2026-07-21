@@ -1,7 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions'
 
-import {getSiteCode} from '../scripts/getSiteConfig'
+import {getSiteCode} from '../lib/config/getSiteCode'
 import StyleHelper from "./StyleHelper.astro";
 
 export interface Props {
@@ -12,6 +12,7 @@ export interface Props {
 
 const { title, description, permalink } = Astro.props
 const siteCode = getSiteCode();
+const isDev = import.meta.env.DEV;
 
 ---
 
@@ -24,11 +25,11 @@ const siteCode = getSiteCode();
       href={new URL("rss.xml", Astro.site)}
 />
 <link rel="sitemap" href=`/sitemap-index.xml` />
-<link rel="icon" type="image/x-icon" href=`/favicons/${siteCode}/favicon.ico` />
-<link rel="apple-touch-icon" sizes="180x180" href=`/favicons/${siteCode}/apple-touch-icon.png`>
-<link rel="icon" type="image/png" sizes="32x32" href=`/favicons/${siteCode}/favicon-32x32.png`>
-<link rel="icon" type="image/png" sizes="16x16" href=`/favicons/${siteCode}/favicon-16x16.png`>
-<link rel="manifest" href=`/favicons/${siteCode}/site.webmanifest`>
+<link rel="icon" type="image/x-icon" href="/favicons/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+<link rel="manifest" href="/favicons/site.webmanifest">
 
 <!-- viewport setting -->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -56,24 +57,23 @@ const siteCode = getSiteCode();
     (function() { // IIFE
         const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
+        // Global helper to get effective theme (resolves 'system' to actual 'light' or 'dark')
+        // This can be called from other inline scripts that can't import modules
+        window.getEffectiveTheme = function() {
+            const storedTheme = localStorage.getItem('theme');
+            const prefersDark = darkModeMediaQuery.matches;
+            if (!storedTheme || storedTheme === 'system') {
+                return prefersDark ? 'dark' : 'light';
+            }
+            return storedTheme === 'dark' ? 'dark' : 'light';
+        };
+
         function setTheme() {
             const root = document.documentElement;
-            let theme = localStorage.getItem('theme');
-            const themeSet = localStorage.getItem('themeSet');
-            // set up theming
-            // if a theme hasn't been manually set, query the system theme.
-            if (themeSet !== 'true') {
+            const effectiveTheme = window.getEffectiveTheme();
 
-                if (darkModeMediaQuery.matches) {
-                    // dark theme on system
-                    theme = 'dark';
-                } else {
-                    // light theme on system
-                    theme = 'light';
-                }
-            }
             // set the theme.
-            if (theme === 'dark') {
+            if (effectiveTheme === 'dark') {
                 console.log('Setting dark mode');
                 root.classList.add('theme-dark');
             } else {
@@ -82,25 +82,19 @@ const siteCode = getSiteCode();
             }
         }
 
-        // set up theme listener
-        function handleThemeChange(e) {
-            const root = document.documentElement;
-            if (e.matches) {
-                console.log('Switched to dark mode');
-                root.classList.add('theme-dark');
-
-            } else {
-                console.log('Switched to light mode');
-                root.classList.remove('theme-dark');
-            }
-        }
-
-        // Wrapper for media query handler that checks themeSet
+        // Wrapper for media query handler - only apply if theme is 'system' or not set
         function handleMediaQueryChange(e) {
-            const themeSet = localStorage.getItem('themeSet');
-            console.log('BaseHead: themeSet', themeSet);
-            if (!themeSet) {
-                handleThemeChange(e);
+            const storedTheme = localStorage.getItem('theme');
+            // Only respond to system changes if theme is 'system' or not explicitly set
+            if (!storedTheme || storedTheme === 'system') {
+                const root = document.documentElement;
+                if (e.matches) {
+                    console.log('System switched to dark mode');
+                    root.classList.add('theme-dark');
+                } else {
+                    console.log('System switched to light mode');
+                    root.classList.remove('theme-dark');
+                }
             }
         }
 
@@ -126,5 +120,21 @@ const siteCode = getSiteCode();
 
 </script>
 
-
+{isDev && (
+<!-- Content change handler - reloads page when content changes (dev mode only) -->
+<!-- Skips reload on Keystatic editor pages to avoid losing draft state -->
+<script>
+    if (import.meta.hot) {
+        import.meta.hot.on('content-changed', (data) => {
+            // Skip reload if we're on a Keystatic editor page
+            if (window.location.pathname.startsWith('/keystatic')) {
+                // console.log('[HMR] Content changed but skipping reload (Keystatic editor active)');
+                return;
+            }
+            // console.log('[HMR] Content changed:', data?.source || data?.file || 'unknown');
+            window.location.reload();
+        });
+    }
+</script>
+)}
 

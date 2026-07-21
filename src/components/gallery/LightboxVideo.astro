@@ -11,8 +11,8 @@ interface Props {
 }
 
 import { Image } from 'astro:assets';
-import toSafeId from '../../scripts/toSafeId';
-import getMediaMetadata from "../../scripts/getMediaMetadata.ts";
+import toSafeId from '../../lib/utils/toSafeId';
+import getMediaMetadata from "../../lib/content/getMediaMetadata.ts";
 
 const {
     alt,
@@ -39,8 +39,8 @@ const previewImgPath = typeof previewImg === 'string' ? previewImg : previewImg?
 const resolvedCaption = caption ? 'VIDEO: ' + caption : '';
 const videoSrc = (await getMediaMetadata(videoPath)).default;
 const previewSrc = (await getMediaMetadata(previewImgPath)).default.src;
-console.log('videoSrc', videoSrc);
-console.log('previewSrc', previewSrc);
+// console.log('videoSrc', videoSrc);
+// console.log('previewSrc', previewSrc);
 ---
 
 <style is:inline>
@@ -70,7 +70,7 @@ console.log('previewSrc', previewSrc);
     .spl-footer { /* the footer wrapping element */ }
 
     /* To ensure that the video is visible without being overlaid by controls*/
-    .spl-pane {
+    .spl-pane:has(video) {
         max-height: 85vh !important;
         position: relative !important;
         top: 7.5vh !important;
@@ -134,7 +134,7 @@ console.log('previewSrc', previewSrc);
 
         div.dataset.hasClickHandler = "true";
         div.addEventListener("click", _ => {
-            const theme = (localStorage.getItem('theme') === 'dark') ? 'dark' : 'white';
+            const theme = (window.getEffectiveTheme() === 'dark') ? 'dark' : 'white';
             // alert(videoSrc);
             Spotlight.show([{
                 media: "video",

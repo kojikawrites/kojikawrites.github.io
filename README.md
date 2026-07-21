@@ -1,6 +1,8 @@
-# kojikawrites.github.io
+# Blog Framework
 
-A modern blog platform built with Astro, featuring math rendering, multi-framework support, and content management capabilities.
+A reusable, multi-site blog platform built with Astro, featuring math rendering, multi-framework support, and content management capabilities.
+
+This repository is a **template**: framework code lives at the root, and each site's content lives entirely under `src/.sites/[site-name]/`. You create your own site by copying the bundled `example.com` reference site, and you pull framework updates later with an ordinary git merge — see [Creating a New Site from the Framework](#creating-a-new-site-from-the-framework).
 
 ## Tech Stack
 
@@ -21,10 +23,12 @@ A modern blog platform built with Astro, featuring math rendering, multi-framewo
 
 ### Initial Setup
 
+The quickest way to try the framework is to run the bundled example site. To build a site of your own, see [Creating a New Site from the Framework](#creating-a-new-site-from-the-framework).
+
 1. Clone the repository:
 ```bash
-git clone https://github.com/kojikawrites/kojikawrites.github.io.git
-cd kojikawrites.github.io
+git clone https://github.com/hiive/blog-framework.git
+cd blog-framework
 ```
 
 2. Install dependencies:
@@ -33,19 +37,54 @@ npm install
 ```
 
 3. Configure your site:
+
+The project uses a two-level environment configuration:
+
+**Root level** (sets which site to use):
 ```bash
 cp .env.example .env
 ```
 
-Edit the `.env` file to set your site configuration:
+Edit the root `.env` file to set your site code:
 ```env
-SITE_CODE=thewriteplace.rocks
-DEFAULT_AUTHOR=K°
+SITE_CODE=example.com
+```
+
+**Site level** (site-specific configuration):
+
+**Note**: Site directories (`src/.sites/[site-name]`) are plain directories by default. If you prefer, a site directory can be its own git repository (e.g. a submodule) so content is versioned separately from the framework — but nothing requires this.
+
+Create `src/.sites/[site-name]/.env` with your site-specific configuration (see `src/.sites/example.com/.env.example`):
+
+```env
+# Site URL with protocol (used for sitemap, RSS, and canonical URLs)
+VITE_SITE_NAME=https://yoursitename.com
+
+# Default author for new blog posts
+DEFAULT_AUTHOR=Your Name
+
+# Git configuration (for /admin/deploy page)
+GIT_AUTHOR_NAME=Your Name
+GIT_AUTHOR_EMAIL=your-email@example.com
+GIT_COMMITTER_NAME=Your Name
+GIT_COMMITTER_EMAIL=your-email@example.com
+
+# Optional: GitHub Personal Access Token (if not using SSH keys)
+# GITHUB_TOKEN=ghp_your_token_here
+
+# Optional: Docker configuration (only if using Docker)
+# DOCKER_BLOG_CODE=mysite
+# DOCKER_BLOG_PORT=4321
+# DOCKER_BUILD_MODE=pip
+# VITE_HMR_HOST=your-server.local
+# VITE_HMR_PORT=4321
 ```
 
 ## Site Configuration
 
-Site-specific settings are configured in `src/assets/config/[site-code].yml`. This includes navigation, build settings, and more.
+Site-specific settings are configured in multiple places:
+- **Environment variables**: `src/.sites/[site-name]/.env` - URLs, authors, git credentials
+- **YAML configuration**: `src/.sites/[site-name]/config/site.yaml` - Navigation, build settings, and more
 
 ### Build Exclusions
 
@@ -63,7 +102,15 @@ These directories will:
 - Be removed from the production build output
 - Remain fully functional in development mode
 
+The framework directories `admin`, `api`, and `edit` are always excluded from production builds. Dev-only routes declare `export const prerender = false` so the dev server runs them on-demand; at production build time the `excludeDevPages` integration forces them to prerender (a static build would otherwise fail) and then deletes their output from `dist/`. Source files are never modified by the build.
+
 This is useful for admin interfaces, API routes, or other development-only pages that shouldn't be deployed to production.
+
+### site.yaml Reference
+
+Each site has a `config/site.yaml` file for navigation, blog settings, social integrations, component injection, and more.
+
+For complete site.yaml documentation, see the [Example Site README](src/.sites/example.com/README.md#site-configuration-siteyaml).
 
 ## Development
 
@@ -100,9 +147,31 @@ In development mode, Keystatic CMS is available at `/keystatic` for editing cont
 - HTTPS connection (automatically enabled in development)
 - Only available when `NODE_ENV=development`
 
+### Adding Content
+
+All content lives in your site directory — you never add files to `src/pages/` to create content. Use Keystatic at `/keystatic` (recommended), or edit files by hand:
+
+**Standalone pages** go in `src/.sites/[site-name]/content/pagecontent/`. A file named `my-page.mdx` is automatically served at `/my-page` by the catch-all route. Menu placement is controlled by frontmatter:
+
+```yaml
+---
+title: About My Site
+showInMenu: true
+menuLabel: about
+menuPosition: right   # left | right | none
+menuOrder: 2
+---
+```
+
+The navigation menu regenerates from this frontmatter (plus `state/system-menu-items.json` for system entries like tags/categories) at every dev-server start and build.
+
+**Blog posts** go in `src/.sites/[site-name]/content/posts/` as `YYYY-MM-DD-slug.mdx` — the publish date comes from the filename. Frontmatter tags and categories feed the generated tag/category pages. Start a post in `content/posts/_drafts/` and it appears in development but is excluded from production builds; the `manage_posts` workflow can promote drafts on a schedule.
+
+The example site's post *Adapting the Example Site* walks through this end-to-end.
+
 ### Deploy UI (Development)
 
-A web-based deploy interface is available at `/edit/deploy` in development mode. This allows you to:
+A web-based deploy interface is available at `/admin/deploy` in development mode. This allows you to:
 - View git status and changed files
 - Commit and push changes to GitHub
 - Manage deployments from any device on your network
@@ -125,21 +194,29 @@ Run the blog in a Docker container on your local server for network-wide access.
 
 1. **Clone the repository on your server:**
 ```bash
-git clone https://github.com/hiive/hiive.github.io.git
-cd hiive.github.io
+git clone https://github.com/hiive/blog-framework.git
+cd blog-framework
 ```
 
 2. **Configure environment:**
+
+Set up both root and site-specific environment files:
+
 ```bash
+# Root .env - sets which site to use
 cp .env.example .env
-# Edit .env with your settings
+# Edit: SITE_CODE=yoursitename
+
+# Site-specific .env - all other configuration
+cp src/.sites/yoursitename/.env.example src/.sites/yoursitename/.env
+# Edit: VITE_SITE_NAME, DEFAULT_AUTHOR, GIT_*, etc.
 ```
 
 3. **Configure Git credentials:**
 
 **Option A: SSH Keys (Recommended)**
 
-Uncomment the SSH volume mount in `docker-compose.yml`:
+Uncomment the SSH volume mount in `docker/compose/docker-compose.yaml`:
 ```yaml
 volumes:
   - ~/.ssh:/root/.ssh:ro
@@ -147,12 +224,12 @@ volumes:
 
 **Option B: Personal Access Token**
 
-Add to your `.env` file:
+Add to your site-specific `.env` file (`src/.sites/[site-name]/.env`):
 ```env
 GITHUB_TOKEN=ghp_your_token_here
 ```
 
-4. **Update Git configuration in `.env`:**
+Git configuration should already be set in your site-specific `.env` file:
 ```env
 GIT_AUTHOR_NAME=Your Name
 GIT_AUTHOR_EMAIL=your-email@example.com
@@ -164,22 +241,22 @@ GIT_COMMITTER_EMAIL=your-email@example.com
 
 **Start the container:**
 ```bash
-docker-compose up -d
+docker-compose -f docker/compose/docker-compose.yaml up -d
 ```
 
 **View logs:**
 ```bash
-docker-compose logs -f
+docker-compose -f docker/compose/docker-compose.yaml logs -f
 ```
 
 **Stop the container:**
 ```bash
-docker-compose down
+docker-compose -f docker/compose/docker-compose.yaml down
 ```
 
 **Restart after changes:**
 ```bash
-docker-compose restart
+docker-compose -f docker/compose/docker-compose.yaml restart
 ```
 
 ### Accessing the Blog
@@ -194,7 +271,7 @@ docker-compose restart
 ### Workflow
 
 1. **Edit content** from any device using Keystatic at `/keystatic`
-2. **Review changes** at `/edit/deploy` to see what files changed
+2. **Review changes** at `/admin/deploy` to see what files changed
 3. **Commit and push** directly from the deploy UI when ready
 4. **GitHub Pages** automatically rebuilds your site
 
@@ -210,7 +287,7 @@ docker-compose restart
 Since the code is volume-mounted, you can also edit files directly on the server:
 
 ```bash
-cd /path/to/hiive.github.io
+cd /path/to/blog-framework
 # Edit files with your favorite editor
 # Changes appear immediately in the dev server
 ```
@@ -220,8 +297,8 @@ cd /path/to/hiive.github.io
 **Port already in use:**
 ```bash
 # Stop any existing containers
-docker-compose down
-# Or change the port in docker-compose.yml
+docker-compose -f docker/compose/docker-compose.yaml down
+# Or change the port in docker/compose/docker-compose.yaml
 ```
 
 **Git authentication fails:**
@@ -235,11 +312,11 @@ ls -la ~/.ssh/
 **Container won't start:**
 ```bash
 # View logs
-docker-compose logs
+docker-compose -f docker/compose/docker-compose.yaml logs
 
 # Rebuild container
-docker-compose build --no-cache
-docker-compose up -d
+docker-compose -f docker/compose/docker-compose.yaml build --no-cache
+docker-compose -f docker/compose/docker-compose.yaml up -d
 ```
 
 ## Production Build
@@ -270,20 +347,29 @@ npm run preview-host
 ## Project Structure
 
 ```
-kojikawrites.github.io/
+blog-framework/
 ├── src/
+│   ├── .sites/              # Site-specific content and configuration
+│   │   └── [site-name]/
+│   │       ├── config/      # Site configuration (site.yaml)
+│   │       ├── content/     # Blog posts and page content
+│   │       ├── components/  # Site-specific components
+│   │       ├── images/      # Site images
+│   │       └── styles/      # Site-specific styles
 │   ├── assets/
-│   │   ├── posts/           # Blog posts organized by site
-│   │   ├── images/          # Image assets
-│   │   └── config/          # Configuration files
+│   │   ├── fonts/           # Font files
+│   │   └── images/          # Shared image assets
 │   ├── components/          # Reusable components (Astro, Svelte, etc.)
 │   ├── layouts/             # Page layouts
+│   ├── lib/                 # Utility libraries and services
 │   ├── pages/               # Route pages
 │   │   ├── blog/            # Blog routes
 │   │   ├── [page].astro     # Dynamic pages
 │   │   └── index.astro      # Home page
-│   ├── scripts/             # Build and utility scripts
 │   └── styles/              # Global styles
+├── docker/                  # Docker configuration
+│   ├── compose/             # Docker Compose files
+│   └── scripts/             # Build and utility scripts
 ├── public/                  # Static assets
 ├── astro.config.mjs         # Astro configuration
 ├── tailwind.config.mjs      # Tailwind configuration
@@ -319,9 +405,16 @@ kojikawrites.github.io/
 
 ### GitHub Pages Deployment
 
-1. Ensure your `.env` is configured correctly for production:
+1. Ensure your environment is configured correctly for production:
+
+**Root `.env`:**
 ```env
 SITE_CODE=yourdomain.com  # or username.github.io
+```
+
+**Site-specific `.env`** (`src/.sites/[site-code]/.env`):
+```env
+VITE_SITE_NAME=https://yourdomain.com
 ```
 
 2. Build the site:
@@ -335,7 +428,7 @@ For GitHub Pages, the site configuration in `astro.config.mjs` uses the `VITE_SI
 
 ## Content Organization
 
-Blog posts are stored in `src/assets/posts/[site-name]/` as MDX files. Each post includes:
+Blog posts are stored in `src/.sites/[site-name]/content/posts/` as MDX files. Each post includes:
 
 - Frontmatter with metadata (title, date, author, tags, etc.)
 - MDX content with support for components
@@ -349,6 +442,297 @@ Blog posts are stored in `src/assets/posts/[site-name]/` as MDX files. Each post
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build locally
 - `npm run preview-host` - Preview production build with network access
+
+## Additional Documentation
+
+- **[Docker Setup](docker/README.md)** - Detailed Docker configuration, volumes, scripts, and troubleshooting
+- **[LLM Service](src/lib/services/llm/README.md)** - AI-powered content assistance (alt text generation, text editing)
+- **[Example Site](src/.sites/example.com/README.md)** - Reference site with complete site.yaml documentation
+- **[Site Components](src/.sites/example.com/components/)** - Site-specific Astro components (see `ExampleComponent.astro`)
+
+## Creating a New Site from the Framework
+
+This project is designed as a reusable framework. You can create your own site by forking/cloning this repository and adding your site-specific content, while still being able to pull in framework updates.
+
+### Architecture Overview
+
+```
+your-site-repo/
+├── src/
+│   ├── components/      # Framework (from upstream)
+│   ├── layouts/         # Framework (from upstream)
+│   ├── lib/             # Framework (from upstream)
+│   ├── styles/          # Framework (from upstream)
+│   ├── pages/           # Framework (from upstream)
+│   └── .sites/
+│       ├── example.com/       # Reference site (from upstream)
+│       └── your-site.com/     # YOUR site content
+├── scripts/             # Framework (from upstream)
+└── ...
+```
+
+**Key principle:** Framework code lives in the root directories. Your site content lives entirely within `src/.sites/your-site.com/`. This separation allows clean merges when updating the framework.
+
+### Step 1: Create Your Site Repository
+
+**Option A: GitHub template (recommended)**
+1. Click **Use this template** on the repository page to create your own repo with a fresh history
+2. Clone it locally:
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/my-site.git my-site
+   cd my-site
+   ```
+
+**Option B: Fork (if you want to contribute back)**
+1. Fork this repository on GitHub
+2. Clone your fork locally:
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/YOUR-FORK.git my-site
+   cd my-site
+   ```
+
+**Option C: Clone as new project**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/hiive/blog-framework.git my-site
+   cd my-site
+   ```
+2. Remove the original origin and set up your own:
+   ```bash
+   git remote remove origin
+   git remote add origin https://github.com/YOUR-USERNAME/my-site.git
+   ```
+
+### Step 2: Add Framework as Upstream Remote
+
+This allows you to pull framework updates later:
+
+```bash
+git remote add upstream https://github.com/hiive/blog-framework.git
+```
+
+Verify your remotes:
+```bash
+git remote -v
+# Should show:
+# origin    https://github.com/YOUR-USERNAME/my-site.git (fetch)
+# origin    https://github.com/YOUR-USERNAME/my-site.git (push)
+# upstream  https://github.com/hiive/blog-framework.git (fetch)
+# upstream  https://github.com/hiive/blog-framework.git (push)
+```
+
+**Note for Option A (template):** a repo created from a GitHub template starts with a fresh history unrelated to the framework's. The first time you update, graft the ancestry so future merges are ordinary three-way merges:
+```bash
+git fetch upstream
+git merge --allow-unrelated-histories -s ours upstream/main   # one-time, changes nothing in your tree
+```
+After that, `git merge upstream/main` works normally. (Forks and clones already share history and skip this.)
+
+### Step 3: Create Your Site Directory
+
+1. Copy the example site as a starting point (keep `example.com` itself as a reference):
+   ```bash
+   cp -r src/.sites/example.com src/.sites/your-site.com
+   ```
+
+2. Configure your site code in the root `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env`:
+   ```env
+   SITE_CODE=your-site.com
+   ```
+
+3. Configure your site-specific settings in `src/.sites/your-site.com/.env`:
+   ```env
+   VITE_SITE_NAME=https://your-site.com
+   DEFAULT_AUTHOR=Your Name
+   GIT_AUTHOR_NAME=Your Name
+   GIT_AUTHOR_EMAIL=you@example.com
+   GIT_COMMITTER_NAME=Your Name
+   GIT_COMMITTER_EMAIL=you@example.com
+   ```
+
+4. Customize `src/.sites/your-site.com/config/site.yaml` with your:
+   - Site name and logo
+   - Navigation links
+   - Blog settings
+   - Social integrations
+   - Custom component injections
+
+### Step 4: Install and Run
+
+**Option A: Using Docker (Recommended)**
+
+Docker provides a consistent development environment with hot reloading accessible from any device on your network.
+
+1. Add Docker-specific configuration to `src/.sites/your-site.com/.env`:
+   ```env
+   # Docker configuration
+   DOCKER_BLOG_CODE=mysite           # Prefix for container/volume names
+   DOCKER_BLOG_PORT=4321             # External port for dev server
+   DOCKER_BUILD_MODE=pip             # or 'uv' for faster builds
+
+   # Optional: Enable HMR from other devices
+   VITE_HMR_HOST=your-server.local   # Your server's hostname
+   ```
+
+2. Start the Docker environment:
+   ```bash
+   cd docker
+   ./pip-docker-build.sh    # For pip-based build
+   # or
+   ./uv-docker-build.sh     # For uv-based build (faster)
+   ```
+
+3. Access your site at `https://localhost:4321` (or your configured port)
+
+See [Docker Setup](docker/README.md) for detailed configuration and troubleshooting.
+
+**Option B: Local Development (without Docker)**
+
+```bash
+npm install
+npm run dev
+```
+
+Your site is now running at https://localhost:4321
+
+### Step 5: Commit Your Site
+
+```bash
+git add .
+git commit -m "Initialize my-site"
+git push -u origin main
+```
+
+### Updating the Framework
+
+When the framework has updates you want to incorporate:
+
+```bash
+# Fetch the latest framework changes
+git fetch upstream
+
+# Merge framework updates into your branch
+git merge upstream/main
+```
+
+**Handling merge conflicts:**
+
+Conflicts are rare if you follow the architecture (your content stays in `.sites/your-site.com/`). If conflicts occur:
+
+1. **Framework file conflicts** (components, layouts, lib, etc.): Usually accept the upstream version unless you've intentionally modified framework code
+2. **Site file conflicts** (anything in `.sites/your-site.com/`): Keep your version
+3. **Generated data conflicts** (`src/build/generators/`): Keep your version — these files are regenerated from *your* site's content by the pre-build scripts
+4. **Config file conflicts** (astro.config.mjs, package.json): Review carefully, merge as appropriate
+
+```bash
+# After resolving conflicts
+git add .
+git commit -m "Merge framework updates"
+git push
+```
+
+### Committing: Content vs. Framework Changes
+
+Your repository carries two different kinds of change, and keeping them in
+**separate commits** is the single most important habit for keeping the
+template relationship healthy:
+
+- **Content commits** — posts, pages, `site.yaml`, images, styles: anything
+  under `src/.sites/your-site.com/`. These are yours alone. Commit them freely
+  and as often as you like; they will never conflict with a framework update
+  and never need to leave your repository.
+- **Framework commits** — anything outside `.sites/`: components, layouts,
+  integrations, plugins, config. Write each one as if it will become an
+  upstream pull request, because it might: one logical change per commit,
+  framework files only.
+
+**Never mix the two in one commit.** A commit that touches both a component
+and a blog post cannot be cleanly cherry-picked upstream, and it makes future
+`git merge upstream/main` conflicts harder to reason about. If you catch
+yourself with mixed staged changes, split them:
+
+```bash
+git add src/.sites/            # stage content only
+git commit -m "Post: my new article"
+git add src/ plugins/          # stage the framework change separately
+git commit -m "Fix breadcrumb truncation on narrow viewports"
+```
+
+**The built-in tooling already respects this split.** Keystatic (`/keystatic`)
+and the deploy UI (`/admin/deploy`) only ever write to your site directory, so
+commits made through them are always pure content commits. A practical rule of
+thumb: use the web tooling for content, and drop to git deliberately for
+framework work.
+
+**A typical framework fix, end to end:**
+
+```bash
+git checkout -b fix/breadcrumb-truncation   # branch, keeping main deployable
+# ...edit framework files only...
+git commit -m "Fix breadcrumb truncation on narrow viewports"
+git checkout main && git merge fix/breadcrumb-truncation
+git push                                     # deploys with your site
+git push origin fix/breadcrumb-truncation    # then PR this branch upstream
+```
+
+Meanwhile content commits continue on `main` uninterrupted — the two streams
+only ever meet at merge time, where they touch disjoint files.
+
+**Want the separation enforced structurally?** Make your site directory its
+own git repository (e.g. a submodule, as noted in Getting Started). Content
+then has its own history and remote entirely, and the outer repository's
+history is purely framework — mixing becomes impossible rather than merely
+discouraged. This is worth the extra ceremony mainly if you run multiple
+sites or want content backed up/versioned independently.
+
+### Best Practices
+
+1. **Never modify framework files directly** - If you need custom behavior, create site-specific overrides in your `.sites/` directory or open an issue/PR on the framework repo
+
+2. **Keep your site content isolated** - Everything specific to your site should be in:
+   - `src/.sites/your-site.com/config/` - Configuration
+   - `src/.sites/your-site.com/content/` - Blog posts, pages
+   - `src/.sites/your-site.com/components/` - Custom components
+   - `src/.sites/your-site.com/images/` - Site images
+   - `src/.sites/your-site.com/styles/` - Site-specific CSS
+
+3. **Pull framework updates regularly** - Smaller, frequent merges are easier than large infrequent ones
+
+4. **Test after merging** - Run `npm run dev` and `npm run build` after pulling framework updates
+
+### Directory Reference
+
+| Directory | Owner | Description |
+|-----------|-------|-------------|
+| `src/components/` | Framework | Shared Astro/React/Svelte components |
+| `src/layouts/` | Framework | Page layout templates |
+| `src/lib/` | Framework | Utilities, services, config helpers |
+| `src/pages/` | Framework | Route definitions |
+| `src/styles/` | Framework | Global CSS and Tailwind config |
+| `src/.sites/your-site.com/` | **You** | All your site-specific content |
+| `scripts/` | Framework | Build and utility scripts |
+| `docker/` | Framework | Docker configuration |
+
+### Troubleshooting
+
+**"SITE_CODE not configured" error:**
+- Ensure `.env` exists in the root with `SITE_CODE=your-site.com`
+- Ensure the directory `src/.sites/your-site.com/` exists
+
+**Framework updates break your site:**
+- Check the framework's changelog/commits for breaking changes
+- You can always revert: `git reset --hard HEAD~1`
+- Or stay on a specific framework version by not merging upstream
+
+**Want to contribute a fix back to the framework:**
+1. Create a branch: `git checkout -b fix/my-fix`
+2. Make changes to framework files only
+3. Push to your fork: `git push origin fix/my-fix`
+4. Open a PR against the upstream repository
 
 ## License
 

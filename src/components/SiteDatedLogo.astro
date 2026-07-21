@@ -7,9 +7,9 @@ interface Props {
 
 import ThemedDatedImage from './ThemedDatedImage.astro';
 
-import getSafeId from '../scripts/toSafeId';
-import {getSiteCode} from "../scripts/getSiteConfig";
-import {getJson} from "../scripts/getJson";
+import getSafeId from '../lib/utils/toSafeId';
+import {getSiteCode} from "../lib/config/getSiteCode";
+import {getJson} from "../lib/config/getJson";
 
 
 // const siteConfig = await getSiteConfig();

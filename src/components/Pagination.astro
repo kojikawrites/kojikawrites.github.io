@@ -1,5 +1,5 @@
 ---
-import {cleanUrl} from "../scripts/urlUtils";
+import {cleanUrl} from "../lib/utils/urlUtils";
 const { length, currentUrl, currentPage, firstUrl, prevUrl, nextUrl, lastUrl } = Astro.props;
 const paginationList = [...Array(length)].map((_, i) => 1 + i);
 

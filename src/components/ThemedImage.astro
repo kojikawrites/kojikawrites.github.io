@@ -7,9 +7,10 @@ interface Props {
     id?: string;
 }
 
-import getSafeId from '../scripts/toSafeId';
+import getSafeId from '../lib/utils/toSafeId';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import getMediaMetadata from '../lib/content/getMediaMetadata.ts';
 // import { getActiveTheme } from '@client-scripts/theme';
 
 // console.log('getActiveTheme', getActiveTheme());
@@ -26,7 +27,6 @@ const {
 function buildSrcList(
     srcList: Record<string, string> | undefined,
     src: string | undefined,
-    imageGlobs: Record<string, () => Promise<{ default: ImageMetadata }>>,
     availableThemes: string[]
 ): { [theme: string]: Promise<{ default: ImageMetadata }> } {
 
@@ -51,17 +51,13 @@ function buildSrcList(
         // Invalid scenario: both or neither provided
         return null;
     }
-
-    // Step 2: Build a new dictionary where each theme is the key, and the value is taken from imageGlobs.
+    // console.log('finalSrcList', finalSrcList);
+    // Step 2: Build a new dictionary where each theme is the key, and the value is from getMediaMetadata.
     // finalSrcList keys: theme names, finalSrcList values: filenames
     return Object.fromEntries(
         Object.entries(finalSrcList).map(([theme, filename]) => {
-            // Look up the glob from imageGlobs using the filename
-            const value = imageGlobs[`${filename}`];
-            if (!value) {
-                console.warn(`No image glob found for ${filename}`);
-            }
-            return [theme, value()];
+            // Use getMediaMetadata to load the image (excluding video files)
+            return [theme, getMediaMetadata(<string>filename, true)];
         })
     );
 }
@@ -76,9 +72,8 @@ function getValueOrFirst<T>(dict: Record<string, Promise<{default: ImageMetadata
 }
 
 const themedImgId = id ?? getSafeId(`themed-image-${className}-${alt}`);
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,svg,webp}');
-const themedImageGlobs = buildSrcList(srcList, srcString, images, ['dark', 'light'])
-// console.log('themedImageGlobs', Object.keys(themedImageGlobs), images);
+const themedImageGlobs = buildSrcList(srcList, srcString, ['dark', 'light'])
+// console.log('themedImageGlobs', Object.keys(themedImageGlobs));
 console.log(themedImgId);
 ---
 
@@ -95,7 +90,7 @@ console.log(themedImgId);
 </themed-image-data-holder>
 <!-- '/@client-scripts/theme'; //@client-scripts  '/src/scripts/client/theme.ts'; -->
 <script>
-    import { getActiveTheme } from "../scripts/client/theme";
+    import { getActiveTheme } from "../lib/client/theme";
     class ThemedImageDataHolder extends HTMLElement {
         connectedCallback() {
             // const id = this.id;
@@ -105,7 +100,7 @@ console.log(themedImgId);
             function setThemedImage()   {
                 var themedImgs = document.querySelectorAll(`[id='${themedImgId}']`);
                 const theme = getActiveTheme();
-                console.log('ThemedImage.setThemedImage', theme);
+                // console.log('ThemedImage.setThemedImage', theme);
                 // alert(theme, themedImgId);
                 themedImgs.forEach((img: HTMLElement) => {
 
@@ -135,7 +130,7 @@ console.log(themedImgId);
             const darkModeMediaQueryTI = window.matchMedia('(prefers-color-scheme: dark)');
             darkModeMediaQueryTI.addEventListener('change', () => {
                 const themeSet = localStorage.getItem('themeSet');
-                console.log('ThemedImage: themeSet', themeSet);
+                // console.log('ThemedImage: themeSet', themeSet);
                 if (!themeSet) {
                     setThemedImage();
                 }
