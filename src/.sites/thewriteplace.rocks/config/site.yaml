@@ -31,8 +31,7 @@ navbar:
         label: '[slug]'
 blog:
   pagination_size: 20
-  path: posts
-  prefix: blog/
+  path: blog
   small_mode: card
   large_mode: card
   default_author: K°
