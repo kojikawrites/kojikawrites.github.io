@@ -15,9 +15,14 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { config as dotenvConfig } from 'dotenv';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, '..');
+
+// This runs as a standalone postbuild process, so load the root .env
+// (SITE_CODE) the same way astro.config.mjs does.
+dotenvConfig({ path: path.join(ROOT_DIR, '.env') });
 
 // Font family to file pattern mapping
 // These patterns match the file naming conventions in the built CSS
@@ -193,8 +198,12 @@ function cleanupCssFiles(distDir, usedFonts, dryRun = false) {
 async function main() {
     const args = process.argv.slice(2);
     const dryRun = args.includes('--dry-run');
-    // Use SITE_CODE to match the rest of the codebase
-    const siteDir = process.env.SITE_CODE || process.env.SITE || 'hiivelabs.com';
+    // Use SITE_CODE to match the rest of the codebase - no silent fallbacks
+    const siteDir = process.env.SITE_CODE || process.env.SITE;
+    if (!siteDir) {
+        console.error('SITE_CODE not configured. Set SITE_CODE in your .env file.');
+        process.exit(1);
+    }
     const distDir = path.join(ROOT_DIR, 'dist');
 
     console.log('\n🔤 Font Stripping Tool');
